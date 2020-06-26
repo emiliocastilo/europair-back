@@ -8,10 +8,27 @@
     <artifactId>auropair-management-back</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+    </properties>
+
     <modules>
         <module>europair-management-rest</module>
         <module>europair-management-rest-model</module>
     </modules>
 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <source>14</source>
+                    <target>14</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
