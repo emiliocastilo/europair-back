@@ -1,5 +1,4 @@
---
 databaseChangeLog:
   - include:
-      file: schema/db.changelog-schema.yaml
+      file: 2020/29062020_screens_master_v1.yaml
       relativeToChangelogFile: true
