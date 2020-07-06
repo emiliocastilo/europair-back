@@ -1,7 +1,7 @@
-package com.europair.management.rest.screens.mapper;
+package com.europair.management.rest.model.screens.mapper;
 
-import com.europair.management.rest.screens.dto.ScreenDTO;
-import com.europair.management.rest.screens.entity.Screen;
+import com.europair.management.rest.model.screens.dto.ScreenDTO;
+import com.europair.management.rest.model.screens.entity.Screen;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

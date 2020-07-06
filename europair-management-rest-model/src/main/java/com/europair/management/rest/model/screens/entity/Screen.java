@@ -1,4 +1,4 @@
-package com.europair.management.rest.screens.entity;
+package com.europair.management.rest.model.screens.entity;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table
+@Table(name = "screens")
 @Data
 public class Screen implements Serializable {
 

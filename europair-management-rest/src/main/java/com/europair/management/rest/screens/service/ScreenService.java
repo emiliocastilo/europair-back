@@ -1,14 +1,12 @@
 package com.europair.management.rest.screens.service;
 
-import com.europair.management.rest.screens.dto.ScreenDTO;
-import com.europair.management.rest.screens.entity.Screen;
-
-import java.util.List;
-import java.util.Optional;
+import com.europair.management.rest.model.screens.dto.ScreenDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ScreenService {
 
-  List<ScreenDTO> findAll();
+  Page<ScreenDTO> findAllPaginated(Pageable pageable);
 
   ScreenDTO findById(Long id);
 
