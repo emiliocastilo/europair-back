@@ -87,7 +87,16 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- Dependencias internas-->
+		<dependency>
+			<groupId>com.europair</groupId>
+			<artifactId>europair-management-rest-model</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
+
 	<profiles>
 		<profile>
 			<id>dev</id>
@@ -107,6 +116,7 @@
 				</resources>
 			</build>
 		</profile>
+
 		<profile>
 			<id>pre</id>
 			<activation>
@@ -117,7 +127,7 @@
 					<resource>
 						<directory>src/main/resources</directory>
 						<excludes>
-							<exclude>*-pre.*</exclude>
+							<exclude>*-dev.*</exclude>
 							<exclude>*-pro.*</exclude>
 						</excludes>
 						<filtering>true</filtering>
@@ -125,6 +135,7 @@
 				</resources>
 			</build>
 		</profile>
+
 		<profile>
 			<id>pro</id>
 			<activation>
@@ -135,8 +146,8 @@
 					<resource>
 						<directory>src/main/resources</directory>
 						<excludes>
+							<exclude>*-dev.*</exclude>
 							<exclude>*-pre.*</exclude>
-							<exclude>*-pro.*</exclude>
 						</excludes>
 						<filtering>true</filtering>
 					</resource>
