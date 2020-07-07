@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<?> globalExcpetionHandler(Exception ex, WebRequest request) {
+  public ResponseEntity<?> globalExcpetionHandler(final Exception ex, final WebRequest request) {
     ApiErrorDTO errorDTO =
       ApiErrorDTO.builder()
         .timestamp(LocalDateTime.now())
@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(ResourceNotFoundException.class)
-  public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+  public ResponseEntity<?> resourceNotFoundException(final ResourceNotFoundException ex, final WebRequest request) {
     ApiErrorDTO errorDTO =
         ApiErrorDTO.builder()
           .timestamp(LocalDateTime.now())

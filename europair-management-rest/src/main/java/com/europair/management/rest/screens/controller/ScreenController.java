@@ -21,7 +21,7 @@ public class ScreenController {
   private final ScreenService screenService;
 
   @GetMapping("")
-  public ResponseEntity<Page<ScreenDTO>> getAllScreensPaginated(Pageable pageable) {
+  public ResponseEntity<Page<ScreenDTO>> getAllScreensPaginated(final Pageable pageable) {
 
     final Page<ScreenDTO> pageScreensDTO = screenService.findAllPaginated(pageable);
     return ResponseEntity.ok().body(pageScreensDTO);
