@@ -31,9 +31,11 @@ public class TaskServiceImpl implements TaskService {
   }
 
   @Override
-  public TaskDTO saveTask(TaskDTO taskDTO) {
+  public TaskDTO saveTask(final TaskDTO taskDTO) {
     Task task = TaskMapper.INSTANCE.toEntity(taskDTO);
-    taskRepository.save(task);
+    task = taskRepository.save(task);
     return TaskMapper.INSTANCE.toDto(task);
   }
+
+
 }

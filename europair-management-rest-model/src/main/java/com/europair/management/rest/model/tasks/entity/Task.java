@@ -1,11 +1,15 @@
 package com.europair.management.rest.model.tasks.entity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.io.Serializable;
+import com.europair.management.rest.model.screens.entity.Screen;
+import lombok.Data;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
+@Entity
+@Table(name = "tasks")
+@Data
 public class Task implements Serializable {
 
   @Id
@@ -17,5 +21,11 @@ public class Task implements Serializable {
 
   @Column
   private String description;
+
+  @ManyToMany(cascade = CascadeType.MERGE)
+  @JoinTable(name = "tasks_screens",
+              joinColumns = @JoinColumn(name="task_id", referencedColumnName = "id"),
+              inverseJoinColumns = @JoinColumn(name="screen_id", referencedColumnName = "id"))
+  private List<Screen> screens;
 
 }

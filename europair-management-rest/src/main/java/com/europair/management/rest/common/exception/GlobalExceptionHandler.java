@@ -11,12 +11,24 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<?> globalExcpetionHandler(final Exception ex, final WebRequest request) {
+    ApiErrorDTO errorDTO =
+      ApiErrorDTO.builder()
+        .timestamp(LocalDateTime.now())
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .message(ex.getMessage())
+        .build();
+    return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+
   @ExceptionHandler(ResourceNotFoundException.class)
-  public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+  public ResponseEntity<?> resourceNotFoundException(final ResourceNotFoundException ex, final WebRequest request) {
     ApiErrorDTO errorDTO =
         ApiErrorDTO.builder()
           .timestamp(LocalDateTime.now())
-          .status()
+          .status(HttpStatus.NOT_FOUND)
+          .message(ex.getMessage())
           .build();
     return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
   }
