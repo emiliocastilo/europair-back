@@ -17,6 +17,10 @@ public class ApiErrorDTO {
   private LocalDateTime timestamp;
   private HttpStatus status;
   private String message;
+<<<<<<< HEAD
+  private String messageDetails;
+=======
   private String errorType;
+>>>>>>> origin/develop
 
 }

@@ -1,0 +1,40 @@
+package com.europair.management.rest.model.screens.dto;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+<<<<<<< HEAD
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+=======
+import lombok.Data;
+
+@Data
+>>>>>>> origin/develop
+@JsonTypeName("screen")
+public class ScreenDTO {
+
+  @JsonProperty("id")
+<<<<<<< HEAD
+  private Long id;
+
+  @JsonProperty("name")
+  private String name;
+
+  @JsonProperty("description")
+  private String description;
+=======
+  private final Long id;
+
+  @JsonProperty("name")
+  private final String name;
+
+  @JsonProperty("description")
+  private final String description;
+>>>>>>> origin/develop
+
+}
