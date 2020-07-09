@@ -48,4 +48,26 @@ public class TaskController {
 
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<TaskDTO> updateTask(@PathVariable final Long id, @RequestBody final TaskDTO taskDTO) {
+
+    final TaskDTO taskDTOSaved = taskService.updateTask(id, taskDTO);
+
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+      .path("/{id}")
+      .buildAndExpand(taskDTOSaved.getId())
+      .toUri();
+
+    return ResponseEntity.ok().body(taskDTOSaved);
+
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteTask(@PathVariable final Long id) {
+
+    taskService.deleteTask(id);
+    return ResponseEntity.noContent().build();
+
+  }
+
 }
