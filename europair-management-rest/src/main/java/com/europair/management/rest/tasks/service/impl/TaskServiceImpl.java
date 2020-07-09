@@ -37,5 +37,38 @@ public class TaskServiceImpl implements TaskService {
     return TaskMapper.INSTANCE.toDto(task);
   }
 
+  @Override
+  public TaskDTO updateTask(final Long id, final TaskDTO taskDTO) {
+
+    Task taskBD = taskRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Task not found on id: " + id));
+
+    TaskDTO taskDTO2Update = updateTaskValues(taskDTO);
+
+    Task task = TaskMapper.INSTANCE.toEntity(taskDTO2Update);
+    task = taskRepository.save(task);
+
+    return TaskMapper.INSTANCE.toDto(task);
+  }
+
+  @Override
+  public void deleteTask(Long id) {
+
+    Task roleBD = taskRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Task not found on id: " + id));
+    taskRepository.deleteById(id);
+  }
+
+  private TaskDTO updateTaskValues(TaskDTO taskDTO) {
+
+    return TaskDTO.builder()
+      .id(taskDTO.getId())
+      .name(taskDTO.getName())
+      .description(taskDTO.getDescription())
+      .screens(taskDTO.getScreens())
+      .build();
+
+  }
+
 
 }
