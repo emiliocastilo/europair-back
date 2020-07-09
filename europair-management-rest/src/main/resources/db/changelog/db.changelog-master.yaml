@@ -2,3 +2,15 @@ databaseChangeLog:
   - include:
       file: 2020/29062020_screens_master_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/07072020_tasks_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/08072020_tasks_screens_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/08072020_roles_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/08072020_roles_tasks_v1.yaml
+      relativeToChangelogFile: true

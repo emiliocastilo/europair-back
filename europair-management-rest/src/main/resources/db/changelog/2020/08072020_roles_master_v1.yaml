@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 08072020_roles_master_v1_roles_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add roles table to the database"
+      changes:
+        # Roles
+        - createTable:
+            tableName: roles
+            remarks: The roles
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the role
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: roles_id_pk
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: name of the role
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(500)
+                  remarks: description of the role
+                  constraints:
+                    nullable: false
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: roles
