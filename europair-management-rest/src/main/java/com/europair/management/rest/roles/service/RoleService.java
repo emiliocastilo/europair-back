@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 public interface RoleService {
 
   Page<RoleDTO> findAllPaginated(Pageable pageable);
-
   RoleDTO findById(Long id);
-
   RoleDTO saveRole(RoleDTO roleDTO);
+  RoleDTO updateRole(Long id, RoleDTO roleDTO);
+  void deleteRole(Long id);
 
 }

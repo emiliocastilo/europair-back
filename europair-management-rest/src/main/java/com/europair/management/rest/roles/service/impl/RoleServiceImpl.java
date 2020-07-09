@@ -25,7 +25,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   @Override
-  public RoleDTO findById(Long id) throws ResourceNotFoundException {
+  public RoleDTO findById(final Long id) throws ResourceNotFoundException {
     return RoleMapper.INSTANCE.toDto(roleRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id)));
   }
@@ -37,5 +37,37 @@ public class RoleServiceImpl implements RoleService {
     return RoleMapper.INSTANCE.toDto(role);
   }
 
+  @Override
+  public RoleDTO updateRole(final Long id, final RoleDTO roleDTO) {
+
+    Role roleBD = roleRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id));
+
+    RoleDTO roleDTO2Update = updateRoleValues(roleDTO);
+
+    Role role = RoleMapper.INSTANCE.toEntity(roleDTO2Update);
+    role = roleRepository.save(role);
+
+    return RoleMapper.INSTANCE.toDto(role);
+  }
+
+  @Override
+  public void deleteRole(Long id) {
+
+    Role roleBD = roleRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id));
+    roleRepository.deleteById(id);
+  }
+
+  private RoleDTO updateRoleValues(RoleDTO roleDTO) {
+
+    return RoleDTO.builder()
+      .id(roleDTO.getId())
+      .name(roleDTO.getName())
+      .description(roleDTO.getDescription())
+      .tasks(roleDTO.getTasks())
+      .build();
+
+  }
 
 }

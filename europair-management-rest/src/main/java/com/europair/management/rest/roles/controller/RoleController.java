@@ -48,4 +48,26 @@ public class RoleController {
 
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<RoleDTO> updateRole(@PathVariable final Long id, @RequestBody final RoleDTO roleDTO) {
+
+    final RoleDTO roleDTOSaved = roleService.updateRole(id, roleDTO);
+
+    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+      .path("/{id}")
+      .buildAndExpand(roleDTOSaved.getId())
+      .toUri();
+
+    return ResponseEntity.ok().body(roleDTOSaved);
+
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteRole(@PathVariable final Long id) {
+
+    roleService.deleteRole(id);
+    return ResponseEntity.noContent().build();
+
+  }
+
 }
