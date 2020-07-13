@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 07072020_tasks_master_v1_screens_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add tasks table to the database"
+      changes:
+        # Tasks
+        - createTable:
+            tableName: tasks
+            remarks: The tasks
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the task
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: tasks_id_pk
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: name of the task
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(500)
+                  remarks: description of the task
+                  constraints:
+                    nullable: false
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: tasks

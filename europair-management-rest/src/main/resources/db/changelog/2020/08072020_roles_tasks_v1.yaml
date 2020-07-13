@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 08072020_roles_v1_roles_tasks_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add roles_tasks table to the database"
+      changes:
+        # Roles_Tasks
+        - createTable:
+            tableName: roles_tasks
+            remarks: The roles and tasks relationship
+            columns:
+              - column:
+                  name: role_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: role_id, task_id
+            constraintName: roles_tasks_pk
+            tableName: roles_tasks
+            validate: true
