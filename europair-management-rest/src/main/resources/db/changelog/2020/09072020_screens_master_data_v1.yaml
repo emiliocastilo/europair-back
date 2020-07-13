@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09072020_screens_master_v1_screens_data
+      context: dev or pre or pro
+      author: jorge.sanchez
+      comment: "Add screens table to the database"
+      changes:
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Expedientes"
+              - column:
+                  name: description
+                  value: "Tareas de expedientes"
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Cotizaciones"
+              - column:
+                  name: description
+                  value: "Cotización de aviones ejecutivos"
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "Aeropuertos"
+              - column:
+                  name: description
+                  value: "Gestión del maestro de aeropuertos"
