@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 08072020_tasks_screens_v1_screens_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add tasks_screens table to the database"
+      changes:
+        # Tasks_Screens
+        - createTable:
+            tableName: tasks_screens
+            remarks: The tasks and screens relationship
+            columns:
+              - column:
+                  name: task_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: screen_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: task_id, screen_id
+            constraintName: tasks_screens_pk
+            tableName: tasks_screens
+            validate: true
