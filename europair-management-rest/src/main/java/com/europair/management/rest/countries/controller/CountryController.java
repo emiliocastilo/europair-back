@@ -22,6 +22,14 @@ public class CountryController {
 
     private final CountryService countryService;
 
+    /**
+     * <p>
+     *     Retrieves a paginated list of countries.
+     * </p>
+     * @param pageable - pagination info
+     * @return paginated list of countries.
+     */
+
     @GetMapping("")
     public ResponseEntity<Page<CountryDTO>> getAllCountriesPaginated(final Pageable pageable) {
 
@@ -30,6 +38,14 @@ public class CountryController {
 
     }
 
+    /**
+     * <p>
+     *     Retrieves country data identified by id.
+     * </p>
+     * @param id - Unique identifier of the country.
+     * @return Country data.
+     */
+
     @GetMapping("/{id}")
     public ResponseEntity<CountryDTO> getCountryById(@PathVariable final Long id) {
 
@@ -37,6 +53,14 @@ public class CountryController {
         return ResponseEntity.ok().body(countryDTO);
 
     }
+
+    /**
+     * <p>
+     *     Creates new country.
+     * </p>
+     * @param countryDTO
+     * @return New country data.
+     */
 
     @PostMapping("")
     public ResponseEntity<CountryDTO> saveCountry(@RequestBody final CountryDTO countryDTO) {
@@ -52,6 +76,15 @@ public class CountryController {
 
     }
 
+    /**
+     * <p>
+     *     Updates country data identified by id.
+     * </p>
+     * @param id - Unique identifier of the country.
+     * @param countryDTO - Country data.
+     * @return Updated country data.
+     */
+
     @PutMapping("/{id}")
     public ResponseEntity<CountryDTO> updateCountry(@PathVariable final Long id, @RequestBody final CountryDTO countryDTO) {
 
@@ -60,6 +93,14 @@ public class CountryController {
         return ResponseEntity.ok().body(countryDTOSaved);
 
     }
+
+    /**
+     * <p>
+     *     Removes country data identified by id.
+     * </p>
+     * @param id - Unique identifier of the country.
+     * @return
+     */
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCountry(@PathVariable final Long id) {
