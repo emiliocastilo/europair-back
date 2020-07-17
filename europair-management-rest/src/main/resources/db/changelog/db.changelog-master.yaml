@@ -17,3 +17,13 @@ databaseChangeLog:
   - include:
       file: 2020/09072020_screens_master_data_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/14072020_users_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/16072020_users_roles_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/16072020_users_tasks_v1.yaml
+      relativeToChangelogFile: true
+

@@ -1,8 +1,12 @@
 package com.europair.management.rest.model.tasks.dto;
 
 import com.europair.management.rest.model.screens.dto.ScreenDTO;
+import com.europair.management.rest.model.users.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -23,5 +27,8 @@ public class TaskDTO {
 
     @JsonProperty("screens")
     private List<ScreenDTO> screens;
+
+    @JsonProperty("users")
+    private List<UserDTO> users;
 
 }
