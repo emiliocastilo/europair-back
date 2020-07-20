@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="europair-management-rest-data" />
         <module name="europair-management-rest-model" />
         <module name="europair-management-rest" />
       </profile>
