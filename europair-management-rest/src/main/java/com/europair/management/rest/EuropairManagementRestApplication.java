@@ -14,18 +14,4 @@ public class EuropairManagementRestApplication extends SpringBootServletInitiali
 		SpringApplication.run(EuropairManagementRestApplication.class, args);
 	}
 
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder springApplicationBuilder) {
-		return springApplicationBuilder
-				.sources(EuropairManagementRestApplication.class)
-				.properties(getProperties());
-	}
-
-	static Properties getProperties() {
-		Properties props = new Properties();
-		props.put("spring.config.location", "classpath:europair/");
-		return props;
-	}
-
-
 }
