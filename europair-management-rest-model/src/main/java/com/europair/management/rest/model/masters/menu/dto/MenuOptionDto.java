@@ -1,12 +1,13 @@
 package com.europair.management.rest.model.masters.menu.dto;
 
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MenuOptionDto {
 

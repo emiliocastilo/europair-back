@@ -1,4 +1,4 @@
-package com.europair.management.rest.masters.menu.entity;
+package com.europair.management.rest.model.masters.menu.entity;
 
 import lombok.Data;
 
