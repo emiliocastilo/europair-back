@@ -1,9 +1,7 @@
 package com.europair.management.rest.cities.controller;
 
 import com.europair.management.rest.cities.service.CityService;
-import com.europair.management.rest.countries.service.CountryService;
 import com.europair.management.rest.model.cities.dto.CityDTO;
-import com.europair.management.rest.model.countries.dto.CountryDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,7 +25,7 @@ public class CityController {
      *     Retrieves a paginated list of cities.
      * </p>
      * @param pageable - pagination info
-     * @return paginated list of countries.
+     * @return paginated list of cities.
      */
 
     @GetMapping("")
