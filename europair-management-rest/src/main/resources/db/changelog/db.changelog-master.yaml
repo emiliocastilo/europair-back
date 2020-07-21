@@ -17,3 +17,6 @@ databaseChangeLog:
   - include:
       file: 2020/09072020_screens_master_data_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/17072020_audit_fields_v1.yaml
+      relativeToChangelogFile: true

@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.roles.entity;
 
+import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.tasks.entity.Task;
 import lombok.Data;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "roles")
 @Data
-public class Role implements Serializable {
+public class Role extends AuditModificationBaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17072020_audit_fields
+      context: dev or pre or pro
+      author: david.castroaguilar
+      comment: "Add audit fields to roles table to the database"
+      changes:
+        # Roles
+        - addColumn:
+            tableName: roles
+            columns:
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: false

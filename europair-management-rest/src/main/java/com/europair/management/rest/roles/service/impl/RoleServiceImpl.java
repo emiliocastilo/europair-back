@@ -1,5 +1,6 @@
 package com.europair.management.rest.roles.service.impl;
 
+import com.europair.management.rest.common.exception.InvalidArgumentException;
 import com.europair.management.rest.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.roles.dto.RoleDTO;
 import com.europair.management.rest.model.roles.entity.Role;
@@ -32,6 +33,10 @@ public class RoleServiceImpl implements RoleService {
 
   @Override
   public RoleDTO saveRole(final RoleDTO roleDTO) {
+
+    if(roleDTO.getId() != null){
+        throw new InvalidArgumentException(String.format("New role expected. Identifier %s got", roleDTO.getId()));
+    }
     Role role = RoleMapper.INSTANCE.toEntity(roleDTO);
     role = roleRepository.save(role);
     return RoleMapper.INSTANCE.toDto(role);
@@ -40,12 +45,10 @@ public class RoleServiceImpl implements RoleService {
   @Override
   public RoleDTO updateRole(final Long id, final RoleDTO roleDTO) {
 
-    Role roleBD = roleRepository.findById(id)
+    Role role = roleRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id));
 
-    RoleDTO roleDTO2Update = updateRoleValues(roleDTO);
-
-    Role role = RoleMapper.INSTANCE.toEntity(roleDTO2Update);
+    RoleMapper.INSTANCE.updateFromDto(roleDTO, role);
     role = roleRepository.save(role);
 
     return RoleMapper.INSTANCE.toDto(role);
@@ -59,15 +62,5 @@ public class RoleServiceImpl implements RoleService {
     roleRepository.deleteById(id);
   }
 
-  private RoleDTO updateRoleValues(RoleDTO roleDTO) {
-
-    return RoleDTO.builder()
-      .id(roleDTO.getId())
-      .name(roleDTO.getName())
-      .description(roleDTO.getDescription())
-      .tasks(roleDTO.getTasks())
-      .build();
-
-  }
 
 }
