@@ -1,12 +1,14 @@
 package com.europair.management.rest.common.configuration;
 
 import com.europair.management.rest.common.login.JwtRequest;
+import com.europair.management.rest.common.login.JwtResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -63,6 +65,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
       .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
       .signWith(SignatureAlgorithm.HS512, secretKey).compact();
     response.addHeader(HEADER_AUTHORIZACION_KEY, TOKEN_BEARER_PREFIX + " " + token);
+    response.getOutputStream().print(new ObjectMapper().writeValueAsString(new JwtResponse(token)));
   }
-
 }

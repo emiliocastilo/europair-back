@@ -2,13 +2,14 @@ package com.europair.management.rest.common.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 import java.io.Serializable;
 
-@Data
+@Getter
 @AllArgsConstructor
 public class JwtResponse implements Serializable {
 
-  private final String jwttoken;
+  private final String jwtToken;
 
 }
