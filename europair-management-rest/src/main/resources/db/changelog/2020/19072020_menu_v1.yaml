@@ -1,0 +1,134 @@
+databaseChangeLog:
+  - changeSet:
+      id: 19072020_menu_v1_menu_options_table
+      context: dev or pre or pro
+      author: jorge.sanchez
+      comment: "Add menu options table to database"
+      changes:
+        # Screens
+        - createTable:
+            tableName: menu_option
+            remarks: Menu options
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the option
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: menu_option_id_pk
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: name of the menu_option
+                  constraints:
+                    nullable: false
+              - column:
+                  name: label
+                  type: varchar(500)
+                  remarks: label of the menu_option
+                  constraints:
+                    nullable: false
+              - column:
+                  name: icon
+                  type: varchar(500)
+                  remarks: icon of the menu_option
+                  constraints:
+                    nullable: true
+              - column:
+                  name: route
+                  type: varchar(500)
+                  remarks: route of the menu_option
+                  constraints:
+                    nullable: true
+              - column:
+                  name: parent_id
+                  type: int
+                  remarks: parent id of the menu_option
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_menu_option_parent
+                    references: menu_option(id)
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: menu_option
+  - changeSet:
+      id: 19072020_menu_v1_menu_option_data
+      context: dev or pre or pro
+      author: jorge.sanchez
+      comment: "Add data to the menu_option table"
+      changes:
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "MASTERS"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters"
+              - column:
+                  name: icon
+                  value: "import_contacts"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "MASTERS_TASKS"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.tasks"
+              - column:
+                  name: route
+                  value: "/tasks"
+              - column:
+                  name: parent_id
+                  value: 1
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "MASTERS_ROLES"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.roles"
+              - column:
+                  name: route
+                  value: "/roles"
+              - column:
+                  name: parent_id
+                  value: 1
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: "MASTERS_USERS"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.users"
+              - column:
+                  name: route
+                  value: "/roles"
+              - column:
+                  name: parent_id
+                  value: 1
