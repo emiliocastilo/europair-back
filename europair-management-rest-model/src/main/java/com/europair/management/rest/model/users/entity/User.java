@@ -30,13 +30,13 @@ public class User {
   @Column(name = "time_zone")
   private String timeZone;
 
-  @ManyToMany(cascade = CascadeType.MERGE)
+  @ManyToMany
   @JoinTable(name = "users_roles",
               joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
               inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
   private List<Role> roles;
 
-  @ManyToMany(cascade = CascadeType.MERGE)
+  @ManyToMany
   @JoinTable(name = "users_tasks",
     joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))

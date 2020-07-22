@@ -7,6 +7,7 @@ import com.europair.management.rest.model.users.mapper.UserMapper;
 import com.europair.management.rest.users.repository.UserRepository;
 import com.europair.management.rest.users.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,58 +19,67 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-  private UserRepository userRepository;
-  private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
-  @Override
-  public Page<UserDTO> findAllPaginated(Pageable pageable) {
-    return userRepository.findAll(pageable).map(user -> UserMapper.INSTANCE.toDto(user));
-  }
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-  @Override
-  public UserDTO findById(Long id) {
-    return UserMapper.INSTANCE.toDto(userRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id)));
-  }
+    @Override
+    public Page<UserDTO> findAllPaginated(Pageable pageable) {
+        return userRepository.findAll(pageable).map(user -> UserMapper.INSTANCE.toDto(user));
+    }
 
-  @Override
-  public UserDTO saveUser(UserDTO userDTO) {
-    User user = UserMapper.INSTANCE.toEntity(userDTO);
-    user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-    user = userRepository.save(user);
-    return UserMapper.INSTANCE.toDto(user);
-  }
+    @Override
+    public UserDTO findById(Long id) {
+        return UserMapper.INSTANCE.toDto(userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id)));
+    }
 
-  @Override
-  public UserDTO updateUser(Long id, UserDTO userDTO) {
-    User userBD = userRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
+    @Override
+    public UserDTO saveUser(UserDTO userDTO) {
+        User user = UserMapper.INSTANCE.toEntity(userDTO);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user = userRepository.save(user);
+        return UserMapper.INSTANCE.toDto(user);
+    }
 
-    UserDTO userDTO2Update = updateUserValues(userDTO);
+    @Override
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
 
-    User user = UserMapper.INSTANCE.toEntity(userDTO2Update);
-    user = userRepository.save(user);
+        User storedUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
 
-    return UserMapper.INSTANCE.toDto(user);
-  }
+        UserDTO storedUserDTO = UserMapper.INSTANCE.toDto(storedUser);
 
-  @Override
-  public void deleteUser(Long id) {
-    User userBD = userRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
-    userRepository.deleteById(id);
-  }
+        UserDTO userDTO2Update = updateUserValues(storedUserDTO.getId(), userDTO);
+        userDTO2Update.setPassword(storedUser.getPassword());
 
-  private UserDTO updateUserValues(UserDTO userDTO) {
+        User user = UserMapper.INSTANCE.toEntity(userDTO2Update);
+        user = userRepository.save(user);
 
-    return UserDTO.builder()
-      .id(userDTO.getId())
-      .username(userDTO.getUsername())
-      .name(userDTO.getName())
-      .surname(userDTO.getSurname())
-      .email(userDTO.getEmail())
-      .timeZone(userDTO.getTimeZone())
-      .build();
+        return UserMapper.INSTANCE.toDto(user);
+    }
 
-  }
+    @Override
+    public void deleteUser(Long id) {
+        User userBD = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
+        userRepository.deleteById(id);
+    }
+
+    private UserDTO updateUserValues(Long id, UserDTO userDTO) {
+
+        return UserDTO.builder()
+                .id(id)
+                .username(userDTO.getUsername())
+                .name(userDTO.getName())
+                .surname(userDTO.getSurname())
+                .email(userDTO.getEmail())
+                .timeZone(userDTO.getTimeZone())
+                .roles(userDTO.getRoles())
+                .tasks(userDTO.getTasks())
+                .build();
+
+    }
 }

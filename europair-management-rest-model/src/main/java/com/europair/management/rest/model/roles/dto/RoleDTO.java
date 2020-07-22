@@ -1,7 +1,6 @@
 package com.europair.management.rest.model.roles.dto;
 
 import com.europair.management.rest.model.tasks.dto.TaskDTO;
-import com.europair.management.rest.model.users.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,8 +26,5 @@ public class RoleDTO {
 
     @JsonProperty("tasks")
     private List<TaskDTO> tasks;
-
-    @JsonProperty("users")
-    private List<UserDTO> users;
 
 }
