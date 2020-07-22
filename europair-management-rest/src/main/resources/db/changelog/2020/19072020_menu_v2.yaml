@@ -48,8 +48,6 @@ databaseChangeLog:
                   remarks: parent id of the menu_option
                   constraints:
                     nullable: true
-                    foreignKeyName: fk_menu_option_parent
-                    references: menu_option(id)
         - addAutoIncrement:
             columnDataType: int
             columnName: id
@@ -57,6 +55,12 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: menu_option
+        - addForeignKeyConstraint:
+            baseColumnNames:  parent_id
+            baseTableName:  menu_option
+            constraintName:  fk_menu_option_parent
+            referencedColumnNames:  id
+            referencedTableName:  menu_option
   - changeSet:
       id: 19072020_menu_v1_menu_option_data
       context: dev or pre or pro
