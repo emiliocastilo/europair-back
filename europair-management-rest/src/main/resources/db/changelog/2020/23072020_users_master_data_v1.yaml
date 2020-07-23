@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 23072020_users_master_v1_users_data
+      context: dev or pre or pro
+      author: juan.sebastianfilipp
+      comment: "Add some users to the database"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: password
+                  value: "$2a$10$YucGYnuMUhG/7rHilE3gVuEjcui7IqA0A.lhtmUh1BVK/ecvGD4/m"
+              - column:
+                  name: name
+                  value: "Noname"
+              - column:
+                  name: surname
+                  value: "Nosurname"
+              - column:
+                  name: time_zone
+                  value: "GMT+2"
