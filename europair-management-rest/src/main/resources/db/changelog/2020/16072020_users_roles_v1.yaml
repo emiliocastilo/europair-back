@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16072020_users_roles_table_v1
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add users_roles table to the database"
+      changes:
+        # Users_Roles
+        - createTable:
+            tableName: users_roles
+            remarks: The users and roles relationship
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: user_id, role_id
+            constraintName: users_roles_pk
+            tableName: users_roles
+            validate: true
