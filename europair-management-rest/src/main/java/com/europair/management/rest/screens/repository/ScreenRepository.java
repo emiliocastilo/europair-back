@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ScrrenRepository extends JpaRepository<Screen, Long> {
+public interface ScreenRepository extends JpaRepository<Screen, Long> {
 
   List<Screen> findByName(final String name);
 }

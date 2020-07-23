@@ -3,7 +3,7 @@ package com.europair.management.rest.screens.service.impl;
 import com.europair.management.rest.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.screens.dto.ScreenDTO;
 import com.europair.management.rest.model.screens.mapper.ScreenMapper;
-import com.europair.management.rest.screens.repository.ScrrenRepository;
+import com.europair.management.rest.screens.repository.ScreenRepository;
 import com.europair.management.rest.screens.service.ScreenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ScreenServiceImpl implements ScreenService {
 
-  private final ScrrenRepository screenRepository;
+  private final ScreenRepository screenRepository;
 
   @Override
   public Page<ScreenDTO> findAllPaginated(Pageable pageable) {
