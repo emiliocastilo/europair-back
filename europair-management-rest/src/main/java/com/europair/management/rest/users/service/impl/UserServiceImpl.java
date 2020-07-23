@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         String password = generatePassword();
         user.setPassword(bCryptPasswordEncoder.encode(password));
         user = userRepository.save(user);
-        
+
         return UserMapper.INSTANCE.toDto(user);
     }
 
