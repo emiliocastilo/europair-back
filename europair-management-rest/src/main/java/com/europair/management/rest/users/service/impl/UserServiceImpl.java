@@ -39,8 +39,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO saveUser(UserDTO userDTO) {
         User user = UserMapper.INSTANCE.toEntity(userDTO);
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+        String password = generatePassword();
+        user.setPassword(bCryptPasswordEncoder.encode(password));
         user = userRepository.save(user);
+        
         return UserMapper.INSTANCE.toDto(user);
     }
 
@@ -81,5 +84,10 @@ public class UserServiceImpl implements UserService {
                 .tasks(userDTO.getTasks())
                 .build();
 
+    }
+
+    private String generatePassword() {
+        //TODO: usar un generador aleatorio. De momento está hardcoded para facilitar el desarrollo.
+        return "europ1234";
     }
 }

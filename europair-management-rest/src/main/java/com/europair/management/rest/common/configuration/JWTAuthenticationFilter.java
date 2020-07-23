@@ -34,8 +34,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   private AuthenticationManager authenticationManager;
 
   // TODO: fix value annotation
-  @Value("${europair.security.token.expiration.time:30000}")
-  private Long expirationTime = 300000L;
+  @Value("${europair.security.token.expiration.time:300000}") // 5 min.
+  private Long expirationTime = 1296000000L; // 15 días, es provisional.
 
   @Value("${europair.security.token.secret.key:3ur0p41r}")
   private String secretKey = "3ur0p41r";
