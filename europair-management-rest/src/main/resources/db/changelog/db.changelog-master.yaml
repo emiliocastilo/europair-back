@@ -33,6 +33,9 @@ databaseChangeLog:
       file: 2020/16072020_countries_master_data_v1.yaml
       relativeToChangelogFile: true
   - include:
+      file: 2020/20072020_cities_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
       file: 2020/19072020_menu_v2.yaml
       relativeToChangelogFile: true
   - include:

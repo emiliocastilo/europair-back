@@ -2,8 +2,6 @@ package com.europair.management.rest.countries.controller;
 
 import com.europair.management.rest.countries.service.CountryService;
 import com.europair.management.rest.model.countries.dto.CountryDTO;
-import com.europair.management.rest.model.roles.dto.RoleDTO;
-import com.europair.management.rest.roles.service.RoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

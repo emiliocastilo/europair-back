@@ -1,5 +1,6 @@
-package com.europair.management.rest.model.countries.dto;
+package com.europair.management.rest.model.cities.dto;
 
+import com.europair.management.rest.model.countries.dto.CountryDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CountryDTO {
+public class CityDTO {
 
     @JsonProperty("id")
     private Long id;
@@ -20,5 +21,8 @@ public class CountryDTO {
 
     @JsonProperty("name")
     private String name;
+
+    @JsonProperty("country")
+    private CountryDTO country;
 
 }

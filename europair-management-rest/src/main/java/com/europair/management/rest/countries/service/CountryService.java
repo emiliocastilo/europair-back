@@ -6,10 +6,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface CountryService {
 
-  Page<CountryDTO> findAllPaginated(Pageable pageable);
-  CountryDTO findById(Long id);
-  CountryDTO saveCountry(CountryDTO countryDTO);
-  CountryDTO updateCountry(Long id, CountryDTO countryDTO);
-  void deleteCountry(Long id);
+    Page<CountryDTO> findAllPaginated(Pageable pageable);
+
+    CountryDTO findById(Long id);
+
+    CountryDTO saveCountry(CountryDTO countryDTO);
+
+    CountryDTO updateCountry(Long id, CountryDTO countryDTO);
+
+    void deleteCountry(Long id);
 
 }
