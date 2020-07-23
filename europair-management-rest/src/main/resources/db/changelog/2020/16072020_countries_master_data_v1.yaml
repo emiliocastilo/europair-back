@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16072020_countries_master_v1_countries_data
+      context: dev or pre or pro
+      author: juan.sebastianfilipp
+      comment: "Add some countries to the database"
+      changes:
+        - insert:
+            tableName: countries
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: code
+                  value: "ES"
+              - column:
+                  name: name
+                  value: "España"
+        - insert:
+            tableName: countries
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: code
+                  value: "IT"
+              - column:
+                  name: name
+                  value: "Italia"
