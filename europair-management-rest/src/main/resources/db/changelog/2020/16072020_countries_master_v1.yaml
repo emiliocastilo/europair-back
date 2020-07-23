@@ -24,8 +24,8 @@ databaseChangeLog:
                   remarks: country code
                   constraints:
                     nullable: false
-                    primaryKey: true
-                    primaryKeyName: country_code_pk
+                    unique: true
+                    uniqueConstraintName: country_code_uq
               - column:
                   name: name
                   type: varchar(255)

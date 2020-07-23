@@ -24,6 +24,8 @@ databaseChangeLog:
                   remarks: username
                   constraints:
                     nullable: false
+                    unique: true
+                    uniqueConstraintName: username_uq
               - column:
                   name: password
                   type: varchar(255)
