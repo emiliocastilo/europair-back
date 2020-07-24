@@ -31,6 +31,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: weight
+                  type: int
+                  remarks: weight of the menu option
+                  constraints:
+                    nullable: false
+              - column:
                   name: icon
                   type: varchar(500)
                   remarks: icon of the menu_option
@@ -74,14 +80,14 @@ databaseChangeLog:
                   name: id
                   value: 1
               - column:
+                  name: weight
+                  value: 1
+              - column:
                   name: name
-                  value: "MASTERS"
+                  value: "PARENT"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters"
-              - column:
-                  name: icon
-                  value: "import_contacts"
+                  value: "core.left.sidebar.parent"
         - insert:
             tableName: menu_option
             columns:
@@ -89,14 +95,17 @@ databaseChangeLog:
                   name: id
                   value: 2
               - column:
+                  name: weight
+                  value: 1
+              - column:
                   name: name
-                  value: "MASTERS_TASKS"
+                  value: "MASTERS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.tasks"
+                  value: "Maestros"
               - column:
-                  name: route
-                  value: "/tasks"
+                  name: icon
+                  value: "import_contacts"
               - column:
                   name: parent_id
                   value: 1
@@ -107,17 +116,20 @@ databaseChangeLog:
                   name: id
                   value: 3
               - column:
+                  name: weight
+                  value: 1
+              - column:
                   name: name
-                  value: "MASTERS_ROLES"
+                  value: "MASTERS_TASKS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.roles"
+                  value: "Tareas"
               - column:
                   name: route
-                  value: "/roles"
+                  value: "/tasks"
               - column:
                   name: parent_id
-                  value: 1
+                  value: 2
         - insert:
             tableName: menu_option
             columns:
@@ -125,14 +137,101 @@ databaseChangeLog:
                   name: id
                   value: 4
               - column:
+                  name: weight
+                  value: 2
+              - column:
                   name: name
-                  value: "MASTERS_USERS"
+                  value: "MASTERS_ROLES"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.users"
+                  value: "Roles"
               - column:
                   name: route
                   value: "/roles"
               - column:
                   name: parent_id
-                  value: 1
+                  value: 2
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: weight
+                  value: 3
+              - column:
+                  name: name
+                  value: "MASTERS_USERS"
+              - column:
+                  name: label
+                  value: "Usuarios"
+              - column:
+                  name: route
+                  value: "/users"
+              - column:
+                  name: parent_id
+                  value: 2
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: weight
+                  value: 4
+              - column:
+                  name: name
+                  value: "MASTERS_COUNTRIES"
+              - column:
+                  name: label
+                  value: "Paises"
+              - column:
+                  name: route
+                  value: "/countries"
+              - column:
+                  name: parent_id
+                  value: 2
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: weight
+                  value: 5
+              - column:
+                  name: name
+                  value: "MASTERS_REGIONS"
+              - column:
+                  name: label
+                  value: "Regiones"
+              - column:
+                  name: route
+                  value: "/regions"
+              - column:
+                  name: parent_id
+                  value: 2
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: weight
+                  value: 6
+              - column:
+                  name: name
+                  value: "MASTERS_CITIES"
+              - column:
+                  name: label
+                  value: "Ciudades"
+              - column:
+                  name: route
+                  value: "/cities"
+              - column:
+                  name: parent_id
+                  value: 2
