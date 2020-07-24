@@ -2,6 +2,7 @@ package com.europair.management.rest.model.roles.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.tasks.entity.Task;
+import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,5 +29,8 @@ public class Role extends AuditModificationBaseEntity implements Serializable {
               joinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"),
               inverseJoinColumns = @JoinColumn(name="task_id", referencedColumnName = "id"))
   private List<Task> tasks;
+
+  @ManyToMany(mappedBy = "roles")
+  private List<User> users;
 
 }

@@ -2,6 +2,7 @@ package com.europair.management.rest.model.users.dto;
 
 import com.europair.management.rest.model.roles.dto.RoleDTO;
 import com.europair.management.rest.model.tasks.dto.TaskDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,20 +16,23 @@ import java.util.List;
 @Builder
 public class UserDTO {
 
-    private Long id;
+  private Long id;
 
-    private String username;
+  private String username;
 
-    private String name;
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private String password;
 
-    private String surname;
+  private String name;
 
-    private String email;
+  private String surname;
 
-    private String timeZone;
+  private String email;
 
-    private List<RoleDTO> roles;
+  private String timeZone;
 
-    private List<TaskDTO> tasks;
+  private List<RoleDTO> roles;
+
+  private List<TaskDTO> tasks;
 
 }

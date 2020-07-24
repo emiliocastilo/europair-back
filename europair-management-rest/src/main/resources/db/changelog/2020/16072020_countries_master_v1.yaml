@@ -1,0 +1,41 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16072020_countries_master_v1_countries_table
+      context: dev or pre or pro
+      author: juan.sebastianfilipp
+      comment: "Add countries table to the database"
+      changes:
+        # Countries
+        - createTable:
+            tableName: countries
+            remarks: Countries
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: country id
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: country_id_pk
+              - column:
+                  name: code
+                  type: char(2)
+                  remarks: country code
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: country_code_uq
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: country name
+                  constraints:
+                    nullable: false
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: countries

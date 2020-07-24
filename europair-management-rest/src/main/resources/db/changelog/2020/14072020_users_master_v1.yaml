@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14072020_users_v1_users_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add users table to the database"
+      changes:
+        # Users
+        - createTable:
+            tableName: users
+            remarks: The users
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the user
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: users_id_pk
+              - column:
+                  name: username
+                  type: varchar(255)
+                  remarks: username
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: username_uq
+              - column:
+                  name: password
+                  type: varchar(255)
+                  remarks: password of the user
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: name of the user
+                  constraints:
+                    nullable: false
+              - column:
+                  name: surname
+                  type: varchar(255)
+                  remarks: surname of the user
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  remarks: email of the user
+                  constraints:
+                    nullable: true
+              - column:
+                  name: time_zone
+                  type: varchar(255)
+                  remarks: time zone of the user
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: users

@@ -18,5 +18,32 @@ databaseChangeLog:
       file: 2020/09072020_screens_master_data_v1.yaml
       relativeToChangelogFile: true
   - include:
+      file: 2020/14072020_users_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/16072020_users_roles_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/16072020_users_tasks_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/16072020_countries_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/16072020_countries_master_data_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20072020_cities_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/19072020_menu_v2.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/23072020_users_master_data_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/23072020_screens_master_v2_screens_data.yaml
+      relativeToChangelogFile: true
+  - include:
       file: 2020/17072020_audit_fields_v1.yaml
       relativeToChangelogFile: true

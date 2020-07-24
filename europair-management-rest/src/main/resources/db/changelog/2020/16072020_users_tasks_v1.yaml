@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 16072020_users_tasks_table_v1
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add users_tasks table to the database"
+      changes:
+        # Users_Tasks
+        - createTable:
+            tableName: users_tasks
+            remarks: The users and tasks relationship
+            columns:
+              - column:
+                  name: user_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: user_id, task_id
+            constraintName: users_tasks_pk
+            tableName: users_tasks
+            validate: true

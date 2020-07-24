@@ -14,12 +14,14 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<name>europair-management-rest</name>
 	<description>Europair management website</description>
+	<packaging>${packaging.type}</packaging>
 
 	<properties>
 		<java.version>14</java.version>
 		<json-web-token.version>0.9.1</json-web-token.version>
 		<lombok.version>1.18.2</lombok.version>
 		<mapstruct.version>1.3.1.Final</mapstruct.version>
+		<packaging.type>jar</packaging.type>
 	</properties>
 
 	<dependencies>
@@ -161,6 +163,43 @@
 				</resources>
 			</build>
 		</profile>
+		<profile>
+			<id>war</id>
+			<properties>
+				<packaging.type>war</packaging.type>
+			</properties>
+			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources</directory>
+						<excludes>
+							<exclude>*-dev.*</exclude>
+							<!--<exclude>*-pre.*</exclude>
+							<exclude>*-int.*</exclude>
+							<exclude>*-pro.*</exclude>-->
+						</excludes>
+						<filtering>true</filtering>
+					</resource>
+				</resources>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>com.h2database</groupId>
+					<artifactId>h2</artifactId>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>mysql</groupId>
+					<artifactId>mysql-connector-java</artifactId>
+					<version>8.0.17</version>
+				</dependency>
+			</dependencies>
+		</profile>
 	</profiles>
 
 	<build>
@@ -168,6 +207,29 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>ch.acanda.maven</groupId>
+				<artifactId>spring-banner-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<id>generate-spring-banner</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<text>EUROPAIR-SERVICE</text>
+					<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+					<filename>banner.txt</filename>
+					<includeInfo>true</includeInfo>
+					<version>${project.version}</version>
+					<color>green</color>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
