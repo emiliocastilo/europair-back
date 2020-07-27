@@ -2,6 +2,10 @@ package com.europair.management.rest.roles.controller;
 
 import com.europair.management.rest.model.roles.dto.RoleDTO;
 import com.europair.management.rest.roles.service.RoleService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -10,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 
 @RestController
@@ -21,7 +26,8 @@ public class RoleController {
   private final RoleService roleService;
 
   @GetMapping("")
-  public ResponseEntity<Page<RoleDTO>> getAllRolesPaginated(final Pageable pageable) {
+  @Operation(description = "Paged result of master roles", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<Page<RoleDTO>> getAllRolesPaginated(@Parameter(description = "Pagination filter")final Pageable pageable) {
 
     final Page<RoleDTO> pageRolesDTO = roleService.findAllPaginated(pageable);
     return ResponseEntity.ok().body(pageRolesDTO);
@@ -29,13 +35,15 @@ public class RoleController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<RoleDTO> getRoleById(@PathVariable final Long id) {
+  @Operation(description = "Retrieve master role by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<RoleDTO> getRoleById(@Parameter(description = "Role identifier") @NotNull @PathVariable final Long id) {
     final RoleDTO roleDTO = roleService.findById(id);
     return ResponseEntity.ok().body(roleDTO);
   }
 
   @PostMapping("")
-  public ResponseEntity<RoleDTO> saveRole(@RequestBody final RoleDTO roleDTO) {
+  @Operation(description = "Save a new master role", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<RoleDTO> saveRole(@Parameter(description = "Master Role object") @NotNull @RequestBody final RoleDTO roleDTO) {
 
     final RoleDTO roleDTOSaved = roleService.saveRole(roleDTO);
 
@@ -49,7 +57,9 @@ public class RoleController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<RoleDTO> updateRole(@PathVariable final Long id, @RequestBody final RoleDTO roleDTO) {
+  @Operation(description = "Updates existing master role", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<RoleDTO> updateRole(@Parameter(description = "Role identifier") @NotNull @PathVariable final Long id,
+                                            @Parameter(description = "Master Role object") @NotNull @RequestBody final RoleDTO roleDTO) {
 
     final RoleDTO roleDTOSaved = roleService.updateRole(id, roleDTO);
 
@@ -63,7 +73,8 @@ public class RoleController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteRole(@PathVariable final Long id) {
+  @Operation(description = "Deletes existing master role by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<?> deleteRole(@Parameter(description = "Role identifier") @PathVariable @NotNull final Long id) {
 
     roleService.deleteRole(id);
     return ResponseEntity.noContent().build();

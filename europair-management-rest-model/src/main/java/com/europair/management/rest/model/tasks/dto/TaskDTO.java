@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.tasks.dto;
 
+import com.europair.management.rest.model.audit.dto.AuditModificationBaseDTO;
 import com.europair.management.rest.model.screens.dto.ScreenDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TaskDTO {
+public class TaskDTO extends AuditModificationBaseDTO {
 
     @JsonProperty("id")
     private Long id;

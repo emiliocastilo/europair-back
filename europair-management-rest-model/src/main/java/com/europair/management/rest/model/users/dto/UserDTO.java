@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.users.dto;
 
+import com.europair.management.rest.model.audit.dto.AuditModificationBaseDTO;
 import com.europair.management.rest.model.roles.dto.RoleDTO;
 import com.europair.management.rest.model.tasks.dto.TaskDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDTO {
+public class UserDTO extends AuditModificationBaseDTO {
 
   private Long id;
 

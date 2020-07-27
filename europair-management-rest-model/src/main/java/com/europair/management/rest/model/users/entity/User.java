@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.users.entity;
 
+import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.tasks.entity.Task;
 import lombok.Data;
@@ -10,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name="users")
 @Data
-public class User {
+public class User extends AuditModificationBaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

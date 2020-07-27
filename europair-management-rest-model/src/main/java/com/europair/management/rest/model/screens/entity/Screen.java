@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.screens.entity;
 
+import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.tasks.entity.Task;
 import lombok.Data;
 
@@ -10,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "screens")
 @Data
-public class Screen implements Serializable {
+public class Screen extends AuditModificationBaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -26,3 +26,9 @@ databaseChangeLog:
               - column:
                   name: time_zone
                   value: "GMT+2"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
