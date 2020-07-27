@@ -12,14 +12,14 @@ databaseChangeLog:
                   name: id
                   value: 1
               - column:
+                  name: weight
+                  value: 1
+              - column:
                   name: name
-                  value: "MASTERS"
+                  value: "PARENT"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters"
-              - column:
-                  name: icon
-                  value: "import_contacts"
+                  value: "core.left.sidebar.parent"
               - column:
                   name: created_at
                   value: "2020-07-24"
@@ -33,14 +33,17 @@ databaseChangeLog:
                   name: id
                   value: 2
               - column:
+                  name: weight
+                  value: 1
+              - column:
                   name: name
-                  value: "MASTERS_TASKS"
+                  value: "MASTERS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.tasks"
+                  value: "core.left.sidebar.masters"
               - column:
-                  name: route
-                  value: "/tasks"
+                  name: icon
+                  value: "import_contacts"
               - column:
                   name: parent_id
                   value: 1
@@ -57,17 +60,20 @@ databaseChangeLog:
                   name: id
                   value: 3
               - column:
+                  name: weight
+                  value: 1
+              - column:
                   name: name
-                  value: "MASTERS_ROLES"
+                  value: "MASTERS_TASKS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.roles"
+                  value: "core.left.sidebar.masters.tasks"
               - column:
                   name: route
-                  value: "/roles"
+                  value: "/tasks"
               - column:
                   name: parent_id
-                  value: 1
+                  value: 2
               - column:
                   name: created_at
                   value: "2020-07-24"
@@ -81,6 +87,36 @@ databaseChangeLog:
                   name: id
                   value: 4
               - column:
+                  name: weight
+                  value: 2
+              - column:
+                  name: name
+                  value: "MASTERS_ROLES"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.roles"
+              - column:
+                  name: route
+                  value: "/roles"
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: weight
+                  value: 3
+              - column:
                   name: name
                   value: "MASTERS_USERS"
               - column:
@@ -88,10 +124,91 @@ databaseChangeLog:
                   value: "core.left.sidebar.masters.users"
               - column:
                   name: route
-                  value: "/roles"
+                  value: "/users"
               - column:
                   name: parent_id
-                  value: 1
+                  value: 2
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: weight
+                  value: 4
+              - column:
+                  name: name
+                  value: "MASTERS_COUNTRIES"
+              - column:
+                  name: label
+                  value: "Países"
+              - column:
+                  name: route
+                  value: "/countries"
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: weight
+                  value: 5
+              - column:
+                  name: name
+                  value: "MASTERS_REGIONS"
+              - column:
+                  name: label
+                  value: "Regiones"
+              - column:
+                  name: route
+                  value: "/regions"
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: weight
+                  value: 6
+              - column:
+                  name: name
+                  value: "MASTERS_CITIES"
+              - column:
+                  name: label
+                  value: "Ciudades"
+              - column:
+                  name: route
+                  value: "/cities"
+              - column:
+                  name: parent_id
+                  value: 2
               - column:
                   name: created_at
                   value: "2020-07-24"
