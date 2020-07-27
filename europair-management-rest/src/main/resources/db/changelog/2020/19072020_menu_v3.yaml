@@ -31,6 +31,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: weight
+                  type: int
+                  remarks: weight of the menu option
+                  constraints:
+                    nullable: false
+              - column:
                   name: icon
                   type: varchar(500)
                   remarks: icon of the menu_option
