@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.cities.dto;
 
+import com.europair.management.rest.model.audit.dto.AuditModificationBaseDTO;
 import com.europair.management.rest.model.countries.dto.CountryDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CityDTO {
+public class CityDTO extends AuditModificationBaseDTO {
 
     @JsonProperty("id")
     private Long id;

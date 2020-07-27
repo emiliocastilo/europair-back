@@ -1,0 +1,151 @@
+databaseChangeLog:
+  - changeSet:
+      id: 09072020_screens_master_v3_screens_data
+      context: dev or pre or pro
+      author: jorge.sanchez
+      comment: "Add screens table to the database"
+      changes:
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Expedientes"
+              - column:
+                  name: description
+                  value: "Tareas de expedientes"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Cotizaciones"
+              - column:
+                  name: description
+                  value: "Cotización de aviones ejecutivos"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "Aeropuertos"
+              - column:
+                  name: description
+                  value: "Gestión del maestro de aeropuertos"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: "Roles"
+              - column:
+                  name: description
+                  value: "Gestión de roles"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+              - insert:
+                  tableName: screens
+                  columns:
+                    - column:
+                        name: id
+                        value: 5
+                    - column:
+                        name: name
+                        value: "Tareas"
+                    - column:
+                        name: description
+                        value: "Gestión de tareas"
+                    - column:
+                        name: created_at
+                        value: "2020-07-24"
+                    - column:
+                        name: created_by
+                        value: "Sistema"
+              - insert:
+                  tableName: screens
+                  columns:
+                    - column:
+                        name: id
+                        value: 6
+                    - column:
+                        name: name
+                        value: "Usuarios"
+                    - column:
+                        name: description
+                        value: "Gestión de usuarios"
+                    - column:
+                        name: created_at
+                        value: "2020-07-24"
+                    - column:
+                        name: created_by
+                        value: "Sistema"
+              - insert:
+                  tableName: screens
+                  columns:
+                    - column:
+                        name: id
+                        value: 7
+                    - column:
+                        name: name
+                        value: "Países"
+                    - column:
+                        name: description
+                        value: "Gestión de países"
+                    - column:
+                        name: created_at
+                        value: "2020-07-24"
+                    - column:
+                        name: created_by
+                        value: "Sistema"
+              - insert:
+                  tableName: screens
+                  columns:
+                    - column:
+                        name: id
+                        value: 8
+                    - column:
+                        name: name
+                        value: "Regiones"
+                    - column:
+                        name: description
+                        value: "Gestión de regiones"
+                    - column:
+                        name: created_at
+                        value: "2020-07-24"
+                    - column:
+                        name: created_by
+                        value: "Sistema"

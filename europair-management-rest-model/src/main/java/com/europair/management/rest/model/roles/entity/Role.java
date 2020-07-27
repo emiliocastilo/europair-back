@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.roles.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class Role extends AuditModificationBaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(unique = true)
+  @Column(unique = true, length = TextField.TEXT_255)
   private String name;
 
   @Column

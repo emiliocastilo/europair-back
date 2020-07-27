@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.masters.menu.dto;
 
+import com.europair.management.rest.model.audit.dto.AuditModificationBaseDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MenuOptionDto {
+public class MenuOptionDto extends AuditModificationBaseDTO {
 
     private Long id;
     private String name;

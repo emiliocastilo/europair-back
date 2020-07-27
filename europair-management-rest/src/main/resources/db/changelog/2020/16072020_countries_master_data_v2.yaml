@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 16072020_countries_master_v1_countries_data
+      id: 25072020_countries_master_v2_countries_data
       context: dev or pre or pro
       author: juan.sebastianfilipp
       comment: "Add some countries to the database"
@@ -17,6 +17,12 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "España"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
         - insert:
             tableName: countries
             columns:
@@ -29,3 +35,9 @@ databaseChangeLog:
               - column:
                   name: name
                   value: "Italia"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"

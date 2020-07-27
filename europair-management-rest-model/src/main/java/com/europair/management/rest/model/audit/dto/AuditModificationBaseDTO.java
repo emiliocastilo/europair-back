@@ -4,8 +4,12 @@
 
 package com.europair.management.rest.model.audit.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,20 +21,29 @@ public class AuditModificationBaseDTO implements Serializable {
 	/**
 	 * Audit: Creation date @see AuditModificationsBaseEntity.createdAt
 	 */
+	@NotNull(message = "Field name is mandatory")
+	@Size(min = 0, max = 255, message = "Field name must be 255 character max")
+	@Schema(description = "Audit creation date")
 	private Date createdAt;
 	
 	/**
 	 * Audit: Creation author @see AuditModificationsBaseEntity.createdBy
 	 */
+	@NotBlank(message = "Field name is mandatory")
+	@Size(min = 0, max = 30, message = "Field name must be 30 character max")
+	@Schema(description = "Audit creation author")
 	private String createdBy;
 
 	/**
 	 * Audit: Modification date @see AuditModificationsBaseEntity.modifiedAt
 	 */
+	@Schema(description = "Audit modification date")
 	private Date modifiedAt;
 	
 	/**
 	 * Audit: Modification author @see AuditModificationsBaseEntity.modifiedBy
 	 */
+	@Size(min = 0, max = 30, message = "Field name must be 30 character max")
+	@Schema(description = "Audit creation author")
 	private String modifiedBy;
 }
