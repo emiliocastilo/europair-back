@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 28072020_conversions_master_v1_conversions_table
+      context: dev or pre or pro
+      author: juan.sebastianfilipp
+      comment: "Add conversions table to the database"
+      changes:
+        # Conversions
+        - createTable:
+            tableName: conversions
+            remarks: Conversions
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the conversion
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: conversions_id_pk
+              - column:
+                  name: src_unit
+                  type: varchar(16)
+                  remarks: source unit
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dst_unit
+                  type: varchar(16)
+                  remarks: destination unit
+                  constraints:
+                    nullable: false
+              - column:
+                  name: factor
+                  type: double
+                  remarks: conversion factor
+                  constraints:
+                    nullable: false
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: conversions
