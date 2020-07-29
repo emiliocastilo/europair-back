@@ -2,6 +2,9 @@ package com.europair.management.rest.conversions.controller;
 
 import com.europair.management.rest.conversions.service.ConversionService;
 import com.europair.management.rest.model.conversions.dto.ConversionDataDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -22,7 +26,7 @@ public class ConversionController {
 
     /**
      * <p>
-     * Convert data between different units.
+     * Converts data between different units.
      * </p>
      *
      * @param conversionDataDTO
@@ -30,7 +34,8 @@ public class ConversionController {
      */
 
     @PostMapping("")
-    public ResponseEntity<List<Double>> convertData(@RequestBody final ConversionDataDTO conversionDataDTO) {
+    @Operation(description = "Converts data between different units.", security = {@SecurityRequirement(name = "bearerAuth")})
+    public ResponseEntity<List<Double>> convertData(@Parameter(description = "Data to be converted") @NotNull @RequestBody final ConversionDataDTO conversionDataDTO) {
 
         final List<Double> convertedData = conversionService.convertData(conversionDataDTO);
 
