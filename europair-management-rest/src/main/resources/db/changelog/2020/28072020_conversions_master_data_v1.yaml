@@ -1,0 +1,250 @@
+databaseChangeLog:
+  - changeSet:
+      id: 28072020_conversion_data
+      context: dev or pre or pro
+      author: juan.sebastianfilipp
+      comment: "Conversion data"
+      changes:
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "FOOT"
+              - column:
+                  name: dst_unit
+                  value: "METER"
+              - column:
+                  name: factor
+                  value: "0.3048"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "FOOT"
+              - column:
+                  name: dst_unit
+                  value: "KILOMETER"
+              - column:
+                  name: factor
+                  value: "0.000305"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "FOOT"
+              - column:
+                  name: dst_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: factor
+                  value: "0.000165"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "FOOT"
+              - column:
+                  name: dst_unit
+                  value: "INCH"
+              - column:
+                  name: factor
+                  value: "12.0"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "METER"
+              - column:
+                  name: dst_unit
+                  value: "FOOT"
+              - column:
+                  name: factor
+                  value: "3.28084"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "METER"
+              - column:
+                  name: dst_unit
+                  value: "KILOMETER"
+              - column:
+                  name: factor
+                  value: "0.001"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "METER"
+              - column:
+                  name: dst_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: factor
+                  value: "0.00054"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "METER"
+              - column:
+                  name: dst_unit
+                  value: "INCH"
+              - column:
+                  name: factor
+                  value: "39.370079"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "KILOMETER"
+              - column:
+                  name: dst_unit
+                  value: "FOOT"
+              - column:
+                  name: factor
+                  value: "3278.688525"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "KILOMETER"
+              - column:
+                  name: dst_unit
+                  value: "METER"
+              - column:
+                  name: factor
+                  value: "1000"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "KILOMETER"
+              - column:
+                  name: dst_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: factor
+                  value: "0.539957"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "KILOMETER"
+              - column:
+                  name: dst_unit
+                  value: "INCH"
+              - column:
+                  name: factor
+                  value: "39370.08"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: dst_unit
+                  value: "FOOT"
+              - column:
+                  name: factor
+                  value: "6075.334143"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: dst_unit
+                  value: "METER"
+              - column:
+                  name: factor
+                  value: "1851.851852"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: dst_unit
+                  value: "KILOMETER"
+              - column:
+                  name: factor
+                  value: "1.851999"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: dst_unit
+                  value: "INCH"
+              - column:
+                  name: factor
+                  value: "72913.38"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "INCH"
+              - column:
+                  name: dst_unit
+                  value: "FOOT"
+              - column:
+                  name: factor
+                  value: "0.083333"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "INCH"
+              - column:
+                  name: dst_unit
+                  value: "METER"
+              - column:
+                  name: factor
+                  value: "0.0254"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "INCH"
+              - column:
+                  name: dst_unit
+                  value: "KILOMETER"
+              - column:
+                  name: factor
+                  value: "0.000025"
+        - insert:
+            tableName: conversions
+            columns:
+              - column:
+                  name: src_unit
+                  value: "INCH"
+              - column:
+                  name: dst_unit
+                  value: "NAUTIC_MILE"
+              - column:
+                  name: factor
+                  value: "0.000014"
+
+
+
