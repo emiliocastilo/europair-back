@@ -1,0 +1,120 @@
+databaseChangeLog:
+  - changeSet:
+      id: 30072020_airports_v1_airports_table
+      context: dev or pre or pro
+      author: juan.sebastianfilipp
+      comment: "Add airports table to the database"
+      changes:
+        # Airports
+        - createTable:
+            tableName: airports
+            remarks: The airports
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the airport
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: airport_id_pk
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: iataCode
+                  type: char(3)
+                  remarks: IATA code
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: iata_code_uq
+              - column:
+                  name: icaoCode
+                  type: char(4)
+                  remarks: ICAO code
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: icao_code_uq
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: name of the airports
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: int
+                  remarks: country id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: airports_country_fk
+                    references: countries(id)
+              - column:
+                  name: city_id
+                  type: int
+                  remarks: city id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: airports_city_fk
+                    references: cities(id)
+              # TODO: definir tipo de time_zone
+              - column:
+                  name: time_zone
+                  type: varchar(255)
+                  remarks: airport time zone
+                  constraints:
+                    nullable: true
+              - column:
+                  name: elevation
+                  type: double
+                  remarks: airport elevation
+                  constraints:
+                    nullable: true
+              - column:
+                  name: elevation_unit
+                  type: varchar(16)
+                  remarks: airport elevation unit
+                  constraints:
+                    nullable: true
+              - column:
+                  name: latitude
+                  type: double
+                  remarks: airport latitude
+                  constraints:
+                    nullable: true
+              - column:
+                  name: longitude
+                  type: double
+                  remarks: airport longitude
+                  constraints:
+                    nullable: true
+              - column:
+                  name: customs
+                  type: varchar(16)
+                  remarks: airport customs
+                  constraints:
+                    nullable: true
+              - column:
+                  name: special_conditions
+                  type: boolean
+                  remarks: airport special conditions
+                  constraints:
+                    nullable: true
+              - column:
+                  name: flight_rules
+                  type: varchar(4)
+                  remarks: airport flight rules
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: airports

@@ -1,56 +1,96 @@
 package com.europair.management.rest.model.airport.entity;
 
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.common.Location;
+import com.europair.management.rest.model.common.PhysicalQuantity;
+import com.europair.management.rest.model.common.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.countries.entity.Country;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "airports")
 @Data
-public class Airport extends AuditModificationBaseEntity implements Serializable {
+public class Airport extends SoftRemovableBaseEntity implements Serializable {
 
-  public static enum Customs {YES, NO, ON_REQUEST};
+    public static enum Customs {
+        YES, NO, ON_REQUEST
+    }
 
-  public static enum FlightRules {IFR, VFR};
+    public static enum FlightRules {
+        IFR, VFR
+    }
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  @Column(unique = true)
-  private String iataCode;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(unique = true)
-  private String icaoCode;
+    @Column(unique = true)
+    private String iataCode;
 
-  private String name;
+    @Column(unique = true)
+    private String icaoCode;
 
-  @ManyToOne
-  @JoinColumn(name="country_id")
-  private Country country;
+    private String name;
 
-  @ManyToOne
-  @JoinColumn(name="city_id")
-  private City city;
+    @ManyToOne
+    @JoinColumn(name = "country_id")
+    private Country country;
 
-  @Column(name = "time_zone")
-  private String timeZone;
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private City city;
 
-  private double elevation;
+    @Column(name = "time_zone")
+    private String timeZone;
 
-  @Embedded
-  private Location location;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "magnitude", column = @Column(name = "elevation")),
+            @AttributeOverride(name = "unit", column = @Column(name = "elevation_unit"))
+    })
+    private PhysicalQuantity elevation;
 
-  @Enumerated(EnumType.STRING)
-  private Customs customs;
+    @Embedded
+    private Location location;
 
-  private boolean specialConditions = false;
+    @Enumerated(EnumType.STRING)
+    private Customs customs;
 
-  @Enumerated(EnumType.STRING)
-  private FlightRules flightRules;
+    private boolean specialConditions = false;
+
+    @Enumerated(EnumType.STRING)
+    private FlightRules flightRules;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "airport")
+    private List<Runway> runways;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "airport")
+    private List<Terminal> terminals;
+
+    // TODO: operadores certificados: códigos del operador certificado y
+    //  observaciones. Sólo se habilitará si el campo de condiciones
+    //  especiales está marcado.
+
+    @ElementCollection
+    private List<String> comments;
+
+    // TODO: directorio del aeropuerto: listado de contactos de todo
+    //  tipo que se hayan dado de alta en el módulo de CRM y estén
+    //  asociados al aeropuerto: contactos del aeropuerto, contactos
+    //  de empresas de handling, etc.
+
+    // TODO: flota del aeropuerto: se podrá consultar la flota asociada
+    //  al aeropuerto. Se realizará una consulta al maestro de flota,
+    //  filtrando por el aeropuerto a consultar.
+
+    // TODO: regiones: A qué regiones pertenece este aeropuerto.
 }
