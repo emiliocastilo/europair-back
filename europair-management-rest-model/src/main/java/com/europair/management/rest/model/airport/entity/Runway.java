@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.airport.entity;
 
-import com.europair.management.rest.model.common.PhysicalQuantity;
+import com.europair.management.rest.model.common.entity.PhysicalQuantity;
 import lombok.Data;
 
 import javax.persistence.*;

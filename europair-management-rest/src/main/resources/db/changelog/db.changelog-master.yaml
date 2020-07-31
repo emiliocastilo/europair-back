@@ -48,6 +48,6 @@ databaseChangeLog:
       file: 2020/27072020_menu_master_data_v1.yaml
       relativeToChangelogFile: true
   - include:
-      file: 2020/30072020_airports_v1.yaml
+      file: 2020/30072020_airports_master_v1.yaml
       relativeToChangelogFile: true
 

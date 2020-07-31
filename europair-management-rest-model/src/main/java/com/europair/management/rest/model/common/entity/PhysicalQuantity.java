@@ -1,4 +1,4 @@
-package com.europair.management.rest.model.common;
+package com.europair.management.rest.model.common.entity;
 
 import com.europair.management.rest.model.conversions.common.Unit;
 import lombok.Data;

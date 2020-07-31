@@ -2,7 +2,7 @@
  * Copyright (c) 2020. 2020 Plexus Tech. EuropAir license
  */
 
-package com.europair.management.rest.model.common;
+package com.europair.management.rest.model.common.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import lombok.Data;

@@ -1,9 +1,9 @@
 package com.europair.management.rest.model.airport.entity;
 
 import com.europair.management.rest.model.cities.entity.City;
-import com.europair.management.rest.model.common.Location;
-import com.europair.management.rest.model.common.PhysicalQuantity;
-import com.europair.management.rest.model.common.SoftRemovableBaseEntity;
+import com.europair.management.rest.model.common.entity.Location;
+import com.europair.management.rest.model.common.entity.PhysicalQuantity;
+import com.europair.management.rest.model.common.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.countries.entity.Country;
 import lombok.Data;
 
