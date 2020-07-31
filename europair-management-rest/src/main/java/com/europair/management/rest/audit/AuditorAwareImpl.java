@@ -22,7 +22,8 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username).map(u -> u.getName() + " " + u.getSurname());
+        Optional<User> user = userRepository.findByUsername(username);
+        return user.map(u -> u.getName() + " " + u.getSurname());
         //return Optional.of("AUDIT_TEST_USER");
     }
 }

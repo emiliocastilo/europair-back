@@ -19,6 +19,8 @@ public interface AuditModificationBaseMapperConfig {
   List<AuditModificationBaseDTO> toListDtos (final List<AuditModificationBaseEntity> listEntities);
 
   // Prevent audit fields being mapped and overwrited
+  @Mapping(target = "createdBy", ignore = true)
+  @Mapping(target = "createdAt", ignore = true)
   @Mapping(target = "modifiedBy", ignore = true)
   @Mapping(target = "modifiedAt", ignore = true)
   AuditModificationBaseEntity toEntity (final AuditModificationBaseDTO auditModificationBaseDTO);
