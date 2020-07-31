@@ -4,8 +4,6 @@
 
 package com.europair.management.rest.audit;
 
-import com.europair.management.rest.model.users.dto.UserDTO;
-import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
@@ -22,8 +20,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Optional<User> user = userRepository.findByUsername(username);
-        return user.map(u -> u.getName() + " " + u.getSurname());
+        return userRepository.findByUsername(username).map(u -> u.getName() + " " + u.getSurname());
         //return Optional.of("AUDIT_TEST_USER");
     }
 }
