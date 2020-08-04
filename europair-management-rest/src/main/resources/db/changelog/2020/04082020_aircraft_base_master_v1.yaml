@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04082020_aircraft_base_master_v1_aircraft_bases
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add aircraft bases table to the database"
+      changes:
+        - createTable:
+            tableName: aircraft_bases
+            remarks: The aircraft bases
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the aircraft base
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: aircraft_base_id_pk
+              - column:
+                  name: airport_id
+                  type: int
+                  remarks: Airport id
+                  constraints:
+                    nullable: false
+                    # ToDo: pendiente entidad
+#                    foreignKeyName: aircraft_base_airport_fk
+#                    references: airports(id)
+#                    validateForeignKey: true
+              - column:
+                  name: aircraft_id
+                  type: int
+                  remarks: Aircraft id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: aircraft_base_aircraft_fk
+                    references: aircrafts(id)
+                    validateForeignKey: true
+              - column:
+                  name: main_base
+                  type: bool
+                  remarks: Flags if the base is the main base for the aircraft
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: aircraft_bases
