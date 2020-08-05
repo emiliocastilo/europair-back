@@ -215,3 +215,36 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+ - changeSet:
+      id: 05082020_menu_v2_menu_option_data
+      context: dev or pre or pro
+      author: david.castro
+      comment: "Add airport data to the menu_option table"
+      changes:
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: weight
+                  value: 7
+              - column:
+                  name: name
+                  value: "MASTERS_AIRPORTS"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.airports"
+              - column:
+                  name: route
+                  value: "/airports"
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: created_at
+                  value: "2020-08-05"
+              - column:
+                  name: created_by
+                  value: "Sistema"
