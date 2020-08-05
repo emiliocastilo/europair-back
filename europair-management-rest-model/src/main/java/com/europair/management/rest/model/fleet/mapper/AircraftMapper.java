@@ -17,7 +17,7 @@ public interface AircraftMapper {
 
     AircraftMapper INSTANCE = Mappers.getMapper(AircraftMapper.class);
 
-    @Mapping(target = "bases", source = "bases", qualifiedByName = "aircraftBaseDtoListNoAircraft")
+    @Mapping(target = "bases", qualifiedByName = "aircraftBaseNoAircraft")
     AircraftDto toDto(final Aircraft entity);
 
     List<AircraftDto> toDto(final List<Aircraft> entityList);

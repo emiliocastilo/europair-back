@@ -3,13 +3,18 @@ package com.europair.management.rest.fleet.service.impl;
 import com.europair.management.rest.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.fleet.repository.AircraftRepository;
 import com.europair.management.rest.fleet.service.AircraftService;
+import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.fleet.dto.AircraftDto;
+import com.europair.management.rest.model.fleet.dto.AircraftFilterDto;
 import com.europair.management.rest.model.fleet.mapper.AircraftMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -28,4 +33,12 @@ public class AircraftServiceImpl implements AircraftService {
         return AircraftMapper.INSTANCE.toDto(aircraftRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found with id: " + id)));
     }
+
+    @Override
+    public List<AircraftDto> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
+        return aircraftRepository.findAircraftsByCriteria(criteria, pageable).stream()
+                .map(AircraftMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
