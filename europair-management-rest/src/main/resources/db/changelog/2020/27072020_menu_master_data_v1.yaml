@@ -215,7 +215,7 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
- - changeSet:
+  - changeSet:
       id: 05082020_menu_v2_menu_option_data
       context: dev or pre or pro
       author: david.castro
