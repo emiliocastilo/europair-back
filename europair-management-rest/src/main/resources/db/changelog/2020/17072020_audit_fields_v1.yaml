@@ -173,7 +173,7 @@ databaseChangeLog:
                   remarks: last modification author
                   constraints:
                     nullable: true
-        # Tasks
+        # Users
         - addColumn:
             tableName: users
             columns:
@@ -201,3 +201,4 @@ databaseChangeLog:
                   remarks: last modification author
                   constraints:
                     nullable: true
+

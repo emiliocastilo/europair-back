@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -37,6 +38,7 @@ public class OperatorServiceImpl implements OperatorService {
   @Override
   public OperatorDTO saveOperator(OperatorDTO operatorDTO) {
     Operator operator = OperatorMapper.INSTANCE.toEntity(operatorDTO);
+
     operator = operatorRepository.save(operator);
     return OperatorMapper.INSTANCE.toDto(operator);
   }
@@ -61,7 +63,8 @@ public class OperatorServiceImpl implements OperatorService {
 
     Operator operatorBD = operatorRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Operator not found on id: " + id));
-    operatorRepository.deleteById(id);
+
+    operatorRepository.save(operatorBD);
 
   }
 

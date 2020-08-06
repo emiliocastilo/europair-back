@@ -2,6 +2,8 @@ package com.europair.management.rest.operators.controller;
 
 import com.europair.management.rest.model.operators.dto.OperatorDTO;
 import com.europair.management.rest.operators.service.OperatorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ public class OperatorController {
 
 
   @GetMapping("")
+  @Operation(description = "Paged result of operators list", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<Page<OperatorDTO>> getAllOperatorsPaginated(final Pageable pageable) {
 
     final Page<OperatorDTO> pageOperatorsDTO = operatorService.findAllPaginated(pageable);
@@ -30,6 +33,7 @@ public class OperatorController {
   }
 
   @GetMapping("/{id}")
+  @Operation(description = "Retrieve operator by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorDTO> getOperatorById(@PathVariable final Long id) {
 
     final OperatorDTO operatorDTO = operatorService.findById(id);
@@ -37,6 +41,7 @@ public class OperatorController {
   }
 
   @PostMapping("")
+  @Operation(description = "Save a new operator", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorDTO> saveOperator(@RequestBody final OperatorDTO operatorDTO) {
 
     final OperatorDTO operatorDTOSaved = operatorService.saveOperator(operatorDTO);
@@ -51,6 +56,7 @@ public class OperatorController {
   }
 
   @PutMapping("/{id}")
+  @Operation(description = "Updates existing operator", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorDTO> updateOperator(@PathVariable final Long id, @RequestBody final OperatorDTO operatorDTO) {
 
     final OperatorDTO operatorDTOSaved = operatorService.updateOperator(id, operatorDTO);
@@ -65,6 +71,7 @@ public class OperatorController {
   }
 
   @DeleteMapping("/{id}")
+  @Operation(description = "Deletes existing operator by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<?> deleteOperator(@PathVariable final Long id) {
 
     operatorService.deleteOperator(id);
