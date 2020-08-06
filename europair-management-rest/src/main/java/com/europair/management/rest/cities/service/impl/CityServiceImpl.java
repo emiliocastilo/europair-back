@@ -2,7 +2,7 @@ package com.europair.management.rest.cities.service.impl;
 
 import com.europair.management.rest.cities.repository.CityRepository;
 import com.europair.management.rest.cities.service.CityService;
-import com.europair.management.rest.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.cities.dto.CityDTO;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.cities.mapper.CityMapper;

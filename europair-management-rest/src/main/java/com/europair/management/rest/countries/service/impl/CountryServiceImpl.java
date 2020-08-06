@@ -1,6 +1,6 @@
 package com.europair.management.rest.countries.service.impl;
 
-import com.europair.management.rest.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.countries.repository.CountryRepository;
 import com.europair.management.rest.countries.service.CountryService;
 import com.europair.management.rest.model.countries.dto.CountryDTO;

@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/roles")
-public class RoleController implements IRoleController {
+public class RoleController implements IRoleController, InitializingBean {
 
   private final RoleService roleService;
 
@@ -81,4 +82,8 @@ public class RoleController implements IRoleController {
 
   }
 
+  @Override
+  public void afterPropertiesSet() throws Exception {
+    System.out.println("estamos escaneando");
+  }
 }

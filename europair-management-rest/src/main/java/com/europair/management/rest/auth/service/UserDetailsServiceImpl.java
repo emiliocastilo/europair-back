@@ -1,6 +1,6 @@
 package com.europair.management.rest.auth.service;
 
-import com.europair.management.rest.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.users.repository.UserRepository;

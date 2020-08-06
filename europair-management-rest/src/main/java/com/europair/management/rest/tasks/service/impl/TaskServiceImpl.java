@@ -1,6 +1,6 @@
 package com.europair.management.rest.tasks.service.impl;
 
-import com.europair.management.rest.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.tasks.dto.TaskDTO;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.tasks.mapper.TaskMapper;

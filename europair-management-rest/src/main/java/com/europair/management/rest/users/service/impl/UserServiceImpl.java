@@ -1,6 +1,6 @@
 package com.europair.management.rest.users.service.impl;
 
-import com.europair.management.rest.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.users.dto.UserDTO;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.mapper.UserMapper;
