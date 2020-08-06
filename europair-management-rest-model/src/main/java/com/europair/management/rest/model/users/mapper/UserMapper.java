@@ -1,7 +1,8 @@
 package com.europair.management.rest.model.users.mapper;
 
+import com.europair.management.api.dto.users.dto.UserDTO;
 import com.europair.management.rest.model.audit.mapper.AuditModificationBaseMapperConfig;
-import com.europair.management.rest.model.users.dto.UserDTO;
+
 import com.europair.management.rest.model.users.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;
