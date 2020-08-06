@@ -11,6 +11,8 @@ import java.util.Properties;
 public class EuropairManagementRestApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
+
+
 		SpringApplication.run(EuropairManagementRestApplication.class, args);
 	}
 

@@ -17,6 +17,8 @@
     <modules>
         <module>europair-management-rest</module>
         <module>europair-management-rest-model</module>
+        <module>europair-management-api</module>
+        <module>europair-management-impl</module>
     </modules>
 
     <build>
