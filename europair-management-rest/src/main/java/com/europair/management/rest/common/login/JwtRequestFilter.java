@@ -40,6 +40,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         // TODO: delete all sout and put this inside a logger
         System.out.println("Unable to get JWT Token");
       } catch (ExpiredJwtException e) {
+        // TODO: delete all sout and put this inside a logger
         System.out.println("JWT Token has expired");
       }
     } else {
