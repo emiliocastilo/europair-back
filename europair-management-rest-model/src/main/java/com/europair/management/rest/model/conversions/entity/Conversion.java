@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Table(name = "conversions")
 @Data
 public class Conversion implements Serializable {
-//doc
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
