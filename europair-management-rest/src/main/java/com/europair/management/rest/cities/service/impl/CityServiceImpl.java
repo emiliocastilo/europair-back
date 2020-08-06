@@ -34,20 +34,20 @@ public class CityServiceImpl implements CityService {
     @Override
     public CityDTO saveCity(final CityDTO cityDTO) {
         City city = cityRepository.save(CityMapper.INSTANCE.toEntity(cityDTO));
-        return CityMapper.INSTANCE.toDto(city);
+        CityDTO cityDTO1 = CityMapper.INSTANCE.toDto(city);
+        return cityDTO1;
     }
 
     @Override
     public CityDTO updateCity(final Long id, final CityDTO cityDTO) {
 
-        City storedCity = cityRepository.findById(id)
+        City city = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found on id: " + id));
 
-        CityDTO storedCityDTO = CityMapper.INSTANCE.toDto(storedCity);
+        CityDTO dto2Update = updateCityValues(id, cityDTO);
 
-        CityDTO updatedCityDTO = updateCityValues(storedCityDTO.getId(), cityDTO);
-
-        City city = cityRepository.save(CityMapper.INSTANCE.toEntity(updatedCityDTO));
+        CityMapper.INSTANCE.updateFromDto(dto2Update, city);
+        city = cityRepository.save(city);
 
         return CityMapper.INSTANCE.toDto(city);
     }
