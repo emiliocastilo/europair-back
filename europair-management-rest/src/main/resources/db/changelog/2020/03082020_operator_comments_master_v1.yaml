@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03082020_operators_master_v1_comments_table
+      context: dev or pre or pro
+      author: joseignacio.mendez
+      comment: "Add operator commments table to the database"
+      changes:
+        # Comments
+        - createTable:
+            tableName: operator_comments
+            remarks: The operator comments
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the comment
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: operator_comments_id_pk
+              - column:
+                  name: comment
+                  type: varchar(255)
+                  remarks: comment
+                  constraints:
+                    nullable: false
+              - column:
+                  name: operator_id
+                  type: int
+                  remarks: operator id
+                  constraints:
+                    nullable: false
+
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: operator_comments
