@@ -48,12 +48,12 @@ databaseChangeLog:
       file: 2020/27072020_menu_master_data_v1.yaml
       relativeToChangelogFile: true
   - include:
+<<<<<<< HEAD
+      file: 2020/03082020_operators_master_data_v1.yaml
+=======
       file: 2020/28072020_conversions_master_v1.yaml
       relativeToChangelogFile: true
   - include:
       file: 2020/28072020_conversions_master_data_v1.yaml
+>>>>>>> develop
       relativeToChangelogFile: true
-  - include:
-      file: 2020/03082020_operators_master_data_v1.yaml
-      relativeToChangelogFile: true
-      
