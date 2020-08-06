@@ -50,15 +50,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(Long id, UserDTO userDTO) {
 
-        User storedUser = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
 
-        UserDTO storedUserDTO = UserMapper.INSTANCE.toDto(storedUser);
+        UserDTO dto2Update = updateUserValues(user.getId(), userDTO);
+        dto2Update.setPassword(user.getPassword());
 
-        UserDTO userDTO2Update = updateUserValues(storedUserDTO.getId(), userDTO);
-        userDTO2Update.setPassword(storedUser.getPassword());
-
-        User user = UserMapper.INSTANCE.toEntity(userDTO2Update);
+        UserMapper.INSTANCE.updateFromDto(dto2Update, user);
         user = userRepository.save(user);
 
         return UserMapper.INSTANCE.toDto(user);
