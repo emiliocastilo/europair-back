@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03082020_operators_master_v1_operators_table
+      context: dev or pre or pro
+      author: joseignacio.mendez
+      comment: "Add operators table to the database"
+      changes:
+        # Operators
+        - createTable:
+            tableName: operators
+            remarks: The operators
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the operator
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: operators_id_pk
+              - column:
+                  name: iata_code
+                  type: varchar(3)
+                  remarks: IATA code of the operator
+                  constraints:
+                    nullable: true
+              - column:
+                  name: icao_code
+                  type: varchar(4)
+                  remarks: ICAO code of the operator
+                  constraints:
+                    nullable: true
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: name of the operator
+                  constraints:
+                    nullable: false
+              - column:
+                  name: aoc_last_revision_date
+                  type: timestamp
+                  remarks: date of the last AOC revision
+                  constraints:
+                    nullable: true
+              - column:
+                  name: aoc_number
+                  type: number
+                  remarks: number of AOC
+                  constraints:
+                    nullable: true
+              - column:
+                  name: insurance_expiration_date
+                  type: timestamp
+                  remarks: date of the expiration of the insurance
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: operators

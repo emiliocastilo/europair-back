@@ -47,3 +47,6 @@ databaseChangeLog:
   - include:
       file: 2020/27072020_menu_master_data_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/03082020_operators_master_data_v1.yaml
+      relativeToChangelogFile: true
