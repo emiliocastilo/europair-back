@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,10 +38,17 @@ public class AircraftController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<List<AircraftDto>> getAircraftByFilter(final Pageable pageable,
+    public ResponseEntity<Page<AircraftDto>> getAircraftByFilter(final Pageable pageable,
                                                                  @RequestParam Map<String, String> reqParam) {
         CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
-        final List<AircraftDto> aircraftDtoPage = aircraftService.findAllPaginatedByFilter(pageable, criteria);
+        final Page<AircraftDto> aircraftDtoPage = aircraftService.findAllPaginatedByFilter(pageable, criteria);
+        return ResponseEntity.ok(aircraftDtoPage);
+    }
+
+    @GetMapping("/filter/basic")
+    public ResponseEntity<Page<AircraftDto>> getAircraftsByBasicFilter(final Pageable pageable,
+                                                                       @RequestParam final String filter) {
+        final Page<AircraftDto> aircraftDtoPage = aircraftService.findAllPaginatedByBasicFilter(pageable, filter);
         return ResponseEntity.ok(aircraftDtoPage);
     }
 

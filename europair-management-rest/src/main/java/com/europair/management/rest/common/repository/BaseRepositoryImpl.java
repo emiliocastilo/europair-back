@@ -1,31 +1,5 @@
 package com.europair.management.rest.common.repository;
 
-import java.io.Serializable;
-import java.text.ParseException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.security.auth.login.AccountException;
-import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
-
 import com.europair.management.rest.common.exception.EuropairGeneralException;
 import com.europair.management.rest.common.exception.InvalidArgumentException;
 import com.europair.management.rest.model.audit.entity.AuditRevision;
@@ -38,11 +12,37 @@ import org.hibernate.Session;
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
-import org.hibernate.envers.RevisionEntity;
 import org.hibernate.jpa.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.query.QueryUtils;
+
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.security.auth.login.AccountException;
+import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public abstract class BaseRepositoryImpl<T> {
@@ -246,12 +246,13 @@ public abstract class BaseRepositoryImpl<T> {
     // PROTECTED METHODS
 
     /**
-     * Create a criteria tp the given entity
+     * Create a criteria tp the given entity ordered by pageable sort properties
      * @param criteria CoreCriteria
-     * @param rootClass
+     * @param rootClass Root class
+     * @param pageable Pageable with sort information
      * @return Criteria Query object
      */
-    protected CriteriaQuery<?> buildCriteria(CoreCriteria criteria, Class rootClass) {
+    protected CriteriaQuery<?> buildCriteria(CoreCriteria criteria, Class rootClass, Pageable pageable) {
 
         CriteriaBuilder builder = getCriteriaBuilder();
         CriteriaQuery<Object> crit = builder.createQuery(rootClass);
@@ -266,6 +267,10 @@ public abstract class BaseRepositoryImpl<T> {
 
         if (!restrictions.isEmpty()) {
             crit.where(restrictions.toArray(new Predicate[restrictions.size()]));
+        }
+
+        if (pageable != null) {
+            crit.orderBy(QueryUtils.toOrders(pageable.getSort(), root, builder));
         }
 
         return crit;
@@ -423,4 +428,16 @@ public abstract class BaseRepositoryImpl<T> {
         }
 		return column;
 	}
+
+    /**
+     * Create a criteria tp the given entity
+     *
+     * @param criteria  CoreCriteria
+     * @param rootClass Root class
+     * @return Criteria Query object
+     */
+    protected CriteriaQuery<?> buildCriteria(CoreCriteria criteria, Class rootClass) {
+        return buildCriteria(criteria, rootClass, null);
+    }
+
 }
