@@ -2,7 +2,7 @@ package com.europair.management.impl.service.tasks.controller;
 
 import com.europair.management.api.dto.tasks.dto.TaskDTO;
 import com.europair.management.api.service.tasks.controller.ITaskController;
-import com.europair.management.impl.service.tasks.service.TaskService;
+import com.europair.management.impl.service.tasks.service.ITaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ import java.net.URI;
 @RequestMapping("/tasks")
 public class TaskController implements ITaskController {
 
-  private final TaskService taskService;
+  private final ITaskService taskService;
 
   @GetMapping("")
   public ResponseEntity<Page<TaskDTO>> getAllSTasksPaginated(final Pageable pageable) {

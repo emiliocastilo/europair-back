@@ -1,18 +1,16 @@
 package com.europair.management.rest.conversions.service.impl;
 
+import com.europair.management.api.dto.conversions.common.Unit;
+import com.europair.management.api.dto.conversions.dto.ConversionDataDTO;
 import com.europair.management.rest.conversions.repository.ConversionRepository;
 import com.europair.management.rest.conversions.service.ConversionService;
-import com.europair.management.rest.model.conversions.common.Unit;
-import com.europair.management.rest.model.conversions.dto.ConversionDataDTO;
 import com.europair.management.rest.model.conversions.entity.Conversion;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service

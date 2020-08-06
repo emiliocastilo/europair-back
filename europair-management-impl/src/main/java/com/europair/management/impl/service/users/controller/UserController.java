@@ -4,7 +4,7 @@ import com.europair.management.api.dto.users.dto.UserDTO;
 import com.europair.management.api.service.users.controller.IUserController;
 
 
-import com.europair.management.impl.service.users.service.UserService;
+import com.europair.management.impl.service.users.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.net.URI;
 public class UserController implements IUserController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     @GetMapping("")
     public ResponseEntity<Page<UserDTO>> getAllUsersPaginated(final Pageable pageable) {

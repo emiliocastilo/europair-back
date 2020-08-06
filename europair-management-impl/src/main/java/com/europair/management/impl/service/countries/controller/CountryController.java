@@ -3,7 +3,7 @@ package com.europair.management.impl.service.countries.controller;
 
 import com.europair.management.api.dto.countries.dto.CountryDTO;
 import com.europair.management.api.service.countries.controller.ICountryController;
-import com.europair.management.impl.service.countries.service.CountryService;
+import com.europair.management.impl.service.countries.service.ICountryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ import java.net.URI;
 @RequestMapping("/countries")
 public class CountryController implements ICountryController {
 
-    private final CountryService countryService;
+    private final ICountryService countryService;
 
     /**
      * <p>

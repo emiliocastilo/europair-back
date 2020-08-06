@@ -4,11 +4,11 @@ import com.europair.management.api.dto.cities.dto.CityDTO;
 import com.europair.management.api.dto.countries.dto.CountryDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 
-import com.europair.management.impl.service.cities.service.CityService;
+import com.europair.management.impl.service.cities.service.ICityService;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.cities.mapper.CityMapper;
 
-import com.europair.management.rest.model.cities.repository.CityRepository;
+import com.europair.management.rest.model.cities.repository.ICityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CityServiceImpl implements CityService {
+public class CityServiceImpl implements ICityService {
 
-    private final CityRepository cityRepository;
+    private final ICityRepository cityRepository;
 
     @Override
     public Page<CityDTO> findAllPaginated(Pageable pageable) {

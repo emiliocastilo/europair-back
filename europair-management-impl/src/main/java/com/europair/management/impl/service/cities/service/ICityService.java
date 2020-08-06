@@ -5,7 +5,7 @@ import com.europair.management.api.dto.cities.dto.CityDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface CityService {
+public interface ICityService {
 
   Page<CityDTO> findAllPaginated(Pageable pageable);
   CityDTO findById(Long id);

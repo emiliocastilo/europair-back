@@ -3,10 +3,10 @@ package com.europair.management.impl.service.tasks.service.impl;
 
 import com.europair.management.api.dto.tasks.dto.TaskDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-import com.europair.management.impl.service.tasks.service.TaskService;
+import com.europair.management.impl.service.tasks.service.ITaskService;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.tasks.mapper.TaskMapper;
-import com.europair.management.rest.model.tasks.repository.TaskRepository;
+import com.europair.management.rest.model.tasks.repository.ITaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class TaskServiceImpl implements TaskService {
+public class TaskServiceImpl implements ITaskService {
 
-  private final TaskRepository taskRepository;
+  private final ITaskRepository taskRepository;
 
   @Override
   public Page<TaskDTO> findAllPaginated(Pageable pageable) {

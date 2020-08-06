@@ -2,7 +2,7 @@ package com.europair.management.impl.service.screens.controller;
 
 import com.europair.management.api.service.screens.controller.IScreenController;
 import com.europair.management.api.dto.screens.dto.ScreenDTO;
-import com.europair.management.impl.service.screens.service.ScreenService;
+import com.europair.management.impl.service.screens.service.IScreenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/screens")
 public class ScreenController implements IScreenController {
 
-  private final ScreenService screenService;
+  private final IScreenService IScreenService;
 
   @GetMapping("")
   public ResponseEntity<Page<ScreenDTO>> getAllScreensPaginated(final Pageable pageable) {
 
-    final Page<ScreenDTO> pageScreensDTO = screenService.findAllPaginated(pageable);
+    final Page<ScreenDTO> pageScreensDTO = IScreenService.findAllPaginated(pageable);
     return ResponseEntity.ok().body(pageScreensDTO);
 
   }
@@ -32,7 +32,7 @@ public class ScreenController implements IScreenController {
   @GetMapping("/{id}")
   public ResponseEntity<ScreenDTO> getScreenById(@PathVariable final Long id) {
 
-    final ScreenDTO screenDTO = screenService.findById(id);
+    final ScreenDTO screenDTO = IScreenService.findById(id);
     return ResponseEntity.ok().body(screenDTO);
   }
 

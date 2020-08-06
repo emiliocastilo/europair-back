@@ -3,11 +3,11 @@ package com.europair.management.impl.service.users.service.impl;
 import com.europair.management.api.dto.users.dto.UserDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 
-import com.europair.management.impl.service.users.service.UserService;
+import com.europair.management.impl.service.users.service.IUserService;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.mapper.UserMapper;
 
-import com.europair.management.rest.model.users.repository.UserRepository;
+import com.europair.management.rest.model.users.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements IUserService {
 
     @Autowired
-    private UserRepository userRepository;
+    private IUserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;

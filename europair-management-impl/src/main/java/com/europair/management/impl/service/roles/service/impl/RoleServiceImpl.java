@@ -5,8 +5,8 @@ import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.api.dto.roles.dto.RoleDTO;
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.roles.mapper.RoleMapper;
-import com.europair.management.rest.model.roles.repository.RoleRepository;
-import com.europair.management.impl.service.roles.service.RoleService;
+import com.europair.management.rest.model.roles.repository.IRoleRepository;
+import com.europair.management.impl.service.roles.service.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl implements IRoleService {
 
-  private final RoleRepository roleRepository;
+  private final IRoleRepository roleRepository;
 
   @Override
   public Page<RoleDTO> findAllPaginated(Pageable pageable) {

@@ -2,7 +2,7 @@ package com.europair.management.rest.auth.service;
 
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.UserRepository;
+import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Autowired
-  private UserRepository userRepository;
+  private IUserRepository userRepository;
 
   @Override
   @Transactional(readOnly = true)

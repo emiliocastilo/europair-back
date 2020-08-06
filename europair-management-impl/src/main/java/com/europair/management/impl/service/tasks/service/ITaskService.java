@@ -5,7 +5,7 @@ import com.europair.management.api.dto.tasks.dto.TaskDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface TaskService {
+public interface ITaskService {
 
   Page<TaskDTO> findAllPaginated(Pageable pageable);
   TaskDTO findById(Long id);

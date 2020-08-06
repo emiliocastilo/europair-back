@@ -1,7 +1,8 @@
 package com.europair.management.rest.conversions.controller;
 
+import com.europair.management.api.dto.conversions.dto.ConversionDataDTO;
 import com.europair.management.rest.conversions.service.ConversionService;
-import com.europair.management.rest.model.conversions.dto.ConversionDataDTO;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

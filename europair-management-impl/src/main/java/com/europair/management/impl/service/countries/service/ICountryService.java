@@ -5,7 +5,7 @@ import com.europair.management.api.dto.countries.dto.CountryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface CountryService {
+public interface ICountryService {
 
     Page<CountryDTO> findAllPaginated(Pageable pageable);
 

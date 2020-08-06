@@ -2,10 +2,10 @@ package com.europair.management.impl.service.countries.service.impl;
 
 import com.europair.management.api.dto.countries.dto.CountryDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-import com.europair.management.impl.service.countries.service.CountryService;
+import com.europair.management.impl.service.countries.service.ICountryService;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.countries.mapper.CountryMapper;
-import com.europair.management.rest.model.countries.repository.CountryRepository;
+import com.europair.management.rest.model.countries.repository.ICountryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CountryServiceImpl implements CountryService {
+public class CountryServiceImpl implements ICountryService {
 
-    private final CountryRepository countryRepository;
+    private final ICountryRepository countryRepository;
 
     @Override
     public Page<CountryDTO> findAllPaginated(Pageable pageable) {

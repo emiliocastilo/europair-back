@@ -3,7 +3,7 @@ package com.europair.management.impl.service.cities.controller;
 import com.europair.management.api.dto.cities.dto.CityDTO;
 import com.europair.management.api.service.cities.controller.ICityController;
 
-import com.europair.management.impl.service.cities.service.CityService;
+import com.europair.management.impl.service.cities.service.ICityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,7 @@ import java.net.URI;
 @RequestMapping("/cities")
 public class CityController implements ICityController {
 
-    private final CityService cityService;
+    private final ICityService cityService;
 
     /**
      * <p>
