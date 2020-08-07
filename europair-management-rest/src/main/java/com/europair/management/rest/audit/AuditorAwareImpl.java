@@ -4,8 +4,6 @@
 
 package com.europair.management.rest.audit;
 
-import com.europair.management.rest.model.users.dto.UserDTO;
-import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
