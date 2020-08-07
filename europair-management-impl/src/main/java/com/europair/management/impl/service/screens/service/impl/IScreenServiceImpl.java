@@ -1,9 +1,9 @@
 package com.europair.management.impl.service.screens.service.impl;
 
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
-import com.europair.management.impl.service.screens.service.IScreenService;
 import com.europair.management.api.dto.screens.dto.ScreenDTO;
-import com.europair.management.rest.model.screens.mapper.ScreenMapper;
+import com.europair.management.impl.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.mappers.screens.ScreenMapper;
+import com.europair.management.impl.service.screens.service.IScreenService;
 import com.europair.management.rest.model.screens.repository.IScreenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

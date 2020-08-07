@@ -3,9 +3,9 @@ package com.europair.management.impl.service.tasks.service.impl;
 
 import com.europair.management.api.dto.tasks.dto.TaskDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.mappers.tasks.TaskMapper;
 import com.europair.management.impl.service.tasks.service.ITaskService;
 import com.europair.management.rest.model.tasks.entity.Task;
-import com.europair.management.rest.model.tasks.mapper.TaskMapper;
 import com.europair.management.rest.model.tasks.repository.ITaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

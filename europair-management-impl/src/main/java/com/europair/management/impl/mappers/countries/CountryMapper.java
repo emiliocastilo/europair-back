@@ -1,11 +1,7 @@
-package com.europair.management.rest.model.cities.mapper;
+package com.europair.management.impl.mappers.countries;
 
-import com.europair.management.api.dto.cities.dto.CityDTO;
 import com.europair.management.api.dto.countries.dto.CountryDTO;
 import com.europair.management.rest.model.audit.mapper.AuditModificationBaseMapperConfig;
-
-import com.europair.management.rest.model.cities.entity.City;
-
 import com.europair.management.rest.model.countries.entity.Country;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;
@@ -14,17 +10,13 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class, mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
-public interface CityMapper {
+public interface CountryMapper {
 
-  CityMapper INSTANCE = Mappers.getMapper(CityMapper.class);
-
-  CityDTO toDto (final City entity);
+  CountryMapper INSTANCE = Mappers.getMapper(CountryMapper.class);
 
   CountryDTO toDto (final Country entity);
 
-  List<CityDTO> toListDtos (final List<City> listEntities);
-
-  City toEntity (final CityDTO cityDTO);
+  List<CountryDTO> toListDtos (final List<Country> listEntities);
 
   Country toEntity (final CountryDTO countryDTO);
 

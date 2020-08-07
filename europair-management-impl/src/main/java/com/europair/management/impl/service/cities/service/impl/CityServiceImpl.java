@@ -3,11 +3,9 @@ package com.europair.management.impl.service.cities.service.impl;
 import com.europair.management.api.dto.cities.dto.CityDTO;
 import com.europair.management.api.dto.countries.dto.CountryDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-
+import com.europair.management.impl.mappers.cities.CityMapper;
 import com.europair.management.impl.service.cities.service.ICityService;
 import com.europair.management.rest.model.cities.entity.City;
-import com.europair.management.rest.model.cities.mapper.CityMapper;
-
 import com.europair.management.rest.model.cities.repository.ICityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

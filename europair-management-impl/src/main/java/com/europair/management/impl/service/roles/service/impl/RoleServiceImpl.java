@@ -1,12 +1,12 @@
 package com.europair.management.impl.service.roles.service.impl;
 
+import com.europair.management.api.dto.roles.dto.RoleDTO;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-import com.europair.management.api.dto.roles.dto.RoleDTO;
-import com.europair.management.rest.model.roles.entity.Role;
-import com.europair.management.rest.model.roles.mapper.RoleMapper;
-import com.europair.management.rest.model.roles.repository.IRoleRepository;
+import com.europair.management.impl.mappers.roles.RoleMapper;
 import com.europair.management.impl.service.roles.service.IRoleService;
+import com.europair.management.rest.model.roles.entity.Role;
+import com.europair.management.rest.model.roles.repository.IRoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
