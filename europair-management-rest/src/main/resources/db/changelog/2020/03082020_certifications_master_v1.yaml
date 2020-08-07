@@ -1,0 +1,69 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03082020_operators_master_v1_certifications_table
+      context: dev or pre or pro
+      author: joseignacio.mendez
+      comment: "Add operator certifications table to the database"
+      changes:
+        # Certifications
+        - createTable:
+            tableName: certifications
+            remarks: The operator certifications
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the certification
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: certifications_id_pk
+              - column:
+                  name: airport_id
+                  type: int
+                  remarks: airport id
+                  constraints:
+                    nullable: false
+              - column:
+                  name: comment
+                  type: varchar(255)
+                  remarks: comment
+                  constraints:
+                    nullable: false
+              - column:
+                  name: operator_id
+                  type: int
+                  remarks: operator id
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: certifications
