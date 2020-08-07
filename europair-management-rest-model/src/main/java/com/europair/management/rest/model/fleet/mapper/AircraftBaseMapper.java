@@ -18,4 +18,8 @@ public interface AircraftBaseMapper {
     @Named("aircraftBaseNoAircraft")
     @Mapping(target = "aircraft", ignore = true)
     AircraftBaseDto toDtoWithoutAircraft(final AircraftBase entity);
+
+    @Named("aircraftBaseEntityNoAircraft")
+    @Mapping(target = "aircraft", ignore = true)
+    AircraftBaseDto toEntityWithoutAircraft(final AircraftBaseDto dto);
 }

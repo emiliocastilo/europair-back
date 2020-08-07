@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface AircraftRepository extends JpaRepository<Aircraft, Long>, AircraftRepositoryCustom {
 
     // ToDo: actualizar con entidades correctas
-    @Query("select a from Aircraft a where " +
+    @Query("select a from Aircraft a join a.bases base where " +
             "CAST(a.operator as string) like :filter " +
             "or CAST(a.aircraftType as string) like :filter " +
-            "or a.id in (select ab.aircraft.id from AircraftBase ab where CAST(ab.airport as string) like :filter)")
+            "or CAST(base.airport as string) like :filter")
     Page<Aircraft> findByBasicFilter(Pageable pageable, String filter);
 
 }

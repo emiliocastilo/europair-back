@@ -6,6 +6,7 @@ import com.europair.management.rest.model.fleet.entity.Aircraft;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -21,4 +22,9 @@ public interface AircraftMapper {
     AircraftDto toDto(final Aircraft entity);
 
     List<AircraftDto> toDto(final List<Aircraft> entityList);
+
+    @Mapping(target = "bases", qualifiedByName = "aircraftBaseEntityNoAircraft")
+    Aircraft toEntity(final AircraftDto aircraftDto);
+
+    void updateFromDto(final AircraftDto aircraftDto, @MappingTarget Aircraft aircraft);
 }
