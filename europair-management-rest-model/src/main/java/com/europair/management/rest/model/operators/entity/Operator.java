@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.operators.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.common.TextField;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,22 +18,22 @@ public class Operator extends AuditModificationBaseEntity implements Serializabl
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "iata_code")
+  @Column(name = "iata_code", length = 3)
   private String iataCode;
 
-  @Column(name = "icao_code")
+  @Column(name = "icao_code", length = 4)
   private String icaoCode;
 
-  @Column
+  @Column(length = TextField.TEXT_255)
   private String name;
 
-  @Column
+  @Column(name = "aoc_last_revision_date")
   private LocalDate aocLastRevisionDate;
 
-  @Column
+  @Column(name = "aoc_number")
   private String aocNumber;
 
-  @Column
+  @Column(name = "insurance_expiration_date")
   private LocalDate insuranceExpirationDate;
 
   @OneToMany(mappedBy = "operator")

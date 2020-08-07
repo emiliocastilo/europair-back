@@ -1,5 +1,6 @@
 package com.europair.management.rest.operators.service.impl;
 
+import com.europair.management.rest.common.exception.InvalidArgumentException;
 import com.europair.management.rest.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.operators.dto.OperatorDTO;
 import com.europair.management.rest.model.operators.entity.Operator;
@@ -14,7 +15,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -37,8 +37,11 @@ public class OperatorServiceImpl implements OperatorService {
 
   @Override
   public OperatorDTO saveOperator(OperatorDTO operatorDTO) {
-    Operator operator = OperatorMapper.INSTANCE.toEntity(operatorDTO);
 
+    if(operatorDTO.getId() != null){
+      throw new InvalidArgumentException(String.format("New operator expected. Identifier %s got", operatorDTO.getId()));
+    }
+    Operator operator = OperatorMapper.INSTANCE.toEntity(operatorDTO);
     operator = operatorRepository.save(operator);
     return OperatorMapper.INSTANCE.toDto(operator);
   }
@@ -46,12 +49,10 @@ public class OperatorServiceImpl implements OperatorService {
   @Override
   public OperatorDTO updateOperator(Long id, OperatorDTO operatorDTO) {
 
-    Operator operatorBD = operatorRepository.findById(id)
+    Operator operator = operatorRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Operator not found on id: " + id));
 
-    OperatorDTO operatorDTO2Update = updateOperatorValues(operatorDTO);
-
-    Operator operator = OperatorMapper.INSTANCE.toEntity(operatorDTO2Update);
+    OperatorMapper.INSTANCE.updateFromDto(operatorDTO, operator);
     operator = operatorRepository.save(operator);
 
     return OperatorMapper.INSTANCE.toDto(operator);
@@ -68,23 +69,10 @@ public class OperatorServiceImpl implements OperatorService {
 
   }
 
-  public List<OperatorDTO> searchOperator(String filter) {
-    List<Operator> listOperatorsInFilter = operatorRepository.findAll(Specification.where(new OperatorSpecification(filter)));
-    return OperatorMapper.INSTANCE.toListDtos(listOperatorsInFilter);
+  @Override
+  public Page<OperatorDTO> searchOperator(String filter, Pageable pageable) {
+    Page<Operator> operatorsWithFilter = operatorRepository.findAll(Specification.where(new OperatorSpecification(filter)), pageable);
+    return operatorsWithFilter.map(operator -> OperatorMapper.INSTANCE.toDto(operator));
   }
 
-
-  private OperatorDTO updateOperatorValues(OperatorDTO operatorDTO) {
-
-    return OperatorDTO.builder()
-      .id(operatorDTO.getId())
-      .name(operatorDTO.getName())
-      .iataCode(operatorDTO.getIataCode())
-      .icaoCode(operatorDTO.getIcaoCode())
-      .aocNumber(operatorDTO.getAocNumber())
-      .aocLastRevisionDate(operatorDTO.getAocLastRevisionDate())
-      .insuranceExpirationDate(operatorDTO.getInsuranceExpirationDate())
-      .build();
-
-  }
 }

@@ -64,12 +64,10 @@ public class CertificationServiceImpl implements CertificationService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    Certification certificationBD = certificationRepository.findById(id)
+    Certification certification = certificationRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Certification not found on id: " + id));
 
-    CertificationDTO certificationDTO2Update = updateCertificationValues(certificationDTO);
-
-    Certification certification = CertificationMapper.INSTANCE.toEntity(certificationDTO2Update);
+    CertificationMapper.INSTANCE.updateFromDto(certificationDTO, certification);
     certification = certificationRepository.save(certification);
 
     return CertificationMapper.INSTANCE.toDto(certification);
@@ -88,15 +86,4 @@ public class CertificationServiceImpl implements CertificationService {
     certificationRepository.deleteById(id);
   }
 
-
-  private CertificationDTO updateCertificationValues(CertificationDTO certificationDTO) {
-
-    return CertificationDTO.builder()
-      .id(certificationDTO.getId())
-      .airport(certificationDTO.getAirport())
-      .comment(certificationDTO.getComment())
-      .operator(certificationDTO.getOperator())
-      .build();
-
-  }
 }

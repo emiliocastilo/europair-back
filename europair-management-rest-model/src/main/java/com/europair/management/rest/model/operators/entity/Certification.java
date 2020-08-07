@@ -15,11 +15,12 @@ public class Certification extends AuditModificationBaseEntity implements Serial
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column
-  private String airport;
+//  @ManyToOne
+//  @JoinColumn(name = "airport_id")
+//  private Airport airport;
 
   @Column
-  private String comments;
+  private String comment;
 
   @ManyToOne
   @JoinColumn(name = "operator_id")

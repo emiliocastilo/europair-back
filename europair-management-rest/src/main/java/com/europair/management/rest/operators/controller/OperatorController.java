@@ -3,6 +3,7 @@ package com.europair.management.rest.operators.controller;
 import com.europair.management.rest.model.operators.dto.OperatorDTO;
 import com.europair.management.rest.operators.service.OperatorService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 
 @RestController
@@ -40,6 +42,14 @@ public class OperatorController {
     return ResponseEntity.ok().body(operatorDTO);
   }
 
+  @GetMapping("/search")
+  @Operation(description = "Retrieve operator by filter", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<Page<OperatorDTO>> getOperatorsByFilter(@RequestParam final String text, Pageable pageable) {
+
+    final Page<OperatorDTO> pageOperatorsDTO = operatorService.findAllPaginated(pageable);
+    return ResponseEntity.ok().body(pageOperatorsDTO);
+  }
+
   @PostMapping("")
   @Operation(description = "Save a new operator", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorDTO> saveOperator(@RequestBody final OperatorDTO operatorDTO) {
@@ -57,7 +67,8 @@ public class OperatorController {
 
   @PutMapping("/{id}")
   @Operation(description = "Updates existing operator", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<OperatorDTO> updateOperator(@PathVariable final Long id, @RequestBody final OperatorDTO operatorDTO) {
+  public ResponseEntity<OperatorDTO> updateOperator(@Parameter(description = "Operator identifier") @NotNull @PathVariable final Long id,
+                                                    @Parameter(description = "Master Operator object") @NotNull @RequestBody final OperatorDTO operatorDTO) {
 
     final OperatorDTO operatorDTOSaved = operatorService.updateOperator(id, operatorDTO);
 
@@ -72,7 +83,7 @@ public class OperatorController {
 
   @DeleteMapping("/{id}")
   @Operation(description = "Deletes existing operator by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<?> deleteOperator(@PathVariable final Long id) {
+  public ResponseEntity<?> deleteOperator(@Parameter(description = "Operator identifier") @PathVariable @NotNull final Long id) {
 
     operatorService.deleteOperator(id);
     return ResponseEntity.noContent().build();

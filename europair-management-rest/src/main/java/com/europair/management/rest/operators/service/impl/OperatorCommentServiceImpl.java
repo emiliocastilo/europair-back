@@ -61,12 +61,10 @@ public class OperatorCommentServiceImpl implements OperatorCommentService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    OperatorComment operatorCommentBD = operatorCommentRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("Certification not found on id: " + id));
+    OperatorComment operatorComment = operatorCommentRepository.findById(id)
+      .orElseThrow(() -> new ResourceNotFoundException("OperatorComment not found on id: " + id));
 
-    OperatorCommentDTO operatorCommentDTO2Update = updateOperatorCommentValues(operatorCommentDTO);
-
-    OperatorComment operatorComment = OperatorCommentMapper.INSTANCE.toEntity(operatorCommentDTO2Update);
+    OperatorCommentMapper.INSTANCE.updateFromDto(operatorCommentDTO, operatorComment);
     operatorComment = operatorCommentRepository.save(operatorComment);
 
     return OperatorCommentMapper.INSTANCE.toDto(operatorComment);
@@ -85,14 +83,4 @@ public class OperatorCommentServiceImpl implements OperatorCommentService {
     operatorCommentRepository.deleteById(id);
   }
 
-
-  private OperatorCommentDTO updateOperatorCommentValues(OperatorCommentDTO operatorCommentDTO) {
-
-    return OperatorCommentDTO.builder()
-      .id(operatorCommentDTO.getId())
-      .comment(operatorCommentDTO.getComment())
-      .operator(operatorCommentDTO.getOperator())
-      .build();
-
-  }
 }
