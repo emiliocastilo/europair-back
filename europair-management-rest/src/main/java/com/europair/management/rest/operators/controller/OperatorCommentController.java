@@ -1,7 +1,7 @@
 package com.europair.management.rest.operators.controller;
 
 import com.europair.management.rest.model.operators.dto.OperatorCommentDTO;
-import com.europair.management.rest.operators.service.OperatorCommentService;
+import com.europair.management.rest.operators.service.IOperatorCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.net.URI;
 @Slf4j
 public class OperatorCommentController {
 
-  private final OperatorCommentService operatorCommentService;
+  private final IOperatorCommentService operatorCommentService;
 
   @GetMapping("/operator/{operatorId}/comments")
   @Operation(description = "Paged result of operator comments list", security = { @SecurityRequirement(name = "bearerAuth") })

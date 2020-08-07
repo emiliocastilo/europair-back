@@ -1,8 +1,7 @@
 package com.europair.management.rest.operators.controller;
 
 import com.europair.management.rest.model.operators.dto.CertificationDTO;
-import com.europair.management.rest.model.operators.dto.OperatorDTO;
-import com.europair.management.rest.operators.service.CertificationService;
+import com.europair.management.rest.operators.service.ICertificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import java.net.URI;
 @Slf4j
 public class CertificationController {
 
-  private final CertificationService certificationService;
+  private final ICertificationService certificationService;
 
   @GetMapping("/operator/{operatorId}/certifications")
   @Operation(description = "Paged result of operator certifications list", security = { @SecurityRequirement(name = "bearerAuth") })

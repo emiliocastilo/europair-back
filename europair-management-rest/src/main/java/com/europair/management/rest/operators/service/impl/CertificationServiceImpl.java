@@ -2,14 +2,11 @@ package com.europair.management.rest.operators.service.impl;
 
 import com.europair.management.rest.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.operators.dto.CertificationDTO;
-import com.europair.management.rest.model.operators.dto.OperatorDTO;
 import com.europair.management.rest.model.operators.entity.Certification;
-import com.europair.management.rest.model.operators.entity.Operator;
-import com.europair.management.rest.model.operators.mapper.CertificationMapper;
-import com.europair.management.rest.model.operators.mapper.OperatorMapper;
-import com.europair.management.rest.operators.repository.CertificationRepository;
-import com.europair.management.rest.operators.repository.OperatorRepository;
-import com.europair.management.rest.operators.service.CertificationService;
+import com.europair.management.rest.model.operators.mapper.ICertificationMapper;
+import com.europair.management.rest.operators.repository.ICertificationRepository;
+import com.europair.management.rest.operators.repository.IOperatorRepository;
+import com.europair.management.rest.operators.service.ICertificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CertificationServiceImpl implements CertificationService {
+public class CertificationServiceImpl implements ICertificationService {
 
-  final private CertificationRepository certificationRepository;
-  final private OperatorRepository operatorRepository;
+  final private ICertificationRepository certificationRepository;
+  final private IOperatorRepository operatorRepository;
 
   @Override
   public Page<CertificationDTO> findAllPaginated(Pageable pageable, Long operatorId) {
@@ -31,7 +28,7 @@ public class CertificationServiceImpl implements CertificationService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    return certificationRepository.findAll(pageable).map(certification -> CertificationMapper.INSTANCE.toDto(certification));
+    return certificationRepository.findAll(pageable).map(certification -> ICertificationMapper.INSTANCE.toDto(certification));
   }
 
   @Override
@@ -41,7 +38,7 @@ public class CertificationServiceImpl implements CertificationService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    return CertificationMapper.INSTANCE.toDto(certificationRepository.findById(id)
+    return ICertificationMapper.INSTANCE.toDto(certificationRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Certification not found on id: " + id)));
   }
 
@@ -52,9 +49,9 @@ public class CertificationServiceImpl implements CertificationService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    Certification certification = CertificationMapper.INSTANCE.toEntity(certificationDTO);
+    Certification certification = ICertificationMapper.INSTANCE.toEntity(certificationDTO);
     certification = certificationRepository.save(certification);
-    return CertificationMapper.INSTANCE.toDto(certification);
+    return ICertificationMapper.INSTANCE.toDto(certification);
   }
 
   @Override
@@ -67,10 +64,10 @@ public class CertificationServiceImpl implements CertificationService {
     Certification certification = certificationRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("Certification not found on id: " + id));
 
-    CertificationMapper.INSTANCE.updateFromDto(certificationDTO, certification);
+    ICertificationMapper.INSTANCE.updateFromDto(certificationDTO, certification);
     certification = certificationRepository.save(certification);
 
-    return CertificationMapper.INSTANCE.toDto(certification);
+    return ICertificationMapper.INSTANCE.toDto(certification);
 
   }
 

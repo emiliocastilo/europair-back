@@ -1,13 +1,10 @@
 package com.europair.management.rest.operators.service;
 
 import com.europair.management.rest.model.operators.dto.OperatorDTO;
-import com.europair.management.rest.model.tasks.dto.TaskDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
-public interface OperatorService {
+public interface IOperatorService {
 
   Page<OperatorDTO> findAllPaginated(Pageable pageable);
   OperatorDTO findById(Long id);

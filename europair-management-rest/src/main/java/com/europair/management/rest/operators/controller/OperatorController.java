@@ -1,7 +1,7 @@
 package com.europair.management.rest.operators.controller;
 
 import com.europair.management.rest.model.operators.dto.OperatorDTO;
-import com.europair.management.rest.operators.service.OperatorService;
+import com.europair.management.rest.operators.service.IOperatorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -22,7 +22,7 @@ import java.net.URI;
 @RequestMapping("/operators")
 public class OperatorController {
 
-  private final OperatorService operatorService;
+  private final IOperatorService operatorService;
 
 
   @GetMapping("")
@@ -46,7 +46,7 @@ public class OperatorController {
   @Operation(description = "Retrieve operator by filter", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<Page<OperatorDTO>> getOperatorsByFilter(@RequestParam final String text, Pageable pageable) {
 
-    final Page<OperatorDTO> pageOperatorsDTO = operatorService.findAllPaginated(pageable);
+    final Page<OperatorDTO> pageOperatorsDTO = operatorService.searchOperator(text, pageable);
     return ResponseEntity.ok().body(pageOperatorsDTO);
   }
 

@@ -3,10 +3,10 @@ package com.europair.management.rest.operators.service.impl;
 import com.europair.management.rest.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.operators.dto.OperatorCommentDTO;
 import com.europair.management.rest.model.operators.entity.OperatorComment;
-import com.europair.management.rest.model.operators.mapper.OperatorCommentMapper;
-import com.europair.management.rest.operators.repository.OperatorCommentRepository;
-import com.europair.management.rest.operators.repository.OperatorRepository;
-import com.europair.management.rest.operators.service.OperatorCommentService;
+import com.europair.management.rest.model.operators.mapper.IOperatorCommentMapper;
+import com.europair.management.rest.operators.repository.IOperatorCommentRepository;
+import com.europair.management.rest.operators.repository.IOperatorRepository;
+import com.europair.management.rest.operators.service.IOperatorCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class OperatorCommentServiceImpl implements OperatorCommentService {
+public class OperatorCommentServiceImpl implements IOperatorCommentService {
 
-  final private OperatorCommentRepository operatorCommentRepository;
-  final private OperatorRepository operatorRepository;
+  final private IOperatorCommentRepository operatorCommentRepository;
+  final private IOperatorRepository operatorRepository;
 
   @Override
   public Page<OperatorCommentDTO> findAllPaginated(Pageable pageable, Long operatorId) {
@@ -28,7 +28,7 @@ public class OperatorCommentServiceImpl implements OperatorCommentService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    return operatorCommentRepository.findAll(pageable).map(comment -> OperatorCommentMapper.INSTANCE.toDto(comment));
+    return operatorCommentRepository.findAll(pageable).map(comment -> IOperatorCommentMapper.INSTANCE.toDto(comment));
   }
 
   @Override
@@ -38,7 +38,7 @@ public class OperatorCommentServiceImpl implements OperatorCommentService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    return OperatorCommentMapper.INSTANCE.toDto(operatorCommentRepository.findById(id)
+    return IOperatorCommentMapper.INSTANCE.toDto(operatorCommentRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("OperatorComment not found on id: " + id)));
   }
 
@@ -49,9 +49,9 @@ public class OperatorCommentServiceImpl implements OperatorCommentService {
       throw new ResourceNotFoundException("Operator not found on id: " + operatorId);
     }
 
-    OperatorComment operatorComment = OperatorCommentMapper.INSTANCE.toEntity(operatorCommentDTO);
+    OperatorComment operatorComment = IOperatorCommentMapper.INSTANCE.toEntity(operatorCommentDTO);
     operatorComment = operatorCommentRepository.save(operatorComment);
-    return OperatorCommentMapper.INSTANCE.toDto(operatorComment);
+    return IOperatorCommentMapper.INSTANCE.toDto(operatorComment);
   }
 
   @Override
@@ -64,10 +64,10 @@ public class OperatorCommentServiceImpl implements OperatorCommentService {
     OperatorComment operatorComment = operatorCommentRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("OperatorComment not found on id: " + id));
 
-    OperatorCommentMapper.INSTANCE.updateFromDto(operatorCommentDTO, operatorComment);
+    IOperatorCommentMapper.INSTANCE.updateFromDto(operatorCommentDTO, operatorComment);
     operatorComment = operatorCommentRepository.save(operatorComment);
 
-    return OperatorCommentMapper.INSTANCE.toDto(operatorComment);
+    return IOperatorCommentMapper.INSTANCE.toDto(operatorComment);
 
   }
 
