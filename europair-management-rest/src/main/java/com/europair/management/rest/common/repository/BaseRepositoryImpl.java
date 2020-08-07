@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
@@ -261,8 +262,10 @@ public abstract class BaseRepositoryImpl<T> {
         
         List<Predicate> restrictions = new ArrayList<>();
 
-        for (Restriction restriction : criteria.getRestrictions()) {
-            restrictions.add(createRestriction(builder, root, restriction));
+        if (!CollectionUtils.isEmpty(criteria.getRestrictions())) {
+            for (Restriction restriction : criteria.getRestrictions()) {
+                restrictions.add(createRestriction(builder, root, restriction));
+            }
         }
 
         if (!restrictions.isEmpty()) {
@@ -285,8 +288,10 @@ public abstract class BaseRepositoryImpl<T> {
         Root<?> root = critCount.from(rootClass);
         List<Predicate> restrictions = new ArrayList<>();
 
-        for (Restriction restriction : criteria.getRestrictions()) {
-            restrictions.add(createRestriction(builder, root, restriction));
+        if (!CollectionUtils.isEmpty(criteria.getRestrictions())) {
+            for (Restriction restriction : criteria.getRestrictions()) {
+                restrictions.add(createRestriction(builder, root, restriction));
+            }
         }
 
         if (!restrictions.isEmpty()) {

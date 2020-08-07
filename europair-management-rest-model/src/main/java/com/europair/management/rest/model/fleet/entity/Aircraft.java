@@ -14,9 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -53,9 +50,8 @@ public class Aircraft extends AuditModificationBaseEntity implements Serializabl
     @OneToMany(mappedBy = "aircraft")
     private List<AircraftBase> bases;
 
-    @Column(name = "plate_number")
-    @Size(min = 0, max = TextField.TEXT_20)
-    private String plateNumber; // ToDo: longitud?
+    @Column(name = "plate_number", length = TextField.TEXT_20)
+    private String plateNumber;
 
     @Column(name = "production_year")
     private Integer productionYear;
@@ -75,7 +71,7 @@ public class Aircraft extends AuditModificationBaseEntity implements Serializabl
     @Column(name = "nighttime_configuration")
     private Integer nighttimeConfiguration;
 
-    @Size(min = 0, max = TextField.TEXT_255, message = "Field notes must be 255 character max")
+    @Column(name = "notes", length = TextField.TEXT_255)
     private String notes;
 
     // ToDo: tags
