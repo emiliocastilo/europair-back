@@ -12,13 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
+import java.net.URI;
 import java.util.Map;
 
 @RestController
@@ -95,6 +101,72 @@ public class AircraftController {
             @Parameter(description = "Filter value") @RequestParam final String filter) {
         final Page<AircraftDto> aircraftDtoPage = aircraftService.findAllPaginatedByBasicFilter(pageable, filter);
         return ResponseEntity.ok(aircraftDtoPage);
+    }
+
+    /**
+     * <p>
+     * Creates a new Aircraft master
+     * </p>
+     *
+     * @param aircraftDto Data of the Aircraft to create
+     * @return Data of the created aircraft
+     */
+    @PostMapping
+    @Operation(description = "Save a new master aircraft", security = {@SecurityRequirement(name = "bearerAuth")})
+    public ResponseEntity<AircraftDto> saveAircraft(@Parameter(description = "Master Aircraft object") @NotNull @RequestBody final AircraftDto aircraftDto) {
+
+        final AircraftDto aircraftDtoSaved = aircraftService.saveAircraft(aircraftDto);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(aircraftDtoSaved.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(aircraftDtoSaved);
+
+    }
+
+    /**
+     * <p>
+     * Updated master aircraft information
+     * </p>
+     *
+     * @param id          Unique identifier
+     * @param aircraftDto Updated aircraft data
+     * @return The updated master aircraft
+     */
+    @PutMapping("/{id}")
+    @Operation(description = "Updates existing master aircraft", security = {@SecurityRequirement(name = "bearerAuth")})
+    public ResponseEntity<AircraftDto> updateAircraft(
+            @Parameter(description = "Aircraft identifier") @NotNull @PathVariable final Long id,
+            @Parameter(description = "Master Aircraft updated data") @NotNull @RequestBody final AircraftDto aircraftDto) {
+
+        final AircraftDto aircraftDtoSaved = aircraftService.updateAircraft(id, aircraftDto);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(aircraftDtoSaved.getId())
+                .toUri();
+
+        return ResponseEntity.ok().body(aircraftDtoSaved);
+
+    }
+
+    /**
+     * <p>
+     * Deletes a master aircraft by id.
+     * </p>
+     *
+     * @param id Unique identifier
+     * @return No content
+     */
+    @DeleteMapping("/{id}")
+    @Operation(description = "Deletes existing master aircraft by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    public ResponseEntity<?> deleteAircraft(@Parameter(description = "Aircraft identifier") @PathVariable @NotNull final Long id) {
+
+        aircraftService.deleteAircraft(id);
+        return ResponseEntity.noContent().build();
+
     }
 
 }

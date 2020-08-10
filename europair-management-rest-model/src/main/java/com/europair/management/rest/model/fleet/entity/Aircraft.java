@@ -4,6 +4,7 @@ import com.europair.management.rest.model.audit.entity.AuditModificationBaseEnti
 import com.europair.management.rest.model.common.TextField;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,7 +48,7 @@ public class Aircraft extends AuditModificationBaseEntity implements Serializabl
     @Column(name = "aircraft_type_id")
     private Long aircraftType;
 
-    @OneToMany(mappedBy = "aircraft")
+    @OneToMany(mappedBy = "aircraft", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AircraftBase> bases;
 
     @Column(name = "plate_number", length = TextField.TEXT_20)
