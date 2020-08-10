@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,12 +25,10 @@ public class AircraftCategory extends AuditModificationBaseEntity implements Ser
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "category_code", nullable = false)
-    @Size(max = TextField.TEXT_20) // ToDo: longitud?
+    @Column(name = "category_code", nullable = false, length = TextField.TEXT_20)
     private String code;
 
-    @Column(name = "category_name", nullable = false)
-    @Size(max = TextField.TEXT_255) // ToDo: longitud?
+    @Column(name = "category_name", nullable = false, length = TextField.TEXT_120)
     private String name;
 
     @Column(name = "category_order")

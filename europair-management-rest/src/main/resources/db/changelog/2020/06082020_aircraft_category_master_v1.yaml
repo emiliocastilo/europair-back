@@ -42,6 +42,30 @@ databaseChangeLog:
                     foreignKeyName: aircraft_category_category_fk
                     references: aircraft_categories(id)
                     validateForeignKey: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
         - addAutoIncrement:
             columnDataType: int
             columnName: id
