@@ -59,3 +59,13 @@ databaseChangeLog:
   - include:
       file: 2020/28072020_conversions_master_data_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/03082020_operators_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/03082020_certifications_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/03082020_operator_comments_master_v1.yaml
+      relativeToChangelogFile: true
+      

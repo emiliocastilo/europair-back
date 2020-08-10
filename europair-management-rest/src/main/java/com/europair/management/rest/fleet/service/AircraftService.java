@@ -14,4 +14,10 @@ public interface AircraftService {
     Page<AircraftDto> findAllPaginatedByBasicFilter(Pageable pageable, String filter);
 
     AircraftDto findById(Long id);
+
+    AircraftDto saveAircraft(AircraftDto aircraftDto);
+
+    AircraftDto updateAircraft(Long id, AircraftDto aircraftDto);
+
+    void deleteAircraft(Long id);
 }
