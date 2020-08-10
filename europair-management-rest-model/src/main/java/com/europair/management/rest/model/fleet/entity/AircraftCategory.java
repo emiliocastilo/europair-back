@@ -38,6 +38,6 @@ public class AircraftCategory extends AuditModificationBaseEntity implements Ser
     @JoinColumn(name = "parent_category_id")
     private AircraftCategory parentCategory;
 
-    @OneToMany(mappedBy = "mainCategory")
+    @OneToMany(mappedBy = "parentCategory")
     private List<AircraftCategory> subcategories;
 }

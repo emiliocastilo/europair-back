@@ -6,6 +6,7 @@ import com.europair.management.rest.model.fleet.entity.AircraftCategory;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
@@ -25,4 +26,8 @@ public interface AircraftCategoryMapper {
     AircraftCategoryDto toDtoNoParent(final AircraftCategory category);
 
     List<AircraftCategoryDto> toDto(final List<AircraftCategory> entityList);
+
+    AircraftCategory toEntity(final AircraftCategoryDto aircraftCategoryDto);
+
+    void updateFromDto(final AircraftCategoryDto aircraftCategoryDto, @MappingTarget AircraftCategory aircraftCategory);
 }
