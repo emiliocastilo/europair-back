@@ -368,3 +368,22 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+  - changeSet:
+      id: 10082020_menu_v5_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add icon to fleet"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: icon
+                  value: "airplanemode_active"
+              - column:
+                  name: modified_at
+                  value: "2020-08-10"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where:  name='MASTERS_FLEET'
