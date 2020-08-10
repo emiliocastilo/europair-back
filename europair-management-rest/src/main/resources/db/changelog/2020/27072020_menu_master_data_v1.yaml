@@ -281,3 +281,90 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+  - changeSet:
+      id: 10082020_menu_v4_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add submenu options into fleet"
+      changes:
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: weight
+                  value: 1
+              - column:
+                  name: name
+                  value: "MASTERS_FLEET_AIRCRAFT"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.fleet.aircraft"
+              - column:
+                  name: route
+                  value: "/aircraft"
+              - column:
+                  name: parent_id
+                  value: 10
+              - column:
+                  name: created_at
+                  value: "2020-08-10"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 12
+              - column:
+                  name: weight
+                  value: 2
+              - column:
+                  name: name
+                  value: "MASTERS_FLEET_CATEGORIES"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.fleet.categories"
+              - column:
+                  name: route
+                  value: "/categories"
+              - column:
+                  name: parent_id
+                  value: 10
+              - column:
+                  name: created_at
+                  value: "2020-08-10"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 13
+              - column:
+                  name: weight
+                  value: 3
+              - column:
+                  name: name
+                  value: "MASTERS_FLEET_TYPES"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.fleet.types"
+              - column:
+                  name: route
+                  value: "/types"
+              - column:
+                  name: parent_id
+                  value: 10
+              - column:
+                  name: created_at
+                  value: "2020-08-10"
+              - column:
+                  name: created_by
+                  value: "Sistema"
