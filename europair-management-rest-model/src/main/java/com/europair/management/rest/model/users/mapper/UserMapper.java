@@ -6,6 +6,7 @@ import com.europair.management.rest.model.audit.mapper.AuditModificationBaseMapp
 import com.europair.management.rest.model.users.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -21,4 +22,5 @@ public interface UserMapper {
 
   User toEntity (final UserDTO userDTO);
 
+  void updateFromDto(final UserDTO userDTO, @MappingTarget User user);
 }

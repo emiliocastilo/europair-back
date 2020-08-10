@@ -7,6 +7,7 @@ import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.countries.entity.Country;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -25,5 +26,7 @@ public interface CityMapper {
   City toEntity (final CityDTO cityDTO);
 
   Country toEntity (final CountryDTO countryDTO);
+
+  void updateFromDto(final CityDTO cityDTO, @MappingTarget City city);
 
 }
