@@ -1,12 +1,14 @@
 package com.europair.management.rest.model.fleet.dto;
 
 import com.europair.management.rest.model.audit.dto.AuditModificationBaseDTO;
+import com.europair.management.rest.model.common.TextField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class AircraftDto extends AuditModificationBaseDTO {
     private List<AircraftBaseDto> bases;
 
     @JsonProperty("plateNumber")
+    @Size(min = 0, max = TextField.TEXT_20)
     private String plateNumber;
 
     @JsonProperty("productionYear")
@@ -52,6 +55,7 @@ public class AircraftDto extends AuditModificationBaseDTO {
     private Integer nighttimeConfiguration;
 
     @JsonProperty("notes")
+    @Size(min = 0, max = TextField.TEXT_255, message = "Field notes must be 255 character max")
     private String notes;
 
     @JsonProperty("insideUpgradeDate")

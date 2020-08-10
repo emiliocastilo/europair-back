@@ -31,6 +31,6 @@ public class AircraftBaseDto extends AuditModificationBaseDTO {
     @JsonProperty("aircraft")
     private AircraftDto aircraft;
 
-    @JsonProperty("main_base")
+    @JsonProperty("mainBase")
     private Boolean mainBase;
 }
