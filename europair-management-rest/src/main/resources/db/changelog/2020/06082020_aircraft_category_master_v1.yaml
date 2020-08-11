@@ -1,0 +1,75 @@
+databaseChangeLog:
+  - changeSet:
+      id: 06082020_aircraft_category_master_v1_aircraft_category_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add aircraft category table to database"
+      changes:
+        - createTable:
+            tableName: aircraft_categories
+            remarks: The aircraft categories table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the aircraft category
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: aircraft_categories_id_pk
+              - column:
+                  name: category_code
+                  type: varchar(20)
+                  remarks: Code of the category
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_name
+                  type: varchar(255)
+                  remarks: Name of the category
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_order
+                  type: int
+                  remarks: Order of the category
+              - column:
+                  name: parent_category_id
+                  type: int
+                  remarks: Parent category id
+                  constraints:
+                    nullable: true
+                    foreignKeyName: aircraft_category_category_fk
+                    references: aircraft_categories(id)
+                    validateForeignKey: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: aircraft_categories
