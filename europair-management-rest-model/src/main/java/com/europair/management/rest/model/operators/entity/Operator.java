@@ -2,6 +2,8 @@ package com.europair.management.rest.model.operators.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.common.TextField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -39,8 +41,8 @@ public class Operator extends AuditModificationBaseEntity implements Serializabl
   @OneToMany(mappedBy = "operator")
   private List<Certification> certifications;
 
-  @OneToMany(mappedBy = "operator")
-  private List<OperatorComment> comments;
+//  @OneToMany(mappedBy = "operator")
+//  private List<OperatorComment> comments;
 
   //private List<Contact> associatedContacts;
 

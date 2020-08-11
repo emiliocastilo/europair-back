@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.operators.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,8 +19,9 @@ public class OperatorComment extends AuditModificationBaseEntity implements Seri
   @Column
   private String comment;
 
-  @ManyToOne
-  @JoinColumn(name = "operator_id")
-  private Operator operator;
+
+//  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//  @JoinColumn(name = "operator_id", nullable = false)
+//  private Operator operator;
 
 }
