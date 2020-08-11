@@ -23,7 +23,7 @@ databaseChangeLog:
                   type: int
                   remarks: airport id
                   constraints:
-                    nullable: true
+                    nullable: false
               - column:
                   name: comment
                   type: varchar(255)
@@ -67,3 +67,13 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: certifications
+  - changeSet:
+      id: 12082020_operators_master_v2_certifications_table
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Alter table to modify airport_id nullable true"
+      changes:
+        - dropNotNullConstraint:
+            columnDataType:  int
+            columnName:  airport_id
+            tableName:  certifications
