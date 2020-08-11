@@ -39,9 +39,6 @@ databaseChangeLog:
                   remarks: Parent category id
                   constraints:
                     nullable: true
-                    foreignKeyName: aircraft_category_category_fk
-                    references: aircraft_categories(id)
-                    validateForeignKey: true
               - column:
                   name: created_at
                   type: timestamp
@@ -73,3 +70,13 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: aircraft_categories
+  - changeSet:
+      id:  11082020_aircraft_category_master_v2_aircraft_category_table
+      author:  ivan.fanjulcosent
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames:  parent_category_id
+            baseTableName:  aircraft_categories
+            constraintName:  aircraft_category_category_fk
+            referencedColumnNames:  id
+            validate:  true
