@@ -1,7 +1,7 @@
-package com.europair.management.rest.model.masters.menu.mapper;
+package com.europair.management.impl.mappers.masters.menu;
 
 import com.europair.management.api.dto.menu.dto.MenuOptionDto;
-import com.europair.management.rest.model.audit.mapper.AuditModificationBaseMapperConfig;
+import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.masters.menu.entity.MenuOption;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;

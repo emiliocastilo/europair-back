@@ -1,7 +1,7 @@
 package com.europair.management.impl.mappers.tasks;
 
 import com.europair.management.api.dto.tasks.dto.TaskDTO;
-import com.europair.management.rest.model.audit.mapper.AuditModificationBaseMapperConfig;
+import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.tasks.entity.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;

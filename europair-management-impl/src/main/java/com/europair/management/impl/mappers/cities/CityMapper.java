@@ -2,7 +2,7 @@ package com.europair.management.impl.mappers.cities;
 
 import com.europair.management.api.dto.cities.dto.CityDTO;
 import com.europair.management.api.dto.countries.dto.CountryDTO;
-import com.europair.management.rest.model.audit.mapper.AuditModificationBaseMapperConfig;
+import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.countries.entity.Country;
 import org.mapstruct.Mapper;

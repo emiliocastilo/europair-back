@@ -3,8 +3,9 @@ package com.europair.management.impl.service.users;
 import com.europair.management.api.dto.users.dto.UserDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 
+import com.europair.management.impl.mappers.users.UserMapper;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.mapper.UserMapper;
+
 
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
