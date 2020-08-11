@@ -19,6 +19,7 @@ public interface AircraftCategoryMapper {
     AircraftCategoryMapper INSTANCE = Mappers.getMapper(AircraftCategoryMapper.class);
 
     @Mapping(target = "subcategories", qualifiedByName = "aircraftCategoryNoParent")
+    @Mapping(target = "parentCategory", ignore = true)
     AircraftCategoryDto toDtoWithSubcategories(final AircraftCategory category);
 
     @Named("aircraftCategoryNoParent")
@@ -29,5 +30,6 @@ public interface AircraftCategoryMapper {
 
     AircraftCategory toEntity(final AircraftCategoryDto aircraftCategoryDto);
 
+    @Mapping(target = "parentCategory", ignore = true)
     void updateFromDto(final AircraftCategoryDto aircraftCategoryDto, @MappingTarget AircraftCategory aircraftCategory);
 }
