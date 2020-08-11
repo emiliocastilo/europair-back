@@ -72,11 +72,6 @@ public class OperatorController {
 
     final OperatorDTO operatorDTOSaved = operatorService.updateOperator(id, operatorDTO);
 
-    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-      .path("/{id}")
-      .buildAndExpand(operatorDTOSaved.getId())
-      .toUri();
-
     return ResponseEntity.ok().body(operatorDTOSaved);
 
   }

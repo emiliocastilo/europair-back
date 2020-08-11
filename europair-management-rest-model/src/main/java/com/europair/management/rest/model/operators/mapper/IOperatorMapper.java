@@ -4,13 +4,16 @@ import com.europair.management.rest.model.audit.mapper.AuditModificationBaseMapp
 import com.europair.management.rest.model.operators.dto.OperatorDTO;
 import com.europair.management.rest.model.operators.entity.Operator;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(config = AuditModificationBaseMapperConfig.class, mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
+@Mapper(config = AuditModificationBaseMapperConfig.class,
+        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
+        uses = ICertificationMapper.class)
 public interface IOperatorMapper {
 
   IOperatorMapper INSTANCE = Mappers.getMapper(IOperatorMapper.class);

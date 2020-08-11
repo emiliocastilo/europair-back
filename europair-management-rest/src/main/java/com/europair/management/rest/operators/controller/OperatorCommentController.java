@@ -21,7 +21,7 @@ public class OperatorCommentController {
 
   private final IOperatorCommentService operatorCommentService;
 
-  @GetMapping("/operator/{operatorId}/comments")
+  @GetMapping("/operators/{operatorId}/comments")
   @Operation(description = "Paged result of operator comments list", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<Page<OperatorCommentDTO>> getAllOperatorCommentsPaginated(final Pageable pageable, @PathVariable final Long operatorId) {
 
@@ -30,7 +30,7 @@ public class OperatorCommentController {
 
   }
 
-  @GetMapping("/operator/{operatorId}/comments/{id}")
+  @GetMapping("/operators/{operatorId}/comments/{id}")
   @Operation(description = "Retrieve operator comment by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorCommentDTO> getOperatorCommentById(@PathVariable final Long id, @PathVariable final Long operatorId) {
 
@@ -38,7 +38,7 @@ public class OperatorCommentController {
     return ResponseEntity.ok().body(operatorCommentDTO);
   }
 
-  @PostMapping("/operator/{operatorId}/comments")
+  @PostMapping("/operators/{operatorId}/comments")
   @Operation(description = "Save a new operator comment", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorCommentDTO> saveOperatorComment(@RequestBody final OperatorCommentDTO operatorCommentDTO, @PathVariable final Long operatorId) {
 
@@ -53,7 +53,7 @@ public class OperatorCommentController {
 
   }
 
-  @PutMapping("/operator/{operatorId}/comments/{id}")
+  @PutMapping("/operators/{operatorId}/comments/{id}")
   @Operation(description = "Updates existing operator comment", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorCommentDTO> updateOperator(@PathVariable final Long id, @RequestBody final OperatorCommentDTO operatorCommentDTO, @PathVariable final Long operatorId) {
 
@@ -68,7 +68,7 @@ public class OperatorCommentController {
 
   }
 
-  @DeleteMapping("/operator/{operatorId}/comments/{id}")
+  @DeleteMapping("/operators/{operatorId}/comments/{id}")
   @Operation(description = "Deletes existing operator comment by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<?> deleteCertification(@PathVariable final Long id, @PathVariable final Long operatorId) {
 

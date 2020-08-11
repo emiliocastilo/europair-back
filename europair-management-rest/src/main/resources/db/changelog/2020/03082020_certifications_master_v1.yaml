@@ -23,7 +23,7 @@ databaseChangeLog:
                   type: int
                   remarks: airport id
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: comment
                   type: varchar(255)
