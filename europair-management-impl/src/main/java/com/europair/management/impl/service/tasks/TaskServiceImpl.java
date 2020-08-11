@@ -4,6 +4,9 @@ package com.europair.management.impl.service.tasks;
 import com.europair.management.api.dto.tasks.dto.TaskDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.tasks.TaskMapper;
+import com.europair.management.rest.common.exception.ResourceNotFoundException;
+import com.europair.management.rest.model.common.CoreCriteria;
+import com.europair.management.rest.model.tasks.dto.TaskDTO;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.tasks.repository.ITaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +23,8 @@ public class TaskServiceImpl implements ITaskService {
   private final ITaskRepository taskRepository;
 
   @Override
-  public Page<TaskDTO> findAllPaginated(Pageable pageable) {
-    return taskRepository.findAll(pageable).map(screen -> TaskMapper.INSTANCE.toDto(screen));
+  public Page<TaskDTO> findAllPaginated(Pageable pageable, CoreCriteria criteria) {
+    return taskRepository.findTasksByCriteria(criteria, pageable).map(TaskMapper.INSTANCE::toDto);
   }
 
   @Override

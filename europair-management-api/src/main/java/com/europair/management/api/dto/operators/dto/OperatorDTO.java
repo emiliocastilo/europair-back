@@ -51,9 +51,9 @@ public class OperatorDTO extends AuditModificationBaseDTO {
   @Schema(description = "Associated certifications")
   private List<CertificationDTO> certifications;
 
-  @JsonProperty("observations")
-  @Schema(description = "Associated comments")
-  private List<OperatorCommentDTO> comments;
+//  @JsonProperty("observations")
+//  @Schema(description = "Associated comments")
+//  private List<OperatorCommentDTO> comments;
 
   //private List<ContactDTO> associatedContacts;
 

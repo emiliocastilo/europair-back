@@ -22,7 +22,7 @@ public class CertificationController implements ICertificationController {
 
   private final ICertificationService certificationService;
 
-  @GetMapping("/operator/{operatorId}/certifications")
+  @GetMapping("/operators/{operatorId}/certifications")
   @Operation(description = "Paged result of operator certifications list", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<Page<CertificationDTO>> getAllCerticationsPaginated(final Pageable pageable, @PathVariable final Long operatorId) {
 
@@ -31,7 +31,7 @@ public class CertificationController implements ICertificationController {
 
   }
 
-  @GetMapping("/operator/{operatorId}/certifications/{id}")
+  @GetMapping("/operators/{operatorId}/certifications/{id}")
   @Operation(description = "Retrieve operator certification by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<CertificationDTO> getCertificationById(@PathVariable final Long id, @PathVariable final Long operatorId) {
 
@@ -39,7 +39,7 @@ public class CertificationController implements ICertificationController {
     return ResponseEntity.ok().body(certificationDTO);
   }
 
-  @PostMapping("/operator/{operatorId}/certifications")
+  @PostMapping("/operators/{operatorId}/certifications")
   @Operation(description = "Save a new operator certification", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<CertificationDTO> saveCertification(@RequestBody final CertificationDTO certificationDTO, @PathVariable final Long operatorId) {
 
@@ -54,7 +54,7 @@ public class CertificationController implements ICertificationController {
 
   }
 
-  @PutMapping("/operator/{operatorId}/certifications/{id}")
+  @PutMapping("/operators/{operatorId}/certifications/{id}")
   @Operation(description = "Updates existing operator certification", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<CertificationDTO> updateOperator(@PathVariable final Long id, @RequestBody final CertificationDTO certificationDTO, @PathVariable final Long operatorId) {
 
@@ -69,7 +69,7 @@ public class CertificationController implements ICertificationController {
 
   }
 
-  @DeleteMapping("/operator/{operatorId}/certifications/{id}")
+  @DeleteMapping("/operators/{operatorId}/certifications/{id}")
   @Operation(description = "Deletes existing operator certification by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<?> deleteCertification(@PathVariable final Long id, @PathVariable final Long operatorId) {
 
