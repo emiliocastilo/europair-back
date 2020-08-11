@@ -18,12 +18,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class AircraftCategoryServiceImpl implements AircraftCategoryService {
 
-    private final String PARENT_CATEGORY_FILTER = "parentCategory.id";
+    private final String PARENT_CATEGORY_ID_FILTER = "parentCategory.id";
+    private final String PARENT_CATEGORY_FILTER = "parentCategory";
 
     @Autowired
     private AircraftCategoryRepository aircraftCategoryRepository;
@@ -74,6 +76,28 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
 
     @Override
     public Page<AircraftCategoryDto> findAllPaginated(CoreCriteria criteria, Pageable pageable) {
+        if (criteria == null || CollectionUtils.isEmpty(criteria.getRestrictions())) {
+            criteria = new CoreCriteria();
+            criteria.setRestrictions(new ArrayList<>());
+        }
+
+        // Add parent category filter if not present
+        Optional<Restriction> parentCategoryRestriction = criteria.getRestrictions().stream()
+                .filter(restriction -> restriction.getColumn().equals(PARENT_CATEGORY_FILTER))
+                .findAny();
+        if (parentCategoryRestriction.isPresent()) {
+            parentCategoryRestriction.get().setOperator(OperatorEnum.IS_NULL);
+            parentCategoryRestriction.get().setValue(null);
+
+        } else {
+            criteria.getRestrictions().add(Restriction.builder()
+                    .column(PARENT_CATEGORY_FILTER)
+                    .value(null)
+                    .operator(OperatorEnum.IS_NULL)
+                    .build()
+            );
+        }
+
         return aircraftCategoryRepository.findAircraftCategoriesByCriteria(criteria, pageable)
                 .map(AircraftCategoryMapper.INSTANCE::toDtoWithSubcategories);
     }
@@ -136,9 +160,9 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
 
         // Add parent category filter if not present
         if (criteria.getRestrictions().stream()
-                .noneMatch(restriction -> restriction.getColumn().equals(PARENT_CATEGORY_FILTER))) {
+                .noneMatch(restriction -> restriction.getColumn().equals(PARENT_CATEGORY_ID_FILTER))) {
             criteria.getRestrictions().add(Restriction.builder()
-                    .column(PARENT_CATEGORY_FILTER)
+                    .column(PARENT_CATEGORY_ID_FILTER)
                     .value(String.valueOf(parentCategoryId))
                     .operator(OperatorEnum.EQUALS)
                     .build()
