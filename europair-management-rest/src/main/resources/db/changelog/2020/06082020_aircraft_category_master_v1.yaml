@@ -79,4 +79,5 @@ databaseChangeLog:
             baseTableName:  aircraft_categories
             constraintName:  aircraft_category_category_fk
             referencedColumnNames:  id
+            referencedTableName: aircraft_categories
             validate:  true
