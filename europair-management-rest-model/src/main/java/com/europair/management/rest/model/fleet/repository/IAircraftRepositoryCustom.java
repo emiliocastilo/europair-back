@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
-public interface AircraftRepositoryCustom {
+public interface IAircraftRepositoryCustom {
+
     Page<Aircraft> findAircraftsByCriteria(CoreCriteria criteria, Pageable pageable);
 
-    Long countAircraftsByCriteria(CoreCriteria coreCriteria);
 }

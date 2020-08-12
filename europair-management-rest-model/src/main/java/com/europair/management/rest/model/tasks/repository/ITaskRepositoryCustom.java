@@ -11,5 +11,4 @@ public interface ITaskRepositoryCustom {
 
     Page<Task> findTasksByCriteria(CoreCriteria criteria, Pageable pageable);
 
-    Long countTasksByCriteria(CoreCriteria criteria);
 }
