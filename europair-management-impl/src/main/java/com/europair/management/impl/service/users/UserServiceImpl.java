@@ -2,12 +2,8 @@ package com.europair.management.impl.service.users;
 
 import com.europair.management.api.dto.users.UserDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-
-import com.europair.management.impl.mappers.operators.IOperatorMapper;
 import com.europair.management.impl.mappers.users.UserMapper;
 import com.europair.management.rest.model.users.entity.User;
-
-
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
