@@ -1,6 +1,6 @@
 package com.europair.management.impl.mappers.operators;
 
-import com.europair.management.api.dto.operators.dto.CertificationDTO;
+import com.europair.management.api.dto.operators.CertificationDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.operators.entity.Certification;
 import org.mapstruct.Mapper;

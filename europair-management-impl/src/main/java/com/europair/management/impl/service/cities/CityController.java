@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.cities;
 
-import com.europair.management.api.dto.cities.dto.CityDTO;
+import com.europair.management.api.dto.cities.CityDTO;
 import com.europair.management.api.service.cities.ICityController;
 
 import lombok.RequiredArgsConstructor;

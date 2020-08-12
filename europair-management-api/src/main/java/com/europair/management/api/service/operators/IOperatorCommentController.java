@@ -1,7 +1,7 @@
 package com.europair.management.api.service.operators;
 
 
-import com.europair.management.api.dto.operators.dto.OperatorCommentDTO;
+import com.europair.management.api.dto.operators.OperatorCommentDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;

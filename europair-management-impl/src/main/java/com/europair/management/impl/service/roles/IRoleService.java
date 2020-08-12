@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.roles;
 
-import com.europair.management.api.dto.roles.dto.RoleDTO;
+import com.europair.management.api.dto.roles.RoleDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

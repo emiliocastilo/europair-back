@@ -1,6 +1,6 @@
 package com.europair.management.api.service.roles;
 
-import com.europair.management.api.dto.roles.dto.RoleDTO;
+import com.europair.management.api.dto.roles.RoleDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

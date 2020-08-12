@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.cities;
 
 
-import com.europair.management.api.dto.cities.dto.CityDTO;
+import com.europair.management.api.dto.cities.CityDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

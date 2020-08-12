@@ -1,6 +1,6 @@
 package com.europair.management.impl.mappers.operators;
 
-import com.europair.management.api.dto.operators.dto.OperatorCommentDTO;
+import com.europair.management.api.dto.operators.OperatorCommentDTO;
 
 
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;

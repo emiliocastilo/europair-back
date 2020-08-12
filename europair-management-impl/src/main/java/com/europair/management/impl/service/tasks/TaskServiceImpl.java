@@ -1,12 +1,10 @@
 package com.europair.management.impl.service.tasks;
 
 
-import com.europair.management.api.dto.tasks.dto.TaskDTO;
+import com.europair.management.api.dto.tasks.TaskDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.tasks.TaskMapper;
-import com.europair.management.rest.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.common.CoreCriteria;
-import com.europair.management.rest.model.tasks.dto.TaskDTO;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.tasks.repository.ITaskRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.europair.management.rest.conversions.service;
 
-import com.europair.management.api.dto.conversions.dto.ConversionDataDTO;
+import com.europair.management.api.dto.conversions.ConversionDataDTO;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.roles;
 
-import com.europair.management.api.dto.roles.dto.RoleDTO;
+import com.europair.management.api.dto.roles.RoleDTO;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.roles.RoleMapper;

@@ -1,6 +1,6 @@
 package com.europair.management.impl.mappers.roles;
 
-import com.europair.management.api.dto.roles.dto.RoleDTO;
+import com.europair.management.api.dto.roles.RoleDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.roles.entity.Role;
 import org.mapstruct.Mapper;

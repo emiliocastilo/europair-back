@@ -1,6 +1,6 @@
 package com.europair.management.api.service.screens;
 
-import com.europair.management.api.dto.screens.dto.ScreenDTO;
+import com.europair.management.api.dto.screens.ScreenDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

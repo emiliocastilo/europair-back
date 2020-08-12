@@ -1,6 +1,6 @@
 package com.europair.management.impl.mappers.fleet;
 
-import com.europair.management.api.dto.fleet.dto.AircraftBaseDto;
+import com.europair.management.api.dto.fleet.AircraftBaseDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import org.mapstruct.Mapper;

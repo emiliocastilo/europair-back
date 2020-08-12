@@ -1,12 +1,10 @@
 package com.europair.management.api.service.operators;
 
 
-import com.europair.management.api.dto.operators.dto.OperatorDTO;
+import com.europair.management.api.dto.operators.OperatorDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

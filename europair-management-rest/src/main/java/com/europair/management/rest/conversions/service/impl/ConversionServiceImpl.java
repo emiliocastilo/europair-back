@@ -1,7 +1,7 @@
 package com.europair.management.rest.conversions.service.impl;
 
 import com.europair.management.api.dto.conversions.common.Unit;
-import com.europair.management.api.dto.conversions.dto.ConversionDataDTO;
+import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.rest.conversions.repository.ConversionRepository;
 import com.europair.management.rest.conversions.service.ConversionService;
 import com.europair.management.rest.model.conversions.entity.Conversion;

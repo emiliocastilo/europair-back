@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.users;
 
-import com.europair.management.api.dto.users.dto.UserDTO;
+import com.europair.management.api.dto.users.UserDTO;
 import com.europair.management.api.service.users.IUserController;
 
 

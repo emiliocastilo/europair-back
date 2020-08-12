@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.screens;
 
-import com.europair.management.api.dto.screens.dto.ScreenDTO;
+import com.europair.management.api.dto.screens.ScreenDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.screens.ScreenMapper;
 import com.europair.management.rest.model.screens.repository.IScreenRepository;

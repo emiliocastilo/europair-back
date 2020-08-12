@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.screens;
 
 import com.europair.management.api.service.screens.IScreenController;
-import com.europair.management.api.dto.screens.dto.ScreenDTO;
+import com.europair.management.api.dto.screens.ScreenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

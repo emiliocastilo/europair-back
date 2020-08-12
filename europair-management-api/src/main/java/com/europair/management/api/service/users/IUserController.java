@@ -1,6 +1,6 @@
 package com.europair.management.api.service.users;
 
-import com.europair.management.api.dto.users.dto.UserDTO;
+import com.europair.management.api.dto.users.UserDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

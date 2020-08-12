@@ -1,6 +1,6 @@
 package com.europair.management.impl.mappers.screens;
 
-import com.europair.management.api.dto.screens.dto.ScreenDTO;
+import com.europair.management.api.dto.screens.ScreenDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.screens.entity.Screen;
 import org.mapstruct.Mapper;

@@ -1,20 +1,16 @@
 package com.europair.management.api.service.fleet;
 
 
-import com.europair.management.api.dto.fleet.dto.AircraftDto;
+import com.europair.management.api.dto.fleet.AircraftDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
-import java.net.URI;
 import java.util.Map;
 
 @RequestMapping("/aircrafts")

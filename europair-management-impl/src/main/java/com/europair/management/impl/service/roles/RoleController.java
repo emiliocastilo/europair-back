@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.roles;
 
-import com.europair.management.api.dto.roles.dto.RoleDTO;
+import com.europair.management.api.dto.roles.RoleDTO;
 import com.europair.management.api.service.roles.IRoleController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

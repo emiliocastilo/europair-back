@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.cities;
 
-import com.europair.management.api.dto.cities.dto.CityDTO;
-import com.europair.management.api.dto.countries.dto.CountryDTO;
+import com.europair.management.api.dto.cities.CityDTO;
+import com.europair.management.api.dto.countries.CountryDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.cities.CityMapper;
 import com.europair.management.rest.model.cities.entity.City;

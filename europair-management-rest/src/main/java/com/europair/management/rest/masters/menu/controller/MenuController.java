@@ -1,6 +1,6 @@
 package com.europair.management.rest.masters.menu.controller;
 
-import com.europair.management.api.dto.menu.dto.MenuOptionDto;
+import com.europair.management.api.dto.menu.MenuOptionDto;
 import com.europair.management.rest.masters.menu.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

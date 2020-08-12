@@ -1,6 +1,6 @@
 package com.europair.management.api.service.countries;
 
-import com.europair.management.api.dto.countries.dto.CountryDTO;
+import com.europair.management.api.dto.countries.CountryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

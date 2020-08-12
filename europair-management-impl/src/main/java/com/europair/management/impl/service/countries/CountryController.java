@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.countries;
 
 
-import com.europair.management.api.dto.countries.dto.CountryDTO;
+import com.europair.management.api.dto.countries.CountryDTO;
 import com.europair.management.api.service.countries.ICountryController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
