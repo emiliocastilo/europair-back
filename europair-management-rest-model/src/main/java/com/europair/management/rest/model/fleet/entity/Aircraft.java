@@ -2,6 +2,7 @@ package com.europair.management.rest.model.fleet.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.common.TextField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.CascadeType;
@@ -64,9 +65,14 @@ public class Aircraft extends AuditModificationBaseEntity implements Serializabl
 
     private Boolean ambulance;
 
-    // Total number of seats for daytime travels
-    @Column(name = "daytime_configuration")
-    private Integer daytimeConfiguration;
+    @Column(name = "seating_f")
+    private Integer seatingF;
+
+    @Column(name = "seating_c")
+    private Integer seatingC;
+
+    @Column(name = "seating_y")
+    private Integer seatingY;
 
     // Total number of seats/beds for nighttime travels
     @Column(name = "nighttime_configuration")
@@ -77,11 +83,11 @@ public class Aircraft extends AuditModificationBaseEntity implements Serializabl
 
     // ToDo: tags
 
-    @Column(name = "inside_upgrade_date")
-    private Date insideUpgradeDate;
+    @Column(name = "inside_upgrade_year")
+    private Integer insideUpgradeYear;
 
-    @Column(name = "outside_upgrade_date")
-    private Date outsideUpgradeDate;
+    @Column(name = "outside_upgrade_year")
+    private Integer outsideUpgradeYear;
 
     // ToDo: observation list
 }

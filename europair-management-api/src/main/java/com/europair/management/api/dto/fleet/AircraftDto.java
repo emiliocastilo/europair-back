@@ -52,6 +52,15 @@ public class AircraftDto extends AuditModificationBaseDTO {
     @JsonProperty("daytimeConfiguration")
     private Integer daytimeConfiguration;
 
+    @JsonProperty("seatingF")
+    private Integer seatingF;
+
+    @JsonProperty("seatingC")
+    private Integer seatingC;
+
+    @JsonProperty("seatingY")
+    private Integer seatingY;
+
     @JsonProperty("nighttimeConfiguration")
     private Integer nighttimeConfiguration;
 
@@ -59,9 +68,9 @@ public class AircraftDto extends AuditModificationBaseDTO {
     @Size(min = 0, max = TextField.TEXT_255, message = "Field notes must be 255 character max")
     private String notes;
 
-    @JsonProperty("insideUpgradeDate")
-    private Date insideUpgradeDate;
+    @JsonProperty("insideUpgradeYear")
+    private Integer insideUpgradeYear;
 
-    @JsonProperty("outsideUpgradeDate")
-    private Date outsideUpgradeDate;
+    @JsonProperty("outsideUpgradeYear")
+    private Integer outsideUpgradeYear;
 }
