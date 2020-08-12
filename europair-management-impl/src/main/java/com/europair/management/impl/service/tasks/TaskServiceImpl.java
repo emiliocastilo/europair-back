@@ -6,7 +6,7 @@ import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.tasks.TaskMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.tasks.entity.Task;
-import com.europair.management.rest.model.tasks.repository.ITaskRepository;
+import com.europair.management.rest.model.tasks.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class TaskServiceImpl implements ITaskService {
 
-  private final ITaskRepository taskRepository;
+  private final TaskRepository taskRepository;
 
   @Override
   public Page<TaskDTO> findAllPaginated(Pageable pageable, CoreCriteria criteria) {
