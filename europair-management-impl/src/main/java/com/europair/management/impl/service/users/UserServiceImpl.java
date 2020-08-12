@@ -3,6 +3,7 @@ package com.europair.management.impl.service.users;
 import com.europair.management.api.dto.users.UserDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 
+import com.europair.management.impl.mappers.operators.IOperatorMapper;
 import com.europair.management.impl.mappers.users.UserMapper;
 import com.europair.management.rest.model.users.entity.User;
 
@@ -52,15 +53,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserDTO updateUser(Long id, UserDTO userDTO) {
 
-        User storedUser = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
 
-        UserDTO storedUserDTO = UserMapper.INSTANCE.toDto(storedUser);
-
-        UserDTO userDTO2Update = updateUserValues(storedUserDTO.getId(), userDTO);
-        userDTO2Update.setPassword(storedUser.getPassword());
-
-        User user = UserMapper.INSTANCE.toEntity(userDTO2Update);
+        UserMapper.INSTANCE.updateFromDto(userDTO, user);
         user = userRepository.save(user);
 
         return UserMapper.INSTANCE.toDto(user);
