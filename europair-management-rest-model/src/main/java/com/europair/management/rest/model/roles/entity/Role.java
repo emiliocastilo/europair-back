@@ -25,6 +25,7 @@ public class Role extends AuditModificationBaseEntity implements Serializable {
   @Column
   private String description;
 
+
   @ManyToMany(cascade = CascadeType.MERGE)
   @JoinTable(name = "roles_tasks",
               joinColumns = @JoinColumn(name="role_id", referencedColumnName = "id"),
