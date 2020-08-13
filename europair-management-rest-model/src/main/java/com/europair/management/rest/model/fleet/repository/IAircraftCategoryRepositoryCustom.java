@@ -11,5 +11,4 @@ public interface IAircraftCategoryRepositoryCustom {
 
     Page<AircraftCategory> findAircraftCategoriesByCriteria(CoreCriteria criteria, Pageable pageable);
 
-    Long countAircraftCategoriesByCriteria(CoreCriteria criteria);
 }

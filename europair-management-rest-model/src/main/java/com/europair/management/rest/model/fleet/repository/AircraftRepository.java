@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AircraftRepository extends JpaRepository<Aircraft, Long>, AircraftRepositoryCustom {
+public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAircraftRepositoryCustom {
 
     // ToDo: actualizar con entidades correctas
     @Query("select a from Aircraft a join a.bases base where " +

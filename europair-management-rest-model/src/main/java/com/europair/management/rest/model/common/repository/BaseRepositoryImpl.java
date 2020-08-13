@@ -17,6 +17,8 @@ import org.hibernate.jpa.QueryHints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
 import org.springframework.util.CollectionUtils;
@@ -25,7 +27,13 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.security.auth.login.AccountException;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
@@ -440,4 +448,26 @@ public abstract class BaseRepositoryImpl<T> {
         return buildCriteria(criteria, rootClass, null);
     }
 
+    protected Page<T> findPageByCriteria(Class<T> rootClass, CoreCriteria criteria, Pageable pageable) {
+        @SuppressWarnings("unchecked")
+        CriteriaQuery<T> crit = (CriteriaQuery<T>) buildCriteria(criteria, rootClass, pageable);
+        Query query = createQuery(crit);
+
+        query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+        query.setMaxResults(pageable.getPageSize());
+
+        @SuppressWarnings("unchecked")
+        List<T> result = query.getResultList();
+
+        return pageable.hasPrevious() ?
+                new PageImpl<>(result) :
+                new PageImpl<>(result, pageable, countByCriteria(rootClass, criteria));
+    }
+
+    protected Long countByCriteria(Class<T> rootClass, CoreCriteria criteria) {
+        CriteriaQuery<Long> crit = buildCountCriteria(criteria, rootClass);
+        Query query = createCountQuery(crit);
+
+        return (Long) query.getSingleResult();
+    }
 }
