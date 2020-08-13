@@ -55,7 +55,7 @@ public class AirportServiceImpl implements IAirportService {
 
     @Override
     public void deleteAirport(Long id) {
-        if (airportRepository.existsById(id)) {
+        if (!airportRepository.existsById(id)) {
             throw new ResourceNotFoundException("Airport not found with id: " + id);
         }
         airportRepository.deleteById(id);
