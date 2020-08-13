@@ -1,7 +1,6 @@
 package com.europair.management.rest.common.configuration;
 
 import com.europair.management.rest.audit.AuditorAwareImpl;
-import com.europair.management.rest.model.users.dto.UserDTO;
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;

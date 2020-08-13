@@ -1,7 +1,6 @@
 package com.europair.management.rest.model.conversions.entity;
 
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
-import com.europair.management.rest.model.conversions.common.Unit;
+import com.europair.management.api.dto.conversions.common.Unit;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -109,3 +109,48 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: aircrafts
+
+  - changeSet:
+      id: 04082020_aircraft_master_v1_12082020_aircraft_table_update
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Updates some aircraft properties"
+      changes:
+        - dropColumn:
+            tableName: aircrafts
+            columns:
+              - column:
+                  name: daytime_configuration
+                  type: int
+                  remarks: Total number of seats for daytime travels
+              - column:
+                  name: inside_upgrade_date
+                  type: date
+                  remarks: Date of last inside improvement
+              - column:
+                  name: outside_upgrade_date
+                  type: date
+                  remarks: Date of last outside improvement
+        - addColumn:
+            tableName: aircrafts
+            columns:
+              - column:
+                  name: seating_f
+                  type: int
+                  remarks: Number of seats of type F
+              - column:
+                  name: seating_c
+                  type: int
+                  remarks: Number of seats of type C
+              - column:
+                  name: seating_y
+                  type: int
+                  remarks: Number of seats of type Y
+              - column:
+                  name: inside_upgrade_year
+                  type: int
+                  remarks: Year of last inside improvement
+              - column:
+                  name: outside_upgrade_year
+                  type: int
+                  remarks: Year of last outside improvement
