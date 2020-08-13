@@ -44,8 +44,4 @@ public class Operator extends AuditModificationBaseEntity implements Serializabl
 //  @OneToMany(mappedBy = "operator")
 //  private List<OperatorComment> comments;
 
-  //private List<Contact> associatedContacts;
-
-  //private Fleet fleet;
-
 }

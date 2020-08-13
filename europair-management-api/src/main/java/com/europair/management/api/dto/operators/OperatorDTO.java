@@ -55,7 +55,5 @@ public class OperatorDTO extends AuditModificationBaseDTO {
 //  @Schema(description = "Associated comments")
 //  private List<OperatorCommentDTO> comments;
 
-  //private List<ContactDTO> associatedContacts;
-
   //private FleetDTO fleet;
 }

@@ -1,11 +1,10 @@
 package com.europair.management.impl.mappers.operators;
 
 import com.europair.management.api.dto.operators.OperatorDTO;
-
-
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.operators.entity.Operator;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
@@ -19,6 +18,7 @@ public interface IOperatorMapper {
 
   IOperatorMapper INSTANCE = Mappers.getMapper(IOperatorMapper.class);
 
+  @Mapping(target = "certifications", qualifiedByName = "certificationNoOperator")
   OperatorDTO toDto (final Operator entity);
 
   List<OperatorDTO> toListDtos (final List<Operator> listEntities);
@@ -26,6 +26,5 @@ public interface IOperatorMapper {
   Operator toEntity (final OperatorDTO operadorDTO);
 
   void updateFromDto(final OperatorDTO operadorDTO, @MappingTarget Operator operator);
-
 
 }

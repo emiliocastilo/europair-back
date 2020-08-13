@@ -16,7 +16,6 @@ public class Certification extends AuditModificationBaseEntity implements Serial
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-//  @JsonBackReference
 //  @ManyToOne(fetch = FetchType.LAZY, optional = false)
 //  @JoinColumn(name = "airport_id", nullable = false)
 //  private Airport airport;
