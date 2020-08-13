@@ -45,7 +45,13 @@ public class TextField {
 
 	// ISO 3166-1 Alpha-2 code
 	public static final int ISO_LANG_CODE = 2;
-	
+
+	// IATA CODE
+	public static final int IATA_CODE = 3;
+
+	// ICAO CODE
+	public static final int ICAO_CODE = 4;
+
 	//-------------------------------------------------------------------------------------------------------------
 	// Generic sizes
 	// Do not modify
