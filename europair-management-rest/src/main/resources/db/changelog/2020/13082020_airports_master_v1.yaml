@@ -119,3 +119,17 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: airports
+
+  - changeSet:
+      id: 13082020_airports_master_v1_airport_add_soft_delete
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add airports soft delete column"
+      changes:
+        - addColumn:
+            tableName: airports
+            columns:
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp

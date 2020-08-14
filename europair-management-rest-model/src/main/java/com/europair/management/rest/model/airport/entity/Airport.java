@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.airport.entity;
 
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.countries.entity.Country;
@@ -9,12 +9,10 @@ import com.europair.management.rest.model.enums.FlightRulesEnum;
 import com.europair.management.rest.model.enums.UnitEnum;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +24,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "airports")
 @Data
-public class Airport extends AuditModificationBaseEntity implements Serializable {
+public class Airport extends SoftRemovableBaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -79,14 +79,14 @@ public interface IAirportController {
 
     /**
      * <p>
-     * Deletes a master airport by id.
+     * Soft deletes a master airport by id.
      * </p>
      *
      * @param id Unique identifier
      * @return No content
      */
     @DeleteMapping("/{id}")
-    @Operation(description = "Deletes existing master airport by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    @Operation(description = "Soft Delete existing master airport by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteAirport(@Parameter(description = "Airport identifier") @PathVariable @NotNull final Long id);
 
 }
