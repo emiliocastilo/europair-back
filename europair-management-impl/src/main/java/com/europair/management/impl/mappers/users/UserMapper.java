@@ -25,6 +25,5 @@ public interface UserMapper {
   User toEntity (final UserDTO userDTO);
 
   @Mapping(target = "roles", qualifiedByName = "roleNoTask")
-  @Mapping(target = "password", ignore = true)
   void updateFromDto(final UserDTO userDTO, @MappingTarget User user);
 }
