@@ -81,7 +81,7 @@ public class RoleServiceImpl implements IRoleService {
 
           RolesTasksPK rolesTasksPK = new RolesTasksPK();
           rolesTasksPK.setRoleId(role.getId());
-          rolesTasksPK.setTaskId(taskDTO.getId());
+          rolesTasksPK.setTaskId(task.getId());
           RolesTasks rolesTasks = new RolesTasks();
           rolesTasks.setId(rolesTasksPK);
           rolesTasks.setRole(role);
@@ -91,7 +91,7 @@ public class RoleServiceImpl implements IRoleService {
         };
       }
       /*
-      mist iterate over the jpa list deleting all the task that are not in the DTO list
+      must iterate over the jpa list deleting all the task that are not in the DTO list
        */
       for ( RolesTasks rolesTasks : role.getRolesTasks()){
         if (!existIdTaskInDTOList(rolesTasks, roleDTO.getTasks())){

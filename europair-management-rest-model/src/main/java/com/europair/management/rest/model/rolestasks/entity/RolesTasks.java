@@ -54,4 +54,13 @@ public class RolesTasks implements Serializable{
     public void setTask(Task tasks) {
         this.task = tasks;
     }
+
+    @Override
+    public String toString() {
+        return "RolesTasks{" +
+                "id=" + id +
+                ", role=" + role +
+                ", task=" + task +
+                '}';
+    }
 }
