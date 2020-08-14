@@ -1,0 +1,121 @@
+databaseChangeLog:
+  - changeSet:
+      id: 13082020_airports_master_v1_airports_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add airports table to the database"
+      changes:
+        # Airports
+        - createTable:
+            tableName: airports
+            remarks: The airports
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the airport
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: airport_id_pk
+              - column:
+                  name: iata_code
+                  type: varchar(3)
+                  remarks: IATA code
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: iata_code_uq
+              - column:
+                  name: icao_code
+                  type: varchar(4)
+                  remarks: ICAO code
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: icao_code_uq
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: name of the airports
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: int
+                  remarks: country id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: airports_country_fk
+                    references: countries(id)
+              - column:
+                  name: city_id
+                  type: int
+                  remarks: city id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: airports_city_fk
+                    references: cities(id)
+              - column:
+                  name: time_zone
+                  type: varchar(255)
+                  remarks: airport time zone
+              - column:
+                  name: elevation
+                  type: double
+                  remarks: airport elevation
+              - column:
+                  name: elevation_unit
+                  type: varchar(16)
+                  remarks: airport elevation unit
+              - column:
+                  name: latitude
+                  type: double
+                  remarks: airport latitude
+              - column:
+                  name: longitude
+                  type: double
+                  remarks: airport longitude
+              - column:
+                  name: customs
+                  type: varchar(16)
+                  remarks: airport customs
+              - column:
+                  name: special_conditions
+                  type: boolean
+                  remarks: airport special conditions
+              - column:
+                  name: flight_rules
+                  type: varchar(4)
+                  remarks: airport flight rules
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: airports
