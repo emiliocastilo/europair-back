@@ -2,6 +2,7 @@ package com.europair.management.rest.model.roles.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.common.TextField;
+import com.europair.management.rest.model.rolestasks.entity.RolesTasks;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
@@ -9,6 +10,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -34,5 +36,8 @@ public class Role extends AuditModificationBaseEntity implements Serializable {
 
   @ManyToMany(mappedBy = "roles")
   private List<User> users;
+
+  @OneToMany(mappedBy = "role")
+  private Set<RolesTasks> rolesTasks;
 
 }
