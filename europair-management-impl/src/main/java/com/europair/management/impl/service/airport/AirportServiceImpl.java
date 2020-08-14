@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Service
 @Transactional
 public class AirportServiceImpl implements IAirportService {
@@ -55,9 +57,10 @@ public class AirportServiceImpl implements IAirportService {
 
     @Override
     public void deleteAirport(Long id) {
-        if (!airportRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Airport not found with id: " + id);
-        }
-        airportRepository.deleteById(id);
+        Airport airport = airportRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Airport not found with id: " + id));
+
+        airport.setRemovedAt(new Date());
+        airportRepository.save(airport);
     }
 }
