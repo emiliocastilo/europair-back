@@ -39,8 +39,7 @@ public class UserServiceImpl implements IUserService {
     public UserDTO saveUser(UserDTO userDTO) {
         User user = UserMapper.INSTANCE.toEntity(userDTO);
 
-        String password = generatePassword();
-        user.setPassword(bCryptPasswordEncoder.encode(password));
+        user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         user = userRepository.save(user);
 
         return UserMapper.INSTANCE.toDto(user);
@@ -51,6 +50,9 @@ public class UserServiceImpl implements IUserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
+        if (!user.getPassword().equals(userDTO.getPassword())) {
+            userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+        }
 
         UserMapper.INSTANCE.updateFromDto(userDTO, user);
         user = userRepository.save(user);
@@ -78,10 +80,5 @@ public class UserServiceImpl implements IUserService {
                 .tasks(userDTO.getTasks())
                 .build();
 
-    }
-
-    private String generatePassword() {
-        //TODO: usar un generador aleatorio. De momento está hardcoded para facilitar el desarrollo.
-        return "europ1234";
     }
 }

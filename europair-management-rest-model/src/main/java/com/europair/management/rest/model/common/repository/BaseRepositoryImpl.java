@@ -2,7 +2,9 @@ package com.europair.management.rest.model.common.repository;
 
 
 import com.europair.management.rest.model.audit.entity.AuditRevision;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.common.CoreCriteria;
+import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.common.exception.EuropairGeneralException;
 import com.europair.management.rest.model.common.exception.InvalidArgumentException;
@@ -45,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -448,6 +451,14 @@ public abstract class BaseRepositoryImpl<T> {
         return buildCriteria(criteria, rootClass, null);
     }
 
+    /**
+     * Returns a page with filtered elements by criteria and sorted by pageable properties
+     *
+     * @param rootClass Root class to filter
+     * @param criteria  CoreCriteria to use as filter
+     * @param pageable  Pageable data
+     * @return Page of filtered elements
+     */
     protected Page<T> findPageByCriteria(Class<T> rootClass, CoreCriteria criteria, Pageable pageable) {
         @SuppressWarnings("unchecked")
         CriteriaQuery<T> crit = (CriteriaQuery<T>) buildCriteria(criteria, rootClass, pageable);
@@ -464,10 +475,52 @@ public abstract class BaseRepositoryImpl<T> {
                 new PageImpl<>(result, pageable, countByCriteria(rootClass, criteria));
     }
 
+    /**
+     * Counts the elements matching the criteria
+     *
+     * @param rootClass Root class to count
+     * @param criteria  CoreCriteria to use as filter
+     * @return Number of elements matching the criteria
+     */
     protected Long countByCriteria(Class<T> rootClass, CoreCriteria criteria) {
         CriteriaQuery<Long> crit = buildCountCriteria(criteria, rootClass);
         Query query = createCountQuery(crit);
 
         return (Long) query.getSingleResult();
+    }
+
+    /**
+     * Returns a page with filtered elements by criteria and sorted by pageable properties, adds (if not present)
+     * a custom criteria to filter elements that are active (remove_at column is NULL)
+     *
+     * @param rootClass Root class to filter
+     * @param criteria  CoreCriteria to use as filter
+     * @param pageable  Pageable data
+     * @return Page of filtered elements
+     */
+    protected Page<T> findPageActiveByCriteria(Class<T> rootClass, CoreCriteria criteria, Pageable pageable) {
+        if (criteria == null || CollectionUtils.isEmpty(criteria.getRestrictions())) {
+            criteria = new CoreCriteria();
+            criteria.setRestrictions(new ArrayList<>());
+        }
+
+        // Add soft delete filter if not present
+        Optional<Restriction> softDeleteCategoryRestriction = criteria.getRestrictions().stream()
+                .filter(restriction -> restriction.getColumn().equals(SoftRemovableBaseEntity.REMOVED_AT))
+                .findAny();
+        if (softDeleteCategoryRestriction.isPresent()) {
+            softDeleteCategoryRestriction.get().setOperator(OperatorEnum.IS_NULL);
+            softDeleteCategoryRestriction.get().setValue(null);
+
+        } else {
+            criteria.getRestrictions().add(Restriction.builder()
+                    .column(SoftRemovableBaseEntity.REMOVED_AT)
+                    .value(null)
+                    .operator(OperatorEnum.IS_NULL)
+                    .build()
+            );
+        }
+
+        return findPageByCriteria(rootClass, criteria, pageable);
     }
 }

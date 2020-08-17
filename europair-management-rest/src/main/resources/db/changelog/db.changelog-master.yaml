@@ -71,4 +71,7 @@ databaseChangeLog:
   - include:
       file: 2020/03082020_operator_comments_master_v1.yaml
       relativeToChangelogFile: true
-      
+  - include:
+      file: 2020/13082020_airports_master_v1.yaml
+      relativeToChangelogFile: true
+
