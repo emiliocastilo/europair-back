@@ -3,7 +3,6 @@ package com.europair.management.impl.mappers.airport;
 import com.europair.management.api.dto.airport.RunwayDto;
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
-import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.entity.Runway;
 import com.europair.management.rest.model.enums.UnitEnum;
 import org.mapstruct.Mapper;
@@ -32,19 +31,12 @@ public interface IRunwayMapper {
     @Mapping(source = "width.type", target = "widthUnit", qualifiedByName = "mapUnitDtoToEntity")
     Runway toEntity(final RunwayDto dto);
 
-    @Mapping(target = "airport", source = "dto", qualifiedByName = "mapRunwayAirportToEntity")
+    @Mapping(target = "airport", ignore = true)
     @Mapping(source = "dto.length.value", target = "length")
     @Mapping(source = "dto.length.type", target = "lengthUnit", qualifiedByName = "mapUnitDtoToEntity")
     @Mapping(source = "dto.width.value", target = "width")
     @Mapping(source = "dto.width.type", target = "widthUnit", qualifiedByName = "mapUnitDtoToEntity")
     void updateFromDto(final RunwayDto dto, @MappingTarget Runway entity);
-
-    @Named("mapRunwayAirportToEntity")
-    default Airport mapAirportCountryToEntity(RunwayDto dto) {
-        Airport airport = new Airport();
-        airport.setId(dto.getAirport().getId());
-        return airport;
-    }
 
     @Named("mapUnitDtoToEntity")
     default Unit mapUnitDtoToEntity(UnitEnum unitEntity) {

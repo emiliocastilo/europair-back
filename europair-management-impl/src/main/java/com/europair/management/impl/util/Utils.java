@@ -5,7 +5,10 @@ import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
+import org.springframework.util.CollectionUtils;
 
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -47,4 +50,25 @@ public class Utils {
             throw new InvalidArgumentException("Invalid filter params. ", e);
         }
     }
+
+    public static void addCriteriaIfNotExists(CoreCriteria criteria,
+                                              @NotNull final String filterName,
+                                              @NotNull final OperatorEnum operator, final String filterValue) {
+        if (criteria == null || CollectionUtils.isEmpty(criteria.getRestrictions())) {
+            criteria = new CoreCriteria();
+            criteria.setRestrictions(new ArrayList<>());
+        }
+
+        // Add filter if not present
+        if (criteria.getRestrictions().stream()
+                .noneMatch(restriction -> restriction.getColumn().equals(filterName))) {
+            criteria.getRestrictions().add(Restriction.builder()
+                    .column(filterName)
+                    .value(filterValue)
+                    .operator(operator)
+                    .build()
+            );
+        }
+    }
+
 }

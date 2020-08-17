@@ -219,3 +219,74 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: runways
+
+
+  - changeSet:
+      id: 13082020_airports_master_v1_terminal_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add terminal table to the database"
+      changes:
+        - createTable:
+            tableName: terminals
+            remarks: The airport terminals
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the terminal
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: terminal_id_pk
+              - column:
+                  name: code
+                  type: varchar(20)
+                  remarks: terminal code
+              - column:
+                  name: name
+                  type: varchar(40)
+                  remarks: Terminal name
+              - column:
+                  name: airport_id
+                  type: int
+                  remarks: airport id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: terminal_airport_fk
+                    references: airports(id)
+              - column:
+                  name: observation
+                  type: varchar(255)
+                  remarks: observation
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: terminals

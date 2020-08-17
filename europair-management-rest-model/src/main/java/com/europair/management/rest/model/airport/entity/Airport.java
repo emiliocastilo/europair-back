@@ -80,7 +80,8 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
     private Set<Runway> runways;
 
-    // ToDo: Terminales: código, nombre y observaciones de las terminales del aeropuerto
+    @OneToMany(orphanRemoval = true, mappedBy = "airport")
+    private Set<Terminal> terminals;
 
     // TODO: operadores certificados: códigos del operador certificado y
     //  observaciones. Sólo se habilitará si el campo de condiciones
