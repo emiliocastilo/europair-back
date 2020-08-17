@@ -36,7 +36,7 @@ public class RunwayDto extends AuditModificationBaseDTO {
     @JsonProperty("width")
     private MeasureDto width;
 
-    @JsonProperty("lengthUnit")
+    @JsonProperty("observation")
     @Size(max = TextField.TEXT_255)
     private String observation;
 }
