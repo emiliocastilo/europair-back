@@ -290,3 +290,64 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: terminals
+
+
+  - changeSet:
+      id: 13082020_airports_master_v1_airport_observation_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add airport_observation table to the database"
+      changes:
+        - createTable:
+            tableName: airport_observations
+            remarks: The airport observations
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the observation
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: airport_observation_id_pk
+              - column:
+                  name: observation
+                  type: varchar(255)
+                  remarks: observation text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: airport_id
+                  type: int
+                  remarks: airport id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: airport_observations_airport_fk
+                    references: airports(id)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: airport_observations

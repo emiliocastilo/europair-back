@@ -87,16 +87,8 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     //  observaciones. Sólo se habilitará si el campo de condiciones
     //  especiales está marcado.
 
-    // ToDo: Observaciones del aeropuerto.
-
-    // TODO: directorio del aeropuerto: listado de contactos de todo
-    //  tipo que se hayan dado de alta en el módulo de CRM y estén
-    //  asociados al aeropuerto: contactos del aeropuerto, contactos
-    //  de empresas de handling, etc.
-
-    // TODO: flota del aeropuerto: se podrá consultar la flota asociada
-    //  al aeropuerto. Se realizará una consulta al maestro de flota,
-    //  filtrando por el aeropuerto a consultar.
+    @OneToMany(orphanRemoval = true, mappedBy = "airport")
+    private Set<AirportObservation> observations;
 
     // TODO: regiones: A qué regiones pertenece este aeropuerto.
 }
