@@ -1,0 +1,280 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18082020_aircraft_type_master_v1_aircraft_type_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add aircraft type table to database"
+      changes:
+        - createTable:
+            tableName: aircraft_types
+            remarks: The aircraft types table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the aircraft type
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: aircraft_types_id_pk
+              - column:
+                  name: iata_code
+                  type: varchar(3)
+                  remarks: IATA code
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: aircraft_types_iata_code_uq
+              - column:
+                  name: icao_code
+                  type: varchar(4)
+                  remarks: ICAO code
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: aircraft_types_icao_code_uq
+              - column:
+                  name: type_code
+                  type: varchar(20)
+                  remarks: internal type code
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: aircraft_types_code_uq
+              - column:
+                  name: description
+                  type: varchar(255)
+                  remarks: type description
+                  constraints:
+                    nullable: false
+              - column:
+                  name: manufacturer
+                  type: varchar(120)
+                  remarks: type manufacturer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: category_id
+                  type: int
+                  remarks: category id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: aircraft_types_category_fk
+                    references: aircraft_categories(id)
+              - column:
+                  name: subcategory_id
+                  type: int
+                  remarks: subcategory id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: aircraft_types_subcategory_fk
+                    references: aircraft_categories(id)
+              - column:
+                  name: flight_range
+                  type: double
+                  remarks: flight range value
+              - column:
+                  name: flight_range_unit
+                  type: varchar(16)
+                  remarks: flight range unit
+              - column:
+                  name: cabin_width
+                  type: double
+                  remarks: cabin width value
+              - column:
+                  name: cabin_width_unit
+                  type: varchar(16)
+                  remarks: cabin width unit
+              - column:
+                  name: cabin_height
+                  type: double
+                  remarks: cabin height value
+              - column:
+                  name: cabin_height_unit
+                  type: varchar(16)
+                  remarks: cabin height unit
+              - column:
+                  name: cabin_length
+                  type: double
+                  remarks: cabin length value
+              - column:
+                  name: cabin_length_unit
+                  type: varchar(16)
+                  remarks: cabin length unit
+              - column:
+                  name: max_cargo
+                  type: double
+                  remarks: max cargo value
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: aircraft_types
+
+        - createTable:
+            tableName: aircraft_type_average_speed
+            remarks: The aircraft types average speed table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the aircraft type average speed
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: aircraft_type_average_speed_id_pk
+              - column:
+                  name: aircraft_type_id
+                  type: int
+                  remarks: aircraft type id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: aircraft_type_average_speed_aircraft_type_fk
+                    references: aircraft_types(id)
+              - column:
+                  name: from_distance
+                  type: double
+                  remarks: flight from distance value
+                  constraints:
+                    nullable: false
+              - column:
+                  name: to_distance
+                  type: double
+                  remarks: flight to distance value
+                  constraints:
+                    nullable: false
+              - column:
+                  name: distance_unit
+                  type: varchar(16)
+                  remarks: flight distance unit
+                  constraints:
+                    nullable: false
+              - column:
+                  name: average_speed
+                  type: double
+                  remarks: average speed value
+                  constraints:
+                    nullable: false
+              - column:
+                  name: unit
+                  type: varchar(16)
+                  remarks: average speed unit
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: aircraft_type_average_speed
+
+        - createTable:
+            tableName: aircraft_type_observation
+            remarks: The aircraft types observation table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the aircraft type observation
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: aircraft_type_observation_id_pk
+              - column:
+                  name: aircraft_type_id
+                  type: int
+                  remarks: aircraft type id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: aircraft_type_observation_aircraft_type_fk
+                    references: aircraft_types(id)
+              - column:
+                  name: observation
+                  type: varchar(255)
+                  remarks: observation text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: aircraft_type_observation
