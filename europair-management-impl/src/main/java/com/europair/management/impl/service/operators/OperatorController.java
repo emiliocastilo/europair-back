@@ -2,6 +2,7 @@ package com.europair.management.impl.service.operators;
 
 
 import com.europair.management.api.dto.operators.OperatorDTO;
+import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -84,4 +85,27 @@ public class OperatorController {
     return ResponseEntity.noContent().build();
 
   }
+
+
+  @GetMapping("/{id}/airports")
+  @Operation(description = "Paged result of airports list", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<Page<OperatorsAirportsDTO>> getAllAirportsByOperatorPaginated(@PathVariable(name = "id") final Long operatorId, final Pageable pageable) {
+
+    final Page<OperatorsAirportsDTO> pageOperatorsAirportsDTO = operatorService
+      .findOperatorAirportsByOperatorPaginated(operatorId, pageable);
+    return ResponseEntity.ok().body(pageOperatorsAirportsDTO);
+
+  }
+
+  @PostMapping("/{id}/airports")
+  @Operation(description = "Assign airports with operator", security = { @SecurityRequirement(name = "bearerAuth") })
+  public ResponseEntity<OperatorsAirportsDTO> saveOperatorsAirports (
+    @PathVariable(name = "id") final Long operatorId,
+    @RequestBody final OperatorsAirportsDTO operatorsAirportsDTO) {
+
+    final OperatorsAirportsDTO operatorsAirportsDTOSaved = operatorService.saveOperatorsAirports(operatorId, operatorsAirportsDTO);
+    return ResponseEntity.ok().body(operatorsAirportsDTOSaved);
+
+  }
+
 }

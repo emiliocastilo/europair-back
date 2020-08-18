@@ -2,14 +2,13 @@ package com.europair.management.rest.model.operators.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.common.TextField;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.europair.management.rest.model.operatorscertifications.entity.OperatorsAirports;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "operators")
@@ -39,7 +38,7 @@ public class Operator extends AuditModificationBaseEntity implements Serializabl
   private LocalDate insuranceExpirationDate;
 
   @OneToMany(mappedBy = "operator")
-  private List<Certification> certifications;
+  private Set<OperatorsAirports> operatorsCertifications;
 
 //  @OneToMany(mappedBy = "operator")
 //  private List<OperatorComment> comments;

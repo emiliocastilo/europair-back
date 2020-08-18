@@ -47,10 +47,6 @@ public class OperatorDTO extends AuditModificationBaseDTO {
   @JsonProperty("insuranceExpirationDate")
   private LocalDate insuranceExpirationDate;
 
-  @JsonProperty("certifications")
-  @Schema(description = "Associated certifications")
-  private List<CertificationDTO> certifications;
-
 //  @JsonProperty("observations")
 //  @Schema(description = "Associated comments")
 //  private List<OperatorCommentDTO> comments;

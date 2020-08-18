@@ -4,8 +4,8 @@ package com.europair.management.impl.service.operators;
 import com.europair.management.api.dto.operators.CertificationDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.operators.ICertificationMapper;
-import com.europair.management.rest.model.operators.entity.Certification;
 
+import com.europair.management.rest.model.operators.entity.Certification;
 import com.europair.management.rest.model.operators.repository.ICertificationRepository;
 import com.europair.management.rest.model.operators.repository.IOperatorRepository;
 import lombok.RequiredArgsConstructor;

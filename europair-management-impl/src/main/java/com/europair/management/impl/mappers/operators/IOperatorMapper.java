@@ -18,7 +18,6 @@ public interface IOperatorMapper {
 
   IOperatorMapper INSTANCE = Mappers.getMapper(IOperatorMapper.class);
 
-  @Mapping(target = "certifications", qualifiedByName = "certificationNoOperator")
   OperatorDTO toDto (final Operator entity);
 
   List<OperatorDTO> toListDtos (final List<Operator> listEntities);

@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 18082020_operators_v1_operators_airports_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add operators_airports table to the database"
+      changes:
+        # operators_airports
+        - createTable:
+            tableName: operators_airports
+            remarks: The operators and airports relationship
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the operators_airports
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: operators_airports_id_pk
+              - column:
+                  name: operator_id
+                  type: int
+                  remarks: operator id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: operators_airports_operator_fk
+                    references: operators(id)
+              - column:
+                  name: airport_id
+                  type: int
+                  remarks: airport id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: operators_airports_airport_fk
+                    references: airports(id)
+              - column:
+                  name: comments
+                  type: varchar(255)
+                  remarks: comments text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: operators_airports
