@@ -1,10 +1,12 @@
 package com.europair.management.rest.model.fleet.entity;
 
+import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,20 +18,15 @@ import java.io.Serializable;
 @Entity
 @Table(name = "aircraft_bases")
 @Data
-public class AircraftBase implements Serializable {
+public class AircraftBase extends AuditModificationBaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ToDo: pendiente entidad
-    /*
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "airport_id", nullable = false)
-    private Object airport;
-     */
-    @Column(name = "airport_id")
-    private Long airport;
+    private Airport airport;
 
     @ManyToOne
     @JoinColumn(name = "aircraft_id", nullable = false)
