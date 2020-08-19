@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
@@ -22,9 +21,9 @@ public class AircraftTypeObservationDto extends AuditModificationBaseDTO {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("aircraftType")
-    @NotNull
-    private AircraftTypeDto aircraftType;
+//    @JsonProperty("aircraftType")
+//    @NotNull
+//    private AircraftTypeDto aircraftType;
 
     @JsonProperty("observation")
     @Size(max = TextField.TEXT_255)
