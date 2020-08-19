@@ -49,7 +49,7 @@ public class Aircraft extends AuditModificationBaseEntity implements Serializabl
     @Column(name = "aircraft_type_id")
     private Long aircraftType;
 
-    @OneToMany(mappedBy = "aircraft", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "aircraft", orphanRemoval = true)
     private List<AircraftBase> bases;
 
     @Column(name = "plate_number", length = TextField.TEXT_20)
