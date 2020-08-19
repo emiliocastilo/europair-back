@@ -3,6 +3,7 @@ package com.europair.management.api.dto.airport;
 
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.cities.CityDTO;
+import com.europair.management.api.dto.common.MeasureDto;
 import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.dto.countries.CountryDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -48,10 +49,7 @@ public class AirportDto extends AuditModificationBaseDTO {
     private String timeZone;
 
     @JsonProperty("elevation")
-    private Double elevation;
-
-    @JsonProperty("elevationUnit")
-    private String elevationUnit;
+    private MeasureDto elevation;
 
     @JsonProperty("latitude")
     private Double latitude;
