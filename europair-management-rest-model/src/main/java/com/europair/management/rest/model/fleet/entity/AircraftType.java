@@ -2,6 +2,7 @@ package com.europair.management.rest.model.fleet.entity;
 
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.common.TextField;
 import lombok.Data;
 
@@ -22,7 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "aircraft_types")
 @Data
-public class AircraftType extends AuditModificationBaseEntity implements Serializable {
+public class AircraftType extends SoftRemovableBaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
