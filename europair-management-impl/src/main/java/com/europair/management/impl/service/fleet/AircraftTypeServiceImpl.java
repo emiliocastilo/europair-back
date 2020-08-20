@@ -5,6 +5,7 @@ import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.fleet.IAircraftTypeMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.exception.InvalidArgumentException;
+import com.europair.management.rest.model.fleet.entity.AircraftCategory;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.repository.AircraftTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,15 @@ public class AircraftTypeServiceImpl implements IAircraftTypeService {
         }
 
         AircraftType aircraftType = IAircraftTypeMapper.INSTANCE.toEntity(aircraftTypeDto);
+
+        // Set relationships
+        AircraftCategory category = new AircraftCategory();
+        category.setId(aircraftTypeDto.getCategory().getId());
+        aircraftType.setCategory(category);
+        AircraftCategory subcategory = new AircraftCategory();
+        subcategory.setId(aircraftTypeDto.getSubcategory().getId());
+        aircraftType.setSubcategory(subcategory);
+
         aircraftType = aircraftTypeRepository.save(aircraftType);
 
         return IAircraftTypeMapper.INSTANCE.toDto(aircraftType);
@@ -50,6 +60,19 @@ public class AircraftTypeServiceImpl implements IAircraftTypeService {
         AircraftType aircraftType = aircraftTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("AircraftType not found with id: " + id));
         IAircraftTypeMapper.INSTANCE.updateFromDto(aircraftTypeDto, aircraftType);
+
+        // Update relationships
+        if (!aircraftType.getCategory().getId().equals(aircraftTypeDto.getCategory().getId())) {
+            AircraftCategory category = new AircraftCategory();
+            category.setId(aircraftTypeDto.getCategory().getId());
+            aircraftType.setCategory(category);
+        }
+        if (!aircraftType.getSubcategory().getId().equals(aircraftTypeDto.getSubcategory().getId())) {
+            AircraftCategory subcategory = new AircraftCategory();
+            subcategory.setId(aircraftTypeDto.getSubcategory().getId());
+            aircraftType.setSubcategory(subcategory);
+        }
+
         aircraftType = aircraftTypeRepository.save(aircraftType);
 
         return IAircraftTypeMapper.INSTANCE.toDto(aircraftType);

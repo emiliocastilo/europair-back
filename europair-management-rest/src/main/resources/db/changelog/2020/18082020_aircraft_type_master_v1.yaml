@@ -184,7 +184,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: unit
+                  name: average_speed_unit
                   type: varchar(16)
                   remarks: average speed unit
                   constraints:

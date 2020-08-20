@@ -20,10 +20,6 @@ public class AircraftTypeAverageSpeedDto extends AuditModificationBaseDTO {
     @JsonProperty("id")
     private Long id;
 
-//    @JsonProperty("aircraftType")
-//    @NotNull
-//    private AircraftTypeDto aircraftType;
-
     @JsonProperty("fromDistance")
     @NotNull
     private Double fromDistance;

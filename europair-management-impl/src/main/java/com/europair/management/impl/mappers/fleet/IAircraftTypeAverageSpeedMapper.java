@@ -20,6 +20,7 @@ public interface IAircraftTypeAverageSpeedMapper {
 
     AircraftTypeAverageSpeedDto toDto(final AircraftTypeAverageSpeed entity);
 
+    @Mapping(target = "aircraftType", ignore = true)
     void updateFromDto(final AircraftTypeAverageSpeedDto dto, @MappingTarget AircraftTypeAverageSpeed entity);
 
 }

@@ -21,10 +21,6 @@ public class AircraftTypeObservationDto extends AuditModificationBaseDTO {
     @JsonProperty("id")
     private Long id;
 
-//    @JsonProperty("aircraftType")
-//    @NotNull
-//    private AircraftTypeDto aircraftType;
-
     @JsonProperty("observation")
     @Size(max = TextField.TEXT_255)
     @NotEmpty
