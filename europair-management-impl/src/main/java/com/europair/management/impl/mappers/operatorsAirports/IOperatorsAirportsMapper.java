@@ -2,9 +2,10 @@ package com.europair.management.impl.mappers.operatorsAirports;
 
 import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
-import com.europair.management.rest.model.operatorscertifications.entity.OperatorsAirports;
+import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
@@ -16,5 +17,7 @@ public interface IOperatorsAirportsMapper {
   OperatorsAirportsDTO toDto (final OperatorsAirports entity);
 
   OperatorsAirports toEntity (final OperatorsAirportsDTO operatorsAirportsDTO);
+
+  void updateFromDto(final OperatorsAirportsDTO operatorsAirportsDTO, @MappingTarget OperatorsAirports operatorsAirports);
 
 }

@@ -1,8 +1,9 @@
 package com.europair.management.rest.model.operators.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.common.TextField;
-import com.europair.management.rest.model.operatorscertifications.entity.OperatorsAirports;
+import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Entity
 @Table(name = "operators")
 @Data
-public class Operator extends AuditModificationBaseEntity implements Serializable {
+public class Operator extends SoftRemovableBaseEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

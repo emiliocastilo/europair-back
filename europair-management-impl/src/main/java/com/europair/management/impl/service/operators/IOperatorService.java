@@ -16,8 +16,4 @@ public interface IOperatorService {
   void deleteOperator(Long id);
   Page<OperatorDTO> searchOperator(String filter, Pageable pageable);
 
-  Page<OperatorsAirportsDTO> findOperatorAirportsByOperatorPaginated(Long operatorId, Pageable pageable);
-
-  OperatorsAirportsDTO saveOperatorsAirports(Long operatorId, OperatorsAirportsDTO operatorsAirportsDTO);
-
 }

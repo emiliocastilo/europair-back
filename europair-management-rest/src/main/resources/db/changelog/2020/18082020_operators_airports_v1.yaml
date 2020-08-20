@@ -58,6 +58,10 @@ databaseChangeLog:
                   name: modified_by
                   type: varchar(30)
                   remarks: last modification author
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
         - addAutoIncrement:
             columnDataType: int
             columnName: id

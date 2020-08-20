@@ -12,8 +12,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
-        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
-        uses = ICertificationMapper.class)
+        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
 public interface IOperatorMapper {
 
   IOperatorMapper INSTANCE = Mappers.getMapper(IOperatorMapper.class);
