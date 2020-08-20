@@ -85,3 +85,17 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: operators
+
+  - changeSet:
+      id: 18082020_operators_master_v2_operators_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add operators soft delete column"
+      changes:
+        - addColumn:
+            tableName: operators
+            columns:
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp

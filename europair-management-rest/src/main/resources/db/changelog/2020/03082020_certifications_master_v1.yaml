@@ -77,3 +77,11 @@ databaseChangeLog:
             columnDataType:  int
             columnName:  airport_id
             tableName:  certifications
+  - changeSet:
+      id: 18082020_operators_master_v3_certifications_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Drop table to modify operator_id for N:N relationship"
+      changes:
+        - dropTable:
+            tableName: certifications
