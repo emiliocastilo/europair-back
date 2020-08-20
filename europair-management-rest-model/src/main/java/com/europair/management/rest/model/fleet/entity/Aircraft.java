@@ -1,19 +1,15 @@
 package com.europair.management.rest.model.fleet.entity;
 
+import com.europair.management.api.dto.fleet.AircraftObservationDto;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.common.TextField;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -89,5 +85,6 @@ public class Aircraft extends AuditModificationBaseEntity implements Serializabl
     @Column(name = "outside_upgrade_year")
     private Integer outsideUpgradeYear;
 
-    // ToDo: observation list
+    @OneToMany(mappedBy = "aircraft", orphanRemoval = true)
+    private List<AircraftObservation> observations;
 }
