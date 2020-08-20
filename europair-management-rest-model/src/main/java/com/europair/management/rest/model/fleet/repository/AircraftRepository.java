@@ -14,7 +14,7 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
     @Query("select a from Aircraft a join a.bases base where " +
             "CAST(a.operator as string) like :filter " +
             "or CAST(a.aircraftType as string) like :filter " +
-            "or CAST(base.airport as string) like :filter")
+            "or base.airport.name like :filter")
     Page<Aircraft> findByBasicFilter(Pageable pageable, String filter);
 
 }
