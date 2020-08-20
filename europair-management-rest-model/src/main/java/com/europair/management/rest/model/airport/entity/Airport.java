@@ -7,6 +7,7 @@ import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.enums.CustomsEnum;
 import com.europair.management.rest.model.enums.FlightRulesEnum;
 import com.europair.management.rest.model.enums.UnitEnum;
+import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "airports")
@@ -83,9 +85,8 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
     private List<Terminal> terminals;
 
-    // TODO: operadores certificados: códigos del operador certificado y
-    //  observaciones. Sólo se habilitará si el campo de condiciones
-    //  especiales está marcado.
+    @OneToMany(orphanRemoval = true, mappedBy = "airport")
+    private List<OperatorsAirports> operators;
 
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
     private List<AirportObservation> observations;

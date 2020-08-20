@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
@@ -19,18 +20,38 @@ public interface IOperatorsAirportsMapper {
   @Mapping(target = "airport.runways", ignore = true)
   @Mapping(target = "airport.terminals", ignore = true)
   @Mapping(target = "airport.observations", ignore = true)
+  @Mapping(target = "airport.operators", ignore = true)
   OperatorsAirportsDTO toDto (final OperatorsAirports entity);
 
   @Mapping(target = "airport.elevation", ignore = true)
   @Mapping(target = "airport.runways", ignore = true)
   @Mapping(target = "airport.terminals", ignore = true)
   @Mapping(target = "airport.observations", ignore = true)
+  @Mapping(target = "airport.operators", ignore = true)
   OperatorsAirports toEntity (final OperatorsAirportsDTO operatorsAirportsDTO);
 
   @Mapping(target = "airport.elevation", ignore = true)
   @Mapping(target = "airport.runways", ignore = true)
   @Mapping(target = "airport.terminals", ignore = true)
   @Mapping(target = "airport.observations", ignore = true)
+  @Mapping(target = "airport.operators", ignore = true)
   void updateFromDto(final OperatorsAirportsDTO operatorsAirportsDTO, @MappingTarget OperatorsAirports operatorsAirports);
+
+
+  // Mappings from Airport side
+
+  //  @Mapping(target = "operator.comments", ignore = true)
+  //  @Mapping(target = "operator.operatorsCertifications", ignore = true)
+  @Mapping(target = "airport", ignore = true)
+  @Named("operatorsAirportToDtoFromAirport")
+  OperatorsAirportsDTO toDtoFromAirport(final OperatorsAirports entity);
+
+  @Mapping(target = "operator", ignore = true)
+  @Mapping(target = "airport", ignore = true)
+  OperatorsAirports toEntityFromAirport(final OperatorsAirportsDTO operatorsAirportsDTO);
+
+  @Mapping(target = "operator", ignore = true)
+  @Mapping(target = "airport", ignore = true)
+  void updateFromDtoFromAirport(final OperatorsAirportsDTO operatorsAirportsDTO, @MappingTarget OperatorsAirports operatorsAirports);
 
 }

@@ -2,17 +2,13 @@ package com.europair.management.impl.service.operators;
 
 
 import com.europair.management.api.dto.operators.OperatorDTO;
-import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.operators.IOperatorMapper;
-import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
 import com.europair.management.rest.model.operators.entity.Operator;
 
 import com.europair.management.rest.model.operators.repository.IOperatorRepository;
 import com.europair.management.rest.model.operators.repository.OperatorSpecification;
-import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
-import com.europair.management.rest.model.operatorsairports.repository.IOperatorsAirportsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
