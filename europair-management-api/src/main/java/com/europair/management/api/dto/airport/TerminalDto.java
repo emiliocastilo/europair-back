@@ -1,7 +1,6 @@
 package com.europair.management.api.dto.airport;
 
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
-import com.europair.management.api.dto.common.MeasureDto;
 import com.europair.management.api.dto.common.TextField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -19,9 +18,6 @@ public class TerminalDto extends AuditModificationBaseDTO {
 
     @JsonProperty("id")
     private Long id;
-
-    @JsonProperty("airport")
-    private AirportDto airport;
 
     @JsonProperty("code")
     @Size(max = TextField.TEXT_20)

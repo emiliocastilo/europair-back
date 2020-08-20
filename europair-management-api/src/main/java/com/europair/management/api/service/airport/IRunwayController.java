@@ -90,7 +90,7 @@ public interface IRunwayController {
 
     /**
      * <p>
-     * Soft deletes a master runway by id.
+     * Deletes a master runway by id.
      * </p>
      *
      * @param airportId Airport identifier
@@ -98,7 +98,7 @@ public interface IRunwayController {
      * @return No content
      */
     @DeleteMapping("/{id}")
-    @Operation(description = "Soft Delete existing master runway by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    @Operation(description = "Delete existing master runway by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteRunway(
             @Parameter(description = "Airport identifier") @NotNull @PathVariable final Long airportId,
             @Parameter(description = "Runway identifier") @PathVariable @NotNull final Long id);

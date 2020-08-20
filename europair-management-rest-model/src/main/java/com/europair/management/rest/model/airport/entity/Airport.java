@@ -21,7 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "airports")
@@ -78,17 +78,17 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     private FlightRulesEnum flightRules;
 
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
-    private Set<Runway> runways;
+    private List<Runway> runways;
 
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
-    private Set<Terminal> terminals;
+    private List<Terminal> terminals;
 
     // TODO: operadores certificados: códigos del operador certificado y
     //  observaciones. Sólo se habilitará si el campo de condiciones
     //  especiales está marcado.
 
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
-    private Set<AirportObservation> observations;
+    private List<AirportObservation> observations;
 
     // TODO: regiones: A qué regiones pertenece este aeropuerto.
 }

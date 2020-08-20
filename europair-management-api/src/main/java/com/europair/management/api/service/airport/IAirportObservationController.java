@@ -90,7 +90,7 @@ public interface IAirportObservationController {
 
     /**
      * <p>
-     * Soft deletes a master airportObservation by id.
+     * Deletes a master airportObservation by id.
      * </p>
      *
      * @param airportId Airport identifier
@@ -98,7 +98,7 @@ public interface IAirportObservationController {
      * @return No content
      */
     @DeleteMapping("/{id}")
-    @Operation(description = "Soft Delete existing master airportObservation by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    @Operation(description = "Delete existing master airportObservation by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteAirportObservation(
             @Parameter(description = "Airport identifier") @NotNull @PathVariable final Long airportId,
             @Parameter(description = "AirportObservation identifier") @PathVariable @NotNull final Long id);

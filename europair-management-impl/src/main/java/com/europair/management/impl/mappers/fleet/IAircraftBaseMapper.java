@@ -21,6 +21,9 @@ public interface IAircraftBaseMapper {
 
     @Mapping(target = "airport.city.country", ignore = true)
     @Mapping(target = "airport.elevation", ignore = true)
+    @Mapping(target = "airport.runways", ignore = true)
+    @Mapping(target = "airport.terminals", ignore = true)
+    @Mapping(target = "airport.observations", ignore = true)
     AircraftBaseDto toDto(final AircraftBase entity);
 
     @Mapping(target = "airport", ignore = true)
@@ -30,5 +33,8 @@ public interface IAircraftBaseMapper {
     @Mapping(target = "airport.country", ignore = true)
     @Mapping(target = "airport.city", ignore = true)
     @Mapping(target = "airport.elevation", ignore = true)
+    @Mapping(target = "airport.runways", ignore = true)
+    @Mapping(target = "airport.terminals", ignore = true)
+    @Mapping(target = "airport.observations", ignore = true)
     AircraftBaseDto toSimpleDto(final AircraftBase entity);
 }

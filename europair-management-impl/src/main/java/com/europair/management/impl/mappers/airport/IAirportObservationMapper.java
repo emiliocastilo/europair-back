@@ -15,12 +15,10 @@ public interface IAirportObservationMapper {
 
     IAirportObservationMapper INSTANCE = Mappers.getMapper(IAirportObservationMapper.class);
 
-    //    @Mapping(target = "airport", ignore = true)
     AirportObservationDto toDto(final AirportObservation entity);
 
     AirportObservation toEntity(final AirportObservationDto dto);
 
-    @Mapping(target = "airport", ignore = true)
     void updateFromDto(final AirportObservationDto dto, @MappingTarget AirportObservation entity);
 
 }

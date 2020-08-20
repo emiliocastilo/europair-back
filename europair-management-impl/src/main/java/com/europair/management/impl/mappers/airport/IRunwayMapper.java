@@ -18,7 +18,7 @@ public interface IRunwayMapper {
 
     IRunwayMapper INSTANCE = Mappers.getMapper(IRunwayMapper.class);
 
-    //    @Mapping(target = "airport", ignore = true)
+    @Named("toRunwayDto")
     @Mapping(target = "length.value", source = "length")
     @Mapping(target = "length.type", source = "lengthUnit", qualifiedByName = "mapUnitEntityToDto")
     @Mapping(target = "width.value", source = "width")
@@ -31,7 +31,6 @@ public interface IRunwayMapper {
     @Mapping(source = "width.type", target = "widthUnit", qualifiedByName = "mapUnitDtoToEntity")
     Runway toEntity(final RunwayDto dto);
 
-    @Mapping(target = "airport", ignore = true)
     @Mapping(source = "dto.length.value", target = "length")
     @Mapping(source = "dto.length.type", target = "lengthUnit", qualifiedByName = "mapUnitDtoToEntity")
     @Mapping(source = "dto.width.value", target = "width")

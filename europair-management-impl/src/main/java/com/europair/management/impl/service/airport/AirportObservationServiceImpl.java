@@ -5,6 +5,7 @@ import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.airport.IAirportObservationMapper;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.entity.AirportObservation;
 import com.europair.management.rest.model.airport.repository.AirportObservationRepository;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
@@ -52,6 +53,12 @@ public class AirportObservationServiceImpl implements IAirportObservationService
         }
 
         AirportObservation airportObservation = IAirportObservationMapper.INSTANCE.toEntity(airportObservationDto);
+
+        // Set relationships
+        Airport airport = new Airport();
+        airport.setId(airportId);
+        airportObservation.setAirport(airport);
+
         airportObservation = airportObservationRepository.save(airportObservation);
 
         return IAirportObservationMapper.INSTANCE.toDto(airportObservation);

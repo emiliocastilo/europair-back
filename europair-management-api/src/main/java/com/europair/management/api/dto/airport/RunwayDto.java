@@ -20,9 +20,6 @@ public class RunwayDto extends AuditModificationBaseDTO {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("airport")
-    private AirportDto airport;
-
     @JsonProperty("name")
     @Size(max = TextField.NAME)
     private String name;

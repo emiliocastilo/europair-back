@@ -90,7 +90,7 @@ public interface ITerminalController {
 
     /**
      * <p>
-     * Soft deletes a master terminal by id.
+     * Deletes a master terminal by id.
      * </p>
      *
      * @param airportId Airport identifier
@@ -98,7 +98,7 @@ public interface ITerminalController {
      * @return No content
      */
     @DeleteMapping("/{id}")
-    @Operation(description = "Soft Delete existing master terminal by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    @Operation(description = "Delete existing master terminal by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteTerminal(
             @Parameter(description = "Airport identifier") @NotNull @PathVariable final Long airportId,
             @Parameter(description = "Terminal identifier") @PathVariable @NotNull final Long id);

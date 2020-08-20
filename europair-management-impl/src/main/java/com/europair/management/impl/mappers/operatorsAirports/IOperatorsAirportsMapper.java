@@ -16,12 +16,21 @@ public interface IOperatorsAirportsMapper {
   IOperatorsAirportsMapper INSTANCE = Mappers.getMapper(IOperatorsAirportsMapper.class);
 
   @Mapping(target = "airport.elevation", ignore = true)
+  @Mapping(target = "airport.runways", ignore = true)
+  @Mapping(target = "airport.terminals", ignore = true)
+  @Mapping(target = "airport.observations", ignore = true)
   OperatorsAirportsDTO toDto (final OperatorsAirports entity);
 
   @Mapping(target = "airport.elevation", ignore = true)
+  @Mapping(target = "airport.runways", ignore = true)
+  @Mapping(target = "airport.terminals", ignore = true)
+  @Mapping(target = "airport.observations", ignore = true)
   OperatorsAirports toEntity (final OperatorsAirportsDTO operatorsAirportsDTO);
 
   @Mapping(target = "airport.elevation", ignore = true)
+  @Mapping(target = "airport.runways", ignore = true)
+  @Mapping(target = "airport.terminals", ignore = true)
+  @Mapping(target = "airport.observations", ignore = true)
   void updateFromDto(final OperatorsAirportsDTO operatorsAirportsDTO, @MappingTarget OperatorsAirports operatorsAirports);
 
 }

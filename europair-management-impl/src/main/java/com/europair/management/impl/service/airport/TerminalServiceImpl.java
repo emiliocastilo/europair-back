@@ -5,6 +5,7 @@ import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.airport.ITerminalMapper;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.entity.Terminal;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.airport.repository.TerminalRepository;
@@ -52,6 +53,12 @@ public class TerminalServiceImpl implements ITerminalService {
         }
 
         Terminal terminal = ITerminalMapper.INSTANCE.toEntity(terminalDto);
+
+        // Set relationships
+        Airport airport = new Airport();
+        airport.setId(airportId);
+        terminal.setAirport(airport);
+
         terminal = terminalRepository.save(terminal);
 
         return ITerminalMapper.INSTANCE.toDto(terminal);

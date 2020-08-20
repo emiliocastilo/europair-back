@@ -6,6 +6,7 @@ import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.airport.IRunwayMapper;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.entity.Runway;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.airport.repository.RunwayRepository;
@@ -61,6 +62,12 @@ public class RunwayServiceImpl implements IRunwayService {
         }
 
         Runway runway = IRunwayMapper.INSTANCE.toEntity(runwayDto);
+
+        // Set relationships
+        Airport airport = new Airport();
+        airport.setId(airportId);
+        runway.setAirport(airport);
+
         runway = runwayRepository.save(runway);
         updateMainRunway(airportId);
 

@@ -20,9 +20,6 @@ public class AirportObservationDto extends AuditModificationBaseDTO {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("airport")
-    private AirportDto airport;
-
     @JsonProperty("observation")
     @Size(min = 1, max = TextField.TEXT_255)
     @NotEmpty
