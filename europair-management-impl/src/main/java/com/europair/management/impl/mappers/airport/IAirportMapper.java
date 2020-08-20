@@ -19,12 +19,18 @@ public interface IAirportMapper {
     IAirportMapper INSTANCE = Mappers.getMapper(IAirportMapper.class);
 
     @Mapping(target = "city.country", ignore = true)
+    @Mapping(target = "elevation.value", source = "elevation")
+    @Mapping(target = "elevation.type", source = "elevationUnit")
     AirportDto toDto(final Airport entity);
 
+    @Mapping(source = "elevation.value", target = "elevation")
+    @Mapping(source = "elevation.type", target = "elevationUnit")
     Airport toEntity(final AirportDto dto);
 
     @Mapping(target = "country", source = "airportDto", qualifiedByName = "mapAirportCountryToEntity")
     @Mapping(target = "city", source = "airportDto", qualifiedByName = "mapAirportCityToEntity")
+    @Mapping(source = "elevation.value", target = "elevation")
+    @Mapping(source = "elevation.type", target = "elevationUnit")
     void updateFromDto(final AirportDto airportDto, @MappingTarget Airport airport);
 
     @Named("mapAirportCountryToEntity")

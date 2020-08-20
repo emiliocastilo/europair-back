@@ -1,7 +1,9 @@
 package com.europair.management.impl.service.operators;
 
 
+import com.europair.management.api.dto.airport.AirportDto;
 import com.europair.management.api.dto.operators.OperatorDTO;
+import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

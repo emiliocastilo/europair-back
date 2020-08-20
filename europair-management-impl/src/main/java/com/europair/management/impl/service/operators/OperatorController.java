@@ -2,6 +2,8 @@ package com.europair.management.impl.service.operators;
 
 
 import com.europair.management.api.dto.operators.OperatorDTO;
+import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
+import com.europair.management.api.service.operators.IOperatorController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -20,7 +22,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/operators")
-public class OperatorController {
+public class OperatorController implements IOperatorController {
 
   private final IOperatorService operatorService;
 
@@ -70,9 +72,9 @@ public class OperatorController {
   public ResponseEntity<OperatorDTO> updateOperator(@Parameter(description = "Operator identifier") @NotNull @PathVariable final Long id,
                                                     @Parameter(description = "Master Operator object") @NotNull @RequestBody final OperatorDTO operatorDTO) {
 
-    final OperatorDTO operatorDTOSaved = operatorService.updateOperator(id, operatorDTO);
+    final OperatorDTO operatorDTOUpdated = operatorService.updateOperator(id, operatorDTO);
 
-    return ResponseEntity.ok().body(operatorDTOSaved);
+    return ResponseEntity.ok().body(operatorDTOUpdated);
 
   }
 
@@ -84,4 +86,5 @@ public class OperatorController {
     return ResponseEntity.noContent().build();
 
   }
+
 }

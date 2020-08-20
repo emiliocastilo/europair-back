@@ -2,7 +2,6 @@ package com.europair.management.impl.mappers.users;
 
 import com.europair.management.api.dto.users.UserDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
-import com.europair.management.impl.mappers.fleet.AircraftBaseMapper;
 import com.europair.management.impl.mappers.roles.RoleMapper;
 import com.europair.management.rest.model.users.entity.User;
 import org.mapstruct.Mapper;
