@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -65,5 +66,14 @@ public class AirportDto extends AuditModificationBaseDTO {
 
     @JsonProperty("flightRules")
     private String flightRules;
+
+    @JsonProperty("terminals")
+    private List<TerminalDto> terminals;
+
+    @JsonProperty("runways")
+    private List<RunwayDto> runways;
+
+    @JsonProperty("observations")
+    private List<AirportObservationDto> observations;
 
 }

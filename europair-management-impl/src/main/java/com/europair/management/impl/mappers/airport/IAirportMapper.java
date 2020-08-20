@@ -13,7 +13,8 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
-        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
+        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
+        uses = {IRunwayMapper.class})
 public interface IAirportMapper {
 
     IAirportMapper INSTANCE = Mappers.getMapper(IAirportMapper.class);
@@ -21,6 +22,7 @@ public interface IAirportMapper {
     @Mapping(target = "city.country", ignore = true)
     @Mapping(target = "elevation.value", source = "elevation")
     @Mapping(target = "elevation.type", source = "elevationUnit")
+    @Mapping(target = "runways", qualifiedByName = "toRunwayDto")
     AirportDto toDto(final Airport entity);
 
     @Mapping(source = "elevation.value", target = "elevation")
