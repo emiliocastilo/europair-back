@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface IOperatorRepository extends JpaRepository<Operator, Long>, JpaSpecificationExecutor<Operator> {
+
   List<Operator> findByName(final String name);
 
 }
