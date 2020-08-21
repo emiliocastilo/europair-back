@@ -13,21 +13,29 @@ import org.mapstruct.factory.Mappers;
 @Mapper(config = AuditModificationBaseMapperConfig.class,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
         uses = IAircraftBaseMapper.class)
-public interface AircraftMapper {
+public interface IAircraftMapper {
 
-    AircraftMapper INSTANCE = Mappers.getMapper(AircraftMapper.class);
+    IAircraftMapper INSTANCE = Mappers.getMapper(IAircraftMapper.class);
 
     @Mapping(target = "daytimeConfiguration", source = "entity", qualifiedByName = "seatingToDayTimeConfig")
     @Mapping(target = "nighttimeConfiguration", source = "entity", qualifiedByName = "mapNightTimeConfig")
     @Mapping(target = "bases", qualifiedByName = "toAircraftBaseSimpleDto")
+    @Mapping(target = "aircraftType.category.subcategories", ignore = true)
+    @Mapping(target = "aircraftType.category.parentCategory", ignore = true)
+    @Mapping(target = "aircraftType.subcategory.parentCategory", ignore = true)
+    @Mapping(target = "aircraftType.subcategory.subcategories", ignore = true)
     AircraftDto toDto(final Aircraft entity);
 
     @Mapping(target = "bases", ignore = true)
     @Mapping(target = "observations", ignore = true)
+    @Mapping(target = "operator", ignore = true)
+    @Mapping(target = "aircraftType", ignore = true)
     Aircraft toEntity(final AircraftDto aircraftDto);
 
     @Mapping(target = "bases", ignore = true)
     @Mapping(target = "observations", ignore = true)
+    @Mapping(target = "operator", ignore = true)
+    @Mapping(target = "aircraftType", ignore = true)
     void updateFromDto(final AircraftDto aircraftDto, @MappingTarget Aircraft aircraft);
 
     @Named("seatingToDayTimeConfig")
