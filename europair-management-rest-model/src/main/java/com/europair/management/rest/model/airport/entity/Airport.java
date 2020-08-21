@@ -7,6 +7,7 @@ import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.enums.CustomsEnum;
 import com.europair.management.rest.model.enums.FlightRulesEnum;
 import com.europair.management.rest.model.enums.UnitEnum;
+import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -18,8 +19,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "airports")
@@ -75,25 +79,17 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private FlightRulesEnum flightRules;
 
+    @OneToMany(orphanRemoval = true, mappedBy = "airport")
+    private List<Runway> runways;
 
-    // ToDo: Información de las pistas: largo, ancho y observaciones de cada una de las pistas asociadas al aeropuerto
+    @OneToMany(orphanRemoval = true, mappedBy = "airport")
+    private List<Terminal> terminals;
 
-    // ToDo: Terminales: código, nombre y observaciones de las terminales del aeropuerto
+    @OneToMany(orphanRemoval = true, mappedBy = "airport")
+    private List<OperatorsAirports> operators;
 
-    // TODO: operadores certificados: códigos del operador certificado y
-    //  observaciones. Sólo se habilitará si el campo de condiciones
-    //  especiales está marcado.
-
-    // ToDo: Observaciones del aeropuerto.
-
-    // TODO: directorio del aeropuerto: listado de contactos de todo
-    //  tipo que se hayan dado de alta en el módulo de CRM y estén
-    //  asociados al aeropuerto: contactos del aeropuerto, contactos
-    //  de empresas de handling, etc.
-
-    // TODO: flota del aeropuerto: se podrá consultar la flota asociada
-    //  al aeropuerto. Se realizará una consulta al maestro de flota,
-    //  filtrando por el aeropuerto a consultar.
+    @OneToMany(orphanRemoval = true, mappedBy = "airport")
+    private List<AirportObservation> observations;
 
     // TODO: regiones: A qué regiones pertenece este aeropuerto.
 }

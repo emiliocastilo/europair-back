@@ -1,14 +1,12 @@
 package com.europair.management.impl.service.operatorsairports;
 
-import com.europair.management.api.dto.operators.OperatorDTO;
 import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-import com.europair.management.impl.mappers.operators.IOperatorMapper;
 import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.operators.repository.IOperatorRepository;
 import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
-import com.europair.management.rest.model.operatorsairports.repository.IOperatorsAirportsRepository;
+import com.europair.management.rest.model.operatorsairports.repository.OperatorsAirportsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,7 +22,7 @@ import java.util.Date;
 @Slf4j
 public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
 
-  private final IOperatorsAirportsRepository operatorsAirportsRepository;
+  private final OperatorsAirportsRepository operatorsAirportsRepository;
   private final IOperatorRepository operatorRepository;
 
   @Override

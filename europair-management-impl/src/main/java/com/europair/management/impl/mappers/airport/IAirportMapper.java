@@ -2,6 +2,7 @@ package com.europair.management.impl.mappers.airport;
 
 import com.europair.management.api.dto.airport.AirportDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
+import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.countries.entity.Country;
@@ -13,7 +14,8 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
-        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
+        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
+        uses = {IRunwayMapper.class, IOperatorsAirportsMapper.class})
 public interface IAirportMapper {
 
     IAirportMapper INSTANCE = Mappers.getMapper(IAirportMapper.class);
@@ -21,16 +23,26 @@ public interface IAirportMapper {
     @Mapping(target = "city.country", ignore = true)
     @Mapping(target = "elevation.value", source = "elevation")
     @Mapping(target = "elevation.type", source = "elevationUnit")
+    @Mapping(target = "runways", qualifiedByName = "toRunwayDto")
+    @Mapping(target = "operators", qualifiedByName = "operatorsAirportToDtoFromAirport")
     AirportDto toDto(final Airport entity);
 
     @Mapping(source = "elevation.value", target = "elevation")
     @Mapping(source = "elevation.type", target = "elevationUnit")
+    @Mapping(target = "runways", ignore = true)
+    @Mapping(target = "terminals", ignore = true)
+    @Mapping(target = "observations", ignore = true)
+    @Mapping(target = "operators", ignore = true)
     Airport toEntity(final AirportDto dto);
 
     @Mapping(target = "country", source = "airportDto", qualifiedByName = "mapAirportCountryToEntity")
     @Mapping(target = "city", source = "airportDto", qualifiedByName = "mapAirportCityToEntity")
     @Mapping(source = "elevation.value", target = "elevation")
     @Mapping(source = "elevation.type", target = "elevationUnit")
+    @Mapping(target = "runways", ignore = true)
+    @Mapping(target = "terminals", ignore = true)
+    @Mapping(target = "observations", ignore = true)
+    @Mapping(target = "operators", ignore = true)
     void updateFromDto(final AirportDto airportDto, @MappingTarget Airport airport);
 
     @Named("mapAirportCountryToEntity")

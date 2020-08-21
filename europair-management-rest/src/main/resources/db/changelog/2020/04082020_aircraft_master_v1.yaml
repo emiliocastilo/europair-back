@@ -154,3 +154,69 @@ databaseChangeLog:
                   name: outside_upgrade_year
                   type: int
                   remarks: Year of last outside improvement
+
+  - changeSet:
+      id: 04082020_aircraft_master_v1_20200820_aircraft_observation_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add aircraft observation table to database"
+      changes:
+        - createTable:
+            tableName: aircraft_observations
+            remarks: The aircrafts observations table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the aircraft observation
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: aircraft_observations_id_pk
+              - column:
+                  name: aircraft_id
+                  type: int
+                  remarks: aircraft id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: aircraft_observation_aircraft_fk
+                    references: aircrafts(id)
+              - column:
+                  name: observation
+                  type: varchar(255)
+                  remarks: observation text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: aircraft_observations
+
+

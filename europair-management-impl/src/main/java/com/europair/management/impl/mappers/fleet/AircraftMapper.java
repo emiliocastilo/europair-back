@@ -23,9 +23,11 @@ public interface AircraftMapper {
     AircraftDto toDto(final Aircraft entity);
 
     @Mapping(target = "bases", ignore = true)
+    @Mapping(target = "observations", ignore = true)
     Aircraft toEntity(final AircraftDto aircraftDto);
 
     @Mapping(target = "bases", ignore = true)
+    @Mapping(target = "observations", ignore = true)
     void updateFromDto(final AircraftDto aircraftDto, @MappingTarget Aircraft aircraft);
 
     @Named("seatingToDayTimeConfig")
