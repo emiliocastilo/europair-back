@@ -18,7 +18,4 @@ public class OperatorCommentDTO extends AuditModificationBaseDTO {
   @JsonProperty("comment")
   private String comment;
 
-//  @JsonProperty("operator")
-//  private OperatorDTO operator;
-
 }
