@@ -12,14 +12,13 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(config = AuditModificationBaseMapperConfig.class, mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
+@Mapper(config = AuditModificationBaseMapperConfig.class,
+        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
 public interface IOperatorCommentMapper {
 
   IOperatorCommentMapper INSTANCE = Mappers.getMapper(IOperatorCommentMapper.class);
 
   OperatorCommentDTO toDto (final OperatorComment entity);
-
-  List<OperatorCommentDTO> toListDtos (final List<OperatorComment> listEntities);
 
   OperatorComment toEntity (final OperatorCommentDTO operatorCommentDTO);
 
