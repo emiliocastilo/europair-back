@@ -4,14 +4,12 @@ import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.countries.CountryDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class CityDTO extends AuditModificationBaseDTO {
 
     @JsonProperty("id")

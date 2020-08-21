@@ -5,7 +5,6 @@ import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AircraftTypeAverageSpeedDto extends AuditModificationBaseDTO {
 
     @JsonProperty("id")

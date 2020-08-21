@@ -20,7 +20,7 @@ public class CountryServiceImpl implements ICountryService {
 
     @Override
     public Page<CountryDTO> findAllPaginated(Pageable pageable) {
-        return countryRepository.findAll(pageable).map(country -> CountryMapper.INSTANCE.toDto(country));
+        return countryRepository.findAll(pageable).map(CountryMapper.INSTANCE::toDto);
     }
 
     @Override
@@ -57,13 +57,12 @@ public class CountryServiceImpl implements ICountryService {
     }
 
     private CountryDTO updateCountryValues(Long id, CountryDTO countryDTO) {
+        CountryDTO dto = new CountryDTO();
+        dto.setId(id);
+        dto.setCode(countryDTO.getCode());
+        dto.setName(countryDTO.getName());
 
-        return CountryDTO.builder()
-                .id(id)
-                .code(countryDTO.getCode())
-                .name(countryDTO.getName())
-                .build();
-
+        return dto;
     }
 
 }
