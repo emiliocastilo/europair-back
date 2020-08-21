@@ -26,7 +26,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Page<UserDTO> findAllPaginated(Pageable pageable) {
-        return userRepository.findAll(pageable).map(user -> UserMapper.INSTANCE.toDto(user));
+        return userRepository.findAll(pageable).map(UserMapper.INSTANCE::toDto);
     }
 
     @Override
@@ -68,17 +68,16 @@ public class UserServiceImpl implements IUserService {
     }
 
     private UserDTO updateUserValues(Long id, UserDTO userDTO) {
+        UserDTO dto = new UserDTO();
+        dto.setId(id);
+        dto.setUsername(userDTO.getUsername());
+        dto.setName(userDTO.getName());
+        dto.setSurname(userDTO.getSurname());
+        dto.setEmail(userDTO.getEmail());
+        dto.setTimeZone(userDTO.getTimeZone());
+        dto.setRoles(userDTO.getRoles());
+        dto.setTasks(userDTO.getTasks());
 
-        return UserDTO.builder()
-                .id(id)
-                .username(userDTO.getUsername())
-                .name(userDTO.getName())
-                .surname(userDTO.getSurname())
-                .email(userDTO.getEmail())
-                .timeZone(userDTO.getTimeZone())
-                .roles(userDTO.getRoles())
-                .tasks(userDTO.getTasks())
-                .build();
-
+        return dto;
     }
 }

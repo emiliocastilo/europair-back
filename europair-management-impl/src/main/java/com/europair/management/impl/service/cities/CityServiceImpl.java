@@ -60,13 +60,14 @@ public class CityServiceImpl implements ICityService {
     }
 
     private CityDTO updateCityValues(Long id, CityDTO cityDTO) {
+        CityDTO dto = new CityDTO();
+        dto.setId(id);
+        dto.setCode(cityDTO.getCode());
+        dto.setName(cityDTO.getName());
 
-        return CityDTO.builder()
-                .id(id)
-                .code(cityDTO.getCode())
-                .name(cityDTO.getName())
-                .country(CountryDTO.builder().id(cityDTO.getCountry().getId()).build())
-                .build();
-
+        CountryDTO country = new CountryDTO();
+        country.setId(cityDTO.getCountry().getId());
+        dto.setCountry(country);
+        return dto;
     }
 }
