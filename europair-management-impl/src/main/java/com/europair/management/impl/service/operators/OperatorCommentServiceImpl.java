@@ -4,6 +4,7 @@ package com.europair.management.impl.service.operators;
 import com.europair.management.api.dto.operators.OperatorCommentDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.operators.IOperatorCommentMapper;
+import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.operators.entity.OperatorComment;
 
 import com.europair.management.rest.model.operators.repository.IOperatorCommentRepository;
@@ -51,6 +52,11 @@ public class OperatorCommentServiceImpl implements IOperatorCommentService {
     }
 
     OperatorComment operatorComment = IOperatorCommentMapper.INSTANCE.toEntity(operatorCommentDTO);
+
+    Operator operator = new Operator();
+    operator.setId(operatorId);
+    operatorComment.setOperator(operator);
+
     operatorComment = operatorCommentRepository.save(operatorComment);
     return IOperatorCommentMapper.INSTANCE.toDto(operatorComment);
   }

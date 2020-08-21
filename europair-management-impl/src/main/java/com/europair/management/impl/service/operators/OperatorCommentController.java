@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
+@RequestMapping("/operators/{operatorId}/comments")
 public class OperatorCommentController {
 
   private final IOperatorCommentService operatorCommentService;
 
-  @GetMapping("/operators/{operatorId}/comments")
+  @GetMapping("")
   @Operation(description = "Paged result of operator comments list", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<Page<OperatorCommentDTO>> getAllOperatorCommentsPaginated(final Pageable pageable, @PathVariable final Long operatorId) {
 
@@ -30,7 +32,7 @@ public class OperatorCommentController {
 
   }
 
-  @GetMapping("/operators/{operatorId}/comments/{id}")
+  @GetMapping("/{id}")
   @Operation(description = "Retrieve operator comment by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorCommentDTO> getOperatorCommentById(@PathVariable final Long id, @PathVariable final Long operatorId) {
 
@@ -38,7 +40,7 @@ public class OperatorCommentController {
     return ResponseEntity.ok().body(operatorCommentDTO);
   }
 
-  @PostMapping("/operators/{operatorId}/comments")
+  @PostMapping("")
   @Operation(description = "Save a new operator comment", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorCommentDTO> saveOperatorComment(@RequestBody final OperatorCommentDTO operatorCommentDTO, @PathVariable final Long operatorId) {
 
@@ -53,24 +55,19 @@ public class OperatorCommentController {
 
   }
 
-  @PutMapping("/operators/{operatorId}/comments/{id}")
+  @PutMapping("/{id}")
   @Operation(description = "Updates existing operator comment", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<OperatorCommentDTO> updateOperator(@PathVariable final Long id, @RequestBody final OperatorCommentDTO operatorCommentDTO, @PathVariable final Long operatorId) {
+  public ResponseEntity<OperatorCommentDTO> updateOperatorComment(@PathVariable final Long id, @RequestBody final OperatorCommentDTO operatorCommentDTO, @PathVariable final Long operatorId) {
 
-    final OperatorCommentDTO operatorCommentDTOSaved = operatorCommentService.updateOperatorComment(id, operatorCommentDTO, operatorId);
+    final OperatorCommentDTO operatorCommentDTOUpdated = operatorCommentService.updateOperatorComment(id, operatorCommentDTO, operatorId);
 
-    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-      .path("/{id}")
-      .buildAndExpand(operatorCommentDTOSaved.getId())
-      .toUri();
-
-    return ResponseEntity.ok().body(operatorCommentDTOSaved);
+    return ResponseEntity.ok().body(operatorCommentDTOUpdated);
 
   }
 
-  @DeleteMapping("/operators/{operatorId}/comments/{id}")
+  @DeleteMapping("/{id}")
   @Operation(description = "Deletes existing operator comment by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<?> deleteCertification(@PathVariable final Long id, @PathVariable final Long operatorId) {
+  public ResponseEntity<?> deleteOperatorComment(@PathVariable final Long id, @PathVariable final Long operatorId) {
 
     operatorCommentService.deleteOperatorComment(id, operatorId);
     return ResponseEntity.noContent().build();
