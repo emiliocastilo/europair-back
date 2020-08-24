@@ -54,6 +54,7 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
       .orElseThrow(() -> new ResourceNotFoundException("Operator not found on id: " + operatorId));
 
     OperatorsAirports operatorsAirports = IOperatorsAirportsMapper.INSTANCE.toEntity(operatorsAirportsDTO);
+    operatorsAirports.setOperator(operator);
     operatorsAirports = operatorsAirportsRepository.save(operatorsAirports);
     return IOperatorsAirportsMapper.INSTANCE.toDto(operatorsAirports);
 
@@ -70,6 +71,7 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
       .orElseThrow(() -> new ResourceNotFoundException("OperatorsAirports not found on id: " + id));
 
       IOperatorsAirportsMapper.INSTANCE.updateFromDto(operatorsAirportsDTO, operatorsAirports);
+      operatorsAirports.setOperator(operator);
       operatorsAirports = operatorsAirportsRepository.save(operatorsAirports);
       return IOperatorsAirportsMapper.INSTANCE.toDto(operatorsAirports);
 
