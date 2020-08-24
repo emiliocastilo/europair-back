@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 25082020_regions_v1_regions_airports_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add regions_airports table to the database"
+      changes:
+        # Regions_Airports
+        - createTable:
+            tableName: regions_airports
+            remarks: The regions and airports relationship
+            columns:
+              - column:
+                  name: region_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: airport_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: region_id, airport_id
+            constraintName: regions_airports_pk
+            tableName: regions_airports
+            validate: true

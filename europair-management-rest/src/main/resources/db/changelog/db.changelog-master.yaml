@@ -83,4 +83,13 @@ databaseChangeLog:
   - include:
       file: 2020/18082020_aircraft_type_master_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/25082020_regions_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/25082020_regions_countries_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/25082020_regions_airports_v1.yaml
+      relativeToChangelogFile: true
 
