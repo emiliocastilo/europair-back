@@ -38,12 +38,11 @@ public class CountryServiceImpl implements ICountryService {
     @Override
     public CountryDTO updateCountry(final Long id, final CountryDTO countryDTO) {
 
-        CountryDTO storedCountryDTO = CountryMapper.INSTANCE.toDto(countryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Country not found on id: " + id)));
+        Country country = countryRepository.findById(id)
+          .orElseThrow(() -> new ResourceNotFoundException("Country not found on id: " + id));
 
-        CountryDTO updatedCountryDTO = updateCountryValues(storedCountryDTO.getId(), countryDTO);
-
-        Country country = countryRepository.save(CountryMapper.INSTANCE.toEntity(updatedCountryDTO));
+        CountryMapper.INSTANCE.updateFromDTO(countryDTO, country);
+        country = countryRepository.save(country);
 
         return CountryMapper.INSTANCE.toDto(country);
     }
@@ -54,15 +53,6 @@ public class CountryServiceImpl implements ICountryService {
         Country country = countryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Country not found on id: " + id));
         countryRepository.delete(country);
-    }
-
-    private CountryDTO updateCountryValues(Long id, CountryDTO countryDTO) {
-        CountryDTO dto = new CountryDTO();
-        dto.setId(id);
-        dto.setCode(countryDTO.getCode());
-        dto.setName(countryDTO.getName());
-
-        return dto;
     }
 
 }

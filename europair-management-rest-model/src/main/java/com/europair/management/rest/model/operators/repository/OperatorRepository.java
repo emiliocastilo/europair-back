@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IOperatorRepository extends JpaRepository<Operator, Long>, JpaSpecificationExecutor<Operator> {
-
-  List<Operator> findByName(final String name);
+public interface OperatorRepository
+    extends JpaRepository<Operator, Long>, JpaSpecificationExecutor<Operator>, IOperatorRepositoryCustom {
 
 }

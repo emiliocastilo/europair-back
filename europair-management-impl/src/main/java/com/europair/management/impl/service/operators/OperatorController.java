@@ -4,6 +4,8 @@ package com.europair.management.impl.service.operators;
 import com.europair.management.api.dto.operators.OperatorDTO;
 import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import com.europair.management.api.service.operators.IOperatorController;
+import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.common.CoreCriteria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,15 +32,18 @@ public class OperatorController implements IOperatorController {
 
   @GetMapping("")
   @Operation(description = "Paged result of operators list", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<Page<OperatorDTO>> getAllOperatorsPaginated(final Pageable pageable) {
+  @Override
+  public ResponseEntity<Page<OperatorDTO>> getOperatorsByFilter(final Pageable pageable, Map<String, String> reqParam) {
 
-    final Page<OperatorDTO> pageOperatorsDTO = operatorService.findAllPaginated(pageable);
+    CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
+    final Page<OperatorDTO> pageOperatorsDTO = operatorService.findAllPaginatedByFilter(pageable, criteria);
     return ResponseEntity.ok().body(pageOperatorsDTO);
 
   }
 
   @GetMapping("/{id}")
   @Operation(description = "Retrieve operator by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
+  @Override
   public ResponseEntity<OperatorDTO> getOperatorById(@PathVariable final Long id) {
 
     final OperatorDTO operatorDTO = operatorService.findById(id);
@@ -46,6 +52,7 @@ public class OperatorController implements IOperatorController {
 
   @GetMapping("/search")
   @Operation(description = "Retrieve operator by filter", security = { @SecurityRequirement(name = "bearerAuth") })
+  @Override
   public ResponseEntity<Page<OperatorDTO>> getOperatorsByFilter(@RequestParam final String text, Pageable pageable) {
 
     final Page<OperatorDTO> pageOperatorsDTO = operatorService.searchOperator(text, pageable);
@@ -54,6 +61,7 @@ public class OperatorController implements IOperatorController {
 
   @PostMapping("")
   @Operation(description = "Save a new operator", security = { @SecurityRequirement(name = "bearerAuth") })
+  @Override
   public ResponseEntity<OperatorDTO> saveOperator(@RequestBody final OperatorDTO operatorDTO) {
 
     final OperatorDTO operatorDTOSaved = operatorService.saveOperator(operatorDTO);
@@ -69,8 +77,10 @@ public class OperatorController implements IOperatorController {
 
   @PutMapping("/{id}")
   @Operation(description = "Updates existing operator", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<OperatorDTO> updateOperator(@Parameter(description = "Operator identifier") @NotNull @PathVariable final Long id,
-                                                    @Parameter(description = "Master Operator object") @NotNull @RequestBody final OperatorDTO operatorDTO) {
+  @Override
+  public ResponseEntity<OperatorDTO> updateOperator(
+      @Parameter(description = "Operator identifier") @NotNull @PathVariable final Long id,
+      @Parameter(description = "Master Operator object") @NotNull @RequestBody final OperatorDTO operatorDTO) {
 
     final OperatorDTO operatorDTOUpdated = operatorService.updateOperator(id, operatorDTO);
 

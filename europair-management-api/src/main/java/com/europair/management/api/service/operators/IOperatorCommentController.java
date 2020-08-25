@@ -9,28 +9,78 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+@RequestMapping("/operators/{operatorId}/comments")
 public interface IOperatorCommentController {
 
-
-  @GetMapping("/operator/{operatorId}/comments")
+  /**
+   * <p>
+   * Retrieves a paginated list of Operator comments.
+   * </p>
+   *
+   * @param pageable pagination info
+   * @return Paginated list of operator comments
+   */
+  @GetMapping("")
   @Operation(description = "Paged result of operator comments list", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<Page<OperatorCommentDTO>> getAllOperatorCommentsPaginated(final Pageable pageable, @PathVariable final Long operatorId) ;
+  ResponseEntity<Page<OperatorCommentDTO>> getAllOperatorCommentsPaginated(
+      final Pageable pageable,
+      @PathVariable final Long operatorId) ;
 
-  @GetMapping("/operator/{operatorId}/comments/{id}")
+  /**
+   * <p>
+   * Retrieves operator comment by id.
+   * </p>
+   *
+   * @param id Unique identifier by id.
+   * @return Operator comment
+   */
+  @GetMapping("/{id}")
   @Operation(description = "Retrieve operator comment by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<OperatorCommentDTO> getOperatorCommentById(@PathVariable final Long id, @PathVariable final Long operatorId) ;
+  ResponseEntity<OperatorCommentDTO> getOperatorCommentById(
+      @PathVariable final Long id, @PathVariable final Long operatorId) ;
 
-  @PostMapping("/operator/{operatorId}/comments")
+  /**
+   * <p>
+   * Creates a new Operator comment
+   * </p>
+   *
+   * @param operatorCommentDTO Info of the Operator to create
+   * @return Data of the created operator comment
+   */
+  @PostMapping("")
   @Operation(description = "Save a new operator comment", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<OperatorCommentDTO> saveOperatorComment(@RequestBody final OperatorCommentDTO operatorCommentDTO, @PathVariable final Long operatorId) ;
+  ResponseEntity<OperatorCommentDTO> saveOperatorComment(
+      @RequestBody final OperatorCommentDTO operatorCommentDTO,
+      @PathVariable final Long operatorId) ;
 
-  @PutMapping("/operator/{operatorId}/comments/{id}")
+  /**
+   * <p>
+   * Updates operator comment
+   * </p>
+   *
+   * @param id         Unique identifier
+   * @param operatorCommentDTO Updated operator comment
+   * @return The updated opertor comment
+   */
+  @PutMapping("/{id}")
   @Operation(description = "Updates existing operator comment", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<OperatorCommentDTO> updateOperator(@PathVariable final Long id, @RequestBody final OperatorCommentDTO operatorCommentDTO, @PathVariable final Long operatorId) ;
+  ResponseEntity<OperatorCommentDTO> updateOperatorComment(
+      @PathVariable final Long id,
+      @RequestBody final OperatorCommentDTO operatorCommentDTO,
+      @PathVariable final Long operatorId) ;
 
-  @DeleteMapping("/operator/{operatorId}/comments/{id}")
+  /**
+   * <p>
+   * Deletes an operator comment by id.
+   * </p>
+   *
+   * @param id Unique identifier
+   * @return No content
+   */
+  @DeleteMapping("/{id}")
   @Operation(description = "Deletes existing operator comment by identifier", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<?> deleteCertification(@PathVariable final Long id, @PathVariable final Long operatorId) ;
+  ResponseEntity<?> deleteOperatorComment(
+      @PathVariable final Long id,
+      @PathVariable final Long operatorId) ;
 
 }
