@@ -2,6 +2,7 @@ package com.europair.management.api.service.fleet;
 
 
 import com.europair.management.api.dto.fleet.AircraftDto;
+import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/aircrafts")
@@ -88,5 +90,18 @@ public interface IAircraftController {
     @DeleteMapping("/{id}")
     @Operation(description = "Deletes existing master aircraft by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteAircraft(@Parameter(description = "Aircraft identifier") @PathVariable @NotNull final Long id);
+
+    /**
+     * <p>
+     * Search aircraft that match the filters
+     * </p>
+     *
+     * @param filterDto Filter object
+     * @return List of aircraft
+     */
+    @GetMapping
+    @Operation(description = "Aircraft list that matches the filters", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<List<AircraftDto>> searchAircraft(
+            @Parameter(description = "Objects with filter parameters") AircraftFilterDto filterDto);
 
 }
