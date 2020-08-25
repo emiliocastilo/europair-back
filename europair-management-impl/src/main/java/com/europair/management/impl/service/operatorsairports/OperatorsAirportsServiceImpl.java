@@ -77,6 +77,7 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
 
   }
 
+  @Transactional(readOnly = false)
   @Override
   public void deleteOperatorsAirports(Long operatorId, Long id) {
     Operator operatorBD = operatorRepository.findById(operatorId)

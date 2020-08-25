@@ -16,13 +16,13 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @Slf4j
-@RequestMapping("/operators")
+@RequestMapping("/operators/{operatorId}/airports")
 public class OperatorsAirportsController {
 
   @Autowired
   private IOperatorsAirportsService operatorsAirportsService;
 
-  @GetMapping("/{operatorId}/airports")
+  @GetMapping("")
   @Operation(description = "Paged result of airports list", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<Page<OperatorsAirportsDTO>> getAllAirportsByOperatorPaginated(
       @PathVariable final Long operatorId,
@@ -34,7 +34,7 @@ public class OperatorsAirportsController {
 
   }
 
-  @GetMapping("/{operatorId}/airports/{id}")
+  @GetMapping("/{id}")
   @Operation(description = "Paged result of airports list", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorsAirportsDTO> getOperatorsAirportsById(
     @PathVariable final Long operatorId,
@@ -45,7 +45,7 @@ public class OperatorsAirportsController {
 
   }
 
-  @PostMapping("/{operatorId}/airports")
+  @PostMapping("")
   @Operation(description = "Assign Airports to Operator", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorsAirportsDTO> saveOperatorsAirports (
       @PathVariable final Long operatorId,
@@ -56,7 +56,7 @@ public class OperatorsAirportsController {
 
   }
 
-  @PutMapping("/{operatorId}/airports/{id}")
+  @PutMapping("/{id}")
   @Operation(description = "Edit Airports assignment to Operator", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<OperatorsAirportsDTO> updateOperatorsAirports (
       @PathVariable final Long operatorId,
@@ -68,7 +68,7 @@ public class OperatorsAirportsController {
 
   }
 
-  @DeleteMapping("/{operatorId}/airports/{id}")
+  @DeleteMapping("/{id}")
   @Operation(description = "Delete Airports assignment to Operator", security = { @SecurityRequirement(name = "bearerAuth") })
   public ResponseEntity<?> deleteOperatorsAirports(
         @Parameter(description = "Operator identifier") @PathVariable @NotNull final Long operatorId,
