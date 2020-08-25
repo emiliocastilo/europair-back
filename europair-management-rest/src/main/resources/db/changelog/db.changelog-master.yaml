@@ -83,4 +83,7 @@ databaseChangeLog:
   - include:
       file: 2020/18082020_aircraft_type_master_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/24082020_expedient_status_master_v1.yaml
+      relativeToChangelogFile: true
 
