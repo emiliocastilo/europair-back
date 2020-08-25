@@ -1,0 +1,238 @@
+databaseChangeLog:
+  - changeSet:
+      id: 24082020_expedient_status_master_v1_tables
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add expedient related tables to database"
+      changes:
+        - createTable:
+            tableName: clients
+            remarks: The clients table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the client
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: clients_id_pk
+              - column:
+                  name: client_code
+                  type: varchar(20)
+                  remarks: client code
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: clients_code_uq
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: client name
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: clients
+
+
+        - createTable:
+            tableName: providers
+            remarks: The provider table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the provider
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: providers_id_pk
+              - column:
+                  name: provider_code
+                  type: varchar(20)
+                  remarks: provider code
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: providers_code_uq
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: provider name
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: providers
+
+
+        - createTable:
+            tableName: contacts
+            remarks: The contact table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the contact
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contacts_id_pk
+              - column:
+                  name: contact_code
+                  type: varchar(20)
+                  remarks: contact code
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: contacts_code_uq
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: contact name
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: contacts
+
+
+        - createTable:
+            tableName: expedient_status
+            remarks: The expedient_status table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the expedient_status
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: expedient_status_id_pk
+              - column:
+                  name: expedient_status_code
+                  type: varchar(20)
+                  remarks: expedient_status code
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: expedient_status_code_uq
+              - column:
+                  name: name
+                  type: varchar(255)
+                  remarks: expedient_status name
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: expedient_status
+
