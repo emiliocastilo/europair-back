@@ -19,9 +19,8 @@ public class OperatorComment extends AuditModificationBaseEntity implements Seri
   @Column
   private String comment;
 
-
-//  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//  @JoinColumn(name = "operator_id", nullable = false)
-//  private Operator operator;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "operator_id", nullable = false)
+  private Operator operator;
 
 }

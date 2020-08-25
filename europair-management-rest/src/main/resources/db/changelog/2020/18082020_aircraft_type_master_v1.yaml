@@ -278,3 +278,33 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: aircraft_type_observation
+
+  - changeSet:
+      id: 18082020_aircraft_type_master_v1_20200821_aircraft_update_operators_types
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Update aircraft table with Operator and Type foreign keys"
+      changes:
+        - addColumn:
+            tableName: aircrafts
+            columns:
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+
+        - addForeignKeyConstraint:
+            baseColumnNames:  operator_id
+            baseTableName:  aircrafts
+            constraintName:  aircraft_operator_fk
+            referencedColumnNames:  id
+            referencedTableName: operators
+            validate:  true
+
+        - addForeignKeyConstraint:
+            baseColumnNames:  aircraft_type_id
+            baseTableName:  aircrafts
+            constraintName:  aircraft_aircraft_type_fk
+            referencedColumnNames:  id
+            referencedTableName: aircraft_types
+            validate:  true

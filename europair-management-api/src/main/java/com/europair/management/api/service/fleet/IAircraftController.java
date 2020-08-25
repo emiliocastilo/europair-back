@@ -8,26 +8,20 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 @RequestMapping("/aircrafts")
 public interface IAircraftController {
-
-
-    /**
-     * <p>
-     * Retrieves a paginated list of Aircraft.
-     * </p>
-     *
-     * @param pageable pagination info
-     * @return Paginated list of aircraft
-     */
-    @GetMapping
-    @Operation(description = "Paged result of master aircraft", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<Page<AircraftDto>> getAllAircraftPaginated(@Parameter(description = "Pagination filter") final Pageable pageable) ;
 
     /**
      * <p>
@@ -39,7 +33,7 @@ public interface IAircraftController {
      */
     @GetMapping("/{id}")
     @Operation(description = "Retrieve master aircraft data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<AircraftDto> getAircraftById(@Parameter(description = "Aircraft identifier") @NotNull @PathVariable final Long id) ;
+    ResponseEntity<AircraftDto> getAircraftById(@Parameter(description = "Aircraft identifier") @NotNull @PathVariable final Long id);
 
     /**
      * <p>
@@ -50,27 +44,11 @@ public interface IAircraftController {
      * @param reqParam Map of filter params, values and operators. (pe: plateNumber=JKL,CONTAINS)
      * @return Paginated list of aircraft
      */
-    @GetMapping("/filter")
+    @GetMapping
     @Operation(description = "Paged result of master aircraft with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<Page<AircraftDto>> getAircraftByFilter(
+    ResponseEntity<Page<AircraftDto>> getAircraftByFilter(
             @Parameter(description = "Pagination filter") final Pageable pageable,
-            @Parameter(description = "Map of properties to filter with value and operator, (pe: plateNumber=JKL,CONTAINS)") @RequestParam Map<String, String> reqParam) ;
-
-    /**
-     * <p>
-     * Retrieves a paginated list of Aircraft filtered by matching the value of some properties:
-     * operator, aircraftType, bases.airport
-     * </p>
-     *
-     * @param pageable pagination info
-     * @param filter   User input filter value
-     * @return Paginated list of aircraft
-     */
-    @GetMapping("/filter/basic")
-    @Operation(description = "Paged result of master aircraft with basic filter", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<Page<AircraftDto>> getAircraftsByBasicFilter(
-            @Parameter(description = "Pagination filter") final Pageable pageable,
-            @Parameter(description = "Filter value") @RequestParam final String filter) ;
+            @Parameter(description = "Map of properties to filter with value and operator, (pe: plateNumber=JKL,CONTAINS)") @RequestParam Map<String, String> reqParam);
 
     /**
      * <p>
@@ -82,7 +60,7 @@ public interface IAircraftController {
      */
     @PostMapping
     @Operation(description = "Save a new master aircraft", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<AircraftDto> saveAircraft(@Parameter(description = "Master Aircraft object") @NotNull @RequestBody final AircraftDto aircraftDto) ;
+    ResponseEntity<AircraftDto> saveAircraft(@Parameter(description = "Master Aircraft object") @NotNull @RequestBody final AircraftDto aircraftDto);
 
     /**
      * <p>
@@ -95,9 +73,9 @@ public interface IAircraftController {
      */
     @PutMapping("/{id}")
     @Operation(description = "Updates existing master aircraft", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<AircraftDto> updateAircraft(
+    ResponseEntity<AircraftDto> updateAircraft(
             @Parameter(description = "Aircraft identifier") @NotNull @PathVariable final Long id,
-            @Parameter(description = "Master Aircraft updated data") @NotNull @RequestBody final AircraftDto aircraftDto) ;
+            @Parameter(description = "Master Aircraft updated data") @NotNull @RequestBody final AircraftDto aircraftDto);
 
     /**
      * <p>
@@ -109,6 +87,6 @@ public interface IAircraftController {
      */
     @DeleteMapping("/{id}")
     @Operation(description = "Deletes existing master aircraft by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<?> deleteAircraft(@Parameter(description = "Aircraft identifier") @PathVariable @NotNull final Long id) ;
+    ResponseEntity<?> deleteAircraft(@Parameter(description = "Aircraft identifier") @PathVariable @NotNull final Long id);
 
 }

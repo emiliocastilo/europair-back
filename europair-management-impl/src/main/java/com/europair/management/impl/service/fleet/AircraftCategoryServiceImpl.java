@@ -4,7 +4,7 @@ package com.europair.management.impl.service.fleet;
 import com.europair.management.api.dto.fleet.AircraftCategoryDto;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-import com.europair.management.impl.mappers.fleet.AircraftCategoryMapper;
+import com.europair.management.impl.mappers.fleet.IAircraftCategoryMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
@@ -41,10 +41,10 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
         aircraftCategoryDto.setParentCategory(null);
         aircraftCategoryDto.setOrder(null);
 
-        AircraftCategory aircraftCategory = AircraftCategoryMapper.INSTANCE.toEntity(aircraftCategoryDto);
+        AircraftCategory aircraftCategory = IAircraftCategoryMapper.INSTANCE.toEntity(aircraftCategoryDto);
 
         aircraftCategory = aircraftCategoryRepository.save(aircraftCategory);
-        return AircraftCategoryMapper.INSTANCE.toDtoWithSubcategories(aircraftCategory);
+        return IAircraftCategoryMapper.INSTANCE.toDtoWithSubcategories(aircraftCategory);
     }
 
     @Override
@@ -56,10 +56,10 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
         aircraftCategoryDto.setParentCategory(null);
         aircraftCategoryDto.setOrder(null);
 
-        AircraftCategoryMapper.INSTANCE.updateFromDto(aircraftCategoryDto, aircraftCategory);
+        IAircraftCategoryMapper.INSTANCE.updateFromDto(aircraftCategoryDto, aircraftCategory);
         aircraftCategory = aircraftCategoryRepository.save(aircraftCategory);
 
-        return AircraftCategoryMapper.INSTANCE.toDtoWithSubcategories(aircraftCategory);
+        return IAircraftCategoryMapper.INSTANCE.toDtoWithSubcategories(aircraftCategory);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
 
     @Override
     public AircraftCategoryDto findById(Long id) {
-        return AircraftCategoryMapper.INSTANCE.toDtoWithSubcategories(aircraftCategoryRepository.findById(id)
+        return IAircraftCategoryMapper.INSTANCE.toDtoWithSubcategories(aircraftCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aircraft Category not found with id: " + id)));
     }
 
@@ -99,7 +99,7 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
         }
 
         return aircraftCategoryRepository.findAircraftCategoriesByCriteria(criteria, pageable)
-                .map(AircraftCategoryMapper.INSTANCE::toDtoWithSubcategories);
+                .map(IAircraftCategoryMapper.INSTANCE::toDtoWithSubcategories);
     }
 
     /*
@@ -117,10 +117,10 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
         parentCategory.setId(parentCategoryId);
         aircraftCategoryDto.setParentCategory(parentCategory);
 
-        AircraftCategory aircraftCategory = AircraftCategoryMapper.INSTANCE.toEntity(aircraftCategoryDto);
+        AircraftCategory aircraftCategory = IAircraftCategoryMapper.INSTANCE.toEntity(aircraftCategoryDto);
         aircraftCategory = aircraftCategoryRepository.save(aircraftCategory);
 
-        return AircraftCategoryMapper.INSTANCE.toDtoNoParent(aircraftCategory);
+        return IAircraftCategoryMapper.INSTANCE.toDtoNoParent(aircraftCategory);
     }
 
     @Override
@@ -129,10 +129,10 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
         AircraftCategory aircraftCategory = aircraftCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found with id: " + id));
 
-        AircraftCategoryMapper.INSTANCE.updateFromDto(aircraftCategoryDto, aircraftCategory);
+        IAircraftCategoryMapper.INSTANCE.updateFromDto(aircraftCategoryDto, aircraftCategory);
         aircraftCategory = aircraftCategoryRepository.save(aircraftCategory);
 
-        return AircraftCategoryMapper.INSTANCE.toDtoNoParent(aircraftCategory);
+        return IAircraftCategoryMapper.INSTANCE.toDtoNoParent(aircraftCategory);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
     @Override
     public AircraftCategoryDto findSubcategoryById(Long parentCategoryId, Long id) {
         checkIfCategoryExists(parentCategoryId);
-        return AircraftCategoryMapper.INSTANCE.toDtoNoParent(aircraftCategoryRepository.findById(id)
+        return IAircraftCategoryMapper.INSTANCE.toDtoNoParent(aircraftCategoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aircraft Subcategory not found with id: " + id)));
     }
 
@@ -170,7 +170,7 @@ public class AircraftCategoryServiceImpl implements AircraftCategoryService {
         }
 
         return aircraftCategoryRepository.findAircraftCategoriesByCriteria(criteria, pageable)
-                .map(AircraftCategoryMapper.INSTANCE::toDtoNoParent);
+                .map(IAircraftCategoryMapper.INSTANCE::toDtoNoParent);
     }
 
     private void checkIfCategoryExists(final Long categoryId) {
