@@ -6,6 +6,7 @@ import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperCon
 import com.europair.management.rest.model.countries.entity.Country;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -20,5 +21,7 @@ public interface CountryMapper {
   List<CountryDTO> toListDtos (final List<Country> listEntities);
 
   Country toEntity (final CountryDTO countryDTO);
+
+  void updateFromDTO(CountryDTO countryDTO, @MappingTarget Country country);
 
 }

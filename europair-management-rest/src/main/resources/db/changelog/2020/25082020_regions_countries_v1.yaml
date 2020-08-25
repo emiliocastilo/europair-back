@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 25082020_regions_v1_regions_countries_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add regions_countries table to the database"
+      changes:
+        # Regions_Countries
+        - createTable:
+            tableName: regions_countries
+            remarks: The regions and countries relationship
+            columns:
+              - column:
+                  name: region_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: region_id, country_id
+            constraintName: regions_countries_pk
+            tableName: regions_countries
+            validate: true
