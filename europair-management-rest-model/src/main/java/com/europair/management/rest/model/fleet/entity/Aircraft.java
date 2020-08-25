@@ -1,8 +1,8 @@
 package com.europair.management.rest.model.fleet.entity;
 
-import com.europair.management.api.dto.fleet.AircraftObservationDto;
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.common.TextField;
+import com.europair.management.rest.model.operators.entity.Operator;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -19,31 +21,19 @@ import java.util.List;
 @Entity
 @Table(name = "aircrafts")
 @Data
-public class Aircraft extends AuditModificationBaseEntity implements Serializable {
+public class Aircraft extends SoftRemovableBaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ToDo: pendiente entidad
-    /*
-    @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "operator_id")
-    private Object operator;
-     */
-    @Column(name = "operator_id")
-    private Long operator;
+    @JoinColumn(name = "operator_id", nullable = false)
+    private Operator operator;
 
-    // ToDo: pendiente entidad
-    /*
-    @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "aircraft_type_id")
-    private Object aircraftType;
-     */
-    @Column(name = "aircraft_type_id")
-    private Long aircraftType;
+    @JoinColumn(name = "aircraft_type_id", nullable = false)
+    private AircraftType aircraftType;
 
     @OneToMany(mappedBy = "aircraft", orphanRemoval = true)
     private List<AircraftBase> bases;

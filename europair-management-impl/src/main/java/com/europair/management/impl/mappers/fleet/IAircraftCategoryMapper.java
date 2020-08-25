@@ -11,9 +11,9 @@ import java.util.List;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
-public interface AircraftCategoryMapper {
+public interface IAircraftCategoryMapper {
 
-    AircraftCategoryMapper INSTANCE = Mappers.getMapper(AircraftCategoryMapper.class);
+    IAircraftCategoryMapper INSTANCE = Mappers.getMapper(IAircraftCategoryMapper.class);
 
     @Mapping(target = "subcategories", qualifiedByName = "aircraftCategoryNoParent")
     @Mapping(target = "parentCategory", ignore = true)

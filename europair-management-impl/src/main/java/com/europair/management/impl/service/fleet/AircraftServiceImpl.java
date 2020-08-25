@@ -5,19 +5,23 @@ import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 
-import com.europair.management.impl.mappers.fleet.AircraftMapper;
+import com.europair.management.impl.mappers.fleet.IAircraftMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 
+import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
+import com.europair.management.rest.model.operators.entity.Operator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.Date;
 
 @Service
 @Transactional
@@ -27,26 +31,15 @@ public class AircraftServiceImpl implements IAircraftService {
     private AircraftRepository aircraftRepository;
 
     @Override
-    public Page<AircraftDto> findAllPaginated(Pageable pageable) {
-        return aircraftRepository.findAll(pageable).map(AircraftMapper.INSTANCE::toDto);
-    }
-
-    @Override
     public AircraftDto findById(Long id) {
-        return AircraftMapper.INSTANCE.toDto(aircraftRepository.findById(id)
+        return IAircraftMapper.INSTANCE.toDto(aircraftRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found with id: " + id)));
     }
 
     @Override
     public Page<AircraftDto> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
         return aircraftRepository.findAircraftsByCriteria(criteria, pageable)
-                .map(AircraftMapper.INSTANCE::toDto);
-    }
-
-    @Override
-    public Page<AircraftDto> findAllPaginatedByBasicFilter(Pageable pageable, String filter) {
-        return aircraftRepository.findByBasicFilter(pageable, filter)
-                .map(AircraftMapper.INSTANCE::toDto);
+                .map(IAircraftMapper.INSTANCE::toDto);
     }
 
     @Override
@@ -55,15 +48,19 @@ public class AircraftServiceImpl implements IAircraftService {
         if (aircraftDto.getId() != null) {
             throw new InvalidArgumentException(String.format("New aircraft expected. Identifier %s got", aircraftDto.getId()));
         }
-        Aircraft aircraft = AircraftMapper.INSTANCE.toEntity(aircraftDto);
-        if (!CollectionUtils.isEmpty(aircraft.getBases())) {
-            for (AircraftBase base : aircraft.getBases()) {
-                base.setAircraft(aircraft);
-            }
-        }
+        Aircraft aircraft = IAircraftMapper.INSTANCE.toEntity(aircraftDto);
+
+        // Set relationships
+        Operator operator = new Operator();
+        operator.setId(aircraftDto.getOperator().getId());
+        aircraft.setOperator(operator);
+        AircraftType aircraftType = new AircraftType();
+        aircraftType.setId(aircraftDto.getAircraftType().getId());
+        aircraft.setAircraftType(aircraftType);
 
         aircraft = aircraftRepository.save(aircraft);
-        return AircraftMapper.INSTANCE.toDto(aircraft);
+
+        return IAircraftMapper.INSTANCE.toDto(aircraft);
     }
 
     @Override
@@ -71,25 +68,30 @@ public class AircraftServiceImpl implements IAircraftService {
         Aircraft aircraft = aircraftRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found with id: " + id));
 
-        AircraftMapper.INSTANCE.updateFromDto(aircraftDto, aircraft);
-        if (!CollectionUtils.isEmpty(aircraft.getBases())) {
-            for (AircraftBase base : aircraft.getBases()) {
-                base.setAircraft(aircraft);
-            }
+        IAircraftMapper.INSTANCE.updateFromDto(aircraftDto, aircraft);
+
+        // Update relationships
+        if (!aircraft.getOperator().getId().equals(aircraftDto.getOperator().getId())) {
+            Operator operator = new Operator();
+            operator.setId(aircraftDto.getOperator().getId());
+            aircraft.setOperator(operator);
+        }
+        if (!aircraft.getAircraftType().getId().equals(aircraftDto.getAircraftType().getId())) {
+            AircraftType aircraftType = new AircraftType();
+            aircraftType.setId(aircraftDto.getAircraftType().getId());
+            aircraft.setAircraftType(aircraftType);
         }
 
         aircraft = aircraftRepository.save(aircraft);
 
-
-        return AircraftMapper.INSTANCE.toDto(aircraft);
+        return IAircraftMapper.INSTANCE.toDto(aircraft);
     }
 
     @Override
     public void deleteAircraft(Long id) {
-        if (!aircraftRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Aircraft not found with id: " + id);
-        }
-
-        aircraftRepository.deleteById(id);
+        Aircraft aircraft = aircraftRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found with id: " + id));
+        aircraft.setRemovedAt(new Date());
+        aircraftRepository.save(aircraft);
     }
 }
