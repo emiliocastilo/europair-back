@@ -83,10 +83,9 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
     Operator operatorBD = operatorRepository.findById(operatorId)
       .orElseThrow(() -> new ResourceNotFoundException("Operator not found on id: " + operatorId));
 
-    OperatorsAirports operatorsAirports = operatorsAirportsRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("OperatorsAirports not found on id: " + id));
-
-    operatorsAirports.setRemovedAt(new Date());
-    operatorRepository.save(operatorBD);
+    if (!operatorsAirportsRepository.existsById(id)) {
+      throw new ResourceNotFoundException("OperatorsAirports not found with id: " + id);
+    }
+    operatorsAirportsRepository.deleteById(id);
   }
 }
