@@ -4,7 +4,7 @@ import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
 import com.europair.management.rest.model.operators.entity.Operator;
-import com.europair.management.rest.model.operators.repository.IOperatorRepository;
+import com.europair.management.rest.model.operators.repository.OperatorRepository;
 import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
 import com.europair.management.rest.model.operatorsairports.repository.OperatorsAirportsRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.Date;
 public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
 
   private final OperatorsAirportsRepository operatorsAirportsRepository;
-  private final IOperatorRepository operatorRepository;
+  private final OperatorRepository operatorRepository;
 
   @Override
   public Page<OperatorsAirportsDTO> findOperatorsAirportsByOperatorPaginated(Long operatorId, Pageable pageable) {
