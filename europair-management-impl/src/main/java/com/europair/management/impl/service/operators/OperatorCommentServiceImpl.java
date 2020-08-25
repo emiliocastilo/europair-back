@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OperatorCommentServiceImpl implements IOperatorCommentService {
 
@@ -45,6 +45,7 @@ public class OperatorCommentServiceImpl implements IOperatorCommentService {
   }
 
   @Override
+  @Transactional(readOnly = false)
   public OperatorCommentDTO saveOperatorComment(OperatorCommentDTO operatorCommentDTO, Long operatorId) {
 
     if (operatorRepository.findById(operatorId).isEmpty()) {
@@ -62,6 +63,7 @@ public class OperatorCommentServiceImpl implements IOperatorCommentService {
   }
 
   @Override
+  @Transactional(readOnly = false)
   public OperatorCommentDTO updateOperatorComment(Long id, OperatorCommentDTO operatorCommentDTO, Long operatorId) {
 
     if (operatorRepository.findById(operatorId).isEmpty()) {
@@ -79,6 +81,7 @@ public class OperatorCommentServiceImpl implements IOperatorCommentService {
   }
 
   @Override
+  @Transactional(readOnly = false)
   public void deleteOperatorComment(Long id, Long operatorId) {
 
     if (operatorRepository.findById(operatorId).isEmpty()) {
