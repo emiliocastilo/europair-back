@@ -44,9 +44,4 @@ public class OperatorDTO extends AuditModificationBaseDTO {
   @JsonProperty("insuranceExpirationDate")
   private LocalDate insuranceExpirationDate;
 
-//  @JsonProperty("observations")
-//  @Schema(description = "Associated comments")
-//  private List<OperatorCommentDTO> comments;
-
-  //private FleetDTO fleet;
 }

@@ -8,7 +8,7 @@ import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.operators.entity.OperatorComment;
 
 import com.europair.management.rest.model.operators.repository.IOperatorCommentRepository;
-import com.europair.management.rest.model.operators.repository.IOperatorRepository;
+import com.europair.management.rest.model.operators.repository.OperatorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OperatorCommentServiceImpl implements IOperatorCommentService {
 
   final private IOperatorCommentRepository operatorCommentRepository;
-  final private IOperatorRepository operatorRepository;
+  final private OperatorRepository operatorRepository;
 
   @Override
   public Page<OperatorCommentDTO> findAllPaginated(Pageable pageable, Long operatorId) {
