@@ -99,7 +99,7 @@ public interface IAircraftController {
      * @param filterDto Filter object
      * @return List of aircraft
      */
-    @GetMapping
+    @GetMapping("/search")
     @Operation(description = "Aircraft list that matches the filters", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<AircraftDto>> searchAircraft(
             @Parameter(description = "Objects with filter parameters") AircraftFilterDto filterDto);
