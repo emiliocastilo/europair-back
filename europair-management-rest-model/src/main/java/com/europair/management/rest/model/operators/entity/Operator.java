@@ -32,7 +32,7 @@ public class Operator extends SoftRemovableBaseEntity implements Serializable {
   @Column(name = "aoc_last_revision_date")
   private LocalDate aocLastRevisionDate;
 
-  @Column(name = "aoc_number")
+  @Column(name = "aoc_number", length = 50)
   private String aocNumber;
 
   @Column(name = "insurance_expiration_date")
@@ -40,8 +40,5 @@ public class Operator extends SoftRemovableBaseEntity implements Serializable {
 
   @OneToMany(mappedBy = "operator")
   private Set<OperatorsAirports> operatorsCertifications;
-
-//  @OneToMany(mappedBy = "operator")
-//  private List<OperatorComment> comments;
 
 }
