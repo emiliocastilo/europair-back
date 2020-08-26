@@ -7,6 +7,7 @@ import com.europair.management.api.dto.common.MeasureDto;
 import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.dto.countries.CountryDTO;
 import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
+import com.europair.management.api.dto.regions.RegionDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -77,5 +78,8 @@ public class AirportDto extends AuditModificationBaseDTO {
 
     @JsonProperty("operators")
     private List<OperatorsAirportsDTO> operators;
+
+    @JsonProperty("regions")
+    private List<RegionDTO> regions;
 
 }
