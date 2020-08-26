@@ -21,6 +21,7 @@ public interface IOperatorsAirportsMapper {
   @Mapping(target = "airport.terminals", ignore = true)
   @Mapping(target = "airport.observations", ignore = true)
   @Mapping(target = "airport.operators", ignore = true)
+  @Mapping(target = "airport.regions", ignore = true)
   OperatorsAirportsDTO toDto (final OperatorsAirports entity);
 
   @Mapping(target = "airport.elevation", ignore = true)
@@ -28,6 +29,7 @@ public interface IOperatorsAirportsMapper {
   @Mapping(target = "airport.terminals", ignore = true)
   @Mapping(target = "airport.observations", ignore = true)
   @Mapping(target = "airport.operators", ignore = true)
+  @Mapping(target = "airport.regions", ignore = true)
   OperatorsAirports toEntity (final OperatorsAirportsDTO operatorsAirportsDTO);
 
   @Mapping(target = "airport.elevation", ignore = true)
@@ -35,6 +37,7 @@ public interface IOperatorsAirportsMapper {
   @Mapping(target = "airport.terminals", ignore = true)
   @Mapping(target = "airport.observations", ignore = true)
   @Mapping(target = "airport.operators", ignore = true)
+  @Mapping(target = "airport.regions", ignore = true)
   void updateFromDto(final OperatorsAirportsDTO operatorsAirportsDTO, @MappingTarget OperatorsAirports operatorsAirports);
 
 
