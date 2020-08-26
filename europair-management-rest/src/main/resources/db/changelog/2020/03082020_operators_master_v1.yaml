@@ -99,3 +99,12 @@ databaseChangeLog:
                   name: removed_at
                   type: timestamp
                   remarks: soft removal timestamp
+  - changeSet:
+      id: 25082020_operators_master_v3_operators_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      changes:
+        - modifyDataType:
+            tableName: operators
+            columnName: aoc_number
+            newDataType: varchar(50)

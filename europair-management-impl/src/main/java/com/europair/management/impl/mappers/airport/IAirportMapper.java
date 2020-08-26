@@ -1,11 +1,13 @@
 package com.europair.management.impl.mappers.airport;
 
 import com.europair.management.api.dto.airport.AirportDto;
+import com.europair.management.api.dto.regions.RegionDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.countries.entity.Country;
+import com.europair.management.rest.model.regions.entity.Region;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
@@ -25,6 +27,7 @@ public interface IAirportMapper {
     @Mapping(target = "elevation.type", source = "elevationUnit")
     @Mapping(target = "runways", qualifiedByName = "toRunwayDto")
     @Mapping(target = "operators", qualifiedByName = "operatorsAirportToDtoFromAirport")
+    @Mapping(target = "regions", qualifiedByName = "regionToSimpleDto")
     AirportDto toDto(final Airport entity);
 
     @Mapping(source = "elevation.value", target = "elevation")
@@ -33,6 +36,7 @@ public interface IAirportMapper {
     @Mapping(target = "terminals", ignore = true)
     @Mapping(target = "observations", ignore = true)
     @Mapping(target = "operators", ignore = true)
+    @Mapping(target = "regions", ignore = true)
     Airport toEntity(final AirportDto dto);
 
     @Mapping(target = "country", source = "airportDto", qualifiedByName = "mapAirportCountryToEntity")
@@ -43,6 +47,7 @@ public interface IAirportMapper {
     @Mapping(target = "terminals", ignore = true)
     @Mapping(target = "observations", ignore = true)
     @Mapping(target = "operators", ignore = true)
+    @Mapping(target = "regions", ignore = true)
     void updateFromDto(final AirportDto airportDto, @MappingTarget Airport airport);
 
     @Named("mapAirportCountryToEntity")
@@ -58,5 +63,10 @@ public interface IAirportMapper {
         city.setId(dto.getCity().getId());
         return city;
     }
+
+    @Mapping(target = "countries", ignore = true)
+    @Mapping(target = "airports", ignore = true)
+    @Named("regionToSimpleDto")
+    RegionDTO regionToSimpleDto(final Region entity);
 
 }
