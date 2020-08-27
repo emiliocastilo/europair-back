@@ -70,4 +70,24 @@ public class Utils {
             );
         }
     }
+
+    private static double calculateDistance(final double origLat, final double origLon, final double destLat, final double destLon) {
+        return Math.acos(
+                Math.cos(Math.toRadians(90 - origLat)) * Math.cos(Math.toRadians(90 - destLat))
+                        + Math.sin(Math.toRadians(90 - origLat))
+                        * Math.sin(Math.toRadians(90 - destLat))
+                        * Math.cos(Math.toRadians(origLon - destLon))
+        );
+    }
+
+    public static double getDistanceInKM(final double origLat, final double origLon, final double destLat, final double destLon) {
+        double earthRadiusInKM = 6371;// Approximate radius of the earth in kilometers
+        return calculateDistance(origLat, origLon, destLat, destLon) * earthRadiusInKM;
+    }
+
+    public static double getDistanceInNM(final double origLat, final double origLon, final double destLat, final double destLon) {
+        double earthRadiusInNM = 3440.065;// Approximate radius of the earth in nautical miles
+        return calculateDistance(origLat, origLon, destLat, destLon) * earthRadiusInNM;
+    }
+
 }

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -72,6 +73,15 @@ public class AircraftController implements IAircraftController {
 
     @Override
     public ResponseEntity<List<AircraftDto>> searchAircraft(AircraftFilterDto filterDto) {
-        return ResponseEntity.ok(aircraftService.searchAircraft(filterDto));
+
+        double origLat = 39.55;
+        double origLon = 2.73333333;
+        double destLat = 47.4647222;
+        double destLon = 8.54916667;
+
+        Utils.calculateDistance_test(origLat, origLon, destLat, destLon);
+
+        return ResponseEntity.ok(new ArrayList<>());
+//        return ResponseEntity.ok(aircraftService.searchAircraft(filterDto));
     }
 }
