@@ -1,7 +1,6 @@
 package com.europair.management.impl.service.fleet;
 
 import com.europair.management.api.dto.fleet.AircraftDto;
-import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.service.fleet.IAircraftController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -15,8 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -70,18 +67,4 @@ public class AircraftController implements IAircraftController {
 
     }
 
-
-    @Override
-    public ResponseEntity<List<AircraftDto>> searchAircraft(AircraftFilterDto filterDto) {
-
-        double origLat = 39.55;
-        double origLon = 2.73333333;
-        double destLat = 47.4647222;
-        double destLon = 8.54916667;
-
-        Utils.calculateDistance_test(origLat, origLon, destLat, destLon);
-
-        return ResponseEntity.ok(new ArrayList<>());
-//        return ResponseEntity.ok(aircraftService.searchAircraft(filterDto));
-    }
 }
