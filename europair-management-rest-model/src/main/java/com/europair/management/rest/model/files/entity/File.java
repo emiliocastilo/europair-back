@@ -16,18 +16,22 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-//  @Column
-//  private String code;
+  @Column
+  private String code;
 
   @Column
   private String description;
 
+  @ManyToOne
   private FileStatus status;
 
+  @ManyToOne
   private Client client;
 
+  @ManyToOne
   private Contact contact;
 
+  @ManyToOne
   private Provider provider; // List ???
 
   @Column

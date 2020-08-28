@@ -8,19 +8,12 @@ import com.europair.management.rest.model.enums.CustomsEnum;
 import com.europair.management.rest.model.enums.FlightRulesEnum;
 import com.europair.management.rest.model.enums.UnitEnum;
 import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
+import com.europair.management.rest.model.regions.entity.Region;
+import com.europair.management.rest.model.regionsairports.entity.RegionAirport;
+import com.europair.management.rest.model.regionscountries.entity.RegionCountry;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -91,5 +84,7 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
     private List<AirportObservation> observations;
 
-    // TODO: regiones: A qué regiones pertenece este aeropuerto.
+    @ManyToMany(mappedBy = "airports")
+    private List<Region> regions;
+
 }
