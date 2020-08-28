@@ -236,3 +236,17 @@ databaseChangeLog:
             startWith: 1
             tableName: expedient_status
 
+  - changeSet:
+      id: 26082020_files_status_master_v1_tables
+      author: jose.mendezgonzalez
+      comment: "Rename expedient to file"
+      changes:
+        - renameTable:
+            newTableName: file_status
+            oldTableName: expedient_status
+        - renameColumn:
+            newColumnName: file_status_code
+            oldColumnName: expedient_status_code
+            columnDataType: varchar(20)
+            remarks: file_status code
+            tableName: file_status

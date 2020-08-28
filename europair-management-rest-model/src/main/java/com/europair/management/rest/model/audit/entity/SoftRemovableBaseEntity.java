@@ -12,6 +12,6 @@ public abstract class SoftRemovableBaseEntity extends AuditModificationBaseEntit
 
     public static final String REMOVED_AT = "removedAt";
 
-    @Column(name = "removed_at")
+    @Column(name = "removed_at", nullable = true)
     private Date removedAt;
 }
