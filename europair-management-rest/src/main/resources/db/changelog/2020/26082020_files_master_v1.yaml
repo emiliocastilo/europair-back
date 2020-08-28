@@ -1,0 +1,113 @@
+databaseChangeLog:
+  - changeSet:
+      id: 26082020_files_master_v1_files_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add countries table to the database"
+      changes:
+        # Files
+        - createTable:
+            tableName: files
+            remarks: Files
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: file id
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: file_id_pk
+              - column:
+                  name: code
+                  type: varchar(20)
+                  remarks: file code (e.g., EXP123456789)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: file_code_uq
+              - column:
+                  name: description
+                  type: varchar(255)
+                  remarks: file description
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status_id
+                  type: int
+                  remarks: status id
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: int
+                  remarks: client id
+                  constraints:
+                    nullable: true
+              - column:
+                  name: contact_id
+                  type: int
+                  remarks: contact id
+                  constraints:
+                    nullable: true
+              - column:
+                  name: provider_id
+                  type: int
+                  remarks: provider id
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sale_person
+                  type: varchar(255)
+                  remarks: sale person
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sale_agent
+                  type: varchar(255)
+                  remarks: sale person
+                  constraints:
+                    nullable: true
+              - column:
+                  name: operation_type
+                  type: varchar(20)
+                  remarks: operation type
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: files
