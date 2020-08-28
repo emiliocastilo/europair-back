@@ -247,5 +247,6 @@ databaseChangeLog:
         - renameColumn:
             newColumnName: file_status_code
             oldColumnName: expedient_status_code
+            columnDataType: varchar(20)
             remarks: file_status code
             tableName: file_status
