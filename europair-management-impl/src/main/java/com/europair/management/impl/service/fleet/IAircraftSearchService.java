@@ -1,11 +1,11 @@
 package com.europair.management.impl.service.fleet;
 
-import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
+import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
 
 import java.util.List;
 
 public interface IAircraftSearchService {
 
-    List<AircraftDto> searchAircraft(AircraftFilterDto filterDto);
+    List<AircraftSearchResultDataDto> searchAircraft(AircraftFilterDto filterDto);
 }

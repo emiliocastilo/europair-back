@@ -24,10 +24,10 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             " (aircraft.removedAt is null)" +
             " and ((:baseIds) is null or airport.id in (:baseIds))" +
             " and ((:countryIds) is null or country.id in (:countryIds))" +
-            " and (:seats is null or :seats = (aircraft.seatingF + aircraft.seatingC + aircraft.seatingY))" +
-            " and (:beds is null or :beds = aircraft.nighttimeConfiguration or (aircraft.nighttimeConfiguration is null and :beds = (aircraft.seatingF + aircraft.seatingC + aircraft.seatingY)))" +
+            " and (:seats is null or :seats <= (aircraft.seatingF + aircraft.seatingC + aircraft.seatingY))" +
+            " and (:beds is null or :beds <= aircraft.nighttimeConfiguration or (aircraft.nighttimeConfiguration is null and :beds <= (aircraft.seatingF + aircraft.seatingC + aircraft.seatingY)))" +
             " and (:categoryId is null or category.id = :categoryId)" +
-            " and (:subcategoryId is null or (:exactSubcategory = 1 and subcategory.id = :subcategoryId) or (subcategory.order > :minSubcategory))" +
+            " and (:subcategoryId is null or (:exactSubcategory = true and subcategory.id = :subcategoryId) or (subcategory.parentCategory.id = :categoryId and subcategory.order >= :minSubcategory))" +
             " and (:ambulance is null or aircraft.ambulance = :ambulance)" +
             " and ((:aircraftTypeIds) is null or aircraftType.id in (:aircraftTypeIds))" +
             " and ((:operatorIds) is null or operator.id in (:operatorIds))"

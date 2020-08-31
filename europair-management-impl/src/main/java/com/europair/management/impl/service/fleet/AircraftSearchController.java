@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.fleet;
 
-import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
+import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
 import com.europair.management.api.service.fleet.IAircraftSearchController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class AircraftSearchController implements IAircraftSearchController {
     private IAircraftSearchService aircraftSearchService;
 
     @Override
-    public ResponseEntity<List<AircraftDto>> searchAircraft(AircraftFilterDto filterDto) {
+    public ResponseEntity<List<AircraftSearchResultDataDto>> searchAircraft(AircraftFilterDto filterDto) {
         return ResponseEntity.ok(aircraftSearchService.searchAircraft(filterDto));
     }
 }

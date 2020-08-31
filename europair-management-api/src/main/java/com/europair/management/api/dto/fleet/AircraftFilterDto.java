@@ -2,6 +2,7 @@ package com.europair.management.api.dto.fleet;
 
 
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
+import com.europair.management.api.enums.OperationTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -66,7 +67,7 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
 
     @Schema(description = "Type of operation (OperationTypeEnum)")
     @JsonProperty("operationType")
-    private String operationType; //  Change for enum
+    private OperationTypeEnum operationType;
 
     @Schema(description = "List of aircraft type ids to filter", example = "1,2,11")
     @JsonProperty("aircraftTypes")
