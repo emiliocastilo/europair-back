@@ -1,8 +1,8 @@
 package com.europair.management.rest.model.airport.entity;
 
+import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.common.TextField;
-import com.europair.management.rest.model.enums.UnitEnum;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -42,14 +42,14 @@ public class Runway extends AuditModificationBaseEntity implements Serializable 
 
     @Column(name = "runway_length_unit", length = TextField.TEXT_20)
     @Enumerated(EnumType.STRING)
-    private UnitEnum lengthUnit;
+    private Unit lengthUnit;
 
     @Column(name = "runway_width")
     private Double width;
 
     @Column(name = "runway_width_unit", length = TextField.TEXT_20)
     @Enumerated(EnumType.STRING)
-    private UnitEnum widthUnit;
+    private Unit widthUnit;
 
     @Column(name = "observation")
     private String observation;

@@ -6,9 +6,8 @@ import com.europair.management.api.dto.tasks.TaskDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.tasks.TaskMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
-import com.europair.management.rest.model.rolestasks.entity.RolesTasks;
 import com.europair.management.rest.model.screens.entity.Screen;
-import com.europair.management.rest.model.screens.repository.IScreenRepository;
+import com.europair.management.rest.model.screens.repository.ScreenRepository;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.tasks.repository.TaskRepository;
 import com.europair.management.rest.model.tasksscreens.entity.TasksScreens;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -29,7 +27,7 @@ import java.util.Set;
 public class TaskServiceImpl implements ITaskService {
 
   private final TaskRepository taskRepository;
-  private final IScreenRepository iScreenRepository;
+  private final ScreenRepository screenRepository;
   private final TasksScreensRepository tasksScreensRepository;
 
   @Override
@@ -63,7 +61,7 @@ public class TaskServiceImpl implements ITaskService {
       if (!existIdScreenDTOInJPAList(screenDTO, taskBD.getTasksScreens())){
 
         // we have left hand side of the relationship task but we must have both
-        Screen screen = iScreenRepository.findById(screenDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Screen not found with id: " + taskDTO.getId()));
+        Screen screen = screenRepository.findById(screenDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Screen not found with id: " + taskDTO.getId()));
 
         TasksScreensPK tasksScreensPK = new TasksScreensPK();
         tasksScreensPK.setTaskId(taskBD.getId());
