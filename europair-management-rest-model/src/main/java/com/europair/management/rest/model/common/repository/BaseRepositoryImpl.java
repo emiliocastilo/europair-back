@@ -16,6 +16,7 @@ import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.AuditReaderFactory;
 import org.hibernate.envers.DefaultRevisionEntity;
 import org.hibernate.jpa.QueryHints;
+import org.hibernate.query.criteria.internal.path.AbstractJoinImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.GenericTypeResolver;
@@ -53,36 +54,36 @@ import java.util.regex.Pattern;
 
 
 public abstract class BaseRepositoryImpl<T> {
-	
+
     private static final String LIST_SEPARATOR = "\\|\\|"; // Separator by ||
 	private static final Logger LOG = LoggerFactory.getLogger(BaseRepositoryImpl.class);
-	
+
 	@PersistenceContext
     private EntityManager entityManager;
-	
-	// Query projection list 
+
+	// Query projection list
 	protected Map<String,String> projectionsList = null;
-	
+
 	/**
 	 * Metodo que retorna una session de Hibernate para realizar consultas:
 	 *    - Nativas
 	 *    - JQL
 	 *    - Hibernate Criteria
-	 *    
+	 *
 	 * @return - Session de Hibernate
 	 */
 	protected Session getSession(){
-		
+
 		return entityManager.unwrap(Session.class);
 	}
-	
+
 	/**
 	 * Method to return a criteria builder
 	 */
 	protected CriteriaBuilder getCriteriaBuilder(){
 	    return entityManager.getCriteriaBuilder();
 	}
-	
+
     /**
      * method to return the AuditReader repository
      * @return audit reader repository
@@ -90,45 +91,45 @@ public abstract class BaseRepositoryImpl<T> {
     protected AuditReader getAuditBuilder() {
         return AuditReaderFactory.get(entityManager);
     }
-    
+
 	/** Method to execute a criteria Query
-     * 
-     * @return Query to be executed 
-     * 
+     *
+     * @return Query to be executed
+     *
      */
     protected Query createQuery(CriteriaQuery<?> criteriaQuery){
         return entityManager.createQuery(criteriaQuery);
-        
+
     }
-    
+
     /** Method to execute a criteria Count Query
-     * 
-     * @return Query count to be executed 
-     * 
+     *
+     * @return Query count to be executed
+     *
      */
     protected Query createCountQuery(CriteriaQuery<Long> countCriteriaQuery){
         return entityManager.createQuery(countCriteriaQuery);
-        
+
     }
-    
-    
+
+
     /** Method to execute a criteria Query with Graph Strategy
-    * 
-    * @return Query to be executed 
-    * 
+    *
+    * @return Query to be executed
+    *
     */
     protected Query createQuery(CriteriaQuery<T> criteriaQuery, String graphName){
-        
+
         Query query = entityManager.createQuery(criteriaQuery);
         EntityGraph<?> graph = entityManager.getEntityGraph(graphName);
         query.setHint(QueryHints.HINT_LOADGRAPH, graph);
         return query;
     }
-    
-	
+
+
 	/**
 	 * Method to lazy load a Entity reference from Hibernate session for updates
-	 * 
+	 *
 	 * @param clazz Entity to load
 	 * @param primaryKey primary Key object
 	 */
@@ -137,53 +138,53 @@ public abstract class BaseRepositoryImpl<T> {
 	public Object getEntityReference(@SuppressWarnings("rawtypes") Class clazz, Serializable primaryKey){
 		return getSession().load(clazz, primaryKey);
 	}
-	
+
 	/**
 	 * Method to lazy load a Entity references from Hibernate session for updates
-	 * 
+	 *
 	 * @param clazz Entity to load
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Object> getEntityReferences(@SuppressWarnings("rawtypes") Class clazz, List<Serializable> primaryKeys){
 		return getSession().byMultipleIds(clazz).multiLoad(primaryKeys);
 	}
-	
+
 	/**
 	 * Method to detach Entity from Hibernate session and allowing entity modifications without db changes
-	 * 
+	 *
 	 * @param entity Entity to detach
 	 */
 	void detachEntity(T entity){
-		
+
 		getSession().evict(entity);
 	}
-	
+
 	/**
 	 * Builds Entities -> DTO projection fields
-	 * 
+	 *
 	 * @return projection map
 	 */
 	protected Map<String, String> getEntityProjections(){
 		throw new NotImplementedException("Method not implemented");
 		// Extended classes must override it if it's required
 	}
-	
+
 	/**
-	 * @throws AccountException 
+	 * @throws AccountException
 	 * Return entity revisions of an entity
 	 * @param id
 	 * @return
 	 */
 	public List<AuditRevision<T>> listRevisions(String id) {
-	    
+
 	    List<AuditRevision<T>> revisions = new ArrayList<>();
         AuditReader auditReader = getAuditBuilder();
         Class<T> clazz = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), BaseRepositoryImpl.class);
-        
+
         if(auditReader.isEntityClassAudited(clazz)){
 
             List<Number> revisionNumbers = auditReader.getRevisions(clazz, id);
-    
+
             for (Number revision : revisionNumbers) {
             	AuditRevision<T> auditRevision = new AuditRevision<>();
             	auditRevision.setRev(revision);
@@ -196,18 +197,18 @@ public abstract class BaseRepositoryImpl<T> {
         }
         return revisions;
     }
-	
+
 	/**
-     * @throws AccountException 
+     * @throws AccountException
      * Return current entity revision number
      * @param id - entity Id
      * @return revision number
      */
     public Number getCurrentRevision(String id) {
-        
+
         AuditReader auditReader = getAuditBuilder();
         Class<T> clazz = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), BaseRepositoryImpl.class);
-        
+
         if(auditReader.isEntityClassAudited(clazz)){
 
             List<Number> revisionNumbers = auditReader.getRevisions(clazz, id);
@@ -222,21 +223,21 @@ public abstract class BaseRepositoryImpl<T> {
             throw new InvalidArgumentException(String.format("Entity %s is not being audited", clazz.getName()));
         }
     }
-	
-	
-	
+
+
+
 	   /**
-     * @throws AccountException 
+     * @throws AccountException
      * Return entity revisions of an entity
      * @param id
      * @return
      */
     public T getRevision(String id, Number revisionNumber) throws AccountException {
-        
+
         T revisionEntity;
         AuditReader auditReader = getAuditBuilder();
         Class<T> clazz = (Class<T>) GenericTypeResolver.resolveTypeArgument(getClass(), BaseRepositoryImpl.class);
-        
+
         if(auditReader.isEntityClassAudited(clazz)){
             revisionEntity = auditReader.find(clazz, id, revisionNumber);
         }
@@ -245,11 +246,11 @@ public abstract class BaseRepositoryImpl<T> {
         }
         return revisionEntity;
     }
-    
+
     public int getCurrentRevision() {
     	return ((DefaultRevisionEntity) getAuditBuilder().getCurrentRevision(DefaultRevisionEntity.class, true)).getId();
     }
-        
+
     // PROTECTED METHODS
 
     /**
@@ -265,7 +266,7 @@ public abstract class BaseRepositoryImpl<T> {
         CriteriaQuery<Object> crit = builder.createQuery(rootClass);
         Root<?> root = crit.from(rootClass);
         crit.select(root);
-        
+
         List<Predicate> restrictions = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(criteria.getRestrictions())) {
@@ -310,11 +311,11 @@ public abstract class BaseRepositoryImpl<T> {
     }
 
     protected Object getValue(Class<?> expectedDataType, String stringRepresentation) throws ParseException {
-        
+
         if(String.class.isAssignableFrom(expectedDataType)){
             return stringRepresentation;
         }
-        else if(Boolean.class.isAssignableFrom(expectedDataType) || 
+        else if(Boolean.class.isAssignableFrom(expectedDataType) ||
                 boolean.class.isAssignableFrom(expectedDataType)) {
             return Boolean.valueOf(stringRepresentation);
         }
@@ -334,7 +335,7 @@ public abstract class BaseRepositoryImpl<T> {
         }
         return stringRepresentation;
     }
-    
+
     protected Object[] getValueFromList(Class<?> expectedDataType, String stringRepresentation) throws ParseException {
     	List<Object> listOfValues = new ArrayList<>();
     	String[] stringRepresentationSplit = stringRepresentation.split("\\|\\|");
@@ -344,23 +345,23 @@ public abstract class BaseRepositoryImpl<T> {
     	}
     	return listOfValues.toArray(new Object[listOfValues.size()]);
     }
-    
+
     protected Predicate createRestriction(CriteriaBuilder builder, Root<?> root, Restriction restriction) {
 
         LOG.trace("Creating restriction by {} : {}", restriction.getColumn(), restriction.getValue());
-        
+
         String joinTable = null;
         String columnName = null;
         @SuppressWarnings("rawtypes")
         Path column;
-        
+
         Pattern p = Pattern.compile("(?:(.*?)\\.)?(.*)"); // Matches table alias if exists in group 1. Column name at group 2
         String columnPath = restriction.getColumn();
-        
+
         column = evaluateJoinPath(root, p, columnPath);
 
         Class<?> expectedJavaType = column.getJavaType();
-        
+
         Predicate predicate;
         try{
             switch (restriction.getOperator()) {
@@ -410,12 +411,12 @@ public abstract class BaseRepositoryImpl<T> {
     }
 
 	private Path<?> evaluateJoinPath(Path<?> root, Pattern p, String columnPath) {
-		
+
 		if (LOG.isTraceEnabled()) {
 			LOG.trace(String.format("evaluateJoinPath:(root, p, columnPath=%s)".replaceAll(", ", "=%s, "), root, p,
 					columnPath));
 		}
-		
+
 		String joinTable;
 		String columnName;
 		@SuppressWarnings("rawtypes")
@@ -426,8 +427,18 @@ public abstract class BaseRepositoryImpl<T> {
         	LOG.trace("Valor a matchear en evaluateJoinPath: " + columnPath);
             joinTable = m.group(1);
             columnName = m.group(2);
-            if(!StringUtils.isEmpty(joinTable)){
-                Join<?,?> join = ((Root<?>)root).join( joinTable );
+            if (!StringUtils.isEmpty(joinTable)) {
+                Join<?, ?> join;
+                try {
+                    join = ((Root<?>) root).join(joinTable);
+                } catch (ClassCastException e) {
+                    /*
+                    Casting to AbstractJoinImpl because root class can be of types: SingularAttributeJoin or ListAttributeJoin
+                    and both extend from AbstractJoinImpl
+                    */
+                    LOG.trace("Class cast exception to Root<?> from class: " + root.getClass() + ", trying to cast to AbstractJoinImpl<?,?>");
+                    join = ((AbstractJoinImpl<?, ?>) root).join(joinTable);
+                }
                 column = evaluateJoinPath(join, p, columnName);
             }
             else{
