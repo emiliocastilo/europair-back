@@ -1,22 +1,30 @@
 package com.europair.management.rest.model.airport.entity;
 
+import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.enums.CustomsEnum;
 import com.europair.management.rest.model.enums.FlightRulesEnum;
-import com.europair.management.rest.model.enums.UnitEnum;
 import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
 import com.europair.management.rest.model.regions.entity.Region;
-import com.europair.management.rest.model.regionsairports.entity.RegionAirport;
-import com.europair.management.rest.model.regionscountries.entity.RegionCountry;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "airports")
@@ -53,7 +61,7 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
 
     @Column(name = "elevation_unit")
     @Enumerated(EnumType.STRING)
-    private UnitEnum elevationUnit;
+    private Unit elevationUnit;
 
     @Column(name = "latitude")
     private Double latitude;
