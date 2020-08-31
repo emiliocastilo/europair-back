@@ -109,7 +109,7 @@ public class AircraftBaseServiceImpl implements IAircraftBaseService {
     }
 
     private void checkIfAircraftExists(final Long aircraftId) {
-        if (!airportRepository.existsById(aircraftId)) {
+        if (!aircraftRepository.existsById(aircraftId)) {
             throw new ResourceNotFoundException("Aircraft not found with id: " + aircraftId);
         }
     }
