@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IScreenRepository extends JpaRepository<Screen, Long> {
+public interface ScreenRepository extends JpaRepository<Screen, Long>, IScreenRepositoryCustom {
 
-  List<Screen> findByName(final String name);
+    List<Screen> findByName(final String name);
 }
