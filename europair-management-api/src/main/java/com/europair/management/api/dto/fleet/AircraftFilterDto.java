@@ -2,6 +2,7 @@ package com.europair.management.api.dto.fleet;
 
 
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
+import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -76,5 +77,17 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     @Schema(description = "List of operator ids to filter", example = "1,2,11")
     @JsonProperty("operators")
     private List<Long> operators;
+
+    @Schema(description = "To search near airports from distance")
+    @JsonProperty("fromDistance")
+    private Double fromDistance;
+
+    @Schema(description = "To search near airports to distance")
+    @JsonProperty("operators")
+    private Double toDistance;
+
+    @Schema(description = "To search near airports distance unit")
+    @JsonProperty("distanceUnit")
+    private Unit distanceUnit;
 
 }
