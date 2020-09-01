@@ -5,7 +5,6 @@ import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
-import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ public class Utils {
 
         try {
             CoreCriteria criteria = new CoreCriteria();
+            criteria.setRestrictions(new ArrayList<>());
 
             if (reqParams != null && !reqParams.isEmpty()) {
                 criteria.setRestrictions(
@@ -54,10 +54,6 @@ public class Utils {
     public static void addCriteriaIfNotExists(CoreCriteria criteria,
                                               @NotNull final String filterName,
                                               @NotNull final OperatorEnum operator, final String filterValue) {
-        if (criteria == null || CollectionUtils.isEmpty(criteria.getRestrictions())) {
-            criteria = new CoreCriteria();
-            criteria.setRestrictions(new ArrayList<>());
-        }
 
         // Add filter if not present
         if (criteria.getRestrictions().stream()

@@ -1,6 +1,5 @@
 package com.europair.management.api.service.files;
 
-import com.europair.management.api.dto.files.ClientDto;
 import com.europair.management.api.dto.files.FileDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
