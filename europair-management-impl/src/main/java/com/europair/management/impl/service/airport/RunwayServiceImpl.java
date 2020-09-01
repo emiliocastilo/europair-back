@@ -1,10 +1,12 @@
 package com.europair.management.impl.service.airport;
 
 import com.europair.management.api.dto.airport.RunwayDto;
+import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.airport.IRunwayMapper;
+import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.entity.Runway;
@@ -17,8 +19,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -35,8 +39,8 @@ public class RunwayServiceImpl implements IRunwayService {
     @Autowired
     private AirportRepository airportRepository;
 
-//    @Autowired
-//    private ConversionService conversionService;
+    @Autowired
+    private ConversionService conversionService;
 
     @Override
     public Page<RunwayDto> findAllPaginatedByFilter(final Long airportId, Pageable pageable, CoreCriteria criteria) {
@@ -110,17 +114,15 @@ public class RunwayServiceImpl implements IRunwayService {
 
         Runway main = runwayList.stream().filter(r -> Boolean.TRUE.equals(r.getMainRunway())).findAny().orElse(null);
         Runway max = runwayList.stream().max(Comparator.comparing(runway -> {
-            /* ToDo: usar servicio de conversion, ahora está en otro paquete hará falta un refactor o import
             ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
-            ct.setDstUnit(DEFAULT_UNIT);
-            ct.setSrcUnit(Unit.valueOf(runway.getLengthUnit().toString()));
+            ct.setSrcUnit(runway.getLengthUnit());
             ct.setValue(runway.getLength());
             ConversionDataDTO conversionData = new ConversionDataDTO();
+            conversionData.setDstUnit(DEFAULT_UNIT);
             conversionData.setDataToConvert(Collections.singletonList(ct));
 
-            return conversionService.convertData(conversionData).get(0);
-             */
-            return runway.getLength();
+            List<Double> result = conversionService.convertData(conversionData);
+            return CollectionUtils.isEmpty(result) ? 0 : result.get(0);
         })).orElse(null);
 
         if (max != null && main != null && !max.getId().equals(main.getId())) {

@@ -1,4 +1,4 @@
-package com.europair.management.rest.conversions.service;
+package com.europair.management.impl.service.conversions;
 
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
 

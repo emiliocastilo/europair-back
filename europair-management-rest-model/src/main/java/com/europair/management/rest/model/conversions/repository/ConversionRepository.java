@@ -1,4 +1,4 @@
-package com.europair.management.rest.conversions.repository;
+package com.europair.management.rest.model.conversions.repository;
 
 import com.europair.management.rest.model.conversions.entity.Conversion;
 import org.springframework.data.jpa.repository.JpaRepository;
