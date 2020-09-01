@@ -1,10 +1,9 @@
-package com.europair.management.rest.conversions.service.impl;
+package com.europair.management.impl.service.conversions;
 
-import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
-import com.europair.management.rest.conversions.repository.ConversionRepository;
-import com.europair.management.rest.conversions.service.ConversionService;
+import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.rest.model.conversions.entity.Conversion;
+import com.europair.management.rest.model.conversions.repository.ConversionRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
