@@ -3,8 +3,9 @@ package com.europair.management.impl.service.countries;
 import com.europair.management.api.dto.countries.CountryDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.countries.CountryMapper;
+import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.countries.entity.Country;
-import com.europair.management.rest.model.countries.repository.ICountryRepository;
+import com.europair.management.rest.model.countries.repository.CountryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,11 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CountryServiceImpl implements ICountryService {
 
-    private final ICountryRepository countryRepository;
+    private final CountryRepository countryRepository;
 
     @Override
-    public Page<CountryDTO> findAllPaginated(Pageable pageable) {
-        return countryRepository.findAll(pageable).map(CountryMapper.INSTANCE::toDto);
+    public Page<CountryDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
+        return countryRepository.findCountryByCriteria(criteria, pageable).map(CountryMapper.INSTANCE::toDto);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class CountryServiceImpl implements ICountryService {
     public CountryDTO updateCountry(final Long id, final CountryDTO countryDTO) {
 
         Country country = countryRepository.findById(id)
-          .orElseThrow(() -> new ResourceNotFoundException("Country not found on id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Country not found on id: " + id));
 
         CountryMapper.INSTANCE.updateFromDTO(countryDTO, country);
         country = countryRepository.save(country);
