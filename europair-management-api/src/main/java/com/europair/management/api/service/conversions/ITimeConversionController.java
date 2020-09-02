@@ -19,8 +19,8 @@ public interface ITimeConversionController {
 
     /**
      * Operation to transform date time from an utc indicator to another
-     * @param transformUTCTimeFromToDTO
-     * @return
+     * @param transformUTCTimeFromToDTO request body to retrieve the parameters
+     * @return <code>String</code> new time in String
      */
     @PostMapping("")
     @Operation(description = "Transforms the input date time in UTC X (fromUTCIndicator) into UTC Y (toUTCIndicator)", security = {@SecurityRequirement(name = "bearerAuth")})
