@@ -1,12 +1,14 @@
 package com.europair.management.impl.util;
 
 
+import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,4 +68,56 @@ public class Utils {
             );
         }
     }
+
+    /**
+     * Utils.TimeConverter API to convert time from:
+     * * UTC: getLocalTimeInOtherUTC
+     *
+     * * (if we have more conversiones must add the description here)
+     */
+    public static class TimeConverter {
+
+        /**
+         * Operation to transform date time from an utc indicator to another
+         * @param fromUTCIndicator
+         * @param time
+         * @param toUTCIndicator
+         * @return
+         */
+        public static LocalTime getLocalTimeInOtherUTC(UTCEnum fromUTCIndicator, String time, UTCEnum toUTCIndicator) {
+            LocalTime utcZeroTime;
+            // If fromUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
+            if (0 < fromUTCIndicator.getHours()) {
+                utcZeroTime = addHoursMinutesToLocalTime(LocalTime.parse(time), (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
+            } else {
+                utcZeroTime = addHoursMinutesToLocalTime(LocalTime.parse(time), (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
+            }
+
+            LocalTime utcTime = null;
+            //After that we have to add the hours from toUTCIndicator
+            // If toUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
+            if (0 < toUTCIndicator.getHours()) {
+                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), toUTCIndicator.getMinutes());
+            } else {
+                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), (-toUTCIndicator.getMinutes()));
+            }
+            return utcTime;
+        }
+
+        private static LocalTime addHoursMinutesToLocalTime(LocalTime localTime, Integer hours, Integer minutes) {
+
+            LocalTime res = null;
+
+            res = localTime.plusHours(hours);
+            res = res.plusMinutes(minutes);
+
+            return res;
+
+        }
+
+    }
+
+
+
+
 }
