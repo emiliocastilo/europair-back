@@ -10,6 +10,6 @@ public class AircraftTypeRepositoryImpl extends BaseRepositoryImpl<AircraftType>
 
     @Override
     public Page<AircraftType> findAircraftTypeByCriteria(CoreCriteria criteria, Pageable pageable) {
-        return findPageActiveByCriteria(AircraftType.class, criteria, pageable);
+        return findPageByCriteria(AircraftType.class, criteria, pageable);
     }
 }
