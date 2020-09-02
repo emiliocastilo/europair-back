@@ -111,3 +111,86 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: files
+
+        # Routes
+        - createTable:
+            tableName: routes
+            remarks: Routes table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: route id
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: route_id_pk
+              - column:
+                  name: label
+                  type: varchar(255)
+                  remarks: Route label (airport codes)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: frequency
+                  type: varchar(50)
+                  remarks: route frequency
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: date
+                  remarks: route start date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: date
+                  remarks: route end date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: int
+                  remarks: file id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: routes_files_fk
+                    references: files(id)
+              - column:
+                  name: rotations
+                  type: int
+                  remarks: number of rotations
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: routes

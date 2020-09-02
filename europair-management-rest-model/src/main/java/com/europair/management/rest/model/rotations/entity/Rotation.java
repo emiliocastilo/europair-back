@@ -2,6 +2,7 @@ package com.europair.management.rest.model.rotations.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.flights.entity.Flight;
+import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -32,5 +33,9 @@ public class Rotation extends AuditModificationBaseEntity implements Serializabl
 
   @ManyToOne
   private List<Flight> flights;
+
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "route_id", nullable = false)
+  private Route route;
 
 }
