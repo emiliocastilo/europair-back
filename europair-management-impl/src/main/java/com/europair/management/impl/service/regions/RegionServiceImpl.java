@@ -1,22 +1,13 @@
 package com.europair.management.impl.service.regions;
 
-import com.europair.management.api.dto.airport.AirportDto;
-import com.europair.management.api.dto.countries.CountryDTO;
 import com.europair.management.api.dto.regions.RegionDTO;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.regions.IRegionMapper;
-import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
-import com.europair.management.rest.model.airport.repository.IAirportRepositoryCustom;
-import com.europair.management.rest.model.countries.entity.Country;
-import com.europair.management.rest.model.countries.repository.ICountryRepository;
+import com.europair.management.rest.model.countries.repository.CountryRepository;
 import com.europair.management.rest.model.regions.entity.Region;
-import com.europair.management.rest.model.regionsairports.entity.RegionAirport;
-import com.europair.management.rest.model.regionsairports.entity.RegionAirportPK;
 import com.europair.management.rest.model.regionsairports.repository.IRegionAirportRepository;
-import com.europair.management.rest.model.regionscountries.entity.RegionCountry;
-import com.europair.management.rest.model.regionscountries.entity.RegionCountryPK;
 import com.europair.management.rest.model.regionscountries.repository.IRegionCountryRepository;
 import com.europair.management.rest.model.regionscountries.repository.IRegionRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -36,7 +24,7 @@ import java.util.Set;
 public class RegionServiceImpl implements IRegionService {
 
   private final IRegionRepository regionRepository;
-  private final ICountryRepository countryRepository;
+  private final CountryRepository countryRepository;
   private final IRegionCountryRepository regionCountryRepository;
   private final AirportRepository airportRepository;
   private final IRegionAirportRepository regionAirportRepository;
