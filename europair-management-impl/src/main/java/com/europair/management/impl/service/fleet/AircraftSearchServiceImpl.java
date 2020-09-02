@@ -13,6 +13,7 @@ import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftCategory;
+import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
 import com.europair.management.rest.model.fleet.repository.AircraftCategoryRepository;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import org.apache.logging.log4j.util.Strings;
@@ -24,7 +25,10 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,6 +49,9 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
     @Value("${europair.aircraft.search.default.category.operation.group}")
     private String DEFAULT_TYPE_FOR_OPERATION_GROUP;
+
+    private final Unit DEFAULT_SPEED_UNIT = Unit.KNOTS;
+    private final Unit DEFAULT_DISTANCE_UNIT = Unit.NAUTIC_MILE;
 
     @Autowired
     private AircraftRepository aircraftRepository;
@@ -109,6 +116,10 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         );
 
 
+        // ToDo: de donde sacamos la distancia? Nos pueden indicar más de 2 aeropuertos para la búsqueda por lo que no sabemos el origen-destino exactos
+        // ToDo: calcular tiempo (se deja un método preparado) -> falta la distancia
+        // ToDo: excluir de los resultados las aeronaves que tengas un rango de vuelo definido e inferior a la distancia -> falta distancia
+
         List<AircraftSearchResultDataDto> result = aircraftFiltered.stream()
                 .map(IAircraftSearchMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
@@ -130,11 +141,10 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             }
         });
 
-        final Unit defaultDistanceUnit = Unit.KILOMETER;
         final Double fromDistance;
         final Double toDistance;
 
-        if (defaultDistanceUnit.equals(filterDto.getDistanceUnit())) {
+        if (DEFAULT_DISTANCE_UNIT.equals(filterDto.getDistanceUnit())) {
             fromDistance = filterDto.getFromDistance();
             toDistance = filterDto.getToDistance();
 
@@ -149,7 +159,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             ctTo.setValue(filterDto.getToDistance());
 
             ConversionDataDTO conversionData = new ConversionDataDTO();
-            conversionData.setDstUnit(defaultDistanceUnit);
+            conversionData.setDstUnit(DEFAULT_DISTANCE_UNIT);
             conversionData.setDataToConvert(Arrays.asList(ctFrom, ctTo));
 
             List<Double> result = conversionService.convertData(conversionData);
@@ -165,5 +175,53 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                 }))
                 .map(Airport::getId)
                 .collect(Collectors.toList());
+    }
+
+    private Double calculateTimeInHours(final double distance, final Aircraft aircraft) {
+
+        // Filter avg speeds to get the one that matches the distance
+        AircraftTypeAverageSpeed speed = aircraft.getAircraftType().getAverageSpeed().stream()
+                .filter(avgSpeed -> {
+                    List<Double> distanceRange = Arrays.asList(avgSpeed.getFromDistance(), avgSpeed.getToDistance());
+                    if (!DEFAULT_DISTANCE_UNIT.equals(avgSpeed.getDistanceUnit())) {
+                        // Convert distances to default unit
+                        ConversionDataDTO.ConversionTuple ctFrom = new ConversionDataDTO.ConversionTuple();
+                        ctFrom.setSrcUnit(avgSpeed.getDistanceUnit());
+                        ctFrom.setValue(avgSpeed.getFromDistance());
+
+                        ConversionDataDTO.ConversionTuple ctTo = new ConversionDataDTO.ConversionTuple();
+                        ctTo.setSrcUnit(avgSpeed.getDistanceUnit());
+                        ctTo.setValue(avgSpeed.getToDistance());
+
+                        ConversionDataDTO conversionData = new ConversionDataDTO();
+                        conversionData.setDstUnit(DEFAULT_DISTANCE_UNIT);
+                        conversionData.setDataToConvert(Arrays.asList(ctFrom, ctTo));
+
+                        List<Double> result = conversionService.convertData(conversionData);
+                        distanceRange = Arrays.asList(result.get(0), result.get(1));
+                    }
+
+                    return distance <= distanceRange.get(0) && distance >= distanceRange.get(1);
+                }).findFirst().orElse(null);
+
+        Double speedInDefaultUnit = null;
+        if (speed != null) {
+            speedInDefaultUnit = speed.getAverageSpeed();
+            if (!DEFAULT_SPEED_UNIT.equals(speed.getAverageSpeedUnit())) {
+                // Convert speed to default unit
+                ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
+                ct.setSrcUnit(speed.getAverageSpeedUnit());
+                ct.setValue(speed.getAverageSpeed());
+
+                ConversionDataDTO conversionData = new ConversionDataDTO();
+                conversionData.setDstUnit(DEFAULT_SPEED_UNIT);
+                conversionData.setDataToConvert(Collections.singletonList(ct));
+
+                List<Double> result = conversionService.convertData(conversionData);
+                speedInDefaultUnit = result.get(0);
+            }
+        }
+
+        return speedInDefaultUnit == null ? null : distance / speedInDefaultUnit;
     }
 }
