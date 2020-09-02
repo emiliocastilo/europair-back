@@ -123,7 +123,7 @@ public enum UTCEnum {
 
 
     private static String toJSONString(UTCEnum utcEnum) {
-        return "'UTCEnum':{" +
+        return "{" +
                 "'name':'" + utcEnum.name() + "'" +
                 ",'hours':'" + utcEnum.getHours() + "'" +
                 ",'minutes':'" + utcEnum.getMinutes() + "'" +
