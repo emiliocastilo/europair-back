@@ -6,9 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -26,5 +24,10 @@ public interface ITimeConversionController {
     @Operation(description = "Transforms the input date time in UTC X (fromUTCIndicator) into UTC Y (toUTCIndicator)", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<String> transformTimeFromUTCIndicatorToUTCIndicator(
             @Parameter(description = "Request objetc to transform time in UTC from UTC X to UTC Y") @NotNull @RequestBody TransformUTCTimeFromToDTO transformUTCTimeFromToDTO);
+
+
+    @GetMapping("")
+    @Operation(description = "Get all the UTC options in the world", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<String> getUTCEnum();
 
 }

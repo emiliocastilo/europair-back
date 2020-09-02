@@ -109,4 +109,32 @@ public enum UTCEnum {
     public Integer getMinutes() {
         return minutes;
     }
+
+    public static String getAllValues() {
+
+        String res = "allUTCValues{";
+        for(final UTCEnum utcEnum : UTCEnum.values()){
+           res += toJSONString(utcEnum) + ',';
+        }
+        res += '}';
+
+        return res;
+    }
+
+
+    private static String toJSONString(UTCEnum utcEnum) {
+        return "UTCEnum{" +
+                "'name:'" + utcEnum.name() + "'" +
+                "'hours':'" + utcEnum.getHours() + "'" +
+                ", 'minutes':'" + utcEnum.getMinutes() + "'" +
+                '}';
+    }
+
+    @Override
+    public String toString() {
+        return "UTCEnum{" +
+                "hours=" + hours +
+                ", minutes=" + minutes +
+                '}';
+    }
 }
