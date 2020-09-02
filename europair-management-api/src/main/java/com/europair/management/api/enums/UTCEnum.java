@@ -112,21 +112,21 @@ public enum UTCEnum {
 
     public static String getAllValues() {
 
-        String res = "allUTCValues{";
+        String res = "{'allUTCValues':[";
         for(final UTCEnum utcEnum : UTCEnum.values()){
            res += toJSONString(utcEnum) + ',';
         }
-        res += '}';
+        res += "]}";
 
         return res;
     }
 
 
     private static String toJSONString(UTCEnum utcEnum) {
-        return "UTCEnum{" +
-                "'name:'" + utcEnum.name() + "'" +
-                "'hours':'" + utcEnum.getHours() + "'" +
-                ", 'minutes':'" + utcEnum.getMinutes() + "'" +
+        return "'UTCEnum':{" +
+                "'name':'" + utcEnum.name() + "'" +
+                ",'hours':'" + utcEnum.getHours() + "'" +
+                ",'minutes':'" + utcEnum.getMinutes() + "'" +
                 '}';
     }
 
