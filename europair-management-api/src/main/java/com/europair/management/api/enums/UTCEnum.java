@@ -112,13 +112,13 @@ public enum UTCEnum {
 
     public static String getAllValues() {
 
-        String res = "{\"allUTCValues\":[";
+        String res = "[";
         int i = 0;
         for(final UTCEnum utcEnum : UTCEnum.values()){
            res += toJSONString(utcEnum) + (UTCEnum.values().length -1 == i ? "" : ",");
            i++;
         }
-        res += "]}";
+        res += "]";
 
         return res;
     }
