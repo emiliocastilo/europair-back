@@ -10,6 +10,6 @@ public class OperatorRepositoryImpl extends BaseRepositoryImpl<Operator> impleme
 
   @Override
   public Page<Operator> findOperatorByCriteria(CoreCriteria criteria, Pageable pageable) {
-    return findPageActiveByCriteria(Operator.class, criteria, pageable);
+    return findPageByCriteria(Operator.class, criteria, pageable);
   }
 }

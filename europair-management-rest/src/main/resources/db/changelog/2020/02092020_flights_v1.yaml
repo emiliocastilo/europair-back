@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: 02092020_flights_v1_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add flights table to the database"
+      changes:
+        # Flights
+        - createTable:
+            tableName: flights
+            remarks: The flights
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the flight
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flights_id_pk
+              - column:
+                  name: departure_time
+                  type: timestamp
+                  remarks: departure time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: origin
+                  type: varchar(3)
+                  remarks: flight origin airport
+                  constraints:
+                    nullable: false
+              - column:
+                  name: destination
+                  type: varchar(3)
+                  remarks: flight destination airport
+                  constraints:
+                    nullable: false
+              - column:
+                  name: seats_F
+                  type: int
+                  remarks: F-type seats
+                  constraints:
+                    nullable: true
+              - column:
+                  name: seats_C
+                  type: int
+                  remarks: C-type seats
+                  constraints:
+                    nullable: true
+              - column:
+                  name: seats_Y
+                  type: int
+                  remarks: Y-type seats
+                  constraints:
+                    nullable: true
+              - column:
+                  name: beds
+                  type: int
+                  remarks: beds
+                  constraints:
+                    nullable: true
+              - column:
+                  name: stretchers
+                  type: int
+                  remarks: stretchers
+                  constraints:
+                    nullable: true
+              - column:
+                  name: route_id
+                  type: int
+                  remarks: route id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: flights_route_fk
+                    references: routes(id)
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: flights

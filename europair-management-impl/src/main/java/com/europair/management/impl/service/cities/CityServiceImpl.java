@@ -5,7 +5,8 @@ import com.europair.management.api.dto.countries.CountryDTO;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.cities.CityMapper;
 import com.europair.management.rest.model.cities.entity.City;
-import com.europair.management.rest.model.cities.repository.ICityRepository;
+import com.europair.management.rest.model.cities.repository.CityRepository;
+import com.europair.management.rest.model.common.CoreCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CityServiceImpl implements ICityService {
 
-    private final ICityRepository cityRepository;
+    private final CityRepository cityRepository;
 
     @Override
-    public Page<CityDTO> findAllPaginated(Pageable pageable) {
-        return cityRepository.findAll(pageable).map(city -> CityMapper.INSTANCE.toDto(city));
+    public Page<CityDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
+        return cityRepository.findCityByCriteria(criteria, pageable).map(CityMapper.INSTANCE::toDto);
     }
 
     @Override
@@ -39,7 +40,6 @@ public class CityServiceImpl implements ICityService {
 
     @Override
     public CityDTO updateCity(final Long id, final CityDTO cityDTO) {
-
         City city = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found on id: " + id));
 
@@ -53,7 +53,6 @@ public class CityServiceImpl implements ICityService {
 
     @Override
     public void deleteCity(Long id) {
-
         City city = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found on id: " + id));
         cityRepository.delete(city);

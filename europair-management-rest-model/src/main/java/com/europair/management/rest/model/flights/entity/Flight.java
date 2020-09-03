@@ -40,4 +40,7 @@ public class Flight extends AuditModificationBaseEntity implements Serializable 
   @Column
   private Integer stretchers;
 
+  @ManyToOne
+  private Route route;
+
 }
