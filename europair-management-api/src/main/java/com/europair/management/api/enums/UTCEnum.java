@@ -116,9 +116,6 @@ public enum UTCEnum {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     public static String getAllValues() {
 
@@ -138,8 +135,8 @@ public enum UTCEnum {
         return "{" +
                 "\"name\":\"" + utcEnum.name() + "\"" +
                 ",\"hours\":\"" + utcEnum.getHours() + "\"" +
-                ",\"minutes\":\"" + utcEnum.getMinutes() +
-                ",\"description\":" + utcEnum.getDescription() + "}";
+                ",\"minutes\":\"" + utcEnum.getMinutes() + "\"" +
+                ",\"description\":\"" + utcEnum.getDescription() + "\"}";
     }
 
     @Override
