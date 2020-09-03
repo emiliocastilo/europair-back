@@ -6,7 +6,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "flights")
@@ -18,7 +18,7 @@ public class Flight extends AuditModificationBaseEntity implements Serializable 
   private Long id;
 
   @Column(name = "departure_time")
-  private LocalDate departureTime;
+  private LocalDateTime departureTime;
 
   @Column
   private String origin;
