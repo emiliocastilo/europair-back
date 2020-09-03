@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.flights.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 
 import javax.persistence.*;

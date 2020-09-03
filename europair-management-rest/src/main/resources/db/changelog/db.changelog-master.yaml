@@ -102,6 +102,9 @@ databaseChangeLog:
       file: 2020/31082020_servicetype_master_v1.yaml
       relativeToChangelogFile: true
   - include:
+      file: 2020/20200902_routes_v1.yaml
+      relativeToChangelogFile: true
+  - include:
       file: 2020/02092020_flights_v1.yaml
       relativeToChangelogFile: true
 

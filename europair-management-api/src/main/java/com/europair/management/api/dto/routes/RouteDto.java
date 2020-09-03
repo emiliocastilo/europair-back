@@ -41,6 +41,6 @@ public class RouteDto {
     private Integer rotationsNumber;
 
     @JsonProperty("rotations")
-    private List<Object> rotations; // ToDo: cambiar por Dto
+    private List<RouteDto> rotations;
 
 }

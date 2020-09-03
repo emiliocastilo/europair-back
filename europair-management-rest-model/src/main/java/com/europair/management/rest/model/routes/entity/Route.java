@@ -3,13 +3,14 @@ package com.europair.management.rest.model.routes.entity;
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.files.entity.File;
-import com.europair.management.rest.model.rotations.entity.Rotation;
+import com.europair.management.rest.model.flights.entity.Flight;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,10 +47,17 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     @Column(name = "rotations", nullable = false)
     private Integer rotationsNumber;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", nullable = false)
     private File file;
 
+    @ManyToOne
+    @JoinColumn(name = "parent_route_id")
+    private Route parentRoute;
+
+    @OneToMany(mappedBy = "parentRoute", orphanRemoval = true)
+    private List<Route> rotations;
+
     @OneToMany(mappedBy = "route", orphanRemoval = true)
-    private List<Rotation> rotations;
+    private List<Flight> flights;
 }
