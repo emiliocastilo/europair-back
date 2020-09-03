@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.airport.entity;
 
 import com.europair.management.api.dto.conversions.common.Unit;
+import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.common.TextField;
@@ -54,7 +55,8 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
 
     // ToDo: Set type for timezones
     @Column(name = "time_zone")
-    private String timeZone;
+    @Enumerated(EnumType.STRING)
+    private UTCEnum timeZone;
 
     @Column(name = "elevation")
     private Double elevation;
