@@ -1,7 +1,7 @@
 package com.europair.management.api.enums;
 
 /**
- * This Enum shows all UTC options for all countries arround the world
+ * This Enum shows all UTC options for all countries arround the world.
  */
 public enum UTCEnum {
 
