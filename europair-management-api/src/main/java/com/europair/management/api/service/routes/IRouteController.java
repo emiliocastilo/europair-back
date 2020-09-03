@@ -103,4 +103,23 @@ public interface IRouteController {
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Route identifier") @PathVariable @NotNull final Long id);
 
+    /**
+     * <p>
+     * Update rotation route information
+     * </p>
+     *
+     * @param fileId   File identifier
+     * @param routeId  Unique parent route identifier
+     * @param id       Unique identifier
+     * @param routeDto Updated route data
+     * @return The updated rotation route
+     */
+    @PutMapping("/{routeId}/rotations/{id}")
+    @Operation(description = "Updates existing rotation route", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<RouteDto> updateRotation(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Parent route identifier") @NotNull @PathVariable final Long routeId,
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long id,
+            @Parameter(description = "Route updated data") @NotNull @RequestBody final RouteDto routeDto);
+
 }

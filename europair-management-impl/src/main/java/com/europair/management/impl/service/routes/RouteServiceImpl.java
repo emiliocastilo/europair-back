@@ -17,11 +17,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class RouteServiceImpl implements IRouteService {
 
     private final String FILE_ID_FILTER = "file.id";
+    private final String PARENT_ROUTE_FILTER = "parentRoute";
 
     @Autowired
     private RouteRepository routeRepository;
@@ -33,6 +39,7 @@ public class RouteServiceImpl implements IRouteService {
     public Page<RouteDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
         checkIfFileExists(fileId);
         Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
+        Utils.addCriteriaIfNotExists(criteria, PARENT_ROUTE_FILTER, OperatorEnum.IS_NULL, null);
 
         return routeRepository.findRouteByCriteria(criteria, pageable)
                 .map(IRouteMapper.INSTANCE::toDto);
@@ -61,7 +68,9 @@ public class RouteServiceImpl implements IRouteService {
 
         route = routeRepository.save(route);
 
-        // ToDo: crear rotaciones?
+        // Create rotations
+        List<Route> rotations = createRotations(route);
+        route.setRotations(rotations);
 
         return IRouteMapper.INSTANCE.toDto(route);
     }
@@ -94,4 +103,54 @@ public class RouteServiceImpl implements IRouteService {
         }
     }
 
+    // Route Rotations
+
+    private List<Route> createRotations(@NotNull final Route parentRoute) {
+        List<Route> rotations = new ArrayList<>();
+
+        LocalDate auxDate = parentRoute.getStartDate();
+        for (int i = 0; i < parentRoute.getRotationsNumber(); i++) {
+            Route newRotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
+            // Set relationships
+            newRotation.setFile(parentRoute.getFile());
+            newRotation.setParentRoute(parentRoute);
+
+            newRotation.setStartDate(auxDate);
+            newRotation.setEndDate(auxDate);
+
+            // Update date for next rotation
+            switch (newRotation.getFrequency()) {
+                case DAILY:
+                    auxDate = auxDate.plusDays(1);
+                    break;
+                case WEEKLY:
+                    auxDate = auxDate.plusWeeks(1);
+                    break;
+                case BIWEEKLY:
+                    auxDate = auxDate.plusWeeks(2);
+                    break;
+                case DAY_OF_MONTH:
+                    // ToDo pensar como lo hacemos
+                    break;
+            }
+
+            rotations.add(newRotation);
+        }
+
+        return rotations.size() > 0 ? routeRepository.saveAll(rotations) : null;
+    }
+
+    @Override
+    public RouteDto updateRouteRotation(Long routeId, Long id, RouteDto routeDto) {
+        if (!routeRepository.existsById(routeId)) {
+            throw new ResourceNotFoundException("Route not found with id: " + routeId);
+        }
+        Route route = routeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Rotation not found with id: " + id));
+        IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
+        route = routeRepository.save(route);
+
+        // ToDo: modificar vuelos??
+        return IRouteMapper.INSTANCE.toDto(route);
+    }
 }

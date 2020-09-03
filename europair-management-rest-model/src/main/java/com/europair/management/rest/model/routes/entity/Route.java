@@ -34,7 +34,7 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     @Column(nullable = false)
     private String label;
 
-    @Column(nullable = false)
+    @Column
     @Enumerated(EnumType.STRING)
     private FrequencyEnum frequency;
 
@@ -44,7 +44,7 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     @Column(name = "end_date", nullable = false)
     private LocalDate endDate;
 
-    @Column(name = "rotations", nullable = false)
+    @Column(name = "rotations")
     private Integer rotationsNumber;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
@@ -60,4 +60,6 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "route", orphanRemoval = true)
     private List<Flight> flights;
+
+    //  ToDo Cotizacion
 }

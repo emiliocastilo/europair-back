@@ -66,4 +66,13 @@ public class RouteController implements IRouteController {
         routeService.deleteRoute(fileId, id);
         return ResponseEntity.noContent().build();
     }
+
+    // Rotations
+
+    @Override
+    public ResponseEntity<RouteDto> updateRotation(@NotNull Long fileId, @NotNull Long routeId, @NotNull Long id,
+                                                   @NotNull RouteDto routeDto) {
+        final RouteDto dtoSaved = routeService.updateRouteRotation(routeId, id, routeDto);
+        return ResponseEntity.ok(dtoSaved);
+    }
 }

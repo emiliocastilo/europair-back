@@ -15,20 +15,38 @@ public interface IRouteMapper {
 
     IRouteMapper INSTANCE = Mappers.getMapper(IRouteMapper.class);
 
+    //    @Mapping(target = "rotations", qualifiedByName = "toDtoNoParent")
     RouteDto toDto(final Route entity);
 
-    @Mapping(target = "rotations", ignore = true)
     @Mapping(target = "file", ignore = true)
+    @Mapping(target = "parentRoute", ignore = true)
+    @Mapping(target = "rotations", ignore = true)
+    @Mapping(target = "flights", ignore = true)
+    @Mapping(target = "rotationsNumber", source = "rotationsNumber", defaultValue = "1")
+    @Mapping(target = "frequency", source = "frequency", defaultValue = "ADHOC")
     Route toEntity(final RouteDto dto);
 
-    @Mapping(target = "rotations", ignore = true)
     @Mapping(target = "file", ignore = true)
+    @Mapping(target = "parentRoute", ignore = true)
+    @Mapping(target = "rotations", ignore = true)
+    @Mapping(target = "flights", ignore = true)
+    @Mapping(target = "rotationsNumber", source = "rotationsNumber", defaultValue = "1")
+    @Mapping(target = "frequency", source = "frequency", defaultValue = "ADHOC")
     void updateFromDto(final RouteDto routeDto, @MappingTarget Route route);
 
-/*
-    @Mapping(target = "countries", ignore = true)
-    @Mapping(target = "routes", ignore = true)
-    @Named("regionToSimpleDto")
-    RegionDTO regionToSimpleDto(final Region entity);
-*/
+    // Rotations
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "file", ignore = true)
+    @Mapping(target = "parentRoute", ignore = true)
+    @Mapping(target = "rotations", ignore = true)
+    @Mapping(target = "flights", ignore = true)
+    @Mapping(target = "rotationsNumber", ignore = true)
+    @Mapping(target = "frequency", source = "frequency", defaultValue = "ADHOC")
+    Route mapRotation(final Route parentRoute);
+
+//    @Named("toDtoNoParent")
+//    @Mapping(target = "parentRoute", ignore = true)
+//    RouteDto toDtoNoParent(final Route entity);
+
 }

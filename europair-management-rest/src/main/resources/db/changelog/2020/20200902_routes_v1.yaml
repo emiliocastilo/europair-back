@@ -29,8 +29,6 @@ databaseChangeLog:
                   name: frequency
                   type: varchar(50)
                   remarks: route frequency
-                  constraints:
-                    nullable: false
               - column:
                   name: start_date
                   type: date
@@ -55,8 +53,6 @@ databaseChangeLog:
                   name: rotations
                   type: int
                   remarks: number of rotations
-                  constraints:
-                    nullable: false
               - column:
                   name: parent_route_id
                   type: int

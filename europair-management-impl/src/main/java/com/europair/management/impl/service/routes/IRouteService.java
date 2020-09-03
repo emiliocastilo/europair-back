@@ -16,4 +16,6 @@ public interface IRouteService {
     RouteDto updateRoute(Long fileId, Long id, RouteDto routeDto);
 
     void deleteRoute(Long fileId, Long id);
+
+    RouteDto updateRouteRotation(Long routeId, Long id, RouteDto routeDto);
 }
