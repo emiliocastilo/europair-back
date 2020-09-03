@@ -33,4 +33,9 @@ public class TimeConversionController implements ITimeConversionController {
         return ResponseEntity.ok().body(res);
     }
 
+    @Override
+    public ResponseEntity<String> getUTCEnum() {
+        return ResponseEntity.ok().body(UTCEnum.getAllValues());
+    }
+
 }

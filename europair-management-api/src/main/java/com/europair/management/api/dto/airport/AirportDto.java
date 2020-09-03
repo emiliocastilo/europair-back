@@ -8,6 +8,7 @@ import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.dto.countries.CountryDTO;
 import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import com.europair.management.api.dto.regions.RegionDTO;
+import com.europair.management.api.enums.UTCEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,7 +48,7 @@ public class AirportDto extends AuditModificationBaseDTO {
     private CityDTO city;
 
     @JsonProperty("timeZone")
-    private String timeZone;
+    private UTCEnum timeZone;
 
     @JsonProperty("elevation")
     private MeasureDto elevation;
