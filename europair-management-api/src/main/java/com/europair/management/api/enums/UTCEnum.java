@@ -126,8 +126,7 @@ public enum UTCEnum {
         return "{" +
                 "'name':'" + utcEnum.name() + "'" +
                 ",'hours':'" + utcEnum.getHours() + "'" +
-                ",'minutes':'" + utcEnum.getMinutes() + "'" +
-                '}';
+                ",'minutes':'" + utcEnum.getMinutes() + "'}";
     }
 
     @Override
