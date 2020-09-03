@@ -25,6 +25,10 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: time_zone
+                  type: varchar(20)
+                  remarks: flight departure time zone
+              - column:
                   name: origin
                   type: varchar(3)
                   remarks: flight origin airport

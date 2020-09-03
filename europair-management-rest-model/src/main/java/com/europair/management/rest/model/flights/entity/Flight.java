@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.flights.entity;
 
+import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
@@ -19,6 +20,10 @@ public class Flight extends AuditModificationBaseEntity implements Serializable 
 
   @Column(name = "departure_time")
   private LocalDateTime departureTime;
+
+  @Column(name = "time_zone")
+  @Enumerated(EnumType.STRING)
+  private UTCEnum timeZone;
 
   @Column
   private String origin;
