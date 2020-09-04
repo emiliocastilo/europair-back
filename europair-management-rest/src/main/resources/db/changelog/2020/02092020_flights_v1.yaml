@@ -25,6 +25,10 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: time_zone
+                  type: varchar(20)
+                  remarks: flight departure time zone
+              - column:
                   name: origin
                   type: varchar(3)
                   remarks: flight origin airport
@@ -67,11 +71,35 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+              - column:
                   name: route_id
                   type: int
                   remarks: route id
                   constraints:
-                    nullable: false
+                    nullable: true
                     foreignKeyName: flights_route_fk
                     references: routes(id)
         - addAutoIncrement:
