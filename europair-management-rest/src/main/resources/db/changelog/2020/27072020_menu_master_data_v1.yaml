@@ -420,3 +420,63 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+  - changeSet:
+      id: 04092020_menu_v7_menu_option_data
+      context: dev or pre or pro
+      author: pablo.alvessampaio
+      comment: "Add submenu expedients into master"
+      changes:
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                    name: id
+                    value: 15
+              - column:
+                  name: weight
+                  value: 2
+              - column:
+                  name: name
+                  value: "FILES"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.files"
+              - column:
+                  name: icon
+                  value: "text_snippet"
+              - column:
+                  name: parent_id
+                  value: 1
+              - column:
+                  name: created_at
+                  value: "2020-09-04"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 16
+              - column:
+                  name: weight
+                  value: 1
+              - column:
+                  name: name
+                  value: "FILES_NEW"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.files.new"
+              - column:
+                  name: route
+                  value: "/files/new"
+              - column:
+                  name: parent_id
+                  value: 15
+              - column:
+                  name: created_at
+                  value: "2020-08-10"
+              - column:
+                  name: created_by
+                  value: "Sistema"
