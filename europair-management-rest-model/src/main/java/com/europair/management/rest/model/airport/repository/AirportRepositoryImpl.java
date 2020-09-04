@@ -10,6 +10,6 @@ public class AirportRepositoryImpl extends BaseRepositoryImpl<Airport> implement
 
     @Override
     public Page<Airport> findAirportByCriteria(CoreCriteria criteria, Pageable pageable) {
-        return findPageActiveByCriteria(Airport.class, criteria, pageable);
+        return findPageByCriteria(Airport.class, criteria, pageable);
     }
 }
