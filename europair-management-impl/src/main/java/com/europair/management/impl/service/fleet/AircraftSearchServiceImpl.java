@@ -8,11 +8,14 @@ import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.fleet.IAircraftSearchMapper;
 import com.europair.management.impl.service.conversions.ConversionService;
+import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
+import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.entity.AircraftCategory;
+import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
 import com.europair.management.rest.model.fleet.repository.AircraftCategoryRepository;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
@@ -23,12 +26,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,8 +71,6 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     @Override
     public List<AircraftSearchResultDataDto> searchAircraft(final AircraftFilterDto filterDto) {
 
-
-        // ToDo checek near airports and add ids to filter
         List<Long> airportBaseIds = new ArrayList<>(filterDto.getBaseIds());
         if (!CollectionUtils.isEmpty(filterDto.getBaseIds()) && filterDto.getFromDistance() != null
                 && filterDto.getToDistance() != null && filterDto.getDistanceUnit() != null) {
@@ -115,14 +116,29 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                 filterDto.getOperators()
         );
 
+        final Airport destinationAirport = airportRepository.findById(filterDto.getDestinationAirportId())
+                .orElseThrow(() -> new ResourceNotFoundException("Destinarion Airport not found with id: " + filterDto.getDestinationAirportId()));
 
-        // ToDo: de donde sacamos la distancia? Nos pueden indicar más de 2 aeropuertos para la búsqueda por lo que no sabemos el origen-destino exactos
-        // ToDo: calcular tiempo (se deja un método preparado) -> falta la distancia
-        // ToDo: excluir de los resultados las aeronaves que tengas un rango de vuelo definido e inferior a la distancia -> falta distancia
+        final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
         List<AircraftSearchResultDataDto> result = aircraftFiltered.stream()
-                .map(IAircraftSearchMapper.INSTANCE::toDto)
-                .collect(Collectors.toList());
+                .filter(aircraft -> filterAircraftByRangeAndCalculateTime(aircraft, destinationAirport, dsDataList))
+                .map(aircraft -> {
+                    // ToDo: que origen usamos??
+                    final Long originId = aircraft.getBases().stream()
+                            .filter(AircraftBase::getMainBase)
+                            .findFirst()
+                            .map(aircraftBase -> aircraftBase.getAirport().getId())
+                            .orElse(null);
+
+                    AircraftSearchResultDataDto dataDto = IAircraftSearchMapper.INSTANCE.toDto(aircraft);
+                    dataDto.setTimeInHours(dsDataList.stream()
+                            .filter(dsu -> dsu.getAircraftTypeId().equals(aircraft.getAircraftType().getId())
+                                    && dsu.getOriginId().equals(originId) && dsu.getDestinationId().equals(destinationAirport.getId()))
+                            .findFirst().map(DistanceSpeedUtils::getTimeInHours).orElse(null));
+
+                    return dataDto;
+                }).collect(Collectors.toList());
 
         return result;
     }
@@ -137,7 +153,9 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             if (filterDto.getBaseIds().contains(airport.getId())) {
                 searchedAirports.add(airport);
             } else {
-                remainingAirports.add(airport);
+                if (!airport.getId().equals(filterDto.getDestinationAirportId())) {
+                    remainingAirports.add(airport);
+                }
             }
         });
 
@@ -177,10 +195,59 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                 .collect(Collectors.toList());
     }
 
-    private Double calculateTimeInHours(final double distance, final Aircraft aircraft) {
+    private boolean filterAircraftByRangeAndCalculateTime(final Aircraft aircraft, final Airport destinationAirport,
+                                                          @NotNull List<DistanceSpeedUtils> dsDataList) {
+
+        // ToDo: cual es el origen???
+        Airport origin = aircraft.getBases().stream().filter(AircraftBase::getMainBase).findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("No main base found for Aircraft with id: " + aircraft.getId()))
+                .getAirport();
+
+        // If distance has been calculated before we get the data, otherwise we do the calculation and save the data
+        DistanceSpeedUtils dsData;
+        Optional<DistanceSpeedUtils> optionalData = dsDataList.stream().filter(dsu -> dsu.getOriginId().equals(origin.getId())
+                && dsu.getDestinationId().equals(destinationAirport.getId())
+                && dsu.getAircraftTypeId().equals(aircraft.getAircraftType().getId()))
+                .findFirst();
+        if (optionalData.isPresent()) {
+            dsData = optionalData.get();
+        } else {
+            dsData = calculateDistanceAndSpeed(aircraft.getAircraftType(), origin, destinationAirport);
+            dsDataList.add(dsData);
+        }
+
+        Double flightRangeInDefaultUnit = aircraft.getAircraftType().getFlightRange();
+        if (aircraft.getAircraftType().getFlightRange() != null && !DEFAULT_DISTANCE_UNIT.equals(aircraft.getAircraftType().getFlightRangeUnit())) {
+            // Convert flight range to default unit
+            ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
+            ct.setSrcUnit(aircraft.getAircraftType().getFlightRangeUnit());
+            ct.setValue(aircraft.getAircraftType().getFlightRange());
+
+            ConversionDataDTO conversionData = new ConversionDataDTO();
+            conversionData.setDstUnit(DEFAULT_DISTANCE_UNIT);
+            conversionData.setDataToConvert(Collections.singletonList(ct));
+
+            List<Double> result = conversionService.convertData(conversionData);
+            flightRangeInDefaultUnit = result.get(0);
+        }
+
+        return flightRangeInDefaultUnit == null || flightRangeInDefaultUnit >= dsData.getDistance();
+    }
+
+
+    private DistanceSpeedUtils calculateDistanceAndSpeed(final AircraftType aircraftType, final Airport origin, final Airport destination) {
+        DistanceSpeedUtils dsData = new DistanceSpeedUtils();
+        dsData.setOriginId(origin.getId());
+        dsData.setDestinationId(destination.getId());
+        dsData.setAircraftTypeId(aircraftType.getId());
+
+        // Calculate distance
+        double distance = Utils.getDistanceInNM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
+                destination.getLongitude());
+        dsData.setDistance(distance);
 
         // Filter avg speeds to get the one that matches the distance
-        AircraftTypeAverageSpeed speed = aircraft.getAircraftType().getAverageSpeed().stream()
+        AircraftTypeAverageSpeed speed = aircraftType.getAverageSpeed().stream()
                 .filter(avgSpeed -> {
                     List<Double> distanceRange = Arrays.asList(avgSpeed.getFromDistance(), avgSpeed.getToDistance());
                     if (!DEFAULT_DISTANCE_UNIT.equals(avgSpeed.getDistanceUnit())) {
@@ -201,7 +268,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                         distanceRange = Arrays.asList(result.get(0), result.get(1));
                     }
 
-                    return distance <= distanceRange.get(0) && distance >= distanceRange.get(1);
+                    return distance >= distanceRange.get(0) && distance <= distanceRange.get(1);
                 }).findFirst().orElse(null);
 
         Double speedInDefaultUnit = null;
@@ -222,6 +289,10 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             }
         }
 
-        return speedInDefaultUnit == null ? null : distance / speedInDefaultUnit;
+        dsData.setSpeed(speedInDefaultUnit);
+
+        return dsData;
     }
+
+
 }

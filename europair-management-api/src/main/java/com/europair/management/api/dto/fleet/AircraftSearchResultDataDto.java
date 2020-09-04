@@ -62,7 +62,11 @@ public class AircraftSearchResultDataDto extends AuditModificationBaseDTO {
     @JsonProperty("observations")
     private List<AircraftObservationDto> observations;
 
+    @JsonProperty("timeInHours")
+    private Double timeInHours;
 
+
+    // ToDo: Otras propiedades de Aircraft que no sé si hacen falta
 
     @JsonProperty("plateNumber")
     @Size(min = 0, max = TextField.TEXT_20)
@@ -80,7 +84,5 @@ public class AircraftSearchResultDataDto extends AuditModificationBaseDTO {
     @JsonProperty("outsideUpgradeYear")
     private Integer outsideUpgradeYear;
 
-
-    // ToDo: tiempo de vuelo
 
 }

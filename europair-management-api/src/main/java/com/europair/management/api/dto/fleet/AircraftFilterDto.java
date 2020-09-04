@@ -26,6 +26,11 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     @NotEmpty
     private List<Long> baseIds;
 
+    @Schema(description = "Id of the destination Airport", required = true)
+    @JsonProperty("destinationAirport")
+    @NotNull
+    private Long destinationAirportId;
+
     @Schema(description = "List of countries ids of the airports where the aircraft must have a base", example = "1,2,11")
     @JsonProperty("countries")
     private List<Long> countryIds;
