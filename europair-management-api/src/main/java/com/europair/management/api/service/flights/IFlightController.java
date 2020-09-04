@@ -1,7 +1,6 @@
 package com.europair.management.api.service.flights;
 
 import com.europair.management.api.dto.flights.FlightDTO;
-import com.europair.management.api.dto.screens.ScreenDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,9 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.util.Map;
 
-@RequestMapping("/flights")
+@RequestMapping("/files/{fileId}/routes/{routeId}/flights")
 public interface IFlightController {
 
     /**
@@ -27,6 +25,8 @@ public interface IFlightController {
     @GetMapping
     @Operation(description = "Paged result of flights with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
     public ResponseEntity<Page<FlightDTO>> getAllFlightsPaginated(
+      @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+      @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
       @Parameter(description = "Pagination filter") final Pageable pageable);
 
 
@@ -40,7 +40,10 @@ public interface IFlightController {
      */
     @GetMapping("/{id}")
     @Operation(description = "Retrieve flight data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<FlightDTO> getFlightById(@Parameter(description = "Flight identifier") @NotNull @PathVariable final Long id);
+    ResponseEntity<FlightDTO> getFlightById(
+      @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+      @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+      @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long id);
 
     /**
      * <p>
@@ -52,7 +55,10 @@ public interface IFlightController {
      */
     @PostMapping
     @Operation(description = "Save a new flight", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<FlightDTO> saveFlight(@Parameter(description = "Flight object") @NotNull @RequestBody final FlightDTO flightDTO);
+    ResponseEntity<FlightDTO> saveFlight(
+      @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+      @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+      @Parameter(description = "Flight object") @NotNull @RequestBody final FlightDTO flightDTO);
 
     /**
      * <p>
@@ -66,6 +72,8 @@ public interface IFlightController {
     @PutMapping("/{id}")
     @Operation(description = "Updates existing flight", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<FlightDTO> updateFlight(
+      @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+      @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
       @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long id,
       @Parameter(description = "Flight updated data") @NotNull @RequestBody final FlightDTO flightDTO);
 
@@ -79,6 +87,9 @@ public interface IFlightController {
      */
     @DeleteMapping("/{id}")
     @Operation(description = "Deletes existing flight by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<?> deleteFlight(@Parameter(description = "Flight identifier") @PathVariable @NotNull final Long id);
+    ResponseEntity<?> deleteFlight(
+      @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+      @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+      @Parameter(description = "Flight identifier") @PathVariable @NotNull final Long id);
 
 }

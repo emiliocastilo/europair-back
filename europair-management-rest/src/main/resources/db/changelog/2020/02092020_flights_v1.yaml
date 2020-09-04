@@ -26,7 +26,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: time_zone
-                  type: varchar(20)
+                  type: varchar(50)
                   remarks: flight departure time zone
               - column:
                   name: origin
@@ -99,7 +99,7 @@ databaseChangeLog:
                   type: int
                   remarks: route id
                   constraints:
-                    nullable: true
+                    nullable: false
                     foreignKeyName: flights_route_fk
                     references: routes(id)
         - addAutoIncrement:

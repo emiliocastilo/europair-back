@@ -6,14 +6,14 @@ import org.springframework.data.domain.Pageable;
 
 public interface IFlightService {
 
-    Page<FlightDTO> findAllPaginated(Pageable pageable);
+    Page<FlightDTO> findAllPaginated(Long fileId, Long routeId, Pageable pageable);
 
-    FlightDTO findById(Long id);
+    FlightDTO findById(Long fileId, Long routeId, Long id);
 
-    FlightDTO saveFlight(FlightDTO flightDTO);
+    FlightDTO saveFlight(Long fileId, Long routeId, FlightDTO flightDTO);
 
-    FlightDTO updateFlight(Long id, FlightDTO flightDTO);
+    FlightDTO updateFlight(Long fileId, Long routeId, Long id, FlightDTO flightDTO);
 
-    void deleteFlight(Long id);
+    void deleteFlight(Long fileId, Long routeId, Long id);
 
 }
