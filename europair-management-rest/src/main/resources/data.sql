@@ -26,4 +26,4 @@ insert into roles_tasks values (2,2);
 insert into roles_tasks values (3,3);
 
 -- pass: jose
-insert into users values (null, 'jose.mendez', '$2y$10$RmSfGJRyUKh63WIAG6p4dO7ThqkjKWZV2.x1ZJGKBUBvWKpYiQGwW', 'Jose', 'Mendez', 'jose.mendez@prueba.com', 'GMT+2','2020-07-20','Sistema', null, null);
+insert into users values (null, 'jose.mendez', '$2y$10$RmSfGJRyUKh63WIAG6p4dO7ThqkjKWZV2.x1ZJGKBUBvWKpYiQGwW', 'Jose', 'Mendez', 'jose.mendez@prueba.com', 'TWO','2020-07-20','Sistema', null, null);

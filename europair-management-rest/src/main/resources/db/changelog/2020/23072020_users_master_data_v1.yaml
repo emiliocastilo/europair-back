@@ -32,3 +32,16 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+  - changeSet:
+      id: 04092020_users_master_v2_users_data
+      context: dev or pre or pro
+      author: juan.sebastianfilipp
+      comment: "Update timezone to normalize into UTC"
+      changes:
+        - update:
+            tableName: users
+            columns:
+              - column:
+                  name: time_zone
+                  value: "TWO"
+            where: id=1

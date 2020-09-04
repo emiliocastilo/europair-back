@@ -29,6 +29,7 @@ public class User extends AuditModificationBaseEntity {
   private String email;
 
   @Column(name = "time_zone")
+  @Enumerated(EnumType.STRING)
   private String timeZone;
 
   @ManyToMany
