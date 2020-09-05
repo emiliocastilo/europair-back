@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.users.entity;
 
+import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.tasks.entity.Task;
@@ -29,7 +30,8 @@ public class User extends AuditModificationBaseEntity {
   private String email;
 
   @Column(name = "time_zone")
-  private String timeZone;
+  @Enumerated(EnumType.STRING)
+  private UTCEnum timeZone;
 
   @ManyToMany
   @JoinTable(name = "users_roles",
