@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -83,7 +83,7 @@ public class AircraftTypeServiceImpl implements IAircraftTypeService {
         AircraftType aircraftType = aircraftTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("AircraftType not found with id: " + id));
 
-        aircraftType.setRemovedAt(new Date());
+        aircraftType.setRemovedAt(LocalDate.now());
         aircraftTypeRepository.save(aircraftType);
     }
 

@@ -7,7 +7,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "flights")
@@ -19,7 +19,7 @@ public class Flight extends AuditModificationBaseEntity implements Serializable 
   private Long id;
 
   @Column(name = "departure_time")
-  private LocalDateTime departureTime;
+  private LocalDate departureTime;
 
   @Column(name = "time_zone")
   @Enumerated(EnumType.STRING)
