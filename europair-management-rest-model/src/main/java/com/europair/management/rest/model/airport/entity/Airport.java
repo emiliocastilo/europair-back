@@ -12,18 +12,7 @@ import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirp
 import com.europair.management.rest.model.regions.entity.Region;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -81,6 +70,12 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @Column(name = "flight_rules")
     @Enumerated(EnumType.STRING)
     private FlightRulesEnum flightRules;
+
+    @Column(name = "canary_islands")
+    private Boolean canaryIslands = false;
+
+    @Column(name = "balearics")
+    private Boolean balearics = false;
 
     @OneToMany(orphanRemoval = true, mappedBy = "airport")
     private List<Runway> runways;
