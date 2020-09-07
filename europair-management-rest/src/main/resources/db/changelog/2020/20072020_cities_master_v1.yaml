@@ -47,3 +47,17 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: cities
+
+  - changeSet:
+      id: 20200907_cities_master_v2_cities_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add canary islands column to database"
+      changes:
+        - addColumn:
+            tableName: cities
+            columns:
+              - column:
+                  name: canary_islands
+                  type: boolean
+                  remarks: "this city belongs to Canary Islands"
