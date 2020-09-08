@@ -4,13 +4,6 @@
 
 package com.europair.management.rest.model.audit.entity;
 
-import java.util.Date;
-import javax.persistence.Access;
-import javax.persistence.AccessType;
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
-
 import com.europair.management.rest.model.common.TextField;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
@@ -18,6 +11,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import javax.persistence.*;
+import java.time.LocalDate;
 
 /**
  * Audit Modification Base Entity
@@ -38,14 +34,14 @@ public abstract class AuditModificationBaseEntity {
      */
     @Column(nullable = false, name = "created_at")
     @CreatedDate
-    private Date createdAt;
+    private LocalDate createdAt;
 
     /**
      * Audit: Modification date @see AuditModificationsBaseEntity.modifiedAt
      */
     @Column(nullable = true, name = "modified_at")
     @LastModifiedDate
-    private Date modifiedAt;
+    private LocalDate modifiedAt;
 
     /**
      * Audit: Creation author @see AuditModificationsBaseEntity.createdBy

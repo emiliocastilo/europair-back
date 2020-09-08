@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import java.util.Date;
+import java.time.LocalDate;
 
 @MappedSuperclass
 @Data
@@ -13,5 +13,5 @@ public abstract class SoftRemovableBaseEntity extends AuditModificationBaseEntit
     public static final String REMOVED_AT = "removedAt";
 
     @Column(name = "removed_at", nullable = true)
-    private Date removedAt;
+    private LocalDate removedAt;
 }

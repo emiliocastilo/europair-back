@@ -21,6 +21,9 @@ public class CityDTO extends AuditModificationBaseDTO {
     @JsonProperty("name")
     private String name;
 
+    @JsonProperty("canaryIslands")
+    private Boolean canaryIslands = false;
+
     @JsonProperty("country")
     private CountryDTO country;
 

@@ -1,6 +1,5 @@
 package com.europair.management.api.dto.airport;
 
-
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.cities.CityDTO;
 import com.europair.management.api.dto.common.MeasureDto;
@@ -67,6 +66,12 @@ public class AirportDto extends AuditModificationBaseDTO {
 
     @JsonProperty("flightRules")
     private String flightRules;
+
+    @JsonProperty("canary_islands")
+    private Boolean canaryIslands = false;
+
+    @JsonProperty("balearics")
+    private Boolean balearics = false;
 
     @JsonProperty("terminals")
     private List<TerminalDto> terminals;

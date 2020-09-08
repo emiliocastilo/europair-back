@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -60,7 +60,7 @@ public class AirportServiceImpl implements IAirportService {
         Airport airport = airportRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Airport not found with id: " + id));
 
-        airport.setRemovedAt(new Date());
+        airport.setRemovedAt(LocalDate.now());
         airportRepository.save(airport);
     }
 }

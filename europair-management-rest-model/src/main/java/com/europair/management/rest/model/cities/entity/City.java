@@ -19,7 +19,11 @@ public class City extends AuditModificationBaseEntity implements Serializable {
   @Column(unique = true)
   private String code;
 
+  @Column
   private String name;
+
+  @Column(name = "canary_islands")
+  private Boolean canaryIslands = false;
 
   @ManyToOne
   private Country country;
