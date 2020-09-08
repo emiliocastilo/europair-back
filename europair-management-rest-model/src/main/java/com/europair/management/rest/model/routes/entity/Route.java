@@ -6,6 +6,7 @@ import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
 import lombok.Data;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -61,7 +62,7 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     @OneToMany(mappedBy = "route", orphanRemoval = true)
     private List<Flight> flights;
 
-    @OneToMany(mappedBy = "route", orphanRemoval = true)
+    @OneToMany(mappedBy = "route", cascade = CascadeType.REMOVE)
     private List<RouteFrequencyDay> frequencyDays;
 
     //  ToDo Cotizacion

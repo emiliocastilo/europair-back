@@ -106,7 +106,24 @@ public class RouteServiceImpl implements IRouteService {
         Route route = routeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id));
         IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
+
+        // Delete route frequency days
+        routeFrequencyDayRepository.removeByRouteId(id);
+        route.getFrequencyDays().clear();
+
         route = routeRepository.save(route);
+
+        // Recreate route frequency days
+        if (!Collections.isEmpty(routeDto.getFrequencyDays())) {
+            List<RouteFrequencyDay> frequencyDays = new ArrayList<>();
+            for (RouteFrequencyDayDto rfd : routeDto.getFrequencyDays()) {
+                RouteFrequencyDay frequencyDay = IRouteFrequencyDayMapper.INSTANCE.toEntity(rfd);
+                frequencyDay.setRoute(route);
+                frequencyDays.add(frequencyDay);
+            }
+            frequencyDays = routeFrequencyDayRepository.saveAll(frequencyDays);
+            route.setFrequencyDays(frequencyDays);
+        }
 
         // ToDo: modificar rotaciones o recrearlas?
 
