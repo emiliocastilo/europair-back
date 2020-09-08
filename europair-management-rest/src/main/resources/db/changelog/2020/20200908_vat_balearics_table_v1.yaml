@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200908_vat_balearics_v1_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add route percentage from/to Balearics liable to VAT"
+      changes:
+        # VAT_Balearics
+        - createTable:
+            tableName: vat_balearics
+            remarks: Route percentage from/to Balearics liable to VAT
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the VAT Balearics
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: vat_balearics_id_pk
+              - column:
+                  name: origin_airport
+                  type: varchar(3)
+                  remarks: origin airport
+                  constraints:
+                    nullable: false
+              - column:
+                  name: destination_airport
+                  type: varchar(3)
+                  remarks: destination airport
+                  constraints:
+                    nullable: false
+              - column:
+                  name: route_pct_with_vat
+                  type: decimal(5,2)
+                  remarks: Route percentage liable to VAT
+                  constraints:
+                    nullable: false
+
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: vat_balearics
