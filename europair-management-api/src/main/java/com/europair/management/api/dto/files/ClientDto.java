@@ -35,12 +35,12 @@ public class ClientDto extends AuditModificationBaseDTO {
     @Size(min = 1, max = TextField.TEXT_20)
     private String type = "INDIVIDUAL";
 
-    @Column(name = "canary_islands")
+    @JsonProperty("canaryIslands")
     private Boolean canaryIslands = false;
 
-    @Column(name = "vies")
+    @JsonProperty("vies")
     private Boolean vies = false;
 
-    @ManyToOne
+    @JsonProperty("country")
     private CountryDTO country;
 }
