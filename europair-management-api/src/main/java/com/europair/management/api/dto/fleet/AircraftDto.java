@@ -3,6 +3,7 @@ package com.europair.management.api.dto.fleet;
 
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.common.TextField;
+import com.europair.management.api.dto.contributionaircrafts.ContributionAircraftDTO;
 import com.europair.management.api.dto.operators.OperatorDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -75,4 +76,6 @@ public class AircraftDto extends AuditModificationBaseDTO {
 
     @JsonProperty("observations")
     private List<AircraftObservationDto> observations;
+
+    private List<ContributionAircraftDTO> contributionAircrafts;
 }

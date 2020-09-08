@@ -24,18 +24,21 @@ public interface IAircraftMapper {
     @Mapping(target = "aircraftType.category.parentCategory", ignore = true)
     @Mapping(target = "aircraftType.subcategory.parentCategory", ignore = true)
     @Mapping(target = "aircraftType.subcategory.subcategories", ignore = true)
+    @Mapping(target = "contributionAircrafts", ignore = true)
     AircraftDto toDto(final Aircraft entity);
 
     @Mapping(target = "bases", ignore = true)
     @Mapping(target = "observations", ignore = true)
     @Mapping(target = "operator", ignore = true)
     @Mapping(target = "aircraftType", ignore = true)
+    @Mapping(target = "contributionAircrafts", ignore = true)
     Aircraft toEntity(final AircraftDto aircraftDto);
 
     @Mapping(target = "bases", ignore = true)
     @Mapping(target = "observations", ignore = true)
     @Mapping(target = "operator", ignore = true)
     @Mapping(target = "aircraftType", ignore = true)
+    @Mapping(target = "contributionAircrafts", ignore = true)
     void updateFromDto(final AircraftDto aircraftDto, @MappingTarget Aircraft aircraft);
 
     @Named("seatingToDayTimeConfig")
