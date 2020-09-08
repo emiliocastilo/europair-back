@@ -15,7 +15,6 @@ public interface IRouteMapper {
 
     IRouteMapper INSTANCE = Mappers.getMapper(IRouteMapper.class);
 
-    //    @Mapping(target = "rotations", qualifiedByName = "toDtoNoParent")
     RouteDto toDto(final Route entity);
 
     @Mapping(target = "file", ignore = true)
@@ -24,6 +23,7 @@ public interface IRouteMapper {
     @Mapping(target = "flights", ignore = true)
     @Mapping(target = "rotationsNumber", source = "rotationsNumber", defaultValue = "1")
     @Mapping(target = "frequency", source = "frequency", defaultValue = "ADHOC")
+    @Mapping(target = "frequencyDays", ignore = true)
     Route toEntity(final RouteDto dto);
 
     @Mapping(target = "file", ignore = true)
@@ -32,6 +32,7 @@ public interface IRouteMapper {
     @Mapping(target = "flights", ignore = true)
     @Mapping(target = "rotationsNumber", source = "rotationsNumber", defaultValue = "1")
     @Mapping(target = "frequency", source = "frequency", defaultValue = "ADHOC")
+    @Mapping(target = "frequencyDays", ignore = true)
     void updateFromDto(final RouteDto routeDto, @MappingTarget Route route);
 
     // Rotations
@@ -44,9 +45,5 @@ public interface IRouteMapper {
     @Mapping(target = "rotationsNumber", ignore = true)
     @Mapping(target = "frequency", source = "frequency", defaultValue = "ADHOC")
     Route mapRotation(final Route parentRoute);
-
-//    @Named("toDtoNoParent")
-//    @Mapping(target = "parentRoute", ignore = true)
-//    RouteDto toDtoNoParent(final Route entity);
 
 }

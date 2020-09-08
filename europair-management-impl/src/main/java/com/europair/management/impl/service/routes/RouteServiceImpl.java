@@ -1,8 +1,11 @@
 package com.europair.management.impl.service.routes;
 
 import com.europair.management.api.dto.routes.RouteDto;
+import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
+import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -10,7 +13,10 @@ import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.entity.RouteFrequencyDay;
+import com.europair.management.rest.model.routes.repository.RouteFrequencyDayRepository;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
+import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +24,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
+import java.time.DateTimeException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,6 +41,9 @@ public class RouteServiceImpl implements IRouteService {
 
     @Autowired
     private RouteRepository routeRepository;
+
+    @Autowired
+    private RouteFrequencyDayRepository routeFrequencyDayRepository;
 
     @Autowired
     private FileRepository fileRepository;
@@ -67,6 +80,18 @@ public class RouteServiceImpl implements IRouteService {
         route.setFile(file);
 
         route = routeRepository.save(route);
+
+        // Save route frequency days
+        if (!Collections.isEmpty(routeDto.getFrequencyDays())) {
+            List<RouteFrequencyDay> frequencyDays = new ArrayList<>();
+            for (RouteFrequencyDayDto rfd : routeDto.getFrequencyDays()) {
+                RouteFrequencyDay frequencyDay = IRouteFrequencyDayMapper.INSTANCE.toEntity(rfd);
+                frequencyDay.setRoute(route);
+                frequencyDays.add(frequencyDay);
+            }
+            frequencyDays = routeFrequencyDayRepository.saveAll(frequencyDays);
+            route.setFrequencyDays(frequencyDays);
+        }
 
         // Create rotations
         List<Route> rotations = createRotations(route);
@@ -115,29 +140,109 @@ public class RouteServiceImpl implements IRouteService {
             newRotation.setFile(parentRoute.getFile());
             newRotation.setParentRoute(parentRoute);
 
+            auxDate = calculateRotationDate(auxDate, parentRoute);
             newRotation.setStartDate(auxDate);
             newRotation.setEndDate(auxDate);
-
-            // Update date for next rotation
-            switch (newRotation.getFrequency()) {
-                case DAILY:
-                    auxDate = auxDate.plusDays(1);
-                    break;
-                case WEEKLY:
-                    auxDate = auxDate.plusWeeks(1);
-                    break;
-                case BIWEEKLY:
-                    auxDate = auxDate.plusWeeks(2);
-                    break;
-                case DAY_OF_MONTH:
-                    // ToDo pensar como lo hacemos
-                    break;
-            }
 
             rotations.add(newRotation);
         }
 
         return rotations.size() > 0 ? routeRepository.saveAll(rotations) : null;
+    }
+
+    private LocalDate calculateRotationDate(LocalDate lastRotationDate, Route route) {
+        final boolean firstRotation = lastRotationDate == null || lastRotationDate.equals(route.getStartDate());
+        LocalDate rotationDate = lastRotationDate != null ? lastRotationDate : route.getStartDate();
+
+        if (route.getFrequency() == null || FrequencyEnum.ADHOC.equals(route.getFrequency())) {
+            return rotationDate;
+        }
+
+        final List<DayOfWeek> dayOfWeekList = route.getFrequencyDays().stream()
+                .filter(rfd -> rfd.getWeekday() != null)
+                .map(RouteFrequencyDay::getWeekday)
+                .collect(Collectors.toList());
+
+        final List<Integer> dayOfMonthList = route.getFrequencyDays().stream()
+                .filter(rfd -> rfd.getMonthDay() != null)
+                .map(RouteFrequencyDay::getMonthDay)
+                .sorted()
+                .collect(Collectors.toList());
+
+        // If its the first rotation we search from the startDate, else we search from the next day from start
+        switch (route.getFrequency()) {
+            case DAILY:
+            case WEEKLY: // ToDo: cambio de bucle para mejorar rendimiento??
+                for (LocalDate date = firstRotation ? rotationDate : rotationDate.plusDays(1); date.isBefore(route.getEndDate()); date = date.plusDays(1)) {
+                    if (dayOfWeekList.contains(date.getDayOfWeek())) {
+                        return date;
+                    }
+                }
+                break;
+
+            case BIWEEKLY:
+                DayOfWeek min = dayOfWeekList.stream().min(Comparator.comparingInt(DayOfWeek::getValue)).orElse(null);
+                DayOfWeek max = dayOfWeekList.stream().max(Comparator.comparingInt(DayOfWeek::getValue))
+                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
+
+                LocalDate startCounter;
+                if (firstRotation) {
+                    // First rotation: same date
+                    startCounter = rotationDate;
+                } else if (max.equals(min)) {
+                    // Single week day selected: Add two weeks (at start of week if not on selected weekday)
+                    startCounter = rotationDate.getDayOfWeek().equals(max) ? rotationDate.plusWeeks(2) :
+                            rotationDate.plusWeeks(2).minusDays(rotationDate.getDayOfWeek().getValue() - 1);
+                } else {
+                    // Multiple week days selected: Add two weeks if current date on max weekday, else add a day
+                    startCounter = rotationDate.getDayOfWeek().equals(max) ?
+                            rotationDate.plusWeeks(2).minusDays(rotationDate.getDayOfWeek().getValue() - 1) :
+                            rotationDate.plusDays(1);
+                }
+
+                for (LocalDate date = startCounter; date.isBefore(route.getEndDate()); date = date.plusDays(1)) {
+                    if (dayOfWeekList.contains(date.getDayOfWeek())) {
+                        return date;
+                    }
+                }
+                break;
+            case DAY_OF_MONTH:
+                Integer minDayOfMonth = dayOfMonthList.stream().min(Integer::compareTo)
+                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
+                Integer maxDayOfMonth = dayOfMonthList.stream().max(Integer::compareTo)
+                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
+
+                if (firstRotation && dayOfMonthList.contains(rotationDate.getDayOfMonth())) {
+                    return rotationDate;
+                }
+
+
+                LocalDate nextMonthDate = rotationDate;
+                Integer nextMonthDay = dayOfMonthList.stream()
+                        .filter(monthDay -> monthDay > rotationDate.getDayOfMonth())
+                        .min(Integer::compareTo).orElse(null);
+
+                if (nextMonthDay == null) {
+                    nextMonthDay = minDayOfMonth;
+                    nextMonthDate = nextMonthDate.plusMonths(1);
+                }
+
+                try {
+                    nextMonthDate = LocalDate.of(nextMonthDate.getYear(), nextMonthDate.getMonth(), nextMonthDay);
+                    if (nextMonthDate.isAfter(route.getEndDate())) {
+                        throw new InvalidArgumentException("Rotation date after end date: " + nextMonthDate);
+                    } else {
+                        return nextMonthDate;
+                    }
+
+                } catch (DateTimeException e) {
+                    // ToDo: lanzar exception o seleccionar otro día??
+                    throw new InvalidArgumentException("Rotation date out of range (yyyy-MM-dd): " +
+                            nextMonthDate.getYear() + "-" + nextMonthDate.getMonth() + "-" + nextMonthDay);
+                }
+        }
+
+        return rotationDate;
     }
 
     @Override

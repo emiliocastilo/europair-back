@@ -61,5 +61,8 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     @OneToMany(mappedBy = "route", orphanRemoval = true)
     private List<Flight> flights;
 
+    @OneToMany(mappedBy = "route", orphanRemoval = true)
+    private List<RouteFrequencyDay> frequencyDays;
+
     //  ToDo Cotizacion
 }
