@@ -91,22 +91,22 @@ public class Contribution extends SoftRemovableBaseEntity implements Serializabl
     @Enumerated(EnumType.STRING)
     private ExchangeBuyTypeEnum exchangeBuyType;
 
-    @Column(name = "purchase_price")
+    @Column(name = "purchase_price", precision = 12, scale = 4)
     private BigDecimal purchasePrice;
 
     @Column(name = "purchase_commission_percent")
     private Integer purchaseCommissionPercent;
 
-    @Column(name = "included_iva")
-    private Boolean includedIva;
+    @Column(name = "included_vat")
+    private Boolean includedVAT;
 
-    @Column(name = "sales_price")
+    @Column(name = "sales_price", precision = 12, scale = 4)
     private BigDecimal salesPrice;
 
     @Column(name = "sales_commission_percent")
     private Integer salesCommissionPercent;
 
-    @Column(name = "sales_price_without_vat")
+    @Column(name = "sales_price_without_vat", precision = 12, scale = 4)
     private BigDecimal salesPricewithoutVAT;
 
 
