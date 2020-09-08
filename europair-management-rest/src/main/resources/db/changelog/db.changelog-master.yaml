@@ -108,6 +108,9 @@ databaseChangeLog:
       file: 2020/02092020_flights_v1.yaml
       relativeToChangelogFile: true
   - include:
+      file: 2020/20200907_servicetypes_master_data_v1.yaml
+      relativeToChangelogFile: true
+  - include:
       file: 2020/09092020_contribution_master_v1.yaml
       relativeToChangelogFile: true
 

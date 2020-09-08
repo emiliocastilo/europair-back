@@ -21,4 +21,7 @@ public class Country extends AuditModificationBaseEntity implements Serializable
     @Column(unique = true)
     private String name;
 
+    @Column(name = "european_union", nullable = false)
+    private Boolean europeanUnion;
+
 }

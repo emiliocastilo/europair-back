@@ -1,0 +1,142 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907_servicetypes_master_data_v1
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add service types data to the database"
+      changes:
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "VUE"
+              - column:
+                  name: name
+                  value: "VUELO"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "CAR"
+              - column:
+                  name: name
+                  value: "CARGA"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "COM"
+              - column:
+                  name: name
+                  value: "COMISION"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "TRA"
+              - column:
+                  name: name
+                  value: "TRANSPORTE"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "EOB"
+              - column:
+                  name: name
+                  value: "EXTRAS ON BOARD"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "EOG"
+              - column:
+                  name: name
+                  value: "EXTRAS ON GROUND"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "COB"
+              - column:
+                  name: name
+                  value: "CATERING ON BOARD"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "COG"
+              - column:
+                  name: name
+                  value: "CATERING ON GROUND"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: service_types
+            columns:
+              - column:
+                  name: code
+                  value: "CNX"
+              - column:
+                  name: name
+                  value: "GASTOS CANCELACION"
+              - column:
+                  name: created_at
+                  valueDate: "now()"
+              - column:
+                  name: created_by
+                  value: "Sistema"

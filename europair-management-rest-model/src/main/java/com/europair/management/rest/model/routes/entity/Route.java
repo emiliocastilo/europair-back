@@ -2,17 +2,25 @@ package com.europair.management.rest.model.routes.entity;
 
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
-import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
 import lombok.Data;
 
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "routes")
@@ -53,8 +61,11 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     @OneToMany(mappedBy = "route", orphanRemoval = true)
     private List<Flight> flights;
 
+    @OneToMany(mappedBy = "route", cascade = CascadeType.REMOVE)
+    private List<RouteFrequencyDay> frequencyDays;
+
     @OneToMany(mappedBy = "route")
     private Set<Contribution> contributionSet;
 
-    //  ToDo Cotizacion
+
 }

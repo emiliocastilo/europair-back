@@ -43,4 +43,7 @@ public class RouteDto {
     @JsonProperty("rotations")
     private List<RouteDto> rotations;
 
+    @JsonProperty("frequencyDays")
+    private List<RouteFrequencyDayDto> frequencyDays;
+
 }

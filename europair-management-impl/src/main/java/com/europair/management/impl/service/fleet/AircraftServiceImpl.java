@@ -1,16 +1,11 @@
 package com.europair.management.impl.service.fleet;
 
-
 import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
-
 import com.europair.management.impl.mappers.fleet.IAircraftMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
-
 import com.europair.management.rest.model.fleet.entity.Aircraft;
-import com.europair.management.rest.model.fleet.entity.AircraftBase;
-
 import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import com.europair.management.rest.model.operators.entity.Operator;
@@ -19,9 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 @Transactional
@@ -91,7 +85,7 @@ public class AircraftServiceImpl implements IAircraftService {
     public void deleteAircraft(Long id) {
         Aircraft aircraft = aircraftRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found with id: " + id));
-        aircraft.setRemovedAt(new Date());
+        aircraft.setRemovedAt(LocalDate.now());
         aircraftRepository.save(aircraft);
     }
 }
