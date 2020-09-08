@@ -110,6 +110,7 @@ databaseChangeLog:
   - include:
       file: 2020/20200907_servicetypes_master_data_v1.yaml
       relativeToChangelogFile: true
+  #contributions
   - include:
       file: 2020/09092020_contribution_master_v1.yaml
       relativeToChangelogFile: true
