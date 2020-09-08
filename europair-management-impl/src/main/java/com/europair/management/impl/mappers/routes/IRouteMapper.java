@@ -44,6 +44,7 @@ public interface IRouteMapper {
     @Mapping(target = "flights", ignore = true)
     @Mapping(target = "rotationsNumber", ignore = true)
     @Mapping(target = "frequency", source = "frequency", defaultValue = "ADHOC")
+    @Mapping(target = "frequencyDays", ignore = true)
     Route mapRotation(final Route parentRoute);
 
 }
