@@ -140,7 +140,7 @@ public class RouteServiceImpl implements IRouteService {
             newRotation.setFile(parentRoute.getFile());
             newRotation.setParentRoute(parentRoute);
 
-            auxDate = calculateRotationDate(auxDate, parentRoute);
+            auxDate = calculateRotationDate(auxDate, parentRoute, i == 0);
             newRotation.setStartDate(auxDate);
             newRotation.setEndDate(auxDate);
 
@@ -150,8 +150,7 @@ public class RouteServiceImpl implements IRouteService {
         return rotations.size() > 0 ? routeRepository.saveAll(rotations) : null;
     }
 
-    private LocalDate calculateRotationDate(LocalDate lastRotationDate, Route route) {
-        final boolean firstRotation = lastRotationDate == null || lastRotationDate.equals(route.getStartDate());
+    private LocalDate calculateRotationDate(LocalDate lastRotationDate, Route route, final boolean firstRotation) {
         LocalDate rotationDate = lastRotationDate != null ? lastRotationDate : route.getStartDate();
 
         if (route.getFrequency() == null || FrequencyEnum.ADHOC.equals(route.getFrequency())) {
@@ -161,19 +160,22 @@ public class RouteServiceImpl implements IRouteService {
         final List<DayOfWeek> dayOfWeekList = route.getFrequencyDays().stream()
                 .filter(rfd -> rfd.getWeekday() != null)
                 .map(RouteFrequencyDay::getWeekday)
+                .distinct()
                 .collect(Collectors.toList());
 
         final List<Integer> dayOfMonthList = route.getFrequencyDays().stream()
                 .filter(rfd -> rfd.getMonthDay() != null)
                 .map(RouteFrequencyDay::getMonthDay)
+                .distinct()
                 .sorted()
                 .collect(Collectors.toList());
 
         // If its the first rotation we search from the startDate, else we search from the next day from start
         switch (route.getFrequency()) {
+            // ToDo: cambio de bucle para mejorar rendimiento??
             case DAILY:
-            case WEEKLY: // ToDo: cambio de bucle para mejorar rendimiento??
-                for (LocalDate date = firstRotation ? rotationDate : rotationDate.plusDays(1); date.isBefore(route.getEndDate()); date = date.plusDays(1)) {
+            case WEEKLY:
+                for (LocalDate date = firstRotation ? rotationDate : rotationDate.plusDays(1); date.isBefore(route.getEndDate().plusDays(1)); date = date.plusDays(1)) {
                     if (dayOfWeekList.contains(date.getDayOfWeek())) {
                         return date;
                     }
@@ -208,8 +210,6 @@ public class RouteServiceImpl implements IRouteService {
                 break;
             case DAY_OF_MONTH:
                 Integer minDayOfMonth = dayOfMonthList.stream().min(Integer::compareTo)
-                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
-                Integer maxDayOfMonth = dayOfMonthList.stream().max(Integer::compareTo)
                         .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
 
                 if (firstRotation && dayOfMonthList.contains(rotationDate.getDayOfMonth())) {
