@@ -276,3 +276,33 @@ databaseChangeLog:
                     nullable: true
                     foreignKeyName: providers_country_fk
                     references: countries(id)
+
+  - changeSet:
+      id: 20200908_clients_master_v2_clients_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add canaries, vies and country fk fields to database"
+      changes:
+        - addColumn:
+            tableName: clients
+            columns:
+              - column:
+                  name: type
+                  type: varchar(20)
+                  remarks: "this client is Individual or Business"
+              - column:
+                  name: canary_islands
+                  type: boolean
+                  remarks: "this client is at Canary Islands"
+              - column:
+                  name: vies
+                  type: boolean
+                  remarks: "this client is in VAT Information Exchange System (VIES)"
+              - column:
+                  name: country_id
+                  type: int
+                  remarks: "country id"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: clients_country_fk
+                    references: countries(id)
