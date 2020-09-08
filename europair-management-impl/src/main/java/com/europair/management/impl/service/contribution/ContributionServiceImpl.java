@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Service
@@ -61,7 +62,7 @@ public class ContributionServiceImpl implements IContributionService {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contribution not found with id: " + id));
 
-        contribution.setRemovedAt(new Date());
+        contribution.setRemovedAt(LocalDate.now());
         contributionRepository.save(contribution);
     }
 }
