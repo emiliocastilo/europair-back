@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
@@ -35,7 +36,7 @@ public class CountryController implements ICountryController {
         return ResponseEntity.ok().body(countryDTO);
     }
 
-    public ResponseEntity<CountryDTO> saveCountry(final CountryDTO countryDTO) {
+    public ResponseEntity<CountryDTO> saveCountry(@Valid final CountryDTO countryDTO) {
         final CountryDTO savedCountryDTO = countryService.saveCountry(countryDTO);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -46,7 +47,7 @@ public class CountryController implements ICountryController {
         return ResponseEntity.created(location).body(savedCountryDTO);
     }
 
-    public ResponseEntity<CountryDTO> updateCountry(@NotNull final Long id, final CountryDTO countryDTO) {
+    public ResponseEntity<CountryDTO> updateCountry(@NotNull final Long id, @Valid final CountryDTO countryDTO) {
         final CountryDTO countryDTOSaved = countryService.updateCountry(id, countryDTO);
         return ResponseEntity.ok().body(countryDTOSaved);
     }

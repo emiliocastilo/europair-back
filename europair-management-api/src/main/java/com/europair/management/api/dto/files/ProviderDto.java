@@ -1,8 +1,8 @@
 package com.europair.management.api.dto.files;
 
-
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.common.TextField;
+import com.europair.management.api.dto.countries.CountryDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,4 +28,15 @@ public class ProviderDto extends AuditModificationBaseDTO {
     @Size(min = 1, max = TextField.TEXT_255)
     @NotEmpty
     private String name;
+
+    @JsonProperty("canaryIslands")
+    private Boolean canaryIslands = false;
+
+    @JsonProperty("vies")
+    private Boolean vies = false;
+
+    @JsonProperty("country")
+    private CountryDTO country;
+
+
 }

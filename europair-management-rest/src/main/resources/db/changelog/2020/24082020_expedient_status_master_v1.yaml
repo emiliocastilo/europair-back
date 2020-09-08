@@ -250,3 +250,29 @@ databaseChangeLog:
             columnDataType: varchar(20)
             remarks: file_status code
             tableName: file_status
+
+  - changeSet:
+      id: 20200908_providers_master_v2_providers_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add canaries, vies and country fk fields to database"
+      changes:
+        - addColumn:
+            tableName: providers
+            columns:
+              - column:
+                  name: canary_islands
+                  type: boolean
+                  remarks: "this provider is at Canary Islands"
+              - column:
+                  name: vies
+                  type: boolean
+                  remarks: "this provider is in VAT Information Exchange System (VIES)"
+              - column:
+                  name: country_id
+                  type: int
+                  remarks: "country id"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: providers_country_fk
+                    references: countries(id)
