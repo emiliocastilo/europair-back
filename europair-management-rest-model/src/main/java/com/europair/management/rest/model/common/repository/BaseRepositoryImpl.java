@@ -1,10 +1,7 @@
 package com.europair.management.rest.model.common.repository;
 
-
 import com.europair.management.rest.model.audit.entity.AuditRevision;
-import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.common.CoreCriteria;
-import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.common.exception.EuropairGeneralException;
 import com.europair.management.rest.model.common.exception.InvalidArgumentException;
@@ -30,13 +27,7 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.security.auth.login.AccountException;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
@@ -48,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

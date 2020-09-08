@@ -1,15 +1,16 @@
 package com.europair.management.api.service.conversions;
 
 import com.europair.management.api.dto.conversions.TransformUTCTimeFromToDTO;
-import com.europair.management.api.enums.UTCEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 @RequestMapping("/conversions/time")
 public interface ITimeConversionController {

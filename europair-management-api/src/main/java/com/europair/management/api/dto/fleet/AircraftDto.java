@@ -1,6 +1,5 @@
 package com.europair.management.api.dto.fleet;
 
-
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.dto.operators.OperatorDTO;
@@ -11,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -43,7 +42,7 @@ public class AircraftDto extends AuditModificationBaseDTO {
 
     @JsonProperty("insuranceEndDate")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date insuranceEndDate;
+    private LocalDate insuranceEndDate;
 
     @JsonProperty("ambulance")
     private Boolean ambulance;

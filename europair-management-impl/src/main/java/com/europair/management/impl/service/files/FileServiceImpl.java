@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,7 +67,7 @@ public class FileServiceImpl implements IFileService {
     File file = fileRepository.findById(id)
       .orElseThrow(() -> new ResourceNotFoundException("File not found on id: " + id));
 
-    file.setRemovedAt(new Date());
+    file.setRemovedAt(LocalDate.now());
     fileRepository.save(file);
   }
 }

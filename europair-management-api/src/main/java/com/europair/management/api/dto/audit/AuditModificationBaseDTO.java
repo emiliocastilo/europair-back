@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class AuditModificationBaseDTO implements Serializable {
@@ -23,7 +23,7 @@ public class AuditModificationBaseDTO implements Serializable {
 	 */
 	@NotNull(message = "Field name is mandatory")
 	@Schema(description = "Audit creation date")
-	private Date createdAt;
+	private LocalDate createdAt;
 	
 	/**
 	 * Audit: Creation author @see AuditModificationsBaseEntity.createdBy
@@ -37,7 +37,7 @@ public class AuditModificationBaseDTO implements Serializable {
 	 * Audit: Modification date @see AuditModificationsBaseEntity.modifiedAt
 	 */
 	@Schema(description = "Audit modification date")
-	private Date modifiedAt;
+	private LocalDate modifiedAt;
 	
 	/**
 	 * Audit: Modification author @see AuditModificationsBaseEntity.modifiedBy
