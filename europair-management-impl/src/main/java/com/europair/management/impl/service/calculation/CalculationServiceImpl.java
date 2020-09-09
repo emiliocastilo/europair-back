@@ -3,7 +3,6 @@ package com.europair.management.impl.service.calculation;
 import com.europair.management.api.enums.FileServiceEnum;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.airport.entity.Airport;
-import com.europair.management.rest.model.calculations.Contribution;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.files.entity.Client;
 import com.europair.management.rest.model.files.entity.Provider;
@@ -26,7 +25,7 @@ public class CalculationServiceImpl implements ICalculationService {
 
     @Override
     public BigDecimal calculateIva(Long contributionId) {
-        Contribution contribution = contributionRepository.findById(contributionId);
+//        Contribution contribution = contributionRepository.findById(contributionId);
         FileServiceEnum serviceType = FileServiceEnum.FLIGHT; // FIXME: de donde sacamos este valor?
 
 
@@ -320,12 +319,12 @@ public class CalculationServiceImpl implements ICalculationService {
     // Mock temporal classes
 
     static class ContributionRepository {
-        Contribution findById(Long id) {
-            Contribution c = new Contribution();
-
-
-            return c;
-        }
+//        Contribution findById(Long id) {
+//            Contribution c = new Contribution();
+//
+//
+//            return c;
+//        }
     }
 
     private Double getTaxBalearicIslands() {

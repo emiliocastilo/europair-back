@@ -139,3 +139,50 @@ databaseChangeLog:
             startWith: 1
             tableName: route_frequency_days
 
+
+  - changeSet:
+      id: 20200902_routes_v1_20200909_route_airport_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add route airport table to the database"
+      changes:
+
+        # Route airports
+        - createTable:
+            tableName: route_airports
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: route_airports_id_pk
+              - column:
+                  name: airport_order
+                  type: int
+                  remarks: Airport order in the route
+                  constraints:
+                    nullable: false
+              - column:
+                  name: route_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: route_airports_route_fk
+                    references: routes(id)
+              - column:
+                  name: airport_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: route_airports_airport_fk
+                    references: airports(id)
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: route_airports
+
