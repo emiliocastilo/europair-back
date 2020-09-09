@@ -57,7 +57,7 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     private List<RouteFrequencyDay> frequencyDays;
 
     @OneToMany(mappedBy = "route")
-    private Set<Contribution> contributionSet;
+    private Set<Contribution> contributions;
 
 
 }
