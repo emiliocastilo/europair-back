@@ -6,6 +6,8 @@ import com.europair.management.rest.model.calculations.Contribution;
 import com.europair.management.rest.model.files.entity.Client;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CalculationServiceImpl implements ICalculationService {
 
@@ -33,34 +35,13 @@ public class CalculationServiceImpl implements ICalculationService {
     // IVA DEVENGADO
 
     private Double getFlightTax(Airport origin, Airport destination) {
-        Double tax;
-        if (isCanaryIslandsRoute(origin, destination)) {
-            tax = TAX_FREE;
-        } else if (isBalearicIslandsRoute(origin, destination)) {
-            tax = getTaxBalearicIslands();
-        } else if (isSpainInternalRoute(origin, destination)) {
-            tax = TAX_10;
-        } else {
-            tax = TAX_FREE;
-        }
-
-        return tax;
+        return genericRouteTaxCalculation(origin, destination, TAX_10);
     }
 
     private Double getCargoTax(Airport origin, Airport destination, Client client) {
         Double tax = null;
         switch (client.getType()) {
-            case INDIVIDUAL -> {
-                if (isCanaryIslandsRoute(origin, destination)) {
-                    tax = TAX_FREE;
-                } else if (isBalearicIslandsRoute(origin, destination)) {
-                    tax = getTaxBalearicIslands();
-                } else if (isSpainInternalRoute(origin, destination)) {
-                    tax = TAX_21;
-                } else {
-                    tax = TAX_FREE;
-                }
-            }
+            case INDIVIDUAL -> tax = genericRouteTaxCalculation(origin, destination, TAX_21);
             case BUSINESS -> {
                 if (isCanaryIslandsClient(client)) {
                     tax = TAX_FREE;
@@ -74,23 +55,10 @@ public class CalculationServiceImpl implements ICalculationService {
             }
         }
 
-
         return tax;
     }
 
     private Double getCommissionTax(Client client) {
-        Double tax;
-        if (isCanaryIslandsClient(client)) {
-            tax = TAX_FREE;
-        } else if (isVIESClient(client)) {
-            tax = TAX_FREE;
-        } else if (isNationalClient(client)) {
-            tax = TAX_21;
-        } else {
-            tax = TAX_FREE;
-        }
-
-        return tax;
     }
 
     private Double getTransportTax(Airport origin, Airport destination) {
@@ -100,6 +68,10 @@ public class CalculationServiceImpl implements ICalculationService {
         }
 
         return tax;
+    }
+
+    private Double getAirportTax(Airport origin, Airport destination) {
+        return genericRouteTaxCalculation(origin, destination, TAX_10);
     }
 
     // Utils
@@ -126,6 +98,33 @@ public class CalculationServiceImpl implements ICalculationService {
 
     private boolean isVIESClient(Client client) {
         return Boolean.TRUE.equals(client.getVies());
+    }
+
+
+    private Double genericRouteTaxCalculation(final Airport origin, final Airport destination, final Double nationalTaxToApply) {
+        Double tax;
+        if (isCanaryIslandsRoute(origin, destination)) {
+            tax = TAX_FREE;
+        } else if (isSpainInternalRoute(origin, destination)) {
+            tax = nationalTaxToApply;
+        } else {
+            tax = TAX_FREE;
+        }
+        return tax;
+    }
+    
+    private Double genericClientTaxCalculation(final Client client) {
+        Double tax;
+        if (isCanaryIslandsClient(client)) {
+            tax = TAX_FREE;
+        } else if (isVIESClient(client)) {
+            tax = TAX_FREE;
+        } else if (isNationalClient(client)) {
+            tax = TAX_21;
+        } else {
+            tax = TAX_FREE;
+        }
+        return tax;
     }
 
 
