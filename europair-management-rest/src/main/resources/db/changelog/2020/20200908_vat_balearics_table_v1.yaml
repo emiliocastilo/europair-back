@@ -33,7 +33,7 @@ databaseChangeLog:
               - column:
                   name: route_pct_with_vat
                   type: decimal(5,2)
-                  remarks: Route percentage liable to VAT
+                  remarks: Route percentage with VAT
                   constraints:
                     nullable: false
 

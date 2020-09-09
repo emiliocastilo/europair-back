@@ -5,6 +5,7 @@ databaseChangeLog:
       author: jose.mendezgonzalez
       comment: "Add data to VAT_Balearics table"
       changes:
+        # Ibiza - IBZ
         - insert:
             tableName: vat_balearics
             columns:
@@ -353,6 +354,8 @@ databaseChangeLog:
               - column:
                   name: route_pct_with_vat
                   value: "48.95"
+
+        # Menorca - Mahon - MAH
         - insert:
             tableName: vat_balearics
             columns:
@@ -365,3 +368,689 @@ databaseChangeLog:
               - column:
                   name: route_pct_with_vat
                   value: "80.33"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "ALC"
+              - column:
+                  name: route_pct_with_vat
+                  value: "13.92"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "LEI"
+              - column:
+                  name: route_pct_with_vat
+                  value: "34.72"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "BJZ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "63.10"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "BCN"
+              - column:
+                  name: route_pct_with_vat
+                  value: "19.57"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "BIO"
+              - column:
+                  name: route_pct_with_vat
+                  value: "54.35"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "ODB"
+              - column:
+                  name: route_pct_with_vat
+                  value: "75.23"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "GRO"
+              - column:
+                  name: route_pct_with_vat
+                  value: "18.71"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "GRX"
+              - column:
+                  name: route_pct_with_vat
+                  value: "47.66"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "XRY"
+              - column:
+                  name: route_pct_with_vat
+                  value: "56.40"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "LEN"
+              - column:
+                  name: route_pct_with_vat
+                  value: "74.68"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "MAD"
+              - column:
+                  name: route_pct_with_vat
+                  value: "42.47"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "AGP"
+              - column:
+                  name: route_pct_with_vat
+                  value: "51.65"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "RMU"
+              - column:
+                  name: route_pct_with_vat
+                  value: "14.55"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "OVD"
+              - column:
+                  name: route_pct_with_vat
+                  value: "69.27"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "PNA"
+              - column:
+                  name: route_pct_with_vat
+                  value: "52.10"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "REU"
+              - column:
+                  name: route_pct_with_vat
+                  value: "50.88"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "QSA"
+              - column:
+                  name: route_pct_with_vat
+                  value: "33.33"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "SLM"
+              - column:
+                  name: route_pct_with_vat
+                  value: "52.97"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "EAS"
+              - column:
+                  name: route_pct_with_vat
+                  value: "58.54"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "SDR"
+              - column:
+                  name: route_pct_with_vat
+                  value: "66.74"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "SCQ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "74.74"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "SVQ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "56.48"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "VLC"
+              - column:
+                  name: route_pct_with_vat
+                  value: "10.83"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "VLL"
+              - column:
+                  name: route_pct_with_vat
+                  value: "67.76"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "VGO"
+              - column:
+                  name: route_pct_with_vat
+                  value: "77.23"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "VIT"
+              - column:
+                  name: route_pct_with_vat
+                  value: "58.51"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "MAH"
+              - column:
+                  name: destination_airport
+                  value: "ZAZ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "40.14"
+
+        # Mallorca - Palma de Mallorca - PMI
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "LCG"
+              - column:
+                  name: route_pct_with_vat
+                  value: "85.37"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "ALC"
+              - column:
+                  name: route_pct_with_vat
+                  value: "16.09"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "LEI"
+              - column:
+                  name: route_pct_with_vat
+                  value: "49.31"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "BJZ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "72.94"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "BCN"
+              - column:
+                  name: route_pct_with_vat
+                  value: "30.43"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "BIO"
+              - column:
+                  name: route_pct_with_vat
+                  value: "71.31"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "ODB"
+              - column:
+                  name: route_pct_with_vat
+                  value: "69.10"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "GRO"
+              - column:
+                  name: route_pct_with_vat
+                  value: "31.68"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "GRX"
+              - column:
+                  name: route_pct_with_vat
+                  value: "58.95"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "IBZ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "31.43"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "XRY"
+              - column:
+                  name: route_pct_with_vat
+                  value: "68.74"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "LEN"
+              - column:
+                  name: route_pct_with_vat
+                  value: "80.95"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "MAD"
+              - column:
+                  name: route_pct_with_vat
+                  value: "51.47"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "MAH"
+              - column:
+                  name: route_pct_with_vat
+                  value: "62.16"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "AGP"
+              - column:
+                  name: route_pct_with_vat
+                  value: "61.88"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "RMU"
+              - column:
+                  name: route_pct_with_vat
+                  value: "13.79"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "OVD"
+              - column:
+                  name: route_pct_with_vat
+                  value: "79.43"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "PNA"
+              - column:
+                  name: route_pct_with_vat
+                  value: "69.18"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "REU"
+              - column:
+                  name: route_pct_with_vat
+                  value: "21.71"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "QSA"
+              - column:
+                  name: route_pct_with_vat
+                  value: "14.05"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "SLM"
+              - column:
+                  name: route_pct_with_vat
+                  value: "66.58"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "EAS"
+              - column:
+                  name: route_pct_with_vat
+                  value: "72.67"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "SDR"
+              - column:
+                  name: route_pct_with_vat
+                  value: "72.43"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "SCQ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "83.52"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "SVQ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "67.18"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "VLC"
+              - column:
+                  name: route_pct_with_vat
+                  value: "14.86"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "VLL"
+              - column:
+                  name: route_pct_with_vat
+                  value: "76.67"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "VGO"
+              - column:
+                  name: route_pct_with_vat
+                  value: "85.24"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "VIT"
+              - column:
+                  name: route_pct_with_vat
+                  value: "69.79"
+        - insert:
+            tableName: vat_balearics
+            columns:
+              - column:
+                  name: origin_airport
+                  value: "PMI"
+              - column:
+                  name: destination_airport
+                  value: "ZAZ"
+              - column:
+                  name: route_pct_with_vat
+                  value: "53.46"
