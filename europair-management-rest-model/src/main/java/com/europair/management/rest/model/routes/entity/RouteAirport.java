@@ -26,14 +26,14 @@ public class RouteAirport implements Serializable {
     private Long routeId;
 
     @ManyToOne
-    @JoinColumn(name = "route_id")
+    @JoinColumn(name = "route_id", nullable = false, insertable = false, updatable = false)
     private Route route;
 
     @Column(name = "airport_id")
     private Long airportId;
 
     @ManyToOne
-    @JoinColumn(name = "airport_id")
+    @JoinColumn(name = "airport_id", nullable = false, insertable = false, updatable = false)
     private Airport airport;
 
     @Column(name = "airport_order", nullable = false)

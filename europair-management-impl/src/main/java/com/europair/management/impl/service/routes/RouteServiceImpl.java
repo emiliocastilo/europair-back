@@ -8,12 +8,16 @@ import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.airport.entity.Airport;
+import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.entity.RouteFrequencyDay;
+import com.europair.management.rest.model.routes.repository.RouteAirportRepository;
 import com.europair.management.rest.model.routes.repository.RouteFrequencyDayRepository;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import io.jsonwebtoken.lang.Collections;
@@ -22,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
@@ -29,7 +34,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +54,13 @@ public class RouteServiceImpl implements IRouteService {
 
     @Autowired
     private FileRepository fileRepository;
+
+    @Autowired
+    private AirportRepository airportRepository;
+
+    @Autowired
+    private RouteAirportRepository routeAirportRepository;
+
 
     @Override
     public Page<RouteDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
@@ -72,6 +86,14 @@ public class RouteServiceImpl implements IRouteService {
             throw new InvalidArgumentException(String.format("New Route expected. Identifier %s got", routeDto.getId()));
         }
 
+        // Validate Route Airports
+        List<String> iataCodes = Utils.mapRouteAirportIataCodes(routeDto.getLabel());
+        Map<String, Airport> routeAirports = iataCodes.stream()
+                .distinct()
+                .map(iata -> airportRepository.findFirstByIataCode(iata)
+                        .orElseThrow(() -> new InvalidArgumentException("No airport found with IATA: " + iata)))
+                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
 
         // Set relationships
@@ -94,8 +116,13 @@ public class RouteServiceImpl implements IRouteService {
         }
 
         // Create rotations
-        List<Route> rotations = createRotations(route);
+        List<Route> rotations = createRotations(route, routeAirports);
         route.setRotations(rotations);
+
+        // Create flights
+        if (!CollectionUtils.isEmpty(rotations)) {
+            // ToDo: crear vuelos ??
+        }
 
         return IRouteMapper.INSTANCE.toDto(route);
     }
@@ -147,7 +174,7 @@ public class RouteServiceImpl implements IRouteService {
 
     // Route Rotations
 
-    private List<Route> createRotations(@NotNull final Route parentRoute) {
+    private List<Route> createRotations(@NotNull final Route parentRoute, final Map<String, Airport> routeAirportMap) {
         List<Route> rotations = new ArrayList<>();
 
         LocalDate auxDate = parentRoute.getStartDate();
@@ -161,10 +188,28 @@ public class RouteServiceImpl implements IRouteService {
             newRotation.setStartDate(auxDate);
             newRotation.setEndDate(auxDate);
 
+            // Add Route airports
+            newRotation.setAirports(new HashSet<>(createRouteAirports(newRotation, routeAirportMap)));
+
             rotations.add(newRotation);
         }
 
         return rotations.size() > 0 ? routeRepository.saveAll(rotations) : null;
+    }
+
+    private List<RouteAirport> createRouteAirports(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap) {
+        List<String> airportCodes = Utils.mapRouteAirportIataCodes(rotation.getLabel());
+        List<RouteAirport> airportList = new ArrayList<>();
+        for (int i = 0; i < airportCodes.size(); i++) {
+            RouteAirport routeAirport = new RouteAirport();
+            routeAirport.setRouteId(rotation.getId());
+            routeAirport.setAirportId(routeAirportMap.get(airportCodes.get(i)).getId());
+            routeAirport.setOrder(i);
+            airportList.add(routeAirport);
+        }
+        airportList = routeAirportRepository.saveAll(airportList);
+
+        return airportList;
     }
 
     private LocalDate calculateRotationDate(LocalDate lastRotationDate, Route route, final boolean firstRotation) {

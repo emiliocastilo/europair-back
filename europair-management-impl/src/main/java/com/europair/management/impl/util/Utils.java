@@ -6,11 +6,16 @@ import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -68,6 +73,17 @@ public class Utils {
             );
         }
     }
+
+    /**
+     * Maps string of airport codes of route as List
+     * @param routeLabel String of route label with format "XXX-YYY-ZZZ"
+     * @return List of Iata Codes
+     */
+    public static List<String> mapRouteAirportIataCodes(final String routeLabel) {
+         String trimmedLabel = routeLabel.replaceAll("\\s+", "");
+         return Arrays.asList(trimmedLabel.split("-"));
+    }
+
 
     /**
      * Utils.TimeConverter API to convert time from:
