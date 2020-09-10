@@ -21,14 +21,14 @@ public class AuditModificationBaseDTO implements Serializable {
 	/**
 	 * Audit: Creation date @see AuditModificationsBaseEntity.createdAt
 	 */
-	@NotNull(message = "Field name is mandatory")
+	@NotNull(message = "Field createdAt is mandatory")
 	@Schema(description = "Audit creation date")
 	private LocalDate createdAt;
 	
 	/**
 	 * Audit: Creation author @see AuditModificationsBaseEntity.createdBy
 	 */
-	@NotBlank(message = "Field name is mandatory")
+	@NotBlank(message = "Field createdBy is mandatory")
 	@Size(min = 0, max = 30, message = "Field name must be 30 character max")
 	@Schema(description = "Audit creation author")
 	private String createdBy;
