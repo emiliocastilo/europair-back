@@ -91,7 +91,8 @@ public class RouteServiceImpl implements IRouteService {
         Map<String, Airport> routeAirports = iataCodes.stream()
                 .distinct()
                 .map(iata -> airportRepository.findFirstByIataCode(iata)
-                        .orElseThrow(() -> new InvalidArgumentException("No airport found with IATA: " + iata)))
+                        .orElseThrow(() -> new InvalidArgumentException("No airport found with IATA: " + iata))
+                )
                 .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
@@ -188,13 +189,18 @@ public class RouteServiceImpl implements IRouteService {
             newRotation.setStartDate(auxDate);
             newRotation.setEndDate(auxDate);
 
-            // Add Route airports
-            newRotation.setAirports(new HashSet<>(createRouteAirports(newRotation, routeAirportMap)));
-
             rotations.add(newRotation);
         }
 
-        return rotations.size() > 0 ? routeRepository.saveAll(rotations) : null;
+        if (rotations.size() > 0) {
+            rotations = routeRepository.saveAll(rotations);
+            // Add Route airports
+            rotations.forEach(rotation -> rotation.setAirports(new HashSet<>(createRouteAirports(rotation, routeAirportMap))));
+        } else {
+            rotations = null;
+        }
+
+        return rotations;
     }
 
     private List<RouteAirport> createRouteAirports(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap) {
