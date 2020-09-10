@@ -97,25 +97,7 @@ public class CalculationServiceImpl implements ICalculationService {
 
     // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseFlight(Airport origin, Airport destination, Provider provider) {
-        Double tax = null;
-        if (isCanaryIslandsRoute(origin, destination)) {
-            if (isCanaryIslandsInternalRoute(origin, destination) && Boolean.TRUE.equals(provider.getCanaryIslands())) {
-                // ToDo: aplicar IGIC
-            } else {
-                tax = TAX_FREE;
-            }
-        } else if (isNationalProvider(provider)) {
-            tax = TAX_10;
-
-        } else if (isInternationalRoute(origin, destination)) {
-            // ToDo: revisar documento
-
-        } else if (isProviderNationalityOfRoute(provider, origin, destination)) {
-            taxFromOtherCountry(destination.getCountry());
-        } else {
-            tax = TAX_FREE;
-        }
-        return tax;
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
     }
 
     private Double getTaxOnPurchaseCargo(Provider provider) {
@@ -127,65 +109,51 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private Double getTaxOnPurchaseTransport(Airport origin, Airport destination, Provider provider) {
-        Double tax = TAX_FREE;
-
-        // ToDo: ver documento, traslados domesticos/no?
-
-        if (isCanaryIslandsInternalRoute(origin, destination)) {
-            if (isCanaryIslandsProvider(provider)) {
-                // ToDo: aplicar IGIC
-            } else {
-                tax = TAX_FREE;
-            }
-        }
-
+        Double tax = null;
         if (isSpainInternalRoute(origin, destination)) {
-            if (isNationalProvider(provider)) {
+            if (isCanaryIslandsInternalRoute(origin, destination)) {
+                if (isCanaryIslandsProvider(provider)) {
+                    // ToDo: aplicar IGIC
+                } else {
+                    tax = TAX_FREE;
+                }
+//            } else if (isCanaryIslandsRoute(origin, destination)) {
+//                tax = TAX_FREE;
+            } else if (isSpainProvider(provider)) {
                 tax = TAX_10;
             } else {
                 tax = TAX_FREE;
             }
+        } else if (isDomesticRoute(origin, destination)) {
+            if (isProviderNationalityOfRoute(provider, destination)) {
+                taxFromOtherCountry(provider.getCountry());
+            } else {
+                tax = TAX_FREE;
+            }
+        } else {
+            tax = TAX_FREE;
         }
-
         return tax;
     }
 
     // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseAirportFee(Airport origin, Airport destination, Provider provider) {
-        Double tax = TAX_FREE;
-
-        // ToDo: ver documento, traslados domesticos/no?
-
-        if (isCanaryIslandsInternalRoute(origin, destination)) {
-            if (isCanaryIslandsProvider(provider)) {
-                // ToDo: aplicar IGIC
-            } else {
-                tax = TAX_FREE;
-            }
-        }
-
-        if (isSpainInternalRoute(origin, destination)) {
-            if (isCanaryIslandsRoute(origin, destination) || !isNationalProvider(provider)) {
-                tax = TAX_FREE;
-            } else {
-                tax = TAX_10;
-            }
-        }
-        return tax;
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
     }
 
+    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseExtrasOnBoard(Airport origin, Airport destination, Provider provider) {
-        // ToDo: ver documento, traslados domesticos/no?
-        return null;
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
     }
 
     private Double getTaxOnPurchaseExtrasOnGround(Provider provider) {
         return genericProviderPurchaseTaxCalculation(provider, TAX_21);
     }
 
+    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseCateringOnBoard(Airport origin, Airport destination, Provider provider) {
-        // ToDo: ver documento, traslados domesticos/no?
-        return null;
+        // ToDo: 21% IVA para bebidas alcoholicas?
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
     }
 
     private Double getTaxOnPurchaseCateringOnGround(Provider provider) {
@@ -193,9 +161,9 @@ public class CalculationServiceImpl implements ICalculationService {
         return genericProviderPurchaseTaxCalculation(provider, TAX_10);
     }
 
+    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseCancellationFee(Airport origin, Airport destination, Provider provider) {
-        // ToDo: ver documento, traslados domesticos/no?
-        return null;
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_21);
     }
 
 
@@ -217,7 +185,7 @@ public class CalculationServiceImpl implements ICalculationService {
         return SPAIN_CODE.equals(client.getCountry().getCode());
     }
 
-    private boolean isNationalProvider(Provider provider) {
+    private boolean isSpainProvider(Provider provider) {
         return SPAIN_CODE.equals(provider.getCountry().getCode());
     }
 
@@ -241,8 +209,7 @@ public class CalculationServiceImpl implements ICalculationService {
         return Boolean.TRUE.equals(provider.getVies());
     }
 
-    private boolean isProviderNationalityOfRoute(Provider provider, Airport origin, Airport destination) {
-        // ToDo: como se sabe la nacionalidad de la ruta? De forma temporal se usa la nacionalidad del destino
+    private boolean isProviderNationalityOfRoute(Provider provider, Airport destination) {
         String routeNationality = destination.getCountry().getCode();
 
         return routeNationality.equals(provider.getCountry().getCode());
@@ -258,6 +225,10 @@ public class CalculationServiceImpl implements ICalculationService {
 
     private boolean isCanaryIslandsInternalRoute(Airport origin, Airport destination) {
         return Boolean.TRUE.equals(origin.getCanaryIslands()) && Boolean.TRUE.equals(destination.getCanaryIslands());
+    }
+
+    private boolean isDomesticRoute(Airport origin, Airport destination) {
+        return origin.getCountry().getId().equals(destination.getCountry().getId());
     }
 
 
@@ -300,7 +271,7 @@ public class CalculationServiceImpl implements ICalculationService {
         Double tax = null;
         if (isInternationalProvider(provider) || isCanaryIslandsProvider(provider)) {
             // ToDo: revisar documento
-        } else if (isNationalProvider(provider)) {
+        } else if (isSpainProvider(provider)) {
             tax = nationalTaxToApply;
         } else if (isVIESProvider(provider)) {
             tax = TAX_0;
@@ -310,6 +281,34 @@ public class CalculationServiceImpl implements ICalculationService {
         return tax;
     }
 
+    private Double genericRouteAndProviderTaxCalculation(final Airport origin, final Airport destination,
+                                                         final Provider provider, final Double nationalTaxToApply) {
+        Double tax = null;
+        if (isSpainInternalRoute(origin, destination)) {
+            if (isCanaryIslandsInternalRoute(origin, destination)) {
+                if (isCanaryIslandsProvider(provider)) {
+                    // ToDo: aplicar IGIC
+                } else {
+                    tax = TAX_FREE;
+                }
+            } else if (isCanaryIslandsRoute(origin, destination)) {
+                tax = TAX_FREE;
+            } else if (isSpainProvider(provider)) {
+                tax = nationalTaxToApply;
+            } else {
+                tax = TAX_FREE;
+            }
+        } else if (isDomesticRoute(origin, destination)) {
+            if (isProviderNationalityOfRoute(provider, destination)) {
+                taxFromOtherCountry(provider.getCountry());
+            } else {
+                tax = TAX_FREE;
+            }
+        } else {
+            tax = TAX_FREE;
+        }
+        return tax;
+    }
 
     private void taxFromOtherCountry(Country country) {
         // ToDo: definir exception específica
