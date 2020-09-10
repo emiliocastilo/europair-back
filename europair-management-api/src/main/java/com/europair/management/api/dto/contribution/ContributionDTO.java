@@ -8,7 +8,12 @@ import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.enums.ContributionStates;
 import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.ExchangeBuyTypeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,9 +59,15 @@ public class ContributionDTO {
     private AircraftDto aircraft;
 
     @JsonProperty("requestTime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate requestTime;
 
     @JsonProperty("quotedTime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate quotedTime;
 
     // maximum load who must be the airborne to the destiny
@@ -88,6 +99,6 @@ public class ContributionDTO {
     private Integer salesCommissionPercent;
 
     @JsonProperty("salesPricewithoutIVA")
-    private BigDecimal salesPricewithoutIVA;
+    private Boolean salesPricewithoutIVA;
 
 }
