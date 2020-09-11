@@ -2,11 +2,17 @@ package com.europair.management.rest.model.files.entity;
 
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.enums.OperationTypeEnum;
+import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
+
+/**
+ * This entity refers to Expediente in Spanish. This is a direct request of the Product Owner.
+ */
 @Entity
 @Table(name = "files")
 @Data
@@ -43,5 +49,8 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
   @Column(name = "operation_type")
   @Enumerated(EnumType.STRING)
   private OperationTypeEnum operationType;
+
+  @OneToMany(orphanRemoval = true, mappedBy = "file")
+  private List<Route> routes;
 
 }

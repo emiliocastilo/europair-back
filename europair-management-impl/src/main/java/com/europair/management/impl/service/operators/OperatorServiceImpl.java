@@ -1,13 +1,11 @@
 package com.europair.management.impl.service.operators;
 
-
 import com.europair.management.api.dto.operators.OperatorDTO;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.operators.IOperatorMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.operators.entity.Operator;
-
 import com.europair.management.rest.model.operators.repository.OperatorRepository;
 import com.europair.management.rest.model.operators.repository.OperatorSpecification;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Service
 @Transactional(readOnly = true)
@@ -73,7 +71,7 @@ public class OperatorServiceImpl implements IOperatorService {
     Operator operator = operatorRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Operator not found on id: " + id));
 
-    operator.setRemovedAt(new Date());
+    operator.setRemovedAt(LocalDate.now());
     operatorRepository.save(operator);
 
   }

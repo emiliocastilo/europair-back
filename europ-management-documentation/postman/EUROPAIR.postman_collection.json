@@ -1,0 +1,2954 @@
+{
+	"info": {
+		"_postman_id": "cfe531be-7c18-4536-9608-7c0004633bce",
+		"name": "EUROPAIR",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Aircraft",
+			"item": [
+				{
+					"name": "Base",
+					"item": [
+						{
+							"name": "base - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/bases/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"bases",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "base - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/bases",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"bases"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "base  - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"airport\": {\"id\": 1},\r\n    \"mainBase\": true\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/bases",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"bases"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "base  - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"id\": 1,\r\n    \"airport\": {\"id\": 2},\r\n    \"mainBase\": true\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/bases/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"bases",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "base - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/bases/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"bases",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Observation",
+					"item": [
+						{
+							"name": "observations - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observations - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/observations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"observations"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observations - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"aircraft\": {\"id\": 1},\r\n    \"observation\": \"Observation 1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/observations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"observations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observations - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"createdAt\": null,\r\n    \"createdBy\": null,\r\n    \"modifiedAt\": null,\r\n    \"modifiedBy\": null,\r\n    \"id\": 1,\r\n    \"observation\": \"Observation 1 updated\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observations - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircrafts/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircrafts",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6b7e0343-a5c1-4fbd-a13c-c2d2fdda133a",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "3037c06e-0cc1-424c-b15f-d354bf18e56d",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "aircraft - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/aircrafts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"aircrafts"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "filter_aircraftType.id",
+									"value": "1,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "filter_aircraftType.category.id",
+									"value": "1,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "filter_plateNumber",
+									"value": "JKL,CONTAINS",
+									"disabled": true
+								},
+								{
+									"key": "filter_bases.airport.id",
+									"value": "1,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "hasPrevious",
+									"value": "false",
+									"disabled": true
+								},
+								{
+									"key": "filter_name",
+									"value": "pepe,PEPITO",
+									"description": "invalid operator param",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircrafts - get by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/aircrafts/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircrafts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"operator\": {\"id\":1},\r\n    \"aircraftType\": {\"id\": 1},\r\n    \"bases\": [],\r\n    \"plateNumber\": \"1234WWW\",\r\n    \"productionYear\": 2019,\r\n    \"quantity\": 1,\r\n    \"insuranceEndDate\": \"2021-12-31\",\r\n    \"ambulance\": false,\r\n    \"daytimeConfiguration\": 100,\r\n    \"seatingF\": 20,\r\n    \"seatingC\": 100,\r\n    \"seatingY\": 200,\r\n    \"nighttimeConfiguration\": 80,\r\n    \"notes\": \"Notes new aircraft\",\r\n    \"insideUpgradeYear\": \"2019\",\r\n    \"outsideUpgradeYear\": \"2019\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/aircrafts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"aircrafts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft - update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"id\": 1,\r\n    \"operator\": {\"id\": 1},\r\n    \"aircraftType\": {\"id\": 2},\r\n    \"bases\": [],\r\n    \"plateNumber\": \"12TEST\",\r\n    \"productionYear\": 2019,\r\n    \"quantity\": 1,\r\n    \"insuranceEndDate\": \"2021-12-31\",\r\n    \"ambulance\": false,\r\n    \"daytimeConfiguration\": 100,\r\n    \"seatingF\": 20,\r\n    \"seatingC\": 100,\r\n    \"seatingY\": 200,\r\n    \"nighttimeConfiguration\": 80,\r\n    \"notes\": \"Notes new aircraft updated\",\r\n    \"insideUpgradeYear\": \"2019\",\r\n    \"outsideUpgradeYear\": \"2019\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/aircrafts/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircrafts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft - delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/aircrafts/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircrafts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Aircraft Category",
+			"item": [
+				{
+					"name": "SubCategory",
+					"item": [
+						{
+							"name": "subcategory - get by id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-categories/1/subcategories/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-categories",
+										"1",
+										"subcategories",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subcategory - filter",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-categories/1/subcategories",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-categories",
+										"1",
+										"subcategories"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subcategory - add",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"code\": \"SUB1\",\r\n    \"name\": \"subcategory 1\",\r\n    \"order\": 1\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircraft-categories/1/subcategories",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-categories",
+										"1",
+										"subcategories"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subcategory - update",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"code\": \"SUB1-1\",\r\n    \"name\": \"subcategory 1 Updated\",\r\n    \"order\": 20\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircraft-categories/1/subcategories/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-categories",
+										"1",
+										"subcategories",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subcategory - delete",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-categories/1/subcategories/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-categories",
+										"1",
+										"subcategories",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "aircraft category - get by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/aircraft-categories/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircraft-categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft category - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/aircraft-categories",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"aircraft-categories"
+							],
+							"query": [
+								{
+									"key": "filter_code",
+									"value": "1,CONTAINS",
+									"disabled": true
+								},
+								{
+									"key": "filter_code",
+									"value": "1,IN",
+									"disabled": true
+								},
+								{
+									"key": "filter_code",
+									"value": "1,IN",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft category - add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"code\": \"AAA1\",\r\n    \"name\": \"A\"\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/aircraft-categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircraft-categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft category - update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"id\": 1,\r\n    \"code\": \"AAA1\",\r\n    \"name\": \"A-A\"\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/aircraft-categories/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircraft-categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft category - delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/aircraft-categories/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircraft-categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Aircraft Type",
+			"item": [
+				{
+					"name": "Average Speed",
+					"item": [
+						{
+							"name": "average speed - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/average-speed/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"average-speed",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "average speed - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/average-speed",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"average-speed"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "average speed - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"fromDistance\": 1,\r\n    \"toDistance\": 1000,\r\n    \"distanceUnit\": \"NAUTIC_MILE\",\r\n    \"averageSpeed\": 200,\r\n    \"averageSpeedUnit\": \"KNOTS\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/aircraft-types/1/average-speed",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"aircraft-types",
+										"1",
+										"average-speed"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "average speed - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"createdAt\": null,\r\n    \"createdBy\": null,\r\n    \"modifiedAt\": null,\r\n    \"modifiedBy\": null,\r\n    \"id\": 1,\r\n    \"fromDistance\": 100.0,\r\n    \"toDistance\": 1000.0,\r\n    \"distanceUnit\": \"FOOT\",\r\n    \"averageSpeed\": 150.5,\r\n    \"averageSpeedUnit\": \"KILOMETER\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/average-speed/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"average-speed",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "average speed - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/average-speed/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"average-speed",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "85d39692-017a-4cf1-b3b9-13d2b36ba5cc",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "66d0f65d-90d0-4fa0-be88-0c8611ea6066",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Observation",
+					"item": [
+						{
+							"name": "observation - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observation  - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/observations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"observations"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observation  - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"observation\": \"Observation 1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/observations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"observations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observation  - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"createdAt\": null,\r\n    \"createdBy\": null,\r\n    \"modifiedAt\": null,\r\n    \"modifiedBy\": null,\r\n    \"id\": 1,\r\n    \"observation\": \"Observation 1 update\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "observation  - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/aircraft-types/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aircraft-types",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2d9f8831-89fc-49d0-b9a9-c1d6f59fd9b4",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9f1d40ab-fa81-416e-a9fa-5078794375e0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "aircraft type- get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/aircraft-types/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircraft-types",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft type - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/aircraft-types",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"aircraft-types"
+							],
+							"query": [
+								{
+									"key": "filter_code",
+									"value": "1,CONTAINS",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft type - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n    \"iataCode\": \"AAA\",\r\n    \"icaoCode\": \"AAAA\",\r\n    \"code\": \"AA\",\r\n    \"description\": \"Description AA\",\r\n    \"manufacturer\": \"Manufac-AA\",\r\n    \"category\": {\"id\":1},\r\n    \"subcategory\": {\"id\":2},\r\n    \"flightRange\": 100,\r\n    \"flightRangeUnit\": \"KILOMETER\",\r\n\r\n    \"maxCargo\": 50000\r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/aircraft-types",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"aircraft-types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft type - update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n   \"id\": 1,\r\n   \"iataCode\": \"AAA\",\r\n   \"icaoCode\": \"AAAA\",\r\n   \"code\": \"AA\",\r\n   \"description\": \"Description AA-2\",\r\n   \"manufacturer\": \"Manufac-AA\",\r\n   \"category\": {\"id\": 1, \"name\": \"trash\"},\r\n    \"subcategory\": {\"id\": 3},\r\n    \"flightRange\": 110.0,\r\n    \"flightRangeUnit\": \"KILOMETER\",\r\n    \"cabinWidth\": null,\r\n    \"cabinWidthUnit\": null,\r\n    \"cabinHeight\": null,\r\n    \"cabinHeightUnit\": null,\r\n    \"cabinLength\": null,\r\n    \"cabinLengthUnit\": null,\r\n    \"maxCargo\": 50000.0,\r\n    \"averageSpeed\": null,\r\n    \"observations\": [{\"observation\": \"test 1\"}],\r\n   \r\n    \"createdAt\": null,\r\n    \"createdBy\": null,\r\n    \"modifiedAt\": null,\r\n    \"modifiedBy\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/aircraft-types/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircraft-types",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "aircraft type - delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/aircraft-types/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aircraft-types",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2aa2df9d-0177-4126-bc65-5da5f6f9315c",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e5c27d0a-9837-474d-80e9-a238a2dadec0",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Airport",
+			"item": [
+				{
+					"name": "AirportObservation",
+					"item": [
+						{
+							"name": "airportObservation - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "airportObservation - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/observations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"observations"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "airportObservation - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"airport\": {\"id\":1},\r\n    \"observation\": \"Observation 1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/observations",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"observations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "airportObservation - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"id\": 1,\r\n    \"airport\": {\"id\":1},\r\n    \"observation\": \"Observation 1-1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "airportObservation - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/observations/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"observations",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Runway",
+					"item": [
+						{
+							"name": "runway - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/runways/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"runways",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "runway - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/runways",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"runways"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "runway - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"airport\": {\"id\":1},\r\n    \"name\": \"Pista 1\",\r\n    \"length\": {\r\n       \"value\": 1,\r\n       \"type\": \"KILOMETER\",\r\n       \"typeX\": \"NAUTIC_MILE\"\r\n    },\r\n    \"width\": {\r\n       \"value\": 100,\r\n       \"type\": \"METER\"\r\n    },\r\n    \"observation\": \"Observation 1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/airports/1/runways",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"airports",
+										"1",
+										"runways"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "runway - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"id\": 2,\r\n    \"airport\": {\"id\":1},\r\n    \"name\": \"Pista 2\",\r\n    \"length\": {\r\n       \"value\": 110,\r\n       \"type\": \"METER\"\r\n    },\r\n    \"width\": {\r\n       \"value\": 10,\r\n       \"type\": \"METER\"\r\n    },\r\n    \"observation\": \"Observation 1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/runways/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"runways",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "runway - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/runways/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"runways",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Airport Operators",
+					"item": [
+						{
+							"name": "operator - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/operators/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"operators",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "operator - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/operators",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"operators"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "operator - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"operator\": {\"id\":1},\r\n    \"comments\": \"Observation 1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/operators",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"operators"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "operator - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"createdAt\": null,\r\n    \"createdBy\": null,\r\n    \"modifiedAt\": null,\r\n    \"modifiedBy\": null,\r\n    \"id\": 1,\r\n    \"operator\": {\r\n        \"id\": 1,\r\n        \"iataCode\": null\r\n    },\r\n    \"airport\": null,\r\n    \"comments\": \"Observation 1 updated\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/operators/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"operators",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "operator - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/operators/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"operators",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "db5cc97f-f2be-49b0-934f-56029429876c",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "6f2fbfc6-ad97-490e-9dbf-4ed47a0de001",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Terminal",
+					"item": [
+						{
+							"name": "terminal - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/terminals/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"terminals",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "terminal - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/terminals",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"terminals"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "terminal - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"airport\": {\"id\":1},\r\n    \"code\": \"T1\",\r\n    \"name\": \"Terminal 1\",\r\n    \"observation\": \"Observation 1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/terminals",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"terminals"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "terminal - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"id\": 1,\r\n    \"airport\": {\"id\":1},\r\n    \"code\": \"T1-1\",\r\n    \"name\": \"Terminal 1-1\",\r\n    \"observation\": \"Observation 1-1\"\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/terminals/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"terminals",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "terminal - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/terminals/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"terminals",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Airport Region",
+					"item": [
+						{
+							"name": "region - get by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/regions/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"regions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "region  - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/regions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"regions"
+									],
+									"query": [
+										{
+											"key": "filter_code",
+											"value": "1,CONTAINS",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "region - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\r\n    \"id\": 1\r\n }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/airports/1/regions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"regions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "region - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/airports/1/regions/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"airports",
+										"1",
+										"regions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "airport - find by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/airports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"airports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airport - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airports?filter_name=A,CONTAINS",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports"
+							],
+							"query": [
+								{
+									"key": "filter_name",
+									"value": "A,CONTAINS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airport - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"iataCode\": \"AAA\",\r\n    \"icaoCode\": \"AAAA\",\r\n    \"name\": \"Airport A\",\r\n    \"country\": {\r\n        \"id\": 1\r\n    },\r\n    \"city\": {\r\n        \"id\": 1\r\n    },\r\n    \"timeZone\": \"GTM+1\",\r\n    \"elevation\": {\r\n        \"value\": 5000,\r\n        \"type\": \"KILOMETER\"\r\n    },\r\n    \"latitude\": 123,\r\n    \"longitude\": 123,\r\n    \"customs\": \"NO\",\r\n    \"specialConditions\": false,\r\n    \"flightRules\": \"IFR\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airport - update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"iataCode\": \"AAA\",\r\n    \"icaoCode\": \"AAAA\",\r\n    \"name\": \"Airport A2\",\r\n    \"country\": {\r\n        \"id\": 1\r\n    },\r\n    \"city\": {\r\n        \"id\": 2\r\n    },\r\n    \"timeZone\": \"GTM+1\",\r\n    \"elevation\": {\r\n        \"value\": 5000,\r\n        \"type\": \"KILOMETER\"\r\n    },\r\n    \"latitude\": 123,\r\n    \"longitude\": 123,\r\n    \"customs\": \"YES\",\r\n    \"specialConditions\": true,\r\n    \"flightRules\": \"IFR\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/airports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"airports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airport - delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/airports/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"airports",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "City",
+			"item": [
+				{
+					"name": "city - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cities?filter_name=MAL,CONTAINS",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cities"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "filter_id",
+									"value": "2,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "filter_name",
+									"value": "MAL,CONTAINS"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Conversions",
+			"item": [
+				{
+					"name": "get_allUTCValues",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/conversions/time",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"conversions",
+								"time"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transformTimeFromUTCIndicatorToUTCIndicator",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fromUTCIndicator\":\"TWO\",\r\n    \"time\":\"19:00\",\r\n    \"toUTCIndicator\":\"NINE\"\r\n    \r\n}\r\n\r\n    //\"toUTCIndicator\":\"TWO\"\r\n    //\"toUTCIndicator\":\"MINUS_THREE\"\r\n    //\"toUTCIndicator\":\"MINUS_HALF_PAST_TWO\"\r\n    //\"toUTCIndicator\":\"HALF_PAST_SIX\"",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/conversions/time",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"conversions",
+								"time"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Country",
+			"item": [
+				{
+					"name": "country - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/countries?filter_name=tal,CONTAINS",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"countries"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "filter_id",
+									"value": "2,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "filter_name",
+									"value": "tal,CONTAINS"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "Route",
+					"item": [
+						{
+							"name": "Rotation",
+							"item": [
+								{
+									"name": "rotation/route - update",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"id\": 2,\r\n    \"label\": \"PMI-XXX-PMI\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-01\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/files/1/routes/1/rotations/2",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"files",
+												"1",
+												"routes",
+												"1",
+												"rotations",
+												"2"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "route - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - find by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - add - DAILY",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"DAILY\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-30\",\r\n    \"rotationsNumber\": 5,\r\n    \"frequencyDays\": [\r\n        {\"weekday\": \"MONDAY\"},\r\n        {\"weekday\": \"WEDNESDAY\"}\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - add - WEEKLY",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"WEEKLY\",\r\n    \"startDate\": \"2020-10-03\",\r\n    \"endDate\": \"2020-11-30\",\r\n    \"rotationsNumber\": 6,\r\n    \"frequencyDays\": [\r\n        {\"weekday\": \"SATURDAY\"}\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - add - BIWEEKLY",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"BIWEEKLY\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-11-30\",\r\n    \"rotationsNumber\": 4,\r\n    \"frequencyDays\": [\r\n        {\"weekday\": \"SATURDAY\"}\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - add - DAY_OF_MONTH",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"DAY_OF_MONTH\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-12-31\",\r\n    \"rotationsNumber\": 4,\r\n    \"frequencyDays\": [\r\n        {\"monthDay\": 5},\r\n        {\"monthDay\": 25}\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"DAILY\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-30\",\r\n    \"rotationsNumber\": 5,\r\n    \"frequencyDays\": [\r\n        {\"weekday\": \"MONDAY\"},\r\n        {\"weekday\": \"WEDNESDAY\"}\r\n    ]\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Role",
+			"item": [
+				{
+					"name": "role - findAll",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/roles",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "role - update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"createdAt\": null,\r\n    \"createdBy\": null,\r\n    \"modifiedAt\": null,\r\n    \"modifiedBy\": null,\r\n    \"id\": 3,\r\n    \"name\": \"role3\",\r\n    \"description\": \"role3_description\",\r\n    \"tasks\": [\r\n        {\r\n            \"createdAt\": null,\r\n            \"createdBy\": null,\r\n            \"modifiedAt\": null,\r\n            \"modifiedBy\": null,\r\n            \"id\": 2,\r\n            \"name\": \"task2\",\r\n            \"description\": \"task2_description\",\r\n            \"screens\": [\r\n                {\r\n                    \"createdAt\": \"2020-07-23T22:00:00.000+00:00\",\r\n                    \"createdBy\": \"Sistema\",\r\n                    \"modifiedAt\": null,\r\n                    \"modifiedBy\": null,\r\n                    \"id\": 2,\r\n                    \"name\": \"Cotizaciones\",\r\n                    \"description\": \"Cotización de aviones ejecutivos\"\r\n                },\r\n                {\r\n                    \"createdAt\": \"2020-07-23T22:00:00.000+00:00\",\r\n                    \"createdBy\": \"Sistema\",\r\n                    \"modifiedAt\": null,\r\n                    \"modifiedBy\": null,\r\n                    \"id\": 3,\r\n                    \"name\": \"Aeropuertos\",\r\n                    \"description\": \"Gestión del maestro de aeropuertos\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"createdAt\": null,\r\n            \"createdBy\": null,\r\n            \"modifiedAt\": null,\r\n            \"modifiedBy\": null,\r\n            \"id\": 3,\r\n            \"name\": \"task3\",\r\n            \"description\": \"task3_description\",\r\n            \"screens\": [\r\n                {\r\n                    \"createdAt\": \"2020-07-23T22:00:00.000+00:00\",\r\n                    \"createdBy\": \"Sistema\",\r\n                    \"modifiedAt\": null,\r\n                    \"modifiedBy\": null,\r\n                    \"id\": 3,\r\n                    \"name\": \"Aeropuertos\",\r\n                    \"description\": \"Gestión del maestro de aeropuertos\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/roles/3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"roles",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Screen",
+			"item": [
+				{
+					"name": "screen - getAll by Filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/screens?filter_name=xp,CONTAINS",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"screens"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "filter_id",
+									"value": "2,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "filter_name",
+									"value": "xp,CONTAINS"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Task",
+			"item": [
+				{
+					"name": "task - getAll by Filter",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"operator\": 2,\r\n    \"aircraftType\": null,\r\n    \"airport\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/tasks?filter_name=k2,CONTAINS",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "filter_id",
+									"value": "2,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "filter_name",
+									"value": "k2,CONTAINS"
+								},
+								{
+									"key": "filter_name",
+									"value": "task3,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "hasPrevious",
+									"value": "false",
+									"disabled": true
+								},
+								{
+									"key": "filter_description",
+									"value": "1,CONTAINS",
+									"description": "invalid operator param",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "SaveNewUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"ivan.fanjulcosent\",\r\n    \"password\": \"europAir1234\",\r\n    \"name\":\"ivan\",\r\n    \"surname\":\"fanjul\",\r\n    \"email\":\"ivan.fanjulcosent@plexus.es\",\r\n    \"timeZone\":\"TWO\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "login_generate_token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "27b3b9b0-6d90-4226-9c2d-e6877e20e392",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"token\", jsonData.jwtToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"europ1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/login",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Aircraft",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/aircraft-search?baseIds=1&destinationAirportId=2",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"aircraft-search"
+					],
+					"query": [
+						{
+							"key": "baseIds",
+							"value": "1",
+							"description": "array"
+						},
+						{
+							"key": "baseIds",
+							"value": "2",
+							"disabled": true
+						},
+						{
+							"key": "countryIds",
+							"value": "1",
+							"description": "array",
+							"disabled": true
+						},
+						{
+							"key": "seats",
+							"value": "95",
+							"disabled": true
+						},
+						{
+							"key": "beds",
+							"value": "110",
+							"disabled": true
+						},
+						{
+							"key": "categoryId",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "subcategoryId",
+							"value": "5",
+							"disabled": true
+						},
+						{
+							"key": "exactSubcategory",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "ambulance",
+							"value": "true",
+							"disabled": true
+						},
+						{
+							"key": "aircraftTypes",
+							"value": "2",
+							"description": "array",
+							"disabled": true
+						},
+						{
+							"key": "operators",
+							"value": "1",
+							"description": "array",
+							"disabled": true
+						},
+						{
+							"key": "operationType",
+							"value": "ACMI",
+							"disabled": true
+						},
+						{
+							"key": "fromDistance",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "toDistance",
+							"value": "1000",
+							"disabled": true
+						},
+						{
+							"key": "distanceUnit",
+							"value": "KILOMETER",
+							"disabled": true
+						},
+						{
+							"key": "destinationAirportId",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "c2e9c2a0-66e2-417f-8b2d-0a121f123f88",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "edc7ff6c-2c06-4e06-9430-6bfaba596652",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "54157aba-75f0-4137-bdb1-840abcb4b1d6",
+			"key": "token",
+			"value": ""
+		},
+		{
+			"id": "a4044188-159b-4908-a272-608d090ecb35",
+			"key": "url",
+			"value": "http://localhost:8080"
+		},
+		{
+			"id": "e1487b3d-1550-4ba1-b85f-405fe139a7d5",
+			"key": "dev",
+			"value": "http://212.51.59.56/services"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
