@@ -1,13 +1,19 @@
 package com.europair.management.impl.service.calculation;
 
 import com.europair.management.api.enums.FileServiceEnum;
+import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.rest.model.airport.entity.Airport;
+import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.files.entity.Client;
+import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.Provider;
+import com.europair.management.rest.model.files.repository.FileRepository;
+import com.europair.management.rest.model.routes.entity.RouteAirport;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
+import java.util.Comparator;
 
 public class CalculationServiceImpl implements ICalculationService {
 
@@ -18,29 +24,75 @@ public class CalculationServiceImpl implements ICalculationService {
     private final Double TAX_0 = 0D;
     private final Double TAX_FREE = null;
 
-
-    // ToDo: un-mock when merged
-    // @Autowired
-    private ContributionRepository contributionRepository = new ContributionRepository();
+    @Autowired
+    private FileRepository fileRepository;
 
     @Override
-    public BigDecimal calculateIva(Long contributionId) {
-//        Contribution contribution = contributionRepository.findById(contributionId);
+    public Double calculateTaxToApply(Contribution contribution, boolean isSale) {
         FileServiceEnum serviceType = FileServiceEnum.FLIGHT; // FIXME: de donde sacamos este valor?
 
+        Airport origin = contribution.getRoute().getAirports().stream()
+                .min(Comparator.comparing(RouteAirport::getOrder))
+                .orElseThrow(() -> new InvalidArgumentException("No first airport found in the route with id: " + contribution.getRouteId()))
+                .getAirport();
+        Airport destination = contribution.getRoute().getAirports().stream()
+                .max(Comparator.comparing(RouteAirport::getOrder))
+                .orElseThrow(() -> new InvalidArgumentException("No last airport found in the route with id: " + contribution.getRouteId()))
+                .getAirport();
+        File file = fileRepository.findById(contribution.getFileId())
+                .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + contribution.getFileId()));
 
-        return null;
+        Double taxToApply;
+        if (isSale) {
+            Client client = file.getClient();
+            taxToApply = switch (serviceType) {
+                case AIRPORT_TAX -> getTaxOnSaleAirportFee(origin, destination);
+                case CANCEL_FEE -> getTaxOnSaleCancellationFee(origin, destination);
+                case CARGO -> getTaxOnSaleCargo(origin, destination, client);
+                case CATERING_ON_BOARD -> getTaxOnSaleCateringOnBoard(origin, destination);
+                case CATERING_ON_GROUND -> getTaxOnSaleCateringOnGround(client);
+                case COMMISSION -> getTaxOnSaleCommission(client);
+                case EXTRAS_ON_BOARD -> getTaxOnSaleExtrasOnBoard(origin, destination);
+                case EXTRAS_ON_GROUND -> getTaxOnSaleExtrasOnGround(client);
+                case FLIGHT -> getTaxOnSaleFlight(origin, destination);
+                case TRANSPORT -> getTaxOnSaleTransport(origin, destination);
+            };
+        } else {
+            Provider provider = file.getProvider();
+            taxToApply = switch (serviceType) {
+                case AIRPORT_TAX -> getTaxOnPurchaseAirportFee(origin, destination, provider);
+                case CANCEL_FEE -> getTaxOnPurchaseCancellationFee(origin, destination, provider);
+                case CARGO -> getTaxOnPurchaseCargo(provider);
+                case CATERING_ON_BOARD -> getTaxOnPurchaseCateringOnBoard(origin, destination, provider);
+                case CATERING_ON_GROUND -> getTaxOnPurchaseCateringOnGround(provider);
+                case COMMISSION -> getTaxOnPurchaseCommission(provider);
+                case EXTRAS_ON_BOARD -> getTaxOnPurchaseExtrasOnBoard(origin, destination, provider);
+                case EXTRAS_ON_GROUND -> getTaxOnPurchaseExtrasOnGround(provider);
+                case FLIGHT -> getTaxOnPurchaseFlight(origin, destination, provider);
+                case TRANSPORT -> getTaxOnPurchaseTransport(origin, destination, provider);
+            };
+        }
+
+        return taxToApply;
     }
 
+    @Override
+    public Double calculateTaxPercentageOnRoute(Contribution contribution, boolean isSale) {
+        Double taxPercentage = 100D;
+        FileServiceEnum serviceType = FileServiceEnum.FLIGHT; // FIXME: de donde sacamos este valor?
+        if (checkBalearicIslandsSpecialConditions(isSale, serviceType)) {
+            taxPercentage = getTaxBalearicIslands();
+        }
+
+        return taxPercentage;
+    }
 
     // Tax on sale (IVA devengado)
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnSaleFlight(Airport origin, Airport destination) {
         return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnSaleCargo(Airport origin, Airport destination, Client client) {
         Double tax = null;
         switch (client.getType()) {
@@ -63,12 +115,10 @@ public class CalculationServiceImpl implements ICalculationService {
         return tax;
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnSaleAirportFee(Airport origin, Airport destination) {
         return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnSaleExtrasOnBoard(Airport origin, Airport destination) {
         return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
     }
@@ -77,7 +127,6 @@ public class CalculationServiceImpl implements ICalculationService {
         return genericClientSaleTaxCalculation(client, TAX_21);
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnSaleCateringOnBoard(Airport origin, Airport destination) {
         return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
     }
@@ -87,7 +136,6 @@ public class CalculationServiceImpl implements ICalculationService {
         return genericClientSaleTaxCalculation(client, TAX_10);
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnSaleCancellationFee(Airport origin, Airport destination) {
         return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
     }
@@ -95,7 +143,6 @@ public class CalculationServiceImpl implements ICalculationService {
 
     // Tax on purchase (IVA soportado)
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseFlight(Airport origin, Airport destination, Provider provider) {
         return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
     }
@@ -136,12 +183,10 @@ public class CalculationServiceImpl implements ICalculationService {
         return tax;
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseAirportFee(Airport origin, Airport destination, Provider provider) {
         return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseExtrasOnBoard(Airport origin, Airport destination, Provider provider) {
         return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
     }
@@ -150,7 +195,6 @@ public class CalculationServiceImpl implements ICalculationService {
         return genericProviderPurchaseTaxCalculation(provider, TAX_21);
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseCateringOnBoard(Airport origin, Airport destination, Provider provider) {
         // ToDo: 21% IVA para bebidas alcoholicas?
         return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
@@ -161,7 +205,6 @@ public class CalculationServiceImpl implements ICalculationService {
         return genericProviderPurchaseTaxCalculation(provider, TAX_10);
     }
 
-    // ToDo: aplicar condiciones de Baleares
     private Double getTaxOnPurchaseCancellationFee(Airport origin, Airport destination, Provider provider) {
         return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_21);
     }
@@ -211,7 +254,6 @@ public class CalculationServiceImpl implements ICalculationService {
 
     private boolean isProviderNationalityOfRoute(Provider provider, Airport destination) {
         String routeNationality = destination.getCountry().getCode();
-
         return routeNationality.equals(provider.getCountry().getCode());
     }
 
@@ -315,20 +357,19 @@ public class CalculationServiceImpl implements ICalculationService {
         throw new ResourceNotFoundException("Must apply tax from: " + country.getCode() + " - " + country.getName());
     }
 
-    // Mock temporal classes
-
-    static class ContributionRepository {
-//        Contribution findById(Long id) {
-//            Contribution c = new Contribution();
-//
-//
-//            return c;
-//        }
-    }
-
     private Double getTaxBalearicIslands() {
-        return Math.random(); // ToDo implementar recuperar las tasas de baleares según la ruta
+        return Math.random(); // FIXME: implementar recuperar las tasas de baleares según la ruta
     }
 
+    private boolean checkBalearicIslandsSpecialConditions(boolean isSale, FileServiceEnum service) {
+        boolean hasBalearicIslandSpecialConditions = false;
+
+        switch (service) {
+            case FLIGHT, AIRPORT_TAX, EXTRAS_ON_BOARD, CATERING_ON_BOARD, CANCEL_FEE -> hasBalearicIslandSpecialConditions = true;
+            case CARGO -> hasBalearicIslandSpecialConditions = isSale;
+        }
+
+        return hasBalearicIslandSpecialConditions;
+    }
 
 }

@@ -1,9 +1,11 @@
 package com.europair.management.impl.service.calculation;
 
-import java.math.BigDecimal;
+import com.europair.management.rest.model.contributions.entity.Contribution;
 
 public interface ICalculationService {
 
-    BigDecimal calculateIva(Long contributionId);
+    Double calculateTaxToApply(Contribution contribution, boolean isSale);
+
+    Double calculateTaxPercentageOnRoute(Contribution contribution, boolean isSale);
 
 }
