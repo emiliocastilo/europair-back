@@ -7,6 +7,7 @@ import com.europair.management.impl.mappers.fleet.IAircraftMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
+import com.europair.management.rest.model.fleet.repository.AircraftCategoryRepository;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import com.europair.management.rest.model.operators.entity.Operator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class AircraftServiceImpl implements IAircraftService {
 
     @Autowired
     private AircraftRepository aircraftRepository;
+
+    @Autowired
+    private AircraftCategoryRepository aircraftCategoryRepository;
 
     @Override
     public AircraftDto findById(Long id) {
@@ -88,4 +92,5 @@ public class AircraftServiceImpl implements IAircraftService {
         aircraft.setRemovedAt(LocalDate.now());
         aircraftRepository.save(aircraft);
     }
+
 }
