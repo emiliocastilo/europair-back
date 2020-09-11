@@ -39,19 +39,19 @@ import java.util.stream.Collectors;
 public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
     @Value("${europair.aircraft.search.default.category.operation.acmi}")
-    private String DEFAULT_TYPE_FOR_OPERATION_ACMI;
+    private static String DEFAULT_TYPE_FOR_OPERATION_ACMI;
 
     @Value("${europair.aircraft.search.default.category.operation.commercial}")
-    private String DEFAULT_TYPE_FOR_OPERATION_COMMERCIAL;
+    private static String DEFAULT_TYPE_FOR_OPERATION_COMMERCIAL;
 
     @Value("${europair.aircraft.search.default.category.operation.executive}")
-    private String DEFAULT_TYPE_FOR_OPERATION_EXECUTIVE;
+    private static String DEFAULT_TYPE_FOR_OPERATION_EXECUTIVE;
 
     @Value("${europair.aircraft.search.default.category.operation.charge}")
-    private String DEFAULT_TYPE_FOR_OPERATION_CHARGE;
+    private static String DEFAULT_TYPE_FOR_OPERATION_CHARGE;
 
     @Value("${europair.aircraft.search.default.category.operation.group}")
-    private String DEFAULT_TYPE_FOR_OPERATION_GROUP;
+    private static String DEFAULT_TYPE_FOR_OPERATION_GROUP;
 
     private final Unit DEFAULT_SPEED_UNIT = Unit.KNOTS;
     private final Unit DEFAULT_DISTANCE_UNIT = Unit.NAUTIC_MILE;
