@@ -1,10 +1,7 @@
 package com.europair.management.impl.service.contribution;
 
-import com.europair.management.api.dto.airport.AirportDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
-import com.europair.management.api.service.airport.IAirportController;
 import com.europair.management.api.service.contribution.IContributionController;
-import com.europair.management.impl.service.airport.IAirportService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import lombok.extern.slf4j.Slf4j;
@@ -41,14 +38,14 @@ public class ContributionController implements IContributionController {
 
     @Override
     public ResponseEntity<ContributionDTO> saveContribution(@NotNull ContributionDTO contributionDTO) {
-        final ContributionDTO dtoSaved = contributionService.saveContribution(contributionDTO);
+        final ContributionDTO contributionDTOSaved = contributionService.saveContribution(contributionDTO);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(dtoSaved.getId())
+                .buildAndExpand(contributionDTOSaved.getId())
                 .toUri();
 
-        return ResponseEntity.created(location).body(dtoSaved);
+        return ResponseEntity.created(location).body(contributionDTOSaved);
     }
 
     @Override

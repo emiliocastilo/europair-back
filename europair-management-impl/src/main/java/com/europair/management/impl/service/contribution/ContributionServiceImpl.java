@@ -7,6 +7,8 @@ import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,19 +16,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class ContributionServiceImpl implements IContributionService {
 
     @Autowired
     private ContributionRepository contributionRepository;
 
+    @Autowired
+    private RouteRepository routeRepository;
+
     @Override
     public Page<ContributionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
         return contributionRepository.findContributionByCriteria(criteria, pageable).map(IContributionMapper.INSTANCE::toDto);
-
     }
 
     @Override
@@ -36,6 +39,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public ContributionDTO saveContribution(ContributionDTO contributionDTO) {
         if (contributionDTO.getId() != null) {
             throw new InvalidArgumentException(String.format("New Contribution expected. Identifier %s got", contributionDTO.getId()));
@@ -44,10 +48,18 @@ public class ContributionServiceImpl implements IContributionService {
         Contribution contribution = IContributionMapper.INSTANCE.toEntity(contributionDTO);
         contribution = contributionRepository.save(contribution);
 
+        // must activate flag in route to indicate the route has a contribution
+        final Long routeId = contribution.getRouteId();
+        Route route = routeRepository.findById(routeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + routeId));
+        route.setHasContributions(true);
+        routeRepository.save(route);
+
         return IContributionMapper.INSTANCE.toDto(contribution);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public ContributionDTO updateContribution(Long id, ContributionDTO contributionDTO) {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contribution not found with id: " + id));
@@ -58,6 +70,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteContribution(Long id) {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Contribution not found with id: " + id));

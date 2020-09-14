@@ -138,7 +138,20 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: route_frequency_days
-
+  - changeSet:
+      id: 10092020_routes_master_v3_routes_table
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add column has_contributions to table"
+      changes:
+        - addColumn:
+            tableName: routes
+            columns:
+              - column:
+                  name: has_contributions
+                  type: boolean
+                  remarks: soft removal timestamp
+                  defaultValueBoolean: false
 
   - changeSet:
       id: 20200902_routes_v1_20200909_route_airport_table
