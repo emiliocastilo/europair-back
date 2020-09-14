@@ -66,18 +66,5 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
         userRepository.deleteById(id);
     }
-
-    private UserDTO updateUserValues(Long id, UserDTO userDTO) {
-        UserDTO dto = new UserDTO();
-        dto.setId(id);
-        dto.setUsername(userDTO.getUsername());
-        dto.setName(userDTO.getName());
-        dto.setSurname(userDTO.getSurname());
-        dto.setEmail(userDTO.getEmail());
-        dto.setTimeZone(userDTO.getTimeZone());
-        dto.setRoles(userDTO.getRoles());
-        dto.setTasks(userDTO.getTasks());
-
-        return dto;
-    }
+    
 }
