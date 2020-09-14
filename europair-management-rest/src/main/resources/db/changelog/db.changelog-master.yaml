@@ -113,6 +113,3 @@ databaseChangeLog:
   - include:
       file: 2020/20200908_vat_balearics_table_v1.yaml
       relativeToChangelogFile: true
-  - include:
-      file: 2020/20200908_vat_balearics_data_v1.yaml
-      relativeToChangelogFile: true

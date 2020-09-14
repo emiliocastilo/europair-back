@@ -19,19 +19,23 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: vat_balearics_id_pk
               - column:
-                  name: origin_airport
-                  type: varchar(3)
-                  remarks: origin airport
+                  name: origin_airport_id
+                  type: int
+                  remarks: origin airport id
                   constraints:
                     nullable: false
+                    foreignKeyName: vat_balearics_origin_airport_fk
+                    references: airports(id)
               - column:
-                  name: destination_airport
-                  type: varchar(3)
-                  remarks: destination airport
+                  name: destination_airport_id
+                  type: int
+                  remarks: destination airport id
                   constraints:
                     nullable: false
+                    foreignKeyName: vat_balearics_destination_airport_fk
+                    references: airports(id)
               - column:
-                  name: route_pct_with_vat
+                  name: percentage
                   type: decimal(5,2)
                   remarks: Route percentage with VAT
                   constraints:
