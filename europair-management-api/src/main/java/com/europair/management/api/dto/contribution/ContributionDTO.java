@@ -1,6 +1,5 @@
 package com.europair.management.api.dto.contribution;
 
-import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.api.dto.operators.OperatorDTO;
@@ -12,16 +11,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -59,16 +57,14 @@ public class ContributionDTO {
     private AircraftDto aircraft;
 
     @JsonProperty("requestTime")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate requestTime;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime requestTime;
 
     @JsonProperty("quotedTime")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
-    @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = LocalDateSerializer.class)
-    private LocalDate quotedTime;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime quotedTime;
 
     // maximum load who must be the airborne to the destiny
     @JsonProperty("cargoAirborne")

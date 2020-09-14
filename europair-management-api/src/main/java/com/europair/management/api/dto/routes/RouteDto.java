@@ -47,6 +47,6 @@ public class RouteDto {
     private List<RouteFrequencyDayDto> frequencyDays;
 
     @JsonProperty("hasContributions")
-    private Boolean hasContributions;
+    private Boolean hasContributions = false;
 
 }

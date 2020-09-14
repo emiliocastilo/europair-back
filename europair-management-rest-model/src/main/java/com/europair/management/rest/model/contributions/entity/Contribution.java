@@ -14,6 +14,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "contributions")
@@ -57,20 +58,20 @@ public class Contribution extends SoftRemovableBaseEntity implements Serializabl
     private Aircraft aircraft;
 
     @Column(name = "request_time")
-    private LocalDate requestTime;
+    private LocalDateTime requestTime;
 
     @Column(name = "quoted_time")
-    private LocalDate quotedTime;
+    private LocalDateTime quotedTime;
 
     /* TODO: this hours must be in the route delete if needed
 
     // hour that confirms the airport to flight
     @Column(name = "confirmed_time")
-    private LocalDate confirmedTime;
+    private LocalDateTime confirmedTime;
 
-    private LocalDate departureRealTime;
+    private LocalDateTime departureRealTime;
 
-    private LocalDate arriveRealTime;
+    private LocalDateTime arriveRealTime;
     */
 
 
