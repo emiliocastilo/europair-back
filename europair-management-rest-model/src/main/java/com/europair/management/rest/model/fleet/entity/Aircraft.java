@@ -2,21 +2,15 @@ package com.europair.management.rest.model.fleet.entity;
 
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.common.TextField;
+import com.europair.management.rest.model.contributionaircraft.entity.ContributionAircraft;
 import com.europair.management.rest.model.operators.entity.Operator;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "aircrafts")
@@ -47,7 +41,7 @@ public class Aircraft extends SoftRemovableBaseEntity implements Serializable {
     private Integer quantity;
 
     @Column(name = "insurance_end_date")
-    private Date insuranceEndDate;
+    private LocalDate insuranceEndDate;
 
     private Boolean ambulance;
 
@@ -77,4 +71,7 @@ public class Aircraft extends SoftRemovableBaseEntity implements Serializable {
 
     @OneToMany(mappedBy = "aircraft", orphanRemoval = true)
     private List<AircraftObservation> observations;
+
+    @OneToMany(mappedBy = "aircraft")
+    private Set<ContributionAircraft> contributionAircrafts;
 }

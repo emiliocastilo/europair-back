@@ -9,6 +9,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+
+/**
+ * This entity refers to Expediente in Spanish. This is a direct request of the Product Owner.
+ */
 @Entity
 @Table(name = "files")
 @Data

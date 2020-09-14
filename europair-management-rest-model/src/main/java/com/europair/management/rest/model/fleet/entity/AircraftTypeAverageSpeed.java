@@ -43,7 +43,7 @@ public class AircraftTypeAverageSpeed extends AuditModificationBaseEntity implem
     @Column(name = "average_speed", nullable = false)
     private Double averageSpeed;
 
-    @Column(name = "average_speed_unit")
+    @Column(name = "average_speed_unit", nullable = false)
     @Enumerated(EnumType.STRING)
     private Unit averageSpeedUnit;
 

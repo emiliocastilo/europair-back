@@ -66,5 +66,5 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
         userRepository.deleteById(id);
     }
-    
+
 }
