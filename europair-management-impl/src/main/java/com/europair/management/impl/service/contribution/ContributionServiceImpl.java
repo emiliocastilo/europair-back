@@ -4,9 +4,11 @@ import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
+import com.europair.management.impl.service.flights.IFlightTaxService;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.flights.entity.FlightTax;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,6 +29,9 @@ public class ContributionServiceImpl implements IContributionService {
 
     @Autowired
     private RouteRepository routeRepository;
+
+    @Autowired
+    private IFlightTaxService flightTaxService;
 
     @Override
     public Page<ContributionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
@@ -54,6 +60,9 @@ public class ContributionServiceImpl implements IContributionService {
                 .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + routeId));
         route.setHasContributions(true);
         routeRepository.save(route);
+
+        // Add flight taxes for the contribution
+        List<FlightTax> flightTaxes = flightTaxService.saveFlightTaxes(contribution, route);
 
         return IContributionMapper.INSTANCE.toDto(contribution);
     }

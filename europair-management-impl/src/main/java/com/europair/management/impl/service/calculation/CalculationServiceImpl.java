@@ -28,9 +28,47 @@ public class CalculationServiceImpl implements ICalculationService {
     private FileRepository fileRepository;
 
     @Override
-    public Double calculateTaxToApply(Contribution contribution, boolean isSale) {
-        FileServiceEnum serviceType = FileServiceEnum.FLIGHT; // FIXME: de donde sacamos este valor?
+    public Double calculateFlightTaxToApply(Contribution contribution, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
+        File file = fileRepository.findById(contribution.getFileId())
+                .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + contribution.getFileId()));
 
+        Double taxToApply;
+        if (isSale) {
+            Client client = file.getClient();
+            taxToApply = switch (serviceType) {
+                case AIRPORT_TAX -> getTaxOnSaleAirportFee(origin, destination);
+                case CANCEL_FEE -> getTaxOnSaleCancellationFee(origin, destination);
+                case CARGO -> getTaxOnSaleCargo(origin, destination, client);
+                case CATERING_ON_BOARD -> getTaxOnSaleCateringOnBoard(origin, destination);
+                case CATERING_ON_GROUND -> getTaxOnSaleCateringOnGround(client);
+                case COMMISSION -> getTaxOnSaleCommission(client);
+                case EXTRAS_ON_BOARD -> getTaxOnSaleExtrasOnBoard(origin, destination);
+                case EXTRAS_ON_GROUND -> getTaxOnSaleExtrasOnGround(client);
+                case FLIGHT -> getTaxOnSaleFlight(origin, destination);
+                case TRANSPORT -> getTaxOnSaleTransport(origin, destination);
+            };
+        } else {
+            Provider provider = file.getProvider();
+            taxToApply = switch (serviceType) {
+                case AIRPORT_TAX -> getTaxOnPurchaseAirportFee(origin, destination, provider);
+                case CANCEL_FEE -> getTaxOnPurchaseCancellationFee(origin, destination, provider);
+                case CARGO -> getTaxOnPurchaseCargo(provider);
+                case CATERING_ON_BOARD -> getTaxOnPurchaseCateringOnBoard(origin, destination, provider);
+                case CATERING_ON_GROUND -> getTaxOnPurchaseCateringOnGround(provider);
+                case COMMISSION -> getTaxOnPurchaseCommission(provider);
+                case EXTRAS_ON_BOARD -> getTaxOnPurchaseExtrasOnBoard(origin, destination, provider);
+                case EXTRAS_ON_GROUND -> getTaxOnPurchaseExtrasOnGround(provider);
+                case FLIGHT -> getTaxOnPurchaseFlight(origin, destination, provider);
+                case TRANSPORT -> getTaxOnPurchaseTransport(origin, destination, provider);
+            };
+        }
+        Double taxPercentage = calculateTaxPercentageOnRoute(serviceType, isSale);
+
+        return taxToApply != null ? taxToApply * (taxPercentage / 100D) : null;
+    }
+
+    @Override
+    public Double calculateTaxToApply(Contribution contribution, FileServiceEnum serviceType, boolean isSale) {
         Airport origin = contribution.getRoute().getAirports().stream()
                 .min(Comparator.comparing(RouteAirport::getOrder))
                 .orElseThrow(() -> new InvalidArgumentException("No first airport found in the route with id: " + contribution.getRouteId()))
@@ -77,9 +115,8 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     @Override
-    public Double calculateTaxPercentageOnRoute(Contribution contribution, boolean isSale) {
+    public Double calculateTaxPercentageOnRoute(FileServiceEnum serviceType, boolean isSale) {
         Double taxPercentage = 100D;
-        FileServiceEnum serviceType = FileServiceEnum.FLIGHT; // FIXME: de donde sacamos este valor?
         if (checkBalearicIslandsSpecialConditions(isSale, serviceType)) {
             taxPercentage = getTaxBalearicIslands();
         }

@@ -1,5 +1,6 @@
 package com.europair.management.impl.service.routes;
 
+import com.europair.management.api.dto.flights.FlightDTO;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
@@ -7,6 +8,7 @@ import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
+import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
@@ -26,7 +28,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
@@ -61,6 +62,8 @@ public class RouteServiceImpl implements IRouteService {
     @Autowired
     private RouteAirportRepository routeAirportRepository;
 
+    @Autowired
+    private IFlightService flightService;
 
     @Override
     public Page<RouteDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
@@ -119,11 +122,6 @@ public class RouteServiceImpl implements IRouteService {
         // Create rotations
         List<Route> rotations = createRotations(route, routeAirports);
         route.setRotations(rotations);
-
-        // Create flights
-        if (!CollectionUtils.isEmpty(rotations)) {
-            // ToDo: crear vuelos ??
-        }
 
         return IRouteMapper.INSTANCE.toDto(route);
     }
@@ -196,6 +194,10 @@ public class RouteServiceImpl implements IRouteService {
             rotations = routeRepository.saveAll(rotations);
             // Add Route airports
             rotations.forEach(rotation -> rotation.setAirports(new HashSet<>(createRouteAirports(rotation, routeAirportMap))));
+
+            // Add flights
+            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFile().getId()));
+
         } else {
             rotations = null;
         }
@@ -326,4 +328,20 @@ public class RouteServiceImpl implements IRouteService {
         // ToDo: modificar vuelos??
         return IRouteMapper.INSTANCE.toDto(route);
     }
+
+    // Flights
+    private void createFlights(@NotNull final Route rotation, final Long fileId) {
+        List<Airport> airports = rotation.getAirports().stream()
+                .sorted(Comparator.comparing(RouteAirport::getOrder))
+                .map(RouteAirport::getAirport)
+                .collect(Collectors.toList());
+        for (int i = 0; i < airports.size() - 1; i++) {
+            FlightDTO flightDTO = new FlightDTO();
+            flightDTO.setOrigin(airports.get(i).getIataCode());
+            flightDTO.setDestination(airports.get(i + 1).getIataCode());
+            // ToDo: setear más campos???
+            flightService.saveFlight(fileId, rotation.getId(), flightDTO);
+        }
+    }
+
 }
