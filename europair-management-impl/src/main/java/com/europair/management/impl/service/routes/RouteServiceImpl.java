@@ -3,8 +3,6 @@ package com.europair.management.impl.service.routes;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
 import com.europair.management.impl.util.Utils;
@@ -20,8 +18,10 @@ import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
@@ -62,14 +62,14 @@ public class RouteServiceImpl implements IRouteService {
     public RouteDto findById(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         return IRouteMapper.INSTANCE.toDto(routeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id)));
     }
 
     @Override
     public RouteDto saveRoute(final Long fileId, RouteDto routeDto) {
         checkIfFileExists(fileId);
         if (routeDto.getId() != null) {
-            throw new InvalidArgumentException(String.format("New Route expected. Identifier %s got", routeDto.getId()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Route expected. Identifier %s got", routeDto.getId()));
         }
 
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
@@ -104,7 +104,7 @@ public class RouteServiceImpl implements IRouteService {
     public RouteDto updateRoute(final Long fileId, Long id, RouteDto routeDto) {
         checkIfFileExists(fileId);
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
         IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
 
         // Delete route frequency days
@@ -134,14 +134,14 @@ public class RouteServiceImpl implements IRouteService {
     public void deleteRoute(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         if (!routeRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Route not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id);
         }
         routeRepository.deleteById(id);
     }
 
     private void checkIfFileExists(final Long fileId) {
         if (!fileRepository.existsById(fileId)) {
-            throw new ResourceNotFoundException("File not found with id: " + fileId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
         }
     }
 
@@ -202,7 +202,7 @@ public class RouteServiceImpl implements IRouteService {
             case BIWEEKLY:
                 DayOfWeek min = dayOfWeekList.stream().min(Comparator.comparingInt(DayOfWeek::getValue)).orElse(null);
                 DayOfWeek max = dayOfWeekList.stream().max(Comparator.comparingInt(DayOfWeek::getValue))
-                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Route frequency days found!"));
 
                 LocalDate startCounter;
                 if (firstRotation) {
@@ -227,7 +227,7 @@ public class RouteServiceImpl implements IRouteService {
                 break;
             case DAY_OF_MONTH:
                 Integer minDayOfMonth = dayOfMonthList.stream().min(Integer::compareTo)
-                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Route frequency days found!"));
 
                 if (firstRotation && dayOfMonthList.contains(rotationDate.getDayOfMonth())) {
                     return rotationDate;
@@ -247,14 +247,14 @@ public class RouteServiceImpl implements IRouteService {
                 try {
                     nextMonthDate = LocalDate.of(nextMonthDate.getYear(), nextMonthDate.getMonth(), nextMonthDay);
                     if (nextMonthDate.isAfter(route.getEndDate())) {
-                        throw new InvalidArgumentException("Rotation date after end date: " + nextMonthDate);
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rotation date after end date: " + nextMonthDate);
                     } else {
                         return nextMonthDate;
                     }
 
                 } catch (DateTimeException e) {
                     // ToDo: lanzar exception o seleccionar otro día??
-                    throw new InvalidArgumentException("Rotation date out of range (yyyy-MM-dd): " +
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rotation date out of range (yyyy-MM-dd): " +
                             nextMonthDate.getYear() + "-" + nextMonthDate.getMonth() + "-" + nextMonthDay);
                 }
         }
@@ -265,10 +265,10 @@ public class RouteServiceImpl implements IRouteService {
     @Override
     public RouteDto updateRouteRotation(Long routeId, Long id, RouteDto routeDto) {
         if (!routeRepository.existsById(routeId)) {
-            throw new ResourceNotFoundException("Route not found with id: " + routeId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
         }
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rotation not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rotation not found with id: " + id));
         IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
         route = routeRepository.save(route);
 

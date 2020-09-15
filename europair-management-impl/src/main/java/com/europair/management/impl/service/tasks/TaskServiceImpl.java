@@ -3,7 +3,6 @@ package com.europair.management.impl.service.tasks;
 
 import com.europair.management.api.dto.screens.ScreenDTO;
 import com.europair.management.api.dto.tasks.TaskDTO;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.tasks.TaskMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.screens.entity.Screen;
@@ -16,8 +15,10 @@ import com.europair.management.rest.model.tasksscreens.repository.TasksScreensRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -36,9 +37,9 @@ public class TaskServiceImpl implements ITaskService {
   }
 
   @Override
-  public TaskDTO findById(Long id) throws ResourceNotFoundException {
+  public TaskDTO findById(Long id) {
     return TaskMapper.INSTANCE.toDto(taskRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("Task not found on id: " + id)));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found on id: " + id)));
   }
 
   @Override
@@ -52,7 +53,7 @@ public class TaskServiceImpl implements ITaskService {
   public TaskDTO updateTask(final Long id, final TaskDTO taskDTO) {
 
     Task taskBD = taskRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("Task not found on id: " + id));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found on id: " + id));
 
     /*
       must iterate over the dto screens list adding all the screens that are not in the screens JPA list
@@ -61,7 +62,7 @@ public class TaskServiceImpl implements ITaskService {
       if (!existIdScreenDTOInJPAList(screenDTO, taskBD.getTasksScreens())){
 
         // we have left hand side of the relationship task but we must have both
-        Screen screen = screenRepository.findById(screenDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Screen not found with id: " + taskDTO.getId()));
+        Screen screen = screenRepository.findById(screenDTO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Screen not found with id: " + taskDTO.getId()));
 
         TasksScreensPK tasksScreensPK = new TasksScreensPK();
         tasksScreensPK.setTaskId(taskBD.getId());
@@ -84,7 +85,7 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     taskBD = taskRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Task not found on id: " + id));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found on id: " + id));
 
     return TaskMapper.INSTANCE.toDto(taskBD);
   }
@@ -115,7 +116,7 @@ public class TaskServiceImpl implements ITaskService {
   public void deleteTask(Long id) {
 
     Task roleBD = taskRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("Task not found on id: " + id));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found on id: " + id));
     taskRepository.deleteById(id);
   }
 

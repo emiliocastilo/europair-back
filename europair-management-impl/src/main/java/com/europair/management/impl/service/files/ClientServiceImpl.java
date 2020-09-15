@@ -1,9 +1,6 @@
 package com.europair.management.impl.service.files;
 
-
 import com.europair.management.api.dto.files.ClientDto;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.files.IClientMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.files.entity.Client;
@@ -11,8 +8,10 @@ import com.europair.management.rest.model.files.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -24,7 +23,7 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public ClientDto findById(Long id) {
         return IClientMapper.INSTANCE.toDto(clientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found with id: " + id)));
     }
 
     @Override
@@ -37,7 +36,7 @@ public class ClientServiceImpl implements IClientService {
     public ClientDto saveClient(final ClientDto clientDto) {
 
         if (clientDto.getId() != null) {
-            throw new InvalidArgumentException(String.format("New client expected. Identifier %s got", clientDto.getId()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New client expected. Identifier %s got", clientDto.getId()));
         }
         Client client = IClientMapper.INSTANCE.toEntity(clientDto);
         client = clientRepository.save(client);
@@ -48,7 +47,7 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public ClientDto updateClient(Long id, ClientDto clientDto) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Client not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found with id: " + id));
 
         IClientMapper.INSTANCE.updateFromDto(clientDto, client);
         client = clientRepository.save(client);
@@ -59,7 +58,7 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public void deleteClient(Long id) {
         if (!clientRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Client not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found with id: " + id);
         }
         clientRepository.deleteById(id);
     }
