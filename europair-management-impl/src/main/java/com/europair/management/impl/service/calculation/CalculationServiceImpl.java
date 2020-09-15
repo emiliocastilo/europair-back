@@ -12,9 +12,11 @@ import com.europair.management.rest.model.files.entity.Provider;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 
+@Service
 public class CalculationServiceImpl implements ICalculationService {
 
     private final String SPAIN_CODE = "ES";

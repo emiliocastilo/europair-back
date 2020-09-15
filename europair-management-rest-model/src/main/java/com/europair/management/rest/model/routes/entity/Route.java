@@ -6,6 +6,7 @@ import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -28,6 +29,7 @@ import java.util.Set;
 @Entity
 @Table(name = "routes")
 @Data
+@EqualsAndHashCode(exclude = {"rotations", "flights", "frequencyDays", "contributions", "airports"})
 public class Route extends AuditModificationBaseEntity implements Serializable {
 
     @Id

@@ -211,7 +211,9 @@ public class RouteServiceImpl implements IRouteService {
         for (int i = 0; i < airportCodes.size(); i++) {
             RouteAirport routeAirport = new RouteAirport();
             routeAirport.setRouteId(rotation.getId());
+            routeAirport.setRoute(rotation);
             routeAirport.setAirportId(routeAirportMap.get(airportCodes.get(i)).getId());
+            routeAirport.setAirport(routeAirportMap.get(airportCodes.get(i)));
             routeAirport.setOrder(i);
             airportList.add(routeAirport);
         }
@@ -340,6 +342,7 @@ public class RouteServiceImpl implements IRouteService {
             flightDTO.setOrigin(airports.get(i).getIataCode());
             flightDTO.setDestination(airports.get(i + 1).getIataCode());
             // ToDo: setear más campos???
+            flightDTO.setDepartureTime(LocalDate.now()); // Está como not null en bdd ??
             flightService.saveFlight(fileId, rotation.getId(), flightDTO);
         }
     }

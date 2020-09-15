@@ -36,6 +36,7 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
         List<FlightTax> flightTaxes = new ArrayList<>();
         final Map<String, Airport> airportMap = route.getAirports().stream()
                 .map(RouteAirport::getAirport)
+                .distinct()
                 .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
         if (!CollectionUtils.isEmpty(route.getFlights())) {
