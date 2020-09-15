@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.flights;
 
 import com.europair.management.api.enums.FileServiceEnum;
+import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.impl.service.calculation.ICalculationService;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
@@ -9,14 +10,12 @@ import com.europair.management.rest.model.flights.entity.FlightTax;
 import com.europair.management.rest.model.flights.repository.FlightTaxRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
-import com.europair.management.rest.model.servicetypes.entity.ServiceType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,8 +39,10 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
                 .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
         if (!CollectionUtils.isEmpty(route.getFlights())) {
-            FileServiceEnum serviceType = FileServiceEnum.FLIGHT; // FIXME de donde sacamos el tipo de servicio?
-            boolean isSale = true; // FIXME de donde sacamos si es una venta o compra??
+            FileServiceEnum serviceType = FileServiceEnum.FLIGHT;
+            if (contribution.getFile() != null && OperationTypeEnum.CHARGE.equals(contribution.getFile().getOperationType())) {
+                serviceType = FileServiceEnum.CARGO;
+            }
 
             for (Flight flight : route.getFlights()) {
                 FlightTax ft = new FlightTax();
@@ -52,16 +53,15 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
                 Airport origin = airportMap.get(flight.getOrigin());
                 Airport destination = airportMap.get(flight.getDestination());
 
-                Double tax = calculationService.calculateFlightTaxToApply(contribution, origin, destination, serviceType, isSale);
-                ft.setTax(tax);
-                // ToDo: precio * tax -> como calculamos el precio del vuelo ??
-                ft.setTaxAmount(null);
+                Double taxOnSale = calculationService.calculateFlightTaxToApply(contribution, origin, destination, serviceType, true);
+                ft.setTaxOnSale(taxOnSale);
+                Double taxOnPurchase = calculationService.calculateFlightTaxToApply(contribution, origin, destination, serviceType, false);
+                ft.setTaxOnPurchase(taxOnPurchase);
 
                 flightTaxes.add(ft);
             }
             flightTaxes = flightTaxRepository.saveAll(flightTaxes);
         }
-
 
 
         return flightTaxes;

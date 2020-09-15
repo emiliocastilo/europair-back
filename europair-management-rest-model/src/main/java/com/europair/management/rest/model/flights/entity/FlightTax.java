@@ -38,10 +38,16 @@ public class FlightTax implements Serializable {
     @JoinColumn(name = "flight_id", nullable = false, insertable = false, updatable = false)
     private Flight flight;
 
-    @Column(name = "tax_percentage")
-    private Double tax;
+    @Column(name = "sale_tax_percentage")
+    private Double taxOnSale;
 
-    @Column(name = "tax_amount")
-    private BigDecimal taxAmount;
+    @Column(name = "sale_tax_amount")
+    private BigDecimal taxAmountOnSale;
+
+    @Column(name = "purchase_tax_percentage")
+    private Double taxOnPurchase;
+
+    @Column(name = "purchase_tax_amount")
+    private BigDecimal taxAmountOnPurchase;
 
 }
