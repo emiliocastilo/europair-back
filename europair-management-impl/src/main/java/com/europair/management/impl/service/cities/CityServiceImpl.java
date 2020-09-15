@@ -43,9 +43,7 @@ public class CityServiceImpl implements ICityService {
         City city = cityRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("City not found on id: " + id));
 
-        CityDTO dto2Update = updateCityValues(id, cityDTO);
-
-        CityMapper.INSTANCE.updateFromDto(dto2Update, city);
+        CityMapper.INSTANCE.updateFromDto(cityDTO, city);
         city = cityRepository.save(city);
 
         return CityMapper.INSTANCE.toDto(city);
@@ -58,15 +56,4 @@ public class CityServiceImpl implements ICityService {
         cityRepository.delete(city);
     }
 
-    private CityDTO updateCityValues(Long id, CityDTO cityDTO) {
-        CityDTO dto = new CityDTO();
-        dto.setId(id);
-        dto.setCode(cityDTO.getCode());
-        dto.setName(cityDTO.getName());
-
-        CountryDTO country = new CountryDTO();
-        country.setId(cityDTO.getCountry().getId());
-        dto.setCountry(country);
-        return dto;
-    }
 }
