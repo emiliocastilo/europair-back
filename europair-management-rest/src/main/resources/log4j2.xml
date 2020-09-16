@@ -5,7 +5,7 @@
         <!-- local  TODO: define environments -->
         <!-- <Property name="LOG_PATH">./tomcat/logs</Property> -->
         <!-- integration -->
-        <Property name="LOG_PATH">/opt/tomcat/logs</Property>
+         <Property name="LOG_PATH">/opt/tomcat/logs</Property>
         <Property name="PID">????</Property>
         <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
         <Property name="LOG_LEVEL_PATTERN">%5p</Property>
