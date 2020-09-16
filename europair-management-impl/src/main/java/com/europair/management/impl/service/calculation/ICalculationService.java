@@ -10,6 +10,6 @@ public interface ICalculationService {
 
     Double calculateTaxToApply(Contribution contribution, FileServiceEnum serviceType, boolean isSale);
 
-    Double calculateTaxPercentageOnRoute(FileServiceEnum serviceType, boolean isSale);
+    Double calculateTaxPercentageOnRoute(Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale);
 
 }

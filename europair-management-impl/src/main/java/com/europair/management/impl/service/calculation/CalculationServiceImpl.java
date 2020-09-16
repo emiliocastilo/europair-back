@@ -1,8 +1,10 @@
 package com.europair.management.impl.service.calculation;
 
+import com.europair.management.api.dto.taxes.RouteBalearicsPctVatDTO;
 import com.europair.management.api.enums.FileServiceEnum;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.service.taxes.IRouteBalearicsPctVatService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
@@ -29,6 +31,9 @@ public class CalculationServiceImpl implements ICalculationService {
 
     @Autowired
     private TaxRepository taxRepository;
+
+    @Autowired
+    private IRouteBalearicsPctVatService balearicsPctVatService;
 
     @Override
     public Double calculateFlightTaxToApply(Contribution contribution, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
@@ -65,7 +70,7 @@ public class CalculationServiceImpl implements ICalculationService {
                 case TRANSPORT -> getTaxOnPurchaseTransport(origin, destination, provider);
             };
         }
-        Double taxPercentage = calculateTaxPercentageOnRoute(serviceType, isSale);
+        Double taxPercentage = calculateTaxPercentageOnRoute(origin, destination, serviceType, isSale);
 
         return taxToApply != null ? taxToApply * (taxPercentage / 100D) : null;
     }
@@ -118,10 +123,10 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     @Override
-    public Double calculateTaxPercentageOnRoute(FileServiceEnum serviceType, boolean isSale) {
+    public Double calculateTaxPercentageOnRoute(Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
         Double taxPercentage = 100D;
         if (checkBalearicIslandsSpecialConditions(isSale, serviceType)) {
-            taxPercentage = getTaxBalearicIslands();
+            taxPercentage = getTaxBalearicIslands(origin.getId(), destination.getId());
         }
 
         return taxPercentage;
@@ -396,8 +401,10 @@ public class CalculationServiceImpl implements ICalculationService {
 
     // Get Tax values
 
-    private Double getTaxBalearicIslands() {
-        return Math.random() * (100 - 50) + 50; // FIXME: implementar recuperar las tasas de baleares según la ruta
+    private Double getTaxBalearicIslands(Long originId, Long destinationId) {
+        RouteBalearicsPctVatDTO vatDTO =
+                balearicsPctVatService.findByOriginAndDestinationWithInverseSearch(originId, destinationId);
+        return vatDTO.getPercentage();
     }
 
     private void taxFromOtherCountry(Country country) {
