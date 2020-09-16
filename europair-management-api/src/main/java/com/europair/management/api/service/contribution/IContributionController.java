@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping(name = "/contributions")
+@RequestMapping("/files/{fileId}/routes/{routeId}/contributions")
 public interface IContributionController {
 
     /**

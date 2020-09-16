@@ -59,5 +59,9 @@ public class Route extends AuditModificationBaseEntity implements Serializable {
     @OneToMany(mappedBy = "route")
     private Set<Contribution> contributions;
 
+    @Column(name = "has_contributions")
+    private Boolean hasContributions = false;
+
+
 
 }
