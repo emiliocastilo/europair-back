@@ -3,6 +3,7 @@ package com.europair.management.impl.service.calculation;
 import com.europair.management.api.enums.FileServiceEnum;
 import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.impl.common.exception.ResourceNotFoundException;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.countries.entity.Country;
@@ -11,6 +12,7 @@ import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.Provider;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
+import com.europair.management.rest.model.taxes.repository.TaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,15 +21,14 @@ import java.util.Comparator;
 @Service
 public class CalculationServiceImpl implements ICalculationService {
 
-    private final String SPAIN_CODE = "ES";
-
-    private final Double TAX_21 = 21D;
-    private final Double TAX_10 = 10D;
     private final Double TAX_0 = 0D;
     private final Double TAX_FREE = null;
 
     @Autowired
     private FileRepository fileRepository;
+
+    @Autowired
+    private TaxRepository taxRepository;
 
     @Override
     public Double calculateFlightTaxToApply(Contribution contribution, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
@@ -129,69 +130,69 @@ public class CalculationServiceImpl implements ICalculationService {
     // Tax on sale (IVA devengado)
 
     private Double getTaxOnSaleFlight(Airport origin, Airport destination) {
-        return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
+        return genericRouteSaleTaxCalculation(origin, destination, getSpainReducedTax());
     }
 
     private Double getTaxOnSaleCargo(Airport origin, Airport destination, Client client) {
         Double tax = null;
         switch (client.getType()) {
-            case INDIVIDUAL -> tax = genericRouteSaleTaxCalculation(origin, destination, TAX_21);
-            case BUSINESS -> tax = genericClientSaleTaxCalculation(client, TAX_21);
+            case INDIVIDUAL -> tax = genericRouteSaleTaxCalculation(origin, destination, getSpainTax());
+            case BUSINESS -> tax = genericClientSaleTaxCalculation(client, getSpainTax());
         }
         return tax;
     }
 
     private Double getTaxOnSaleCommission(Client client) {
-        return genericClientSaleTaxCalculation(client, TAX_21);
+        return genericClientSaleTaxCalculation(client, getSpainTax());
     }
 
     private Double getTaxOnSaleTransport(Airport origin, Airport destination) {
         Double tax = TAX_FREE;
         if (isSpainInternalRoute(origin, destination) && !isCanaryIslandsRoute(origin, destination)) {
-            tax = TAX_10;
+            tax = getSpainReducedTax();
         }
 
         return tax;
     }
 
     private Double getTaxOnSaleAirportFee(Airport origin, Airport destination) {
-        return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
+        return genericRouteSaleTaxCalculation(origin, destination, getSpainReducedTax());
     }
 
     private Double getTaxOnSaleExtrasOnBoard(Airport origin, Airport destination) {
-        return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
+        return genericRouteSaleTaxCalculation(origin, destination, getSpainReducedTax());
     }
 
     private Double getTaxOnSaleExtrasOnGround(Client client) {
-        return genericClientSaleTaxCalculation(client, TAX_21);
+        return genericClientSaleTaxCalculation(client, getSpainTax());
     }
 
     private Double getTaxOnSaleCateringOnBoard(Airport origin, Airport destination) {
-        return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
+        return genericRouteSaleTaxCalculation(origin, destination, getSpainReducedTax());
     }
 
     private Double getTaxOnSaleCateringOnGround(Client client) {
         // ToDo: 21% para bebidas alcoholicas, pendiente servicio aposta
-        return genericClientSaleTaxCalculation(client, TAX_10);
+        return genericClientSaleTaxCalculation(client, getSpainReducedTax());
     }
 
     private Double getTaxOnSaleCancellationFee(Airport origin, Airport destination) {
-        return genericRouteSaleTaxCalculation(origin, destination, TAX_10);
+        return genericRouteSaleTaxCalculation(origin, destination, getSpainReducedTax());
     }
 
 
     // Tax on purchase (IVA soportado)
 
     private Double getTaxOnPurchaseFlight(Airport origin, Airport destination, Provider provider) {
-        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, getSpainReducedTax());
     }
 
     private Double getTaxOnPurchaseCargo(Provider provider) {
-        return genericProviderPurchaseTaxCalculation(provider, TAX_21);
+        return genericProviderPurchaseTaxCalculation(provider, getSpainTax());
     }
 
     private Double getTaxOnPurchaseCommission(Provider provider) {
-        return genericProviderPurchaseTaxCalculation(provider, TAX_21);
+        return genericProviderPurchaseTaxCalculation(provider, getSpainTax());
     }
 
     private Double getTaxOnPurchaseTransport(Airport origin, Airport destination, Provider provider) {
@@ -199,14 +200,14 @@ public class CalculationServiceImpl implements ICalculationService {
         if (isSpainInternalRoute(origin, destination)) {
             if (isCanaryIslandsInternalRoute(origin, destination)) {
                 if (isCanaryIslandsProvider(provider)) {
-                    // ToDo: aplicar IGIC
+                    tax = getIGICTax();
                 } else {
                     tax = TAX_FREE;
                 }
 //            } else if (isCanaryIslandsRoute(origin, destination)) {
 //                tax = TAX_FREE;
             } else if (isSpainProvider(provider)) {
-                tax = TAX_10;
+                tax = getSpainReducedTax();
             } else {
                 tax = TAX_FREE;
             }
@@ -223,29 +224,29 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private Double getTaxOnPurchaseAirportFee(Airport origin, Airport destination, Provider provider) {
-        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, getSpainReducedTax());
     }
 
     private Double getTaxOnPurchaseExtrasOnBoard(Airport origin, Airport destination, Provider provider) {
-        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, getSpainReducedTax());
     }
 
     private Double getTaxOnPurchaseExtrasOnGround(Provider provider) {
-        return genericProviderPurchaseTaxCalculation(provider, TAX_21);
+        return genericProviderPurchaseTaxCalculation(provider, getSpainTax());
     }
 
     private Double getTaxOnPurchaseCateringOnBoard(Airport origin, Airport destination, Provider provider) {
         // ToDo: 21% IVA para bebidas alcoholicas?
-        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_10);
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, getSpainReducedTax());
     }
 
     private Double getTaxOnPurchaseCateringOnGround(Provider provider) {
         // ToDo: 21% para bebidas alcoholicas, pendiente servicio aposta
-        return genericProviderPurchaseTaxCalculation(provider, TAX_10);
+        return genericProviderPurchaseTaxCalculation(provider, getSpainReducedTax());
     }
 
     private Double getTaxOnPurchaseCancellationFee(Airport origin, Airport destination, Provider provider) {
-        return genericRouteAndProviderTaxCalculation(origin, destination, provider, TAX_21);
+        return genericRouteAndProviderTaxCalculation(origin, destination, provider, getSpainTax());
     }
 
 
@@ -260,15 +261,15 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private boolean isSpainInternalRoute(Airport origin, Airport destination) {
-        return SPAIN_CODE.equals(origin.getCountry().getCode()) && SPAIN_CODE.equals(destination.getCountry().getCode());
+        return Utils.Constants.SPAIN_CODE.equals(origin.getCountry().getCode()) && Utils.Constants.SPAIN_CODE.equals(destination.getCountry().getCode());
     }
 
     private boolean isNationalClient(Client client) {
-        return SPAIN_CODE.equals(client.getCountry().getCode());
+        return Utils.Constants.SPAIN_CODE.equals(client.getCountry().getCode());
     }
 
     private boolean isSpainProvider(Provider provider) {
-        return SPAIN_CODE.equals(provider.getCountry().getCode());
+        return Utils.Constants.SPAIN_CODE.equals(provider.getCountry().getCode());
     }
 
     private boolean isInternationalProvider(Provider provider) {
@@ -311,16 +312,6 @@ public class CalculationServiceImpl implements ICalculationService {
     private boolean isDomesticRoute(Airport origin, Airport destination) {
         return origin.getCountry().getId().equals(destination.getCountry().getId());
     }
-
-
-    private Double taxPercentageToApply(Airport origin, Airport destination) {
-        Double tax = 100D;
-        if (isBalearicIslandsRoute(origin, destination)) {
-            tax = getTaxBalearicIslands();
-        }
-        return tax;
-    }
-
 
     private Double genericRouteSaleTaxCalculation(final Airport origin, final Airport destination, final Double nationalTaxToApply) {
         Double tax;
@@ -368,7 +359,7 @@ public class CalculationServiceImpl implements ICalculationService {
         if (isSpainInternalRoute(origin, destination)) {
             if (isCanaryIslandsInternalRoute(origin, destination)) {
                 if (isCanaryIslandsProvider(provider)) {
-                    // ToDo: aplicar IGIC
+                    tax = getIGICTax();
                 } else {
                     tax = TAX_FREE;
                 }
@@ -391,15 +382,6 @@ public class CalculationServiceImpl implements ICalculationService {
         return tax;
     }
 
-    private void taxFromOtherCountry(Country country) {
-        // ToDo: definir exception específica
-        throw new ResourceNotFoundException("Must apply tax from: " + country.getCode() + " - " + country.getName());
-    }
-
-    private Double getTaxBalearicIslands() {
-        return Math.random(); // FIXME: implementar recuperar las tasas de baleares según la ruta
-    }
-
     private boolean checkBalearicIslandsSpecialConditions(boolean isSale, FileServiceEnum service) {
         boolean hasBalearicIslandSpecialConditions = false;
 
@@ -409,6 +391,39 @@ public class CalculationServiceImpl implements ICalculationService {
         }
 
         return hasBalearicIslandSpecialConditions;
+    }
+
+
+    // Get Tax values
+
+    private Double getTaxBalearicIslands() {
+        return Math.random() * (100 - 50) + 50; // FIXME: implementar recuperar las tasas de baleares según la ruta
+    }
+
+    private void taxFromOtherCountry(Country country) {
+        // ToDo: definir exception específica
+        throw new ResourceNotFoundException("Must apply tax from: " + country.getCode() + " - " + country.getName());
+    }
+
+    private Double getSpainTax() {
+        // ToDo: cambiar exception por la correcta
+        return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_CODE)
+                .orElseThrow(() -> new ResourceNotFoundException("No Tax value for code: " + Utils.Constants.TAX_ES_CODE))
+                .getTaxPercentage();
+    }
+
+    private Double getSpainReducedTax() {
+        // ToDo: cambiar exception por la correcta
+        return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_REDUCED_CODE)
+                .orElseThrow(() -> new ResourceNotFoundException("No Tax value for code: " + Utils.Constants.TAX_ES_REDUCED_CODE))
+                .getTaxPercentage();
+    }
+
+    private Double getIGICTax() {
+        // ToDo: cambiar exception por la correcta
+        return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_IGIC_CODE)
+                .orElseThrow(() -> new ResourceNotFoundException("No Tax value for code: " + Utils.Constants.TAX_ES_IGIC_CODE))
+                .getTaxPercentage();
     }
 
 }

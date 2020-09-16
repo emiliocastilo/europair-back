@@ -12,7 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "flight_taxes")
@@ -22,7 +21,6 @@ public class FlightTax implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @Column(name = "contribution_id")
     private Long contributionId;
@@ -41,13 +39,6 @@ public class FlightTax implements Serializable {
     @Column(name = "sale_tax_percentage")
     private Double taxOnSale;
 
-    @Column(name = "sale_tax_amount")
-    private BigDecimal taxAmountOnSale;
-
     @Column(name = "purchase_tax_percentage")
     private Double taxOnPurchase;
-
-    @Column(name = "purchase_tax_amount")
-    private BigDecimal taxAmountOnPurchase;
-
 }

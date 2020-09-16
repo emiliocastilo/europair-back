@@ -39,17 +39,9 @@ databaseChangeLog:
                   type: double
                   remarks: Tax percentage that applies on sale
               - column:
-                  name: sale_tax_amount
-                  type: bigint
-                  remarks: Tax amount on sale
-              - column:
                   name: purchase_tax_percentage
                   type: double
                   remarks: Tax percentage that applies on purchase
-              - column:
-                  name: purchase_tax_amount
-                  type: bigint
-                  remarks: Tax amount on purchase
         - addAutoIncrement:
             columnDataType: int
             columnName: id

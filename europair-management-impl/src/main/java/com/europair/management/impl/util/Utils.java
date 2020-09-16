@@ -196,5 +196,14 @@ public class Utils {
     }
 
 
+    /**
+     * Utils inner class containing constant values of the application
+     */
+    public static class Constants {
+        public static final String SPAIN_CODE = "ES";
+        public static final String TAX_ES_CODE = "ES";
+        public static final String TAX_ES_REDUCED_CODE = "ES_REDUCED";
+        public static final String TAX_ES_IGIC_CODE = "ES_IGIC";
+    }
 
 }
