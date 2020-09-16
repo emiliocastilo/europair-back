@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cfe531be-7c18-4536-9608-7c0004633bce",
+		"_postman_id": "e850577c-7f8b-4f44-b799-3fe4ae7618e5",
 		"name": "EUROPAIR",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -289,7 +289,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "6b7e0343-a5c1-4fbd-a13c-c2d2fdda133a",
+								"id": "642d8458-724a-406f-a961-5a23cd92f853",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -299,7 +299,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "3037c06e-0cc1-424c-b15f-d354bf18e56d",
+								"id": "cdae0fdb-953c-47e4-a972-99f5ac74c4fc",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -977,7 +977,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "85d39692-017a-4cf1-b3b9-13d2b36ba5cc",
+								"id": "fccc8bc0-f884-4e89-94f4-d9c9711309a7",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -987,7 +987,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "66d0f65d-90d0-4fa0-be88-0c8611ea6066",
+								"id": "6196cb0a-2d07-45e7-8ed0-b92afdc769e9",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1139,7 +1139,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "2d9f8831-89fc-49d0-b9a9-c1d6f59fd9b4",
+								"id": "9c5cdb80-38a9-41f5-9cad-875a9e2e1f9b",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1149,7 +1149,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9f1d40ab-fa81-416e-a9fa-5078794375e0",
+								"id": "36880d41-4cff-49e8-8a39-ff8a6c4f2946",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1304,7 +1304,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "2aa2df9d-0177-4126-bc65-5da5f6f9315c",
+						"id": "3bb8383f-af46-49a7-ae6b-935aa44bffc6",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1314,7 +1314,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "e5c27d0a-9837-474d-80e9-a238a2dadec0",
+						"id": "54ff3a22-872d-489a-87d0-887b9db1fee1",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1746,7 +1746,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "db5cc97f-f2be-49b0-934f-56029429876c",
+								"id": "ddc488f6-bb65-40ee-9fae-4d7027b14a2c",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1756,7 +1756,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6f2fbfc6-ad97-490e-9dbf-4ed47a0de001",
+								"id": "1b01ef87-983c-416e-9f45-eb0ce0855a23",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -2172,6 +2172,59 @@
 								{
 									"key": "filter_name",
 									"value": "MAL,CONTAINS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "city - create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDAyNTUwNjksImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDE1NTEwNjl9.3JI02HsFobUmZl0oDIGGDyRbw3NQ_GddvB5ENnUDR9QyM9wa0G1K2gg9lPsHpN1peOLHbbCSDv8qlJpgiQsHmQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"PML\",\r\n    \"name\": \"Palma de Mallorca\",\r\n    \"canaryIslands\": false,\r\n    \"country\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cities"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "filter_id",
+									"value": "2,EQUALS",
+									"disabled": true
 								}
 							]
 						}
@@ -2758,12 +2811,68 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "VAT_Balearics",
+			"item": [
+				{
+					"name": "vat_balearics - getPercentage",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDAyNTUwNjksImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDE1NTEwNjl9.3JI02HsFobUmZl0oDIGGDyRbw3NQ_GddvB5ENnUDR9QyM9wa0G1K2gg9lPsHpN1peOLHbbCSDv8qlJpgiQsHmQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/routeBalearicsPctVat/?originAirportId=1&destinationAirportId=3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"routeBalearicsPctVat",
+								""
+							],
+							"query": [
+								{
+									"key": "originAirportId",
+									"value": "1"
+								},
+								{
+									"key": "destinationAirportId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "login_generate_token",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "27b3b9b0-6d90-4226-9c2d-e6877e20e392",
+						"id": "88fcd362-95c9-4e4d-ba03-491badf0e9fe",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"pm.collectionVariables.set(\"token\", jsonData.jwtToken);"
@@ -2915,7 +3024,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "c2e9c2a0-66e2-417f-8b2d-0a121f123f88",
+				"id": "0f8a0a64-6a91-4f6e-80f4-98c776d791c1",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2925,7 +3034,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "edc7ff6c-2c06-4e06-9430-6bfaba596652",
+				"id": "74349f95-7b52-4762-8880-193825e4cb42",
 				"type": "text/javascript",
 				"exec": [
 					""
