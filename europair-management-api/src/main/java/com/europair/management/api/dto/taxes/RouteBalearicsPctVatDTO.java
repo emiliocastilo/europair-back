@@ -19,8 +19,14 @@ public class RouteBalearicsPctVatDTO implements Serializable {
   @JsonProperty("originAirport")
   private AirportDto originAirport;
 
+  @JsonProperty("originAirportId")
+  private Long originAirportId;
+
   @JsonProperty("destinationAirport")
   private AirportDto destinationAirport;
+
+  @JsonProperty("destinationAirportId")
+  private Long destinationAirportId;
 
   @JsonProperty("percentage")
   private Double percentage;

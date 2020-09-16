@@ -5,8 +5,10 @@ import com.europair.management.impl.mappers.taxes.IRouteBalearicsPctVatMapper;
 import com.europair.management.rest.model.taxes.entity.RouteBalearicsPctVat;
 import com.europair.management.rest.model.taxes.repository.IRouteBalearicsPctVatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -31,7 +33,7 @@ public class RouteBalearicsPctVatServiceImpl implements IRouteBalearicsPctVatSer
       }
     }
 
-    return null;
+    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route balearics VAT not found with origin: " + originAirportId + " and destination: " + destinationAirportId);
   }
 
 }

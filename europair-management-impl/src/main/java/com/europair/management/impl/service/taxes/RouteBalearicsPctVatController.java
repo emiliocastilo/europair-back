@@ -5,6 +5,7 @@ import com.europair.management.api.service.taxes.IRouteBalearicsPctVatController
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class RouteBalearicsPctVatController implements IRouteBalearicsPctVatCont
 
   @Override
   public ResponseEntity<RouteBalearicsPctVatDTO> getRouteBalearicsPercentageByOriginAndDestination(
-        @NotNull final Long originAirportId, @NotNull final Long destinationAirportId) {
+        @NotNull @RequestParam final Long originAirportId, @NotNull @RequestParam final Long destinationAirportId) {
 
     final RouteBalearicsPctVatDTO routeBalearicsPctVatDTO =
         routeBalearicsPctVatService.findByOriginAndDestinationWithInverseSearch(originAirportId, destinationAirportId);
