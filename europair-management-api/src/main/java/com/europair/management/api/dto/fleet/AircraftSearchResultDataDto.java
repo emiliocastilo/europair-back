@@ -1,8 +1,8 @@
 package com.europair.management.api.dto.fleet;
 
+
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.common.TextField;
-import com.europair.management.api.dto.contributionaircrafts.ContributionAircraftDTO;
 import com.europair.management.api.dto.operators.OperatorDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,13 +11,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AircraftDto extends AuditModificationBaseDTO {
+public class AircraftSearchResultDataDto extends AuditModificationBaseDTO {
 
     @JsonProperty("id")
     private Long id;
@@ -28,28 +28,21 @@ public class AircraftDto extends AuditModificationBaseDTO {
     @JsonProperty("aircraftType")
     private AircraftTypeDto aircraftType;
 
+    @JsonProperty("aircraftCategory")
+    private AircraftCategoryDto aircraftCategory;
+
+    @JsonProperty("aircraftSubcategory")
+    private AircraftCategoryDto aircraftSubcategory;
+
     @JsonProperty("bases")
     private List<AircraftBaseDto> bases;
 
-    @JsonProperty("plateNumber")
-    @Size(min = 0, max = TextField.TEXT_20)
-    private String plateNumber;
-
-    @JsonProperty("productionYear")
-    private Integer productionYear;
+    @JsonProperty("insuranceEndDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date insuranceEndDate;
 
     @JsonProperty("quantity")
     private Integer quantity;
-
-    @JsonProperty("insuranceEndDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate insuranceEndDate;
-
-    @JsonProperty("ambulance")
-    private Boolean ambulance;
-
-    @JsonProperty("daytimeConfiguration")
-    private Integer daytimeConfiguration;
 
     @JsonProperty("seatingF")
     private Integer seatingF;
@@ -60,12 +53,30 @@ public class AircraftDto extends AuditModificationBaseDTO {
     @JsonProperty("seatingY")
     private Integer seatingY;
 
+    @JsonProperty("daytimeConfiguration")
+    private Integer daytimeConfiguration;
+
     @JsonProperty("nighttimeConfiguration")
     private Integer nighttimeConfiguration;
 
-    @JsonProperty("notes")
-    @Size(min = 0, max = TextField.TEXT_255, message = "Field notes must be 255 character max")
-    private String notes;
+    @JsonProperty("observations")
+    private List<AircraftObservationDto> observations;
+
+    @JsonProperty("timeInHours")
+    private Double timeInHours;
+
+
+    // ToDo: Otras propiedades de Aircraft que no sé si hacen falta
+
+    @JsonProperty("plateNumber")
+    @Size(min = 0, max = TextField.TEXT_20)
+    private String plateNumber;
+
+    @JsonProperty("productionYear")
+    private Integer productionYear;
+
+    @JsonProperty("ambulance")
+    private Boolean ambulance;
 
     @JsonProperty("insideUpgradeYear")
     private Integer insideUpgradeYear;
@@ -73,8 +84,5 @@ public class AircraftDto extends AuditModificationBaseDTO {
     @JsonProperty("outsideUpgradeYear")
     private Integer outsideUpgradeYear;
 
-    @JsonProperty("observations")
-    private List<AircraftObservationDto> observations;
 
-    private List<ContributionAircraftDTO> contributionAircrafts;
 }
