@@ -1,0 +1,166 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200917_add_constraints
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add constraints (FK) to columns in tables"
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: operator_comments
+            baseColumnNames: operator_id
+            constraintName: operator_comments_operators_fk
+            referencedTableName: operators
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: aircraft_bases
+            baseColumnNames: airport_id
+            constraintName: aircraft_bases_airports_fk
+            referencedTableName: airports
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: aircrafts
+            baseColumnNames: operator_id
+            constraintName: aircrafts_operators_fk
+            referencedTableName: operators
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: aircrafts
+            baseColumnNames: aircraft_type_id
+            constraintName: aircrafts_aircraft_types_fk
+            referencedTableName: aircraft_types
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: roles_tasks
+            baseColumnNames: role_id
+            constraintName: roles_tasks_roles_fk
+            referencedTableName: roles
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: roles_tasks
+            baseColumnNames: task_id
+            constraintName: roles_tasks_tasks_fk
+            referencedTableName: tasks
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: tasks_screens
+            baseColumnNames: task_id
+            constraintName: tasks_screens_tasks_fk
+            referencedTableName: tasks
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: tasks_screens
+            baseColumnNames: screen_id
+            constraintName: roles_tasks_screens_fk
+            referencedTableName: screens
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: users_roles
+            baseColumnNames: user_id
+            constraintName: users_roles_users_fk
+            referencedTableName: users
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: users_roles
+            baseColumnNames: role_id
+            constraintName: users_roles_roles_fk
+            referencedTableName: roles
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: users_tasks
+            baseColumnNames: user_id
+            constraintName: users_tasks_users_fk
+            referencedTableName: users
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: users_tasks
+            baseColumnNames: task_id
+            constraintName: users_tasks_tasks_fk
+            referencedTableName: tasks
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: regions_airports
+            baseColumnNames: region_id
+            constraintName: regions_airports_regions_fk
+            referencedTableName: regions
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: regions_airports
+            baseColumnNames: airport_id
+            constraintName: regions_airports_airports_fk
+            referencedTableName: airports
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: regions_countries
+            baseColumnNames: region_id
+            constraintName: regions_countries_regions_fk
+            referencedTableName: regions
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: regions_countries
+            baseColumnNames: country_id
+            constraintName: regions_countries_countries_fk
+            referencedTableName: countries
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: files
+            baseColumnNames: status_id
+            constraintName: files_file_status_fk
+            referencedTableName: file_status
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: files
+            baseColumnNames: client_id
+            constraintName: files_clients_fk
+            referencedTableName: clients
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: files
+            baseColumnNames: contact_id
+            constraintName: files_contacts_fk
+            referencedTableName: contacts
+            referencedColumnNames: id
+            validate: true
+
+        - addForeignKeyConstraint:
+            baseTableName: files
+            baseColumnNames: provider_id
+            constraintName: files_providers_fk
+            referencedTableName: providers
+            referencedColumnNames: id
+            validate: true
