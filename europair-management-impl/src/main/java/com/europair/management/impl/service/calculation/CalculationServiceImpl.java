@@ -79,17 +79,14 @@ public class CalculationServiceImpl implements ICalculationService {
     public Double calculateTaxToApply(Contribution contribution, FileServiceEnum serviceType, boolean isSale) {
         Airport origin = contribution.getRoute().getAirports().stream()
                 .min(Comparator.comparing(RouteAirport::getOrder))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "No first airport found in the route with id: " + contribution.getRouteId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No first airport found in the route with id: " + contribution.getRouteId()))
                 .getAirport();
         Airport destination = contribution.getRoute().getAirports().stream()
                 .max(Comparator.comparing(RouteAirport::getOrder))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "No last airport found in the route with id: " + contribution.getRouteId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No last airport found in the route with id: " + contribution.getRouteId()))
                 .getAirport();
         File file = fileRepository.findById(contribution.getFileId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                        "File not found with id: " + contribution.getFileId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + contribution.getFileId()));
 
         Double taxToApply;
         if (isSale) {
@@ -411,28 +408,25 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private void taxFromOtherCountry(Country country) {
-        // ToDo: definir exception específica
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Must apply tax from: " + country.getCode() + " - " + country.getName());
+        throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The tax that applies if from another country, must apply tax manually from: " +
+                country.getCode() + " - " + country.getName());
     }
 
     private Double getSpainTax() {
-        // ToDo: cambiar exception por la correcta
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_CODE)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax value for code: " + Utils.Constants.TAX_ES_CODE))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax found for code: " + Utils.Constants.TAX_ES_CODE))
                 .getTaxPercentage();
     }
 
     private Double getSpainReducedTax() {
-        // ToDo: cambiar exception por la correcta
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_REDUCED_CODE)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax value for code: " + Utils.Constants.TAX_ES_REDUCED_CODE))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax found for code: " + Utils.Constants.TAX_ES_REDUCED_CODE))
                 .getTaxPercentage();
     }
 
     private Double getIGICTax() {
-        // ToDo: cambiar exception por la correcta
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_IGIC_CODE)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax value for code: " + Utils.Constants.TAX_ES_IGIC_CODE))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax found for code: " + Utils.Constants.TAX_ES_IGIC_CODE))
                 .getTaxPercentage();
     }
 
