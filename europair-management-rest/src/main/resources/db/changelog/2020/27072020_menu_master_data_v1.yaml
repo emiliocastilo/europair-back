@@ -524,3 +524,23 @@ databaseChangeLog:
                   name: modified_by
                   value: "Sistema"
             where: name IN ('MASTERS_TASKS','MASTERS_ROLES','MASTERS_USERS')
+
+  - changeSet:
+      id: 17092020_menu_v9_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add data to the menu_option table"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: 1
+              - column:
+                  name: modified_at
+                  value: "2020-09-17"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('CONFIGURATION')
