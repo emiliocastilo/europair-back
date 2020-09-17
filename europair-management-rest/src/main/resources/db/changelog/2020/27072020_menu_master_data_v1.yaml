@@ -480,3 +480,47 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+
+  - changeSet:
+      id: 17092020_menu_v8_menu_option_data
+      context: dev or pre or pro
+      author: jorge.sanchez
+      comment: "Add data to the menu_option table"
+      changes:
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 17
+              - column:
+                  name: weight
+                  value: 3
+              - column:
+                  name: icon
+                  value: "settings"
+              - column:
+                  name: name
+                  value: "CONFIGURATION"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.configuration"
+              - column:
+                  name: created_at
+                  value: "2020-09-17"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: 17
+              - column:
+                  name: modified_at
+                  value: "2020-09-17"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_TASKS','MASTERS_ROLES','MASTERS_USERS')
