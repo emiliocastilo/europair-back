@@ -1,15 +1,23 @@
 package com.europair.management.impl.util;
 
 import com.europair.management.api.enums.UTCEnum;
+import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
+import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.entity.RouteAirport;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.data.util.Pair;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -68,6 +76,17 @@ public class Utils {
             );
         }
     }
+
+    /**
+     * Maps string of airport codes of route as List
+     * @param routeLabel String of route label with format "XXX-YYY-ZZZ"
+     * @return List of Iata Codes
+     */
+    public static List<String> mapRouteAirportIataCodes(final String routeLabel) {
+         String trimmedLabel = routeLabel.replaceAll("\\s+", "");
+         return Arrays.asList(trimmedLabel.split("-"));
+    }
+
 
     /**
      * Utils.TimeConverter API to convert time from:
@@ -137,6 +156,54 @@ public class Utils {
         return calculateDistance(origLat, origLon, destLat, destLon) * earthRadiusInNM;
     }
 
+    /**
+     * Maps the route distance between airports as a percentage relative to the total route distance
+     *
+     * @param route Route entity with route airports
+     * @return Map with key as a pair of origin airport Id, and destination airport id and the distance between them in KM.
+     */
+    public static Map<Pair<Long, Long>, Double> getRouteAirportDistancePercentage(@NotNull final Route route) {
+        Map<Pair<Long, Long>, Double> resultMap = new HashMap<>();
+        List<RouteAirport> airportList = route.getAirports().stream()
+                .sorted(Comparator.comparing(RouteAirport::getOrder))
+                .collect(Collectors.toList());
+        double totalRouteDistance = 0D;
+        List<Double> distances = new ArrayList<>();
 
+        // Calculate distances and total route distance
+        for (int i = 0; i < airportList.size() - 1; i++) {
+            Airport origin = airportList.get(i).getAirport();
+            Airport destination = airportList.get(i + 1).getAirport();
+
+            double distance = Utils.getDistanceInKM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
+                    destination.getLongitude());
+            distances.add(distance);
+            totalRouteDistance = totalRouteDistance + distance;
+        }
+
+        // Calculate distance percentage with total and fill map data
+        for (int i = 0; i < airportList.size() - 1; i++) {
+            Airport origin = airportList.get(i).getAirport();
+            Airport destination = airportList.get(i + 1).getAirport();
+
+            Pair<Long, Long> key = Pair.of(origin.getId(), destination.getId());
+            Double distance = distances.get(i);
+            double finalTotalRouteDistance = totalRouteDistance;
+            resultMap.computeIfAbsent(key, s -> distance * 100 / finalTotalRouteDistance);
+        }
+
+        return resultMap;
+    }
+
+
+    /**
+     * Utils inner class containing constant values of the application
+     */
+    public static class Constants {
+        public static final String SPAIN_CODE = "ES";
+        public static final String TAX_ES_CODE = "ES";
+        public static final String TAX_ES_REDUCED_CODE = "ES_REDUCED";
+        public static final String TAX_ES_IGIC_CODE = "ES_IGIC";
+    }
 
 }

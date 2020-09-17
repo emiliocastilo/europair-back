@@ -11,7 +11,8 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(config = AuditModificationBaseMapperConfig.class, mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
+@Mapper(config = AuditModificationBaseMapperConfig.class,
+        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
 public interface CountryMapper {
 
   CountryMapper INSTANCE = Mappers.getMapper(CountryMapper.class);
