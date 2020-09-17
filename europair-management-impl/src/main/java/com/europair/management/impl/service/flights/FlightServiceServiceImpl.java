@@ -2,13 +2,18 @@ package com.europair.management.impl.service.flights;
 
 import com.europair.management.api.dto.flights.FlightServiceDto;
 import com.europair.management.impl.mappers.flights.IFlightServiceMapper;
+import com.europair.management.impl.service.calculation.ICalculationService;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.repository.FileRepository;
+import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.flights.repository.IFlightRepository;
+import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,6 +43,9 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
     @Autowired
     private FlightServiceRepository flightServiceRepository;
+
+    @Autowired
+    private ICalculationService calculationService;
 
 
     @Override
@@ -63,6 +74,9 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         // Set relationship ids
         flightServiceDto.setFlightId(flightId);
 
+        // Calculate VAT
+        calculateVat(fileId, routeId, flightId, flightServiceDto);
+
         FlightService flightService = IFlightServiceMapper.INSTANCE.toEntity(flightServiceDto);
         flightService = flightServiceRepository.save(flightService);
 
@@ -74,6 +88,10 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         validatePathIds(fileId, routeId, flightId);
         FlightService flightService = flightServiceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id));
+
+        // Recalculate vat
+        calculateVat(fileId, routeId, flightId, flightServiceDto);
+
         IFlightServiceMapper.INSTANCE.updateFromDto(flightServiceDto, flightService);
         flightService = flightServiceRepository.save(flightService);
 
@@ -102,4 +120,23 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         }
     }
 
+    private void calculateVat(final Long fileId, final Long routeId, final Long flightId, final FlightServiceDto flightServiceDto) {
+        final Route route = routeRepository.findById(routeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No route found with id: " + routeId));
+        final Flight flight = flightRepository.findById(flightId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No flight found with id: " + flightId));
+        final Map<String, Airport> airportMap = route.getAirports().stream()
+                .map(RouteAirport::getAirport)
+                .distinct()
+                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+        final Airport origin = airportMap.get(flight.getOrigin());
+        final Airport destination = airportMap.get(flight.getDestination());
+
+        Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, flightServiceDto.getServiceType(), true);
+        Double taxOnPurchase = calculationService.calculateServiceTaxToApply(fileId, origin, destination, flightServiceDto.getServiceType(), false);
+
+        // Update dto values
+        flightServiceDto.setTaxOnSale(taxOnSale);
+        flightServiceDto.setTaxOnPurchase(taxOnPurchase);
+    }
 }

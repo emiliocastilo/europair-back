@@ -51,15 +51,15 @@ public class FlightService extends AuditModificationBaseEntity implements Serial
     @JoinColumn(name = "provider_id", nullable = false, insertable = false, updatable = false)
     private Provider provider;
 
-    @Column(name = "purchase_price")
+    @Column(name = "purchase_price", nullable = false)
     private BigDecimal purchasePrice;
 
-    @Column(name = "sale_price")
+    @Column(name = "sale_price", nullable = false)
     private BigDecimal salePrice;
 
-    @Column(name = "sale_tax_percentage", nullable = false)
+    @Column(name = "sale_tax_percentage")
     private Double taxOnSale;
 
-    @Column(name = "purchase_tax_percentage", nullable = false)
+    @Column(name = "purchase_tax_percentage")
     private Double taxOnPurchase;
 }
