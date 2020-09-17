@@ -2,8 +2,6 @@ package com.europair.management.impl.service.calculation;
 
 import com.europair.management.api.dto.taxes.RouteBalearicsPctVatDTO;
 import com.europair.management.api.enums.FileServiceEnum;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.service.taxes.IRouteBalearicsPctVatService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -16,7 +14,9 @@ import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.taxes.repository.TaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Comparator;
 
@@ -38,7 +38,7 @@ public class CalculationServiceImpl implements ICalculationService {
     @Override
     public Double calculateFlightTaxToApply(Contribution contribution, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
         File file = fileRepository.findById(contribution.getFileId())
-                .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + contribution.getFileId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + contribution.getFileId()));
 
         Double taxToApply;
         if (isSale) {
@@ -79,14 +79,17 @@ public class CalculationServiceImpl implements ICalculationService {
     public Double calculateTaxToApply(Contribution contribution, FileServiceEnum serviceType, boolean isSale) {
         Airport origin = contribution.getRoute().getAirports().stream()
                 .min(Comparator.comparing(RouteAirport::getOrder))
-                .orElseThrow(() -> new InvalidArgumentException("No first airport found in the route with id: " + contribution.getRouteId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "No first airport found in the route with id: " + contribution.getRouteId()))
                 .getAirport();
         Airport destination = contribution.getRoute().getAirports().stream()
                 .max(Comparator.comparing(RouteAirport::getOrder))
-                .orElseThrow(() -> new InvalidArgumentException("No last airport found in the route with id: " + contribution.getRouteId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "No last airport found in the route with id: " + contribution.getRouteId()))
                 .getAirport();
         File file = fileRepository.findById(contribution.getFileId())
-                .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + contribution.getFileId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "File not found with id: " + contribution.getFileId()));
 
         Double taxToApply;
         if (isSale) {
@@ -409,27 +412,27 @@ public class CalculationServiceImpl implements ICalculationService {
 
     private void taxFromOtherCountry(Country country) {
         // ToDo: definir exception específica
-        throw new ResourceNotFoundException("Must apply tax from: " + country.getCode() + " - " + country.getName());
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Must apply tax from: " + country.getCode() + " - " + country.getName());
     }
 
     private Double getSpainTax() {
         // ToDo: cambiar exception por la correcta
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_CODE)
-                .orElseThrow(() -> new ResourceNotFoundException("No Tax value for code: " + Utils.Constants.TAX_ES_CODE))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax value for code: " + Utils.Constants.TAX_ES_CODE))
                 .getTaxPercentage();
     }
 
     private Double getSpainReducedTax() {
         // ToDo: cambiar exception por la correcta
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_REDUCED_CODE)
-                .orElseThrow(() -> new ResourceNotFoundException("No Tax value for code: " + Utils.Constants.TAX_ES_REDUCED_CODE))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax value for code: " + Utils.Constants.TAX_ES_REDUCED_CODE))
                 .getTaxPercentage();
     }
 
     private Double getIGICTax() {
         // ToDo: cambiar exception por la correcta
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_IGIC_CODE)
-                .orElseThrow(() -> new ResourceNotFoundException("No Tax value for code: " + Utils.Constants.TAX_ES_IGIC_CODE))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax value for code: " + Utils.Constants.TAX_ES_IGIC_CODE))
                 .getTaxPercentage();
     }
 

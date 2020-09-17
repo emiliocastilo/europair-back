@@ -1,8 +1,6 @@
 package com.europair.management.impl.service.fleet;
 
 import com.europair.management.api.dto.fleet.AircraftTypeAverageSpeedDto;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.fleet.IAircraftTypeAverageSpeedMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -14,8 +12,10 @@ import com.europair.management.rest.model.fleet.repository.AircraftTypeRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -42,14 +42,14 @@ public class AircraftTypeAverageSpeedServiceImpl implements IAircraftTypeAverage
     public AircraftTypeAverageSpeedDto findById(final Long aircraftTypeId, Long id) {
         checkIfAircraftTypeExists(aircraftTypeId);
         return IAircraftTypeAverageSpeedMapper.INSTANCE.toDto(aircraftTypeAverageSpeedRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("AverageSpeed not found with id: " + id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AverageSpeed not found with id: " + id)));
     }
 
     @Override
     public AircraftTypeAverageSpeedDto saveAircraftTypeAverageSpeed(final Long aircraftTypeId, AircraftTypeAverageSpeedDto aircraftTypeAverageSpeedDto) {
         checkIfAircraftTypeExists(aircraftTypeId);
         if (aircraftTypeAverageSpeedDto.getId() != null) {
-            throw new InvalidArgumentException(String.format("New AverageSpeed expected. Identifier %s got", aircraftTypeAverageSpeedDto.getId()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New AverageSpeed expected. Identifier %s got", aircraftTypeAverageSpeedDto.getId()));
         }
 
         AircraftTypeAverageSpeed aircraftTypeAverageSpeed = IAircraftTypeAverageSpeedMapper.INSTANCE.toEntity(aircraftTypeAverageSpeedDto);
@@ -68,7 +68,7 @@ public class AircraftTypeAverageSpeedServiceImpl implements IAircraftTypeAverage
     public AircraftTypeAverageSpeedDto updateAircraftTypeAverageSpeed(final Long aircraftTypeId, Long id, AircraftTypeAverageSpeedDto aircraftTypeAverageSpeedDto) {
         checkIfAircraftTypeExists(aircraftTypeId);
         AircraftTypeAverageSpeed aircraftTypeAverageSpeed = aircraftTypeAverageSpeedRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("AverageSpeed not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AverageSpeed not found with id: " + id));
         IAircraftTypeAverageSpeedMapper.INSTANCE.updateFromDto(aircraftTypeAverageSpeedDto, aircraftTypeAverageSpeed);
         aircraftTypeAverageSpeed = aircraftTypeAverageSpeedRepository.save(aircraftTypeAverageSpeed);
 
@@ -79,14 +79,14 @@ public class AircraftTypeAverageSpeedServiceImpl implements IAircraftTypeAverage
     public void deleteAircraftTypeAverageSpeed(final Long aircraftTypeId, Long id) {
         checkIfAircraftTypeExists(aircraftTypeId);
         if (!aircraftTypeAverageSpeedRepository.existsById(id)) {
-            throw new ResourceNotFoundException("AverageSpeed not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AverageSpeed not found with id: " + id);
         }
         aircraftTypeAverageSpeedRepository.deleteById(id);
     }
 
     private void checkIfAircraftTypeExists(final Long aircraftTypeId) {
         if (!aircraftTypeRepository.existsById(aircraftTypeId)) {
-            throw new ResourceNotFoundException("Aircraft Type not found with id: " + aircraftTypeId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft Type not found with id: " + aircraftTypeId);
         }
     }
 

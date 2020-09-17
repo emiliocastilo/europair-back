@@ -1,14 +1,14 @@
 package com.europair.management.impl.util;
 
-
 import com.europair.management.api.enums.UTCEnum;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.data.util.Pair;
 
 import javax.validation.constraints.NotNull;
@@ -42,8 +42,8 @@ public class Utils {
                                     try {
                                         operator = OperatorEnum.valueOf(paramValues[1].toUpperCase());
                                     } catch (IllegalArgumentException e) {
-                                        throw new InvalidArgumentException(
-                                                "Invalid filter params, operator not valid: " + paramValues[1], e);
+                                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                                          "Invalid filter params, operator not valid: " + paramValues[1], e);
                                     }
 
                                     return Restriction.builder()
@@ -57,7 +57,7 @@ public class Utils {
             return criteria;
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new InvalidArgumentException("Invalid filter params. ", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid filter params. ", e);
         }
     }
 

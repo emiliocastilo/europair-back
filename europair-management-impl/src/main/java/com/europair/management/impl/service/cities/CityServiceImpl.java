@@ -1,8 +1,6 @@
 package com.europair.management.impl.service.cities;
 
 import com.europair.management.api.dto.cities.CityDTO;
-import com.europair.management.api.dto.countries.CountryDTO;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.cities.CityMapper;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.cities.repository.CityRepository;
@@ -10,8 +8,10 @@ import com.europair.management.rest.model.common.CoreCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -26,9 +26,9 @@ public class CityServiceImpl implements ICityService {
     }
 
     @Override
-    public CityDTO findById(Long id) throws ResourceNotFoundException {
+    public CityDTO findById(Long id) {
         return CityMapper.INSTANCE.toDto(cityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("City not found on id: " + id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "City not found on id: " + id)));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CityServiceImpl implements ICityService {
     @Override
     public CityDTO updateCity(final Long id, final CityDTO cityDTO) {
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("City not found on id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "City not found on id: " + id));
 
         CityMapper.INSTANCE.updateFromDto(cityDTO, city);
         city = cityRepository.save(city);
@@ -52,7 +52,7 @@ public class CityServiceImpl implements ICityService {
     @Override
     public void deleteCity(Long id) {
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("City not found on id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "City not found on id: " + id));
         cityRepository.delete(city);
     }
 
