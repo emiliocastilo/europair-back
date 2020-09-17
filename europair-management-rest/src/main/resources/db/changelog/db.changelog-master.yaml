@@ -123,4 +123,7 @@ databaseChangeLog:
   - include:
       file: 2020/20200916_taxes_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/20200917_flight_services_v1.yaml
+      relativeToChangelogFile: true
 
