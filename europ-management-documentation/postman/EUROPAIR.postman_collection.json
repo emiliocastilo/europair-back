@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "e850577c-7f8b-4f44-b799-3fe4ae7618e5",
+		"_postman_id": "a4596151-f034-44fa-be02-21178837a8d6",
 		"name": "EUROPAIR",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -289,7 +289,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "642d8458-724a-406f-a961-5a23cd92f853",
+								"id": "53887b48-787a-4d94-983c-0e25829f5ec4",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -299,7 +299,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "cdae0fdb-953c-47e4-a972-99f5ac74c4fc",
+								"id": "0d7c384b-e8ca-422c-8ebe-776f4ef7eec8",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -977,7 +977,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "fccc8bc0-f884-4e89-94f4-d9c9711309a7",
+								"id": "11fa10e7-50dc-45ad-9b51-9b6744e87386",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -987,7 +987,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6196cb0a-2d07-45e7-8ed0-b92afdc769e9",
+								"id": "b1d3e324-1432-4757-8df9-a1f99faef292",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1139,7 +1139,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9c5cdb80-38a9-41f5-9cad-875a9e2e1f9b",
+								"id": "5e55ac6e-1de8-4d08-81cb-d772f95ff0e1",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1149,7 +1149,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "36880d41-4cff-49e8-8a39-ff8a6c4f2946",
+								"id": "70d55022-56e8-4b4d-91b4-89b0a4f52207",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1304,7 +1304,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "3bb8383f-af46-49a7-ae6b-935aa44bffc6",
+						"id": "981e8c4f-7f7f-49af-9253-acc2c343d04a",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1314,7 +1314,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "54ff3a22-872d-489a-87d0-887b9db1fee1",
+						"id": "55347b1c-e95a-42ab-afed-1affc1234d37",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1746,7 +1746,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "ddc488f6-bb65-40ee-9fae-4d7027b14a2c",
+								"id": "a0a2758a-f71d-426f-a899-8c41d3325a4e",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1756,7 +1756,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1b01ef87-983c-416e-9f45-eb0ce0855a23",
+								"id": "6c5c1bb4-fe20-4849-a78e-c6d93920a7f2",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -2235,6 +2235,85 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Contribution",
+			"item": [
+				{
+					"name": "contribution - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fileId\": 1,\r\n    \"routeId\": 2,\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": 1,\r\n    \"aircraftId\": 1,\r\n    \"requestTime\": null,\r\n    \"quotedTime\": null,\r\n    \"cargoAirborne\": null,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": null,\r\n    \"exchangeBuyType\": null,\r\n    \"purchasePrice\": 8000,\r\n    \"purchaseCommissionPercent\": 0,\r\n    \"inlcudedIva\": false,\r\n    \"salesPrice\": 10000,\r\n    \"salesCommissionPercent\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Conversions",
 			"item": [
 				{
@@ -2407,6 +2486,34 @@
 										"1",
 										"routes",
 										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "route - add - ADHOC",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-01\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes"
 									]
 								}
 							},
@@ -2872,7 +2979,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "88fcd362-95c9-4e4d-ba03-491badf0e9fe",
+						"id": "8ffb0d39-c457-416f-af7d-49a0389f25d8",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"pm.collectionVariables.set(\"token\", jsonData.jwtToken);"
@@ -3024,7 +3131,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "0f8a0a64-6a91-4f6e-80f4-98c776d791c1",
+				"id": "f267b1b9-8b11-46b7-be71-5a36921d55d9",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -3034,7 +3141,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "74349f95-7b52-4762-8880-193825e4cb42",
+				"id": "41e17d01-2e39-4242-90b2-ae77727ae650",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -3044,17 +3151,17 @@
 	],
 	"variable": [
 		{
-			"id": "54157aba-75f0-4137-bdb1-840abcb4b1d6",
+			"id": "ae2dbd09-1ee5-422b-8ea1-6d2a6833d1ee",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "a4044188-159b-4908-a272-608d090ecb35",
+			"id": "87920eee-2b97-48c2-a74e-e3a90bbe624c",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "e1487b3d-1550-4ba1-b85f-405fe139a7d5",
+			"id": "c5308eea-15df-4f7a-836d-0a6805876d5e",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}

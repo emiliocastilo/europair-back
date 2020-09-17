@@ -1,8 +1,6 @@
 package com.europair.management.impl.service.files;
 
 import com.europair.management.api.dto.files.FileDTO;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.files.IFileMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.files.entity.File;
@@ -10,8 +8,10 @@ import com.europair.management.rest.model.files.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 
@@ -31,7 +31,7 @@ public class FileServiceImpl implements IFileService {
   @Override
   public FileDTO findById(Long id) {
     return IFileMapper.INSTANCE.toDto(fileRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + id)));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id)));
   }
 
   @Transactional(readOnly = false)
@@ -39,7 +39,7 @@ public class FileServiceImpl implements IFileService {
   public FileDTO saveFile(FileDTO fileDTO) {
 
     if (fileDTO.getId() != null) {
-      throw new InvalidArgumentException(String.format("New File expected. Identifier %s got", fileDTO.getId()));
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New File expected. Identifier %s got", fileDTO.getId()));
     }
     File file = IFileMapper.INSTANCE.toEntity(fileDTO);
     file = fileRepository.save(file);
@@ -52,7 +52,7 @@ public class FileServiceImpl implements IFileService {
   public FileDTO updateFile(Long id, FileDTO fileDTO) {
 
     File file = fileRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + id));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id));
 
     IFileMapper.INSTANCE.updateFromDto(fileDTO, file);
     file = fileRepository.save(file);
@@ -65,7 +65,7 @@ public class FileServiceImpl implements IFileService {
   public void deleteFile(Long id) {
 
     File file = fileRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("File not found on id: " + id));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found on id: " + id));
 
     file.setRemovedAt(LocalDate.now());
     fileRepository.save(file);

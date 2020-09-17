@@ -118,5 +118,11 @@ databaseChangeLog:
       file: 2020/20200908_vat_balearics_table_v1.yaml
       relativeToChangelogFile: true
   - include:
+      file: 2020/20200914_flight_taxes_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20200916_taxes_v1.yaml
+      relativeToChangelogFile: true
+..- include:
       file: 2020/20200917_foreign_keys_fix.yaml
       relativeToChangelogFile: true

@@ -5,7 +5,6 @@ import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.fleet.IAircraftSearchMapper;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
@@ -22,9 +21,11 @@ import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         Integer minSubcategory = null;
         if (filterDto.getSubcategoryId() != null) {
             AircraftCategory subCategory = aircraftCategoryRepository.findById(filterDto.getSubcategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Subcategory not found with id; " + filterDto.getSubcategoryId()));
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Subcategory not found with id; " + filterDto.getSubcategoryId()));
             if (!Boolean.TRUE.equals(filterDto.getExactSubcategory())) {
                 minSubcategory = subCategory.getOrder();
                 filterDto.setCategoryId(subCategory.getParentCategory().getId());
@@ -117,7 +118,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         );
 
         final Airport destinationAirport = airportRepository.findById(filterDto.getDestinationAirportId())
-                .orElseThrow(() -> new ResourceNotFoundException("Destinarion Airport not found with id: " + filterDto.getDestinationAirportId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destinarion Airport not found with id: " + filterDto.getDestinationAirportId()));
 
         final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
@@ -200,7 +201,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
         // ToDo: cual es el origen???
         Airport origin = aircraft.getBases().stream().filter(AircraftBase::getMainBase).findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("No main base found for Aircraft with id: " + aircraft.getId()))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No main base found for Aircraft with id: " + aircraft.getId()))
                 .getAirport();
 
         // If distance has been calculated before we get the data, otherwise we do the calculation and save the data

@@ -1,35 +1,39 @@
 package com.europair.management.impl.service.routes;
 
+import com.europair.management.api.dto.flights.FlightDTO;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
+import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.airport.entity.Airport;
+import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.entity.RouteFrequencyDay;
+import com.europair.management.rest.model.routes.repository.RouteAirportRepository;
 import com.europair.management.rest.model.routes.repository.RouteFrequencyDayRepository;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,6 +52,15 @@ public class RouteServiceImpl implements IRouteService {
     @Autowired
     private FileRepository fileRepository;
 
+    @Autowired
+    private AirportRepository airportRepository;
+
+    @Autowired
+    private RouteAirportRepository routeAirportRepository;
+
+    @Autowired
+    private IFlightService flightService;
+
     @Override
     public Page<RouteDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
         checkIfFileExists(fileId);
@@ -62,15 +75,24 @@ public class RouteServiceImpl implements IRouteService {
     public RouteDto findById(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         return IRouteMapper.INSTANCE.toDto(routeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id)));
     }
 
     @Override
     public RouteDto saveRoute(final Long fileId, RouteDto routeDto) {
         checkIfFileExists(fileId);
         if (routeDto.getId() != null) {
-            throw new InvalidArgumentException(String.format("New Route expected. Identifier %s got", routeDto.getId()));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Route expected. Identifier %s got", routeDto.getId()));
         }
+
+        // Validate Route Airports
+        List<String> iataCodes = Utils.mapRouteAirportIataCodes(routeDto.getLabel());
+        Map<String, Airport> routeAirports = iataCodes.stream()
+                .distinct()
+                .map(iata -> airportRepository.findFirstByIataCode(iata)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No airport found with IATA: " + iata))
+                )
+                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
 
@@ -94,7 +116,7 @@ public class RouteServiceImpl implements IRouteService {
         }
 
         // Create rotations
-        List<Route> rotations = createRotations(route);
+        List<Route> rotations = createRotations(route, routeAirports);
         route.setRotations(rotations);
 
         return IRouteMapper.INSTANCE.toDto(route);
@@ -104,7 +126,7 @@ public class RouteServiceImpl implements IRouteService {
     public RouteDto updateRoute(final Long fileId, Long id, RouteDto routeDto) {
         checkIfFileExists(fileId);
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
         IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
 
         // Delete route frequency days
@@ -134,20 +156,20 @@ public class RouteServiceImpl implements IRouteService {
     public void deleteRoute(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         if (!routeRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Route not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id);
         }
         routeRepository.deleteById(id);
     }
 
     private void checkIfFileExists(final Long fileId) {
         if (!fileRepository.existsById(fileId)) {
-            throw new ResourceNotFoundException("File not found with id: " + fileId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
         }
     }
 
     // Route Rotations
 
-    private List<Route> createRotations(@NotNull final Route parentRoute) {
+    private List<Route> createRotations(@NotNull final Route parentRoute, final Map<String, Airport> routeAirportMap) {
         List<Route> rotations = new ArrayList<>();
 
         LocalDate auxDate = parentRoute.getStartDate();
@@ -164,7 +186,36 @@ public class RouteServiceImpl implements IRouteService {
             rotations.add(newRotation);
         }
 
-        return rotations.size() > 0 ? routeRepository.saveAll(rotations) : null;
+        if (rotations.size() > 0) {
+            rotations = routeRepository.saveAll(rotations);
+            // Add Route airports
+            rotations.forEach(rotation -> rotation.setAirports(new HashSet<>(createRouteAirports(rotation, routeAirportMap))));
+
+            // Add flights
+            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFile().getId()));
+
+        } else {
+            rotations = null;
+        }
+
+        return rotations;
+    }
+
+    private List<RouteAirport> createRouteAirports(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap) {
+        List<String> airportCodes = Utils.mapRouteAirportIataCodes(rotation.getLabel());
+        List<RouteAirport> airportList = new ArrayList<>();
+        for (int i = 0; i < airportCodes.size(); i++) {
+            RouteAirport routeAirport = new RouteAirport();
+            routeAirport.setRouteId(rotation.getId());
+            routeAirport.setRoute(rotation);
+            routeAirport.setAirportId(routeAirportMap.get(airportCodes.get(i)).getId());
+            routeAirport.setAirport(routeAirportMap.get(airportCodes.get(i)));
+            routeAirport.setOrder(i);
+            airportList.add(routeAirport);
+        }
+        airportList = routeAirportRepository.saveAll(airportList);
+
+        return airportList;
     }
 
     private LocalDate calculateRotationDate(LocalDate lastRotationDate, Route route, final boolean firstRotation) {
@@ -202,7 +253,7 @@ public class RouteServiceImpl implements IRouteService {
             case BIWEEKLY:
                 DayOfWeek min = dayOfWeekList.stream().min(Comparator.comparingInt(DayOfWeek::getValue)).orElse(null);
                 DayOfWeek max = dayOfWeekList.stream().max(Comparator.comparingInt(DayOfWeek::getValue))
-                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Route frequency days found!"));
 
                 LocalDate startCounter;
                 if (firstRotation) {
@@ -227,7 +278,7 @@ public class RouteServiceImpl implements IRouteService {
                 break;
             case DAY_OF_MONTH:
                 Integer minDayOfMonth = dayOfMonthList.stream().min(Integer::compareTo)
-                        .orElseThrow(() -> new InvalidArgumentException("No Route frequency days found!"));
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Route frequency days found!"));
 
                 if (firstRotation && dayOfMonthList.contains(rotationDate.getDayOfMonth())) {
                     return rotationDate;
@@ -247,14 +298,14 @@ public class RouteServiceImpl implements IRouteService {
                 try {
                     nextMonthDate = LocalDate.of(nextMonthDate.getYear(), nextMonthDate.getMonth(), nextMonthDay);
                     if (nextMonthDate.isAfter(route.getEndDate())) {
-                        throw new InvalidArgumentException("Rotation date after end date: " + nextMonthDate);
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rotation date after end date: " + nextMonthDate);
                     } else {
                         return nextMonthDate;
                     }
 
                 } catch (DateTimeException e) {
                     // ToDo: lanzar exception o seleccionar otro día??
-                    throw new InvalidArgumentException("Rotation date out of range (yyyy-MM-dd): " +
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rotation date out of range (yyyy-MM-dd): " +
                             nextMonthDate.getYear() + "-" + nextMonthDate.getMonth() + "-" + nextMonthDay);
                 }
         }
@@ -265,14 +316,31 @@ public class RouteServiceImpl implements IRouteService {
     @Override
     public RouteDto updateRouteRotation(Long routeId, Long id, RouteDto routeDto) {
         if (!routeRepository.existsById(routeId)) {
-            throw new ResourceNotFoundException("Route not found with id: " + routeId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
         }
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Rotation not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rotation not found with id: " + id));
         IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
         route = routeRepository.save(route);
 
         // ToDo: modificar vuelos??
         return IRouteMapper.INSTANCE.toDto(route);
     }
+
+    // Flights
+    private void createFlights(@NotNull final Route rotation, final Long fileId) {
+        List<Airport> airports = rotation.getAirports().stream()
+                .sorted(Comparator.comparing(RouteAirport::getOrder))
+                .map(RouteAirport::getAirport)
+                .collect(Collectors.toList());
+        for (int i = 0; i < airports.size() - 1; i++) {
+            FlightDTO flightDTO = new FlightDTO();
+            flightDTO.setOrigin(airports.get(i).getIataCode());
+            flightDTO.setDestination(airports.get(i + 1).getIataCode());
+            // ToDo: setear más campos???
+            flightDTO.setDepartureTime(LocalDate.now()); // Está como not null en bdd ??
+            flightService.saveFlight(fileId, rotation.getId(), flightDTO);
+        }
+    }
+
 }

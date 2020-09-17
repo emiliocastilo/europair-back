@@ -1,7 +1,6 @@
 package com.europair.management.impl.service.users;
 
 import com.europair.management.api.dto.users.UserDTO;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.users.UserMapper;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
@@ -9,9 +8,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -32,7 +33,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserDTO findById(Long id) {
         return UserMapper.INSTANCE.toDto(userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found on id: " + id)));
     }
 
     @Override
@@ -49,7 +50,7 @@ public class UserServiceImpl implements IUserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found on id: " + id));
         if (!user.getPassword().equals(userDTO.getPassword())) {
             userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         }
@@ -63,7 +64,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void deleteUser(Long id) {
         User userBD = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found on id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found on id: " + id));
         userRepository.deleteById(id);
     }
 
