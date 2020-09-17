@@ -1,8 +1,6 @@
 package com.europair.management.impl.service.flights;
 
 import com.europair.management.api.dto.flights.FlightDTO;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.flights.IFlightMapper;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
@@ -12,8 +10,10 @@ import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,7 +43,7 @@ public class FlightServiceImpl implements IFlightService {
       checkIfRouteExists(routeId);
 
       return IFlightMapper.INSTANCE.toDto(flightRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Flight not found with id: " + id)));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id)));
     }
 
     @Override
@@ -54,7 +54,7 @@ public class FlightServiceImpl implements IFlightService {
       checkIfRouteExists(routeId);
 
       if (flightDTO.getId() != null) {
-        throw new InvalidArgumentException(String.format("New flight expected. Identifier %s got", flightDTO.getId()));
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New flight expected. Identifier %s got", flightDTO.getId()));
       }
       Flight flight = IFlightMapper.INSTANCE.toEntity(flightDTO);
 
@@ -75,7 +75,7 @@ public class FlightServiceImpl implements IFlightService {
       checkIfRouteExists(routeId);
 
       Flight flight = flightRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Flight not found with id: " + id));
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id));
 
       IFlightMapper.INSTANCE.updateFromDto(flightDTO, flight);
       flight = flightRepository.save(flight);
@@ -91,7 +91,7 @@ public class FlightServiceImpl implements IFlightService {
       checkIfRouteExists(routeId);
 
       if (!flightRepository.existsById(id)) {
-        throw new ResourceNotFoundException("Flight not found with id: " + id);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id);
       }
       flightRepository.deleteById(id);
     }
@@ -99,13 +99,13 @@ public class FlightServiceImpl implements IFlightService {
 
     private void checkIfFileExists(final Long fileId) {
       if (!fileRepository.existsById(fileId)) {
-        throw new ResourceNotFoundException("File not found with id: " + fileId);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
       }
     }
 
     private void checkIfRouteExists(final Long routeId) {
       if (!routeRepository.existsById(routeId)) {
-        throw new ResourceNotFoundException("Route not found with id: " + routeId);
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
       }
     }
 

@@ -2,30 +2,24 @@ package com.europair.management.impl.service.roles;
 
 import com.europair.management.api.dto.roles.RoleDTO;
 import com.europair.management.api.dto.tasks.TaskDTO;
-import com.europair.management.impl.common.exception.InvalidArgumentException;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.roles.RoleMapper;
-import com.europair.management.impl.mappers.tasks.TaskMapper;
-import com.europair.management.rest.model.common.repository.BaseRepositoryImpl;
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.roles.repository.IRoleRepository;
 import com.europair.management.rest.model.rolestasks.entity.RolesTasks;
 import com.europair.management.rest.model.rolestasks.entity.RolesTasksPK;
 import com.europair.management.rest.model.rolestasks.repository.RolesTasksRepository;
 import com.europair.management.rest.model.tasks.entity.Task;
-import com.europair.management.rest.model.tasks.repository.ITaskRepositoryCustom;
 import com.europair.management.rest.model.tasks.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -46,9 +40,9 @@ public class RoleServiceImpl implements IRoleService {
   }
 
   @Override
-  public RoleDTO findById(final Long id) throws ResourceNotFoundException {
+  public RoleDTO findById(final Long id) {
     return RoleMapper.INSTANCE.toDto(roleRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id)));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id)));
   }
 
   @Transactional(readOnly = false)
@@ -56,7 +50,7 @@ public class RoleServiceImpl implements IRoleService {
   public RoleDTO saveRole(final RoleDTO roleDTO) {
 
     if(roleDTO.getId() != null){
-        throw new InvalidArgumentException(String.format("New role expected. Identifier %s got", roleDTO.getId()));
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New role expected. Identifier %s got", roleDTO.getId()));
     }
     Role role = RoleMapper.INSTANCE.toEntity(roleDTO);
     role = roleRepository.save(role);
@@ -68,7 +62,7 @@ public class RoleServiceImpl implements IRoleService {
   public RoleDTO updateRole(final Long id, final RoleDTO roleDTO) {
 
     Role role = roleRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id));
 
       /*
       must iterate over the dto list adding all the task that are not in the JPA list
@@ -77,7 +71,7 @@ public class RoleServiceImpl implements IRoleService {
         if (!existIdTaskDTOInJPAList(taskDTO, role.getRolesTasks())){
 
           // we have left hand side of the relationship role but we must have both
-          Task task = taskRepository.findById(taskDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Task not found on id: " + taskDTO.getId()) );
+          Task task = taskRepository.findById(taskDTO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found on id: " + taskDTO.getId()) );
 
           RolesTasksPK rolesTasksPK = new RolesTasksPK();
           rolesTasksPK.setRoleId(role.getId());
@@ -100,7 +94,7 @@ public class RoleServiceImpl implements IRoleService {
       }
 
     role = roleRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id));
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id));
 
     return RoleMapper.INSTANCE.toDto(role);
   }
@@ -133,7 +127,7 @@ public class RoleServiceImpl implements IRoleService {
   public void deleteRole(Long id) {
 
     Role roleBD = roleRepository.findById(id)
-      .orElseThrow(() -> new ResourceNotFoundException("Role not found on id: " + id));
+      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id));
     roleRepository.deleteById(id);
   }
 

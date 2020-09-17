@@ -1,7 +1,6 @@
 package com.europair.management.impl.service.airport;
 
 import com.europair.management.api.dto.regions.RegionDTO;
-import com.europair.management.impl.common.exception.ResourceNotFoundException;
 import com.europair.management.impl.mappers.regions.IRegionMapper;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
@@ -13,8 +12,10 @@ import com.europair.management.rest.model.regionscountries.repository.IRegionRep
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -44,7 +45,7 @@ public class AirportRegionServiceImpl implements IAirportRegionService {
         regionAirportId.setAirportId(airportId);
         regionAirportId.setRegionId(id);
         RegionAirport regionAirport = regionsAirportsRepository.findById(regionAirportId)
-                .orElseThrow(() -> new ResourceNotFoundException("Region-Airport not found with id: " + id));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Region-Airport not found with id: " + id));
 
         return IRegionMapper.INSTANCE.toSimpleDto(regionAirport.getRegion());
     }
@@ -52,9 +53,9 @@ public class AirportRegionServiceImpl implements IAirportRegionService {
     @Override
     public RegionDTO saveRegionAirport(final Long airportId, RegionDTO regionDto) {
         Airport airport = airportRepository.findById(airportId)
-                .orElseThrow(() -> new ResourceNotFoundException("Airport not found with id: " + airportId));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId));
         Region region = regionRepository.findById(regionDto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Region not found with id: " + regionDto.getId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Region not found with id: " + regionDto.getId()));
 
         RegionAirport regionAirport = new RegionAirport();
         regionAirport.setAirport(airport);
@@ -77,14 +78,14 @@ public class AirportRegionServiceImpl implements IAirportRegionService {
         regionAirportId.setAirportId(airportId);
         regionAirportId.setRegionId(id);
         if (!regionsAirportsRepository.existsById(regionAirportId)) {
-            throw new ResourceNotFoundException("Region-Airport not found with id: " + id);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Region-Airport not found with id: " + id);
         }
         regionsAirportsRepository.deleteById(regionAirportId);
     }
 
     private void checkIfAirportExists(final Long airportId) {
         if (!airportRepository.existsById(airportId)) {
-            throw new ResourceNotFoundException("Airport not found with id: " + airportId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId);
         }
     }
 

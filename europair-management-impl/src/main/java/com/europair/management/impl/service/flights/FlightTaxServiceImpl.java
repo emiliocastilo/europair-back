@@ -41,7 +41,7 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
                 .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
         if (CollectionUtils.isEmpty(route.getFlights())) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "There are no flights in the contribution for tha tax calculation.");
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Something went wrong. There are no flights in the contribution for the tax calculation.");
         }
 
         FileServiceEnum serviceType = FileServiceEnum.FLIGHT;
