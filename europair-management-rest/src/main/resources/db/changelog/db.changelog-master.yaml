@@ -123,6 +123,9 @@ databaseChangeLog:
   - include:
       file: 2020/20200916_taxes_v1.yaml
       relativeToChangelogFile: true
+..- include:
+      file: 2020/20200917_foreign_keys_fix.yaml
+      relativeToChangelogFile: true
   - include:
      file: 2020/17092020_files_aud_master_v1.yaml
      relativeToChangelogFile: true
