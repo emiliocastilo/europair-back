@@ -36,14 +36,14 @@ public class FlightService extends AuditModificationBaseEntity implements Serial
     @JoinColumn(name = "flight_id", nullable = false, insertable = false, updatable = false)
     private Flight flight;
 
-    @Column(name = "service_type", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private FileServiceEnum serviceType;
 
-    @Column(name = "description")
+    @Column
     private String description;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(nullable = false)
     private Integer quantity;
 
     @Column(name = "provider_id")
@@ -68,7 +68,7 @@ public class FlightService extends AuditModificationBaseEntity implements Serial
     @Column(name = "commission_percentage")
     private Double commission;
 
-    @Column(name = "comments")
+    @Column
     private String comments;
 
     @Column(name = "seller_id")
@@ -79,6 +79,6 @@ public class FlightService extends AuditModificationBaseEntity implements Serial
     private User seller;
 
     // ToDo: pendiente estados
-    @Column(name = "status", length = TextField.TEXT_20)
+    @Column(length = TextField.TEXT_20)
     private String status;
 }

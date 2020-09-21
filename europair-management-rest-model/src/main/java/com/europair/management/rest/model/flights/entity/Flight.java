@@ -49,4 +49,7 @@ public class Flight extends AuditModificationBaseEntity implements Serializable 
   @ManyToOne
   private Route route;
 
+  @Column(name = "positional_flight")
+  private Boolean positionalFlight;
+
 }
