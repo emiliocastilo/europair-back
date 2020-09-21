@@ -14,7 +14,7 @@ public interface IFileService {
 
   FileDTO saveFile(FileDTO fileDTO);
 
-  FileDTO updateFile(Long id, FileDTO fileDTO);
+  Boolean updateFile(Long id, FileDTO fileDTO);
 
   void deleteFile(Long id);
 
