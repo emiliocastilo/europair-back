@@ -58,9 +58,9 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
             Airport origin = airportMap.get(flight.getOrigin());
             Airport destination = airportMap.get(flight.getDestination());
 
-            Double taxOnSale = calculationService.calculateFlightTaxToApply(contribution, origin, destination, serviceType, true);
+            Double taxOnSale = calculationService.calculateFinalTaxToApply(contribution.getFileId(), origin, destination, serviceType, true);
             ft.setTaxOnSale(taxOnSale);
-            Double taxOnPurchase = calculationService.calculateFlightTaxToApply(contribution, origin, destination, serviceType, false);
+            Double taxOnPurchase = calculationService.calculateFinalTaxToApply(contribution.getFileId(), origin, destination, serviceType, false);
             ft.setTaxOnPurchase(taxOnPurchase);
 
             flightTaxes.add(ft);

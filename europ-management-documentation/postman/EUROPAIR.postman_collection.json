@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "a4596151-f034-44fa-be02-21178837a8d6",
+		"_postman_id": "6313bce7-d8e1-481c-9708-ae4dc97c3a8a",
 		"name": "EUROPAIR",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -289,7 +289,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "53887b48-787a-4d94-983c-0e25829f5ec4",
+								"id": "58001aa5-1be0-45a5-bb00-8268c0edac17",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -299,7 +299,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "0d7c384b-e8ca-422c-8ebe-776f4ef7eec8",
+								"id": "77ee1cee-bb04-40b9-a59a-c4698c3b242f",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -977,7 +977,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "11fa10e7-50dc-45ad-9b51-9b6744e87386",
+								"id": "930a222b-518e-4000-9a6f-7fde240196c9",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -987,7 +987,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "b1d3e324-1432-4757-8df9-a1f99faef292",
+								"id": "739dfbcb-6335-4482-84a3-1abb4bc76544",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1139,7 +1139,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "5e55ac6e-1de8-4d08-81cb-d772f95ff0e1",
+								"id": "e7e826c0-5ba0-43cb-8b09-d44c2e6daab0",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1149,7 +1149,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "70d55022-56e8-4b4d-91b4-89b0a4f52207",
+								"id": "5c4f3b45-1a88-4a67-82d3-9ea61209b157",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1304,7 +1304,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "981e8c4f-7f7f-49af-9253-acc2c343d04a",
+						"id": "b997bbf7-cd53-4f43-8d44-906efb7ca8c4",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1314,7 +1314,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "55347b1c-e95a-42ab-afed-1affc1234d37",
+						"id": "d084cd59-0eea-43f6-867a-2bd12fbf4efb",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1746,7 +1746,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "a0a2758a-f71d-426f-a899-8c41d3325a4e",
+								"id": "980b7a52-8b86-49de-84c9-3bcf5a517116",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1756,7 +1756,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "6c5c1bb4-fe20-4849-a78e-c6d93920a7f2",
+								"id": "280b1bbf-bc64-4d2f-bb64-67c48862690e",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -2688,6 +2688,177 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Flight",
+			"item": [
+				{
+					"name": "FlightService",
+					"item": [
+						{
+							"name": "flight service - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes/2/flights/1/services",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"2",
+										"flights",
+										"1",
+										"services"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "flight service - find by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes/2/flights/1/services/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"2",
+										"flights",
+										"1",
+										"services",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "flight service - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": null,\r\n    \"flightId\": null,\r\n    \"serviceType\": \"EXTRAS_ON_BOARD\",\r\n    \"description\": null,\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 19.99,\r\n    \"salePrice\": 29.99,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/2/flights/1/services",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"2",
+										"flights",
+										"1",
+										"services"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "flight service - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"flightId\": 1,\r\n    \"serviceType\": \"EXTRAS_ON_GROUND\",\r\n    \"description\": \"updated\",\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 18.99,\r\n    \"salePrice\": 28.99,\r\n    \"taxOnSale\": 8.05,\r\n    \"taxOnPurchase\": 10.0,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments updated\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/2/flights/1/services/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"2",
+										"flights",
+										"1",
+										"services",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "flight service - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes/2/flights/1/services/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"2",
+										"flights",
+										"1",
+										"services",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "6125518f-fe56-4c76-8453-c05e289bcadb",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9565b4b8-2f02-4969-9e6d-a627b7ea7c2c",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Role",
 			"item": [
 				{
@@ -2979,7 +3150,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "8ffb0d39-c457-416f-af7d-49a0389f25d8",
+						"id": "9eef8ec1-4738-4e4a-b04a-323b11278299",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"pm.collectionVariables.set(\"token\", jsonData.jwtToken);"
@@ -3131,7 +3302,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "f267b1b9-8b11-46b7-be71-5a36921d55d9",
+				"id": "3cd17025-604c-40aa-89eb-afb326150b2c",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -3141,7 +3312,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "41e17d01-2e39-4242-90b2-ae77727ae650",
+				"id": "ab32e68e-0b3b-462c-902b-bd6036acd722",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -3151,17 +3322,17 @@
 	],
 	"variable": [
 		{
-			"id": "ae2dbd09-1ee5-422b-8ea1-6d2a6833d1ee",
+			"id": "a20de69a-7df4-4a41-9973-ed6360a721c0",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "87920eee-2b97-48c2-a74e-e3a90bbe624c",
+			"id": "fb4c518b-ef36-400e-afa9-357407652554",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "c5308eea-15df-4f7a-836d-0a6805876d5e",
+			"id": "42b12d19-a4c8-4488-be4a-8e1d47a7b3e6",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}
