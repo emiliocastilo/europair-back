@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "4466caf4-7f8b-4301-bf7d-1eea8366f32b",
+		"_postman_id": "6313bce7-d8e1-481c-9708-ae4dc97c3a8a",
 		"name": "EUROPAIR",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -289,7 +289,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d4c40d56-6ffd-4736-a344-d8a2f7fbb7ea",
+								"id": "58001aa5-1be0-45a5-bb00-8268c0edac17",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -299,7 +299,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "fe818e36-69e3-4431-836b-59551c944571",
+								"id": "77ee1cee-bb04-40b9-a59a-c4698c3b242f",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -977,7 +977,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "ca8b3cc1-0978-4902-be19-66557cbdd605",
+								"id": "930a222b-518e-4000-9a6f-7fde240196c9",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -987,7 +987,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "795f4dbf-9b69-4bbe-aec6-5dfcdaa7d277",
+								"id": "739dfbcb-6335-4482-84a3-1abb4bc76544",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1139,7 +1139,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9fcc0d1c-e57a-4f44-9264-e2f39f66e5c4",
+								"id": "e7e826c0-5ba0-43cb-8b09-d44c2e6daab0",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1149,7 +1149,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "064f1caa-07e8-4777-8957-e9c068acc895",
+								"id": "5c4f3b45-1a88-4a67-82d3-9ea61209b157",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1304,7 +1304,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "5b11d6d9-662f-451e-bfce-9f0d8b74f9ac",
+						"id": "b997bbf7-cd53-4f43-8d44-906efb7ca8c4",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1314,7 +1314,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "0b5c7dc9-3e82-47b6-b4cc-c8b1af4f7b74",
+						"id": "d084cd59-0eea-43f6-867a-2bd12fbf4efb",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1746,7 +1746,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "b0d94c1a-b5cb-4c84-9e25-35a19b8c8865",
+								"id": "980b7a52-8b86-49de-84c9-3bcf5a517116",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1756,7 +1756,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "5b2f7d75-83ee-4306-921d-6cffdc5c85d6",
+								"id": "280b1bbf-bc64-4d2f-bb64-67c48862690e",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -2019,20 +2019,10 @@
 				{
 					"name": "airport - find by Id",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDAwODEzNTMsImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDEzNzczNTN9.cZ77GTwucnLxkcGRp5nf2rQEbQm7J2Ix87blCFernA9VrTSsxiBj_7rnxiumLmbwt6dyCtwyTF0UpkkJQF5wMw",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/airports/100",
+							"raw": "http://localhost:8080/airports/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -2040,7 +2030,7 @@
 							"port": "8080",
 							"path": [
 								"airports",
-								"100"
+								"1"
 							]
 						}
 					},
@@ -2183,6 +2173,138 @@
 									"key": "filter_name",
 									"value": "MAL,CONTAINS"
 								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "city - create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDAyNTUwNjksImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDE1NTEwNjl9.3JI02HsFobUmZl0oDIGGDyRbw3NQ_GddvB5ENnUDR9QyM9wa0G1K2gg9lPsHpN1peOLHbbCSDv8qlJpgiQsHmQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\": \"PML\",\r\n    \"name\": \"Palma de Mallorca\",\r\n    \"canaryIslands\": false,\r\n    \"country\": {\r\n        \"id\": 1\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cities",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cities"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"disabled": true
+								},
+								{
+									"key": "filter_id",
+									"value": "2,EQUALS",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Contribution",
+			"item": [
+				{
+					"name": "contribution - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fileId\": 1,\r\n    \"routeId\": 2,\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": 1,\r\n    \"aircraftId\": 1,\r\n    \"requestTime\": null,\r\n    \"quotedTime\": null,\r\n    \"cargoAirborne\": null,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": null,\r\n    \"exchangeBuyType\": null,\r\n    \"purchasePrice\": 8000,\r\n    \"purchaseCommissionPercent\": 0,\r\n    \"inlcudedIva\": false,\r\n    \"salesPrice\": 10000,\r\n    \"salesCommissionPercent\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions"
 							]
 						}
 					},
@@ -2370,6 +2492,34 @@
 							"response": []
 						},
 						{
+							"name": "route - add - ADHOC",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-01\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "route - add - DAILY",
 							"request": {
 								"method": "POST",
@@ -2533,17 +2683,23 @@
 					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
-				},
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Flight",
+			"item": [
 				{
-					"name": "Contribution",
+					"name": "FlightService",
 					"item": [
 						{
-							"name": "getContributionByFilter",
+							"name": "flight service - filter",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions?size=10&page=0&filter_fileId=1,EQUALS&filter_contributionState=CONFIRMED,EQUALS&filter_operatorId=1,EQUALS&filter_routeId=1,EQUALS",
+									"raw": "{{url}}/files/1/routes/2/flights/1/services",
 									"host": [
 										"{{url}}"
 									],
@@ -2551,46 +2707,22 @@
 										"files",
 										"1",
 										"routes",
+										"2",
+										"flights",
 										"1",
-										"contributions"
-									],
-									"query": [
-										{
-											"key": "size",
-											"value": "10"
-										},
-										{
-											"key": "page",
-											"value": "0"
-										},
-										{
-											"key": "filter_fileId",
-											"value": "1,EQUALS"
-										},
-										{
-											"key": "filter_contributionState",
-											"value": "CONFIRMED,EQUALS"
-										},
-										{
-											"key": "filter_operatorId",
-											"value": "1,EQUALS"
-										},
-										{
-											"key": "filter_routeId",
-											"value": "1,EQUALS"
-										}
+										"services"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "getContributionById",
+							"name": "flight service - find by Id",
 							"request": {
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions/1",
+									"raw": "{{url}}/files/1/routes/2/flights/1/services/1",
 									"host": [
 										"{{url}}"
 									],
@@ -2598,8 +2730,10 @@
 										"files",
 										"1",
 										"routes",
+										"2",
+										"flights",
 										"1",
-										"contributions",
+										"services",
 										"1"
 									]
 								}
@@ -2607,25 +2741,13 @@
 							"response": []
 						},
 						{
-							"name": "saveContribution PENDING",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"id": "18dc440a-72da-48ca-a2ad-9389f032576f",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
+							"name": "flight service - add",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
+									"raw": "{\r\n    \"id\": null,\r\n    \"flightId\": null,\r\n    \"serviceType\": \"EXTRAS_ON_BOARD\",\r\n    \"description\": null,\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 19.99,\r\n    \"salePrice\": 29.99,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2633,7 +2755,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions",
+									"raw": "{{url}}/files/1/routes/2/flights/1/services",
 									"host": [
 										"{{url}}"
 									],
@@ -2641,33 +2763,23 @@
 										"files",
 										"1",
 										"routes",
+										"2",
+										"flights",
 										"1",
-										"contributions"
+										"services"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "saveContribution SENDED",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"id": "23ea0e9f-07aa-48d7-84c7-f3d09beb652f",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
+							"name": "flight service - update",
 							"request": {
-								"method": "POST",
+								"method": "PUT",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"SENDED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"flightId\": 1,\r\n    \"serviceType\": \"EXTRAS_ON_GROUND\",\r\n    \"description\": \"updated\",\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 18.99,\r\n    \"salePrice\": 28.99,\r\n    \"taxOnSale\": 8.05,\r\n    \"taxOnPurchase\": 10.0,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments updated\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}\r\n\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2675,7 +2787,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions",
+									"raw": "{{url}}/files/1/routes/2/flights/1/services/1",
 									"host": [
 										"{{url}}"
 									],
@@ -2683,41 +2795,23 @@
 										"files",
 										"1",
 										"routes",
+										"2",
+										"flights",
 										"1",
-										"contributions"
+										"services",
+										"1"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "saveContribution QUOTED",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"id": "f00f7f1b-30fa-4e2c-ae10-a3aa019bf970",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
+							"name": "flight service - delete",
 							"request": {
-								"method": "POST",
+								"method": "DELETE",
 								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"QUOTED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions",
+									"raw": "{{url}}/files/1/routes/2/flights/1/services/1",
 									"host": [
 										"{{url}}"
 									],
@@ -2725,168 +2819,41 @@
 										"files",
 										"1",
 										"routes",
+										"2",
+										"flights",
 										"1",
-										"contributions"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "saveContribution CONFIRMED",
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"id": "8fdff32f-4b7e-42d3-ab9f-d16ea7189376",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"CONFIRMED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"files",
-										"1",
-										"routes",
-										"1",
-										"contributions"
+										"services",
+										"1"
 									]
 								}
 							},
 							"response": []
 						}
 					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "saveFile IN_CONSTRUCTION",
 					"event": [
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "86be447f-ecab-48c6-99e6-5165a10ec26e",
+								"id": "6125518f-fe56-4c76-8453-c05e289bcadb",
+								"type": "text/javascript",
 								"exec": [
 									""
-								],
-								"type": "text/javascript"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9565b4b8-2f02-4969-9e6d-a627b7ea7c2c",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
 							}
 						}
 					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{    \r\n    \"code\": \"COD_F1\",\r\n    \"description\": \"Description of the file\",\r\n    \"contributionState\": \"PENDING\",\r\n    \"status\": {\r\n                \"code\":\"COD_STATUS\",\r\n                \"name\": \"NAME_STATUS\"\r\n            },\r\n    \"client\": {\r\n            \"code\":\"CODE_CLIENT\",\r\n            \"name\":\"exampleName\",\r\n            \"type\": \"INDIVIDUAL\",\r\n            \"canaryIslands\":\"true\",\r\n            \"vies\":\"true\",\r\n            \"country\":{\r\n                    \"id\":\"1\",\r\n                    \"code\": \"ES\",\r\n                    \"name\": \"Spain\",\r\n                    \"europeanUnion\":\"true\"                \r\n            }\r\n    }\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/files",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getFilesByFilter",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/files?size=10&page=0",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files"
-							],
-							"query": [
-								{
-									"key": "size",
-									"value": "10"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getFilesById",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/files/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "updateFile",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id\": \"1\",\r\n    \"code\": \"NEW_CODE\",\r\n    \"description\": \"Descripcion_actualizada_con_auditoría\",\r\n    \"salePerson\": \"new Sale Person WO\",\r\n    \"saleAgent\": \"new Sale Agent WO\",\r\n    \"operationType\": \"EXECUTIVE\",\r\n    \"satatus\": \"1\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/files/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1"
-							]
-						}
-					},
-					"response": []
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -3122,32 +3089,53 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "master_enumerated_service",
+			"name": "VAT_Balearics",
 			"item": [
 				{
-					"name": "get_allUTCValues",
+					"name": "vat_balearics - getPercentage",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE1OTkwNTEyNjksImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiam9zZS5tZW5kZXoiLCJleHAiOjE2MDAzNDcyNjl9.AjwrSl3zseYD3rmBv3Ww0ennQguDh0bhvHZL5W8fR5PtEMpMG9GXbsquqg22gne_NWh0mqK8MWb48_PXUXH_cw",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDAyNTUwNjksImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDE1NTEwNjl9.3JI02HsFobUmZl0oDIGGDyRbw3NQ_GddvB5ENnUDR9QyM9wa0G1K2gg9lPsHpN1peOLHbbCSDv8qlJpgiQsHmQ",
 									"type": "string"
 								}
 							]
 						},
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "localhost:8080/conversions/time",
+							"raw": "{{url}}/routeBalearicsPctVat/?originAirportId=1&destinationAirportId=3",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
-							"port": "8080",
 							"path": [
-								"conversions",
-								"time"
+								"routeBalearicsPctVat",
+								""
+							],
+							"query": [
+								{
+									"key": "originAirportId",
+									"value": "1"
+								},
+								{
+									"key": "destinationAirportId",
+									"value": "3"
+								}
 							]
 						}
 					},
@@ -3162,7 +3150,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "040b2f67-617d-4bb5-b45d-2d186ab5dedf",
+						"id": "9eef8ec1-4738-4e4a-b04a-323b11278299",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"pm.collectionVariables.set(\"token\", jsonData.jwtToken);"
@@ -3298,35 +3286,6 @@
 				}
 			},
 			"response": []
-		},
-		{
-			"name": "Actuator",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDAwODEzNTMsImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDEzNzczNTN9.cZ77GTwucnLxkcGRp5nf2rQEbQm7J2Ix87blCFernA9VrTSsxiBj_7rnxiumLmbwt6dyCtwyTF0UpkkJQF5wMw",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/actuator",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"actuator"
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"auth": {
@@ -3343,11 +3302,9 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "7602b898-c824-40d8-9426-cf79bcdce9f3",
+				"id": "3cd17025-604c-40aa-89eb-afb326150b2c",
 				"type": "text/javascript",
 				"exec": [
-					"var current_timestamp = new Date();",
-					"postman.setEnvironmentVariable(\"timestamp\", current_timestamp.toISOString());",
 					""
 				]
 			}
@@ -3355,7 +3312,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "57b928c3-8432-43f6-88fc-bcf0e9be77b7",
+				"id": "ab32e68e-0b3b-462c-902b-bd6036acd722",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -3365,27 +3322,17 @@
 	],
 	"variable": [
 		{
-			"id": "b22062a9-dd85-4eb8-a046-3d61ed9a0010",
-			"value": "",
-			"disabled": true
-		},
-		{
-			"id": "43a1dc8e-7f5e-4a61-aeb6-ffc96279bf06",
-			"key": "timestamp",
-			"value": "09/Fr/2020 12:00"
-		},
-		{
-			"id": "8aa14373-e316-4339-8e47-f014093bb6ce",
+			"id": "a20de69a-7df4-4a41-9973-ed6360a721c0",
 			"key": "token",
-			"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDAyNTQyMzYsImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDE1NTAyMzZ9.aXnEgaY-_K81I3zCNuypz2l9E9HHBpCsmXKXAIMkiA2X5yPUdcUTnSj2GpuwnAj712QAMZe9qCLBkE74h7Riqw"
+			"value": ""
 		},
 		{
-			"id": "22775f9e-a215-4c03-8cb9-9b86887870f0",
+			"id": "fb4c518b-ef36-400e-afa9-357407652554",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "018c0327-27bb-4425-821d-eea45a7a93c2",
+			"id": "42b12d19-a4c8-4488-be4a-8e1d47a7b3e6",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}

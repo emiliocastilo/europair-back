@@ -5,20 +5,16 @@ import com.europair.management.api.enums.FileServiceEnum;
 import com.europair.management.impl.service.taxes.IRouteBalearicsPctVatService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
-import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.files.entity.Client;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.Provider;
 import com.europair.management.rest.model.files.repository.FileRepository;
-import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.taxes.repository.TaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.Comparator;
 
 @Service
 public class CalculationServiceImpl implements ICalculationService {
@@ -36,57 +32,17 @@ public class CalculationServiceImpl implements ICalculationService {
     private IRouteBalearicsPctVatService balearicsPctVatService;
 
     @Override
-    public Double calculateFlightTaxToApply(Contribution contribution, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
-        File file = fileRepository.findById(contribution.getFileId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + contribution.getFileId()));
-
-        Double taxToApply;
-        if (isSale) {
-            Client client = file.getClient();
-            taxToApply = switch (serviceType) {
-                case AIRPORT_TAX -> getTaxOnSaleAirportFee(origin, destination);
-                case CANCEL_FEE -> getTaxOnSaleCancellationFee(origin, destination);
-                case CARGO -> getTaxOnSaleCargo(origin, destination, client);
-                case CATERING_ON_BOARD -> getTaxOnSaleCateringOnBoard(origin, destination);
-                case CATERING_ON_GROUND -> getTaxOnSaleCateringOnGround(client);
-                case COMMISSION -> getTaxOnSaleCommission(client);
-                case EXTRAS_ON_BOARD -> getTaxOnSaleExtrasOnBoard(origin, destination);
-                case EXTRAS_ON_GROUND -> getTaxOnSaleExtrasOnGround(client);
-                case FLIGHT -> getTaxOnSaleFlight(origin, destination);
-                case TRANSPORT -> getTaxOnSaleTransport(origin, destination);
-            };
-        } else {
-            Provider provider = file.getProvider();
-            taxToApply = switch (serviceType) {
-                case AIRPORT_TAX -> getTaxOnPurchaseAirportFee(origin, destination, provider);
-                case CANCEL_FEE -> getTaxOnPurchaseCancellationFee(origin, destination, provider);
-                case CARGO -> getTaxOnPurchaseCargo(provider);
-                case CATERING_ON_BOARD -> getTaxOnPurchaseCateringOnBoard(origin, destination, provider);
-                case CATERING_ON_GROUND -> getTaxOnPurchaseCateringOnGround(provider);
-                case COMMISSION -> getTaxOnPurchaseCommission(provider);
-                case EXTRAS_ON_BOARD -> getTaxOnPurchaseExtrasOnBoard(origin, destination, provider);
-                case EXTRAS_ON_GROUND -> getTaxOnPurchaseExtrasOnGround(provider);
-                case FLIGHT -> getTaxOnPurchaseFlight(origin, destination, provider);
-                case TRANSPORT -> getTaxOnPurchaseTransport(origin, destination, provider);
-            };
-        }
+    public Double calculateFinalTaxToApply(Long fileId, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
+        Double taxToApply = calculateServiceTaxToApply(fileId, origin, destination, serviceType, isSale);
         Double taxPercentage = calculateTaxPercentageOnRoute(origin, destination, serviceType, isSale);
 
         return taxToApply != null ? taxToApply * (taxPercentage / 100D) : null;
     }
 
     @Override
-    public Double calculateTaxToApply(Contribution contribution, FileServiceEnum serviceType, boolean isSale) {
-        Airport origin = contribution.getRoute().getAirports().stream()
-                .min(Comparator.comparing(RouteAirport::getOrder))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No first airport found in the route with id: " + contribution.getRouteId()))
-                .getAirport();
-        Airport destination = contribution.getRoute().getAirports().stream()
-                .max(Comparator.comparing(RouteAirport::getOrder))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No last airport found in the route with id: " + contribution.getRouteId()))
-                .getAirport();
-        File file = fileRepository.findById(contribution.getFileId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + contribution.getFileId()));
+    public Double calculateServiceTaxToApply(Long fileId, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
+        File file = fileRepository.findById(fileId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId));
 
         Double taxToApply;
         if (isSale) {

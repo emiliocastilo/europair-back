@@ -1,0 +1,118 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200917_flight_services_v1_20200917_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add flight services table"
+      changes:
+
+        - createTable:
+            tableName: flight_services
+            remarks: Flight Services table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flight_services_id_pk
+              - column:
+                  name: flight_id
+                  type: int
+                  remarks: flight id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: flight_services_flight_fk
+                    references: flights(id)
+              - column:
+                  name: provider_id
+                  type: int
+                  remarks: provider id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: flight_services_provider_fk
+                    references: providers(id)
+              - column:
+                  name: service_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: quantity
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: purchase_price
+                  type: decimal(12,4)
+                  remarks: Purchase price
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sale_price
+                  type: decimal(12,4)
+                  remarks: Sale price
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sale_tax_percentage
+                  type: double
+                  remarks: Tax percentage that applies on sale
+              - column:
+                  name: purchase_tax_percentage
+                  type: double
+                  remarks: Tax percentage that applies on purchase
+              - column:
+                  name: commission_percentage
+                  type: double
+              - column:
+                  name: comments
+                  type: varchar(255)
+              - column:
+                  name: seller_id
+                  type: int
+                  remarks: seller id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: flight_services_seller_user_fk
+                    references: users(id)
+              - column:
+                  name: status
+                  type: varchar(20)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: flight_services
+
+
