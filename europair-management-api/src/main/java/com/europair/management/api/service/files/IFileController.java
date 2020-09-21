@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,7 +69,8 @@ public interface IFileController {
    */
   @PutMapping("/{id}")
   @Operation(description = "Updates existing file", security = {@SecurityRequirement(name = "bearerAuth")})
-  ResponseEntity<FileDTO> updateFile(
+  @ResponseStatus(code = HttpStatus.OK)
+  void updateFile(
     @Parameter(description = "File identifier") @NotNull @PathVariable final Long id,
     @Parameter(description = "File updated data") @NotNull @RequestBody final FileDTO fileDTO);
 
@@ -83,6 +85,7 @@ public interface IFileController {
    */
   @DeleteMapping("/{id}")
   @Operation(description = "Deletes existing file by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
-  ResponseEntity<?> deleteFile(@Parameter(description = "File identifier") @PathVariable @NotNull final Long id);
+  @ResponseStatus(code = HttpStatus.OK)
+  void deleteFile(@Parameter(description = "File identifier") @PathVariable @NotNull final Long id);
 
 }

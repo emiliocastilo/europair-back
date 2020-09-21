@@ -8,7 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -51,19 +53,13 @@ public class FileController implements IFileController {
     }
 
     @Override
-    public ResponseEntity<FileDTO> updateFile(@NotNull final Long id, @NotNull final FileDTO fileDTO) {
-
-        final FileDTO fileDTOUpdated = fileService.updateFile(id, fileDTO);
-        return ResponseEntity.ok().body(fileDTOUpdated);
-
+    public void updateFile(@NotNull final Long id, @NotNull final FileDTO fileDTO) {
+        fileService.updateFile(id, fileDTO);
     }
 
     @Override
-    public ResponseEntity<?> deleteFile(@NotNull final Long id) {
-
+    public void deleteFile(@NotNull final Long id) {
         fileService.deleteFile(id);
-        return ResponseEntity.noContent().build();
-
     }
 
 }

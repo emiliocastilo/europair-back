@@ -49,7 +49,7 @@ public class FileServiceImpl implements IFileService {
 
   @Transactional(readOnly = false)
   @Override
-  public FileDTO updateFile(Long id, FileDTO fileDTO) {
+  public Boolean updateFile(Long id, FileDTO fileDTO) {
 
     File file = fileRepository.findById(id)
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id));
@@ -57,7 +57,7 @@ public class FileServiceImpl implements IFileService {
     IFileMapper.INSTANCE.updateFromDto(fileDTO, file);
     file = fileRepository.save(file);
 
-    return IFileMapper.INSTANCE.toDto(file);
+    return Boolean.TRUE;
   }
 
   @Transactional(readOnly = false)

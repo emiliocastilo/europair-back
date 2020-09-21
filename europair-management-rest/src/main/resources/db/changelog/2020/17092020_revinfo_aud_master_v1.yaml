@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17092020_revinfo_aud_master_v1_master_table_for_auditory
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "create table revinfo mandatory to use envers in audited entities"
+      changes:
+        # REVINFO
+        - createTable:
+            tableName: REVINFO
+            remarks: Master table for auditory
+            columns:
+              - column:
+                  name: REV
+                  type: int
+                  remarks: revision number
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: rev_pk
+              - column:
+                  name: REVTSTMP
+                  type: bigint
+                  remarks: timestamp of the revision
+
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: REV
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: REVINFO

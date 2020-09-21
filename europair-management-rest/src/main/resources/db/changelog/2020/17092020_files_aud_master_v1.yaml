@@ -1,0 +1,163 @@
+databaseChangeLog:
+  - changeSet:
+      id: 17092020_files_aud_master_v1_files_aud_table
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "create table for auditable entity files"
+      changes:
+        # Files_aud
+        - createTable:
+            tableName: files_aud
+            remarks: Files Auditory table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: file id
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: file_aud_id_pk
+              - column:
+                  name: rev
+                  type: int
+                  remarks: revision id
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: file_rev_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+                  remarks: revtype
+              - column:
+                  name: code
+                  type: varchar(20)
+                  remarks: file code (e.g., EXP123456789)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: varchar(255)
+                  remarks: file description
+                  constraints:
+                    nullable: true
+              - column:
+                  name: status_id
+                  type: int
+                  remarks: status id
+                  constraints:
+                    nullable: true
+              - column:
+                  name: client_id
+                  type: int
+                  remarks: client id
+                  constraints:
+                    nullable: true
+              - column:
+                  name: contact_id
+                  type: int
+                  remarks: contact id
+                  constraints:
+                    nullable: true
+              - column:
+                  name: provider_id
+                  type: int
+                  remarks: provider id
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sale_person
+                  type: varchar(255)
+                  remarks: sale person
+                  constraints:
+                    nullable: true
+              - column:
+                  name: sale_agent
+                  type: varchar(255)
+                  remarks: sale person
+                  constraints:
+                    nullable: true
+              - column:
+                  name: operation_type
+                  type: varchar(20)
+                  remarks: operation type
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: files
+  - changeSet:
+      id: 21092020_files_master_v2_files_table
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Change column from sales person and sales agent to relate to users id"
+      changes:
+        - modifyDataType:
+            columnName: sale_person
+            newDataType: int
+            tableName: files_aud
+        - modifyDataType:
+            columnName: sale_agent
+            newDataType: int
+            tableName: files_aud
+        - addForeignKeyConstraint:
+            baseColumnNames: sale_person
+            baseTableName: files_aud
+            constraintName: file_aud_sale_person_fk
+            referencedColumnNames: id
+            referencedTableName: users
+            validate: true
+        - addForeignKeyConstraint:
+            baseColumnNames: sale_agent
+            baseTableName: files_aud
+            constraintName: file_aud_sale_agent_fk
+            referencedColumnNames: id
+            referencedTableName: users
+            validate: true
+        - renameColumn:
+            columnDataType: int
+            newColumnName: sale_person_id
+            oldColumnName: sale_person
+            remarks: A String for user id
+            tableName: files_aud
+        - renameColumn:
+            columnDataType: int
+            newColumnName: sale_agent_id
+            oldColumnName: sale_agent
+            remarks: A String for user id
+            tableName: files_aud
