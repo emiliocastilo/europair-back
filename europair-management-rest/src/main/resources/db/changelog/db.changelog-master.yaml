@@ -132,8 +132,10 @@ databaseChangeLog:
   - include:
      file: 2020/17092020_files_aud_master_v1.yaml
      relativeToChangelogFile: true
+  # hard auditory for files
   - include:
      file: 2020/17092020_revinfo_aud_master_v1.yaml
      relativeToChangelogFile: true
+
 
 
