@@ -15,10 +15,12 @@ import com.europair.management.rest.model.flights.repository.IFlightRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
+import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -40,6 +42,9 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
     @Autowired
     private IFlightRepository flightRepository;
+
+    @Autowired
+    private IUserRepository userRepository;
 
     @Autowired
     private FlightServiceRepository flightServiceRepository;
@@ -73,6 +78,9 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
         // Set relationship ids
         flightServiceDto.setFlightId(flightId);
+        if (flightServiceDto.getSellerId() == null) {
+            flightServiceDto.setSellerId(getLoggedUserId());
+        }
 
         // Calculate VAT
         calculateVat(fileId, routeId, flightId, flightServiceDto);
@@ -138,5 +146,12 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         // Update dto values
         flightServiceDto.setTaxOnSale(taxOnSale);
         flightServiceDto.setTaxOnPurchase(taxOnPurchase);
+    }
+
+    private Long getLoggedUserId() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(username).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "User of the token authentication not found: " + username))
+                .getId();
     }
 }

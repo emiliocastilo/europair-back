@@ -67,6 +67,23 @@ databaseChangeLog:
                   type: double
                   remarks: Tax percentage that applies on purchase
               - column:
+                  name: commission_percentage
+                  type: double
+              - column:
+                  name: comments
+                  type: varchar(255)
+              - column:
+                  name: seller_id
+                  type: int
+                  remarks: seller id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: flight_services_seller_user_fk
+                    references: users(id)
+              - column:
+                  name: status
+                  type: varchar(20)
+              - column:
                   name: created_at
                   type: timestamp
                   remarks: creation timestamp

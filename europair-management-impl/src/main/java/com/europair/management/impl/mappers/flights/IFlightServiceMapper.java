@@ -15,6 +15,9 @@ public interface IFlightServiceMapper {
 
     IFlightServiceMapper INSTANCE = Mappers.getMapper(IFlightServiceMapper.class);
 
+    @Mapping(target = "seller.password", ignore = true)
+    @Mapping(target = "seller.roles", ignore = true)
+    @Mapping(target = "seller.tasks", ignore = true)
     FlightServiceDto toDto(final FlightService entity);
 
     FlightService toEntity(final FlightServiceDto dto);

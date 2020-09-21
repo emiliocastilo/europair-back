@@ -2,7 +2,9 @@ package com.europair.management.rest.model.flights.entity;
 
 import com.europair.management.api.enums.FileServiceEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.files.entity.Provider;
+import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -36,7 +38,7 @@ public class FlightService extends AuditModificationBaseEntity implements Serial
 
     @Column(name = "service_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private FileServiceEnum serviceType; // ToDo: será una tabla o enum??
+    private FileServiceEnum serviceType;
 
     @Column(name = "description")
     private String description;
@@ -62,4 +64,21 @@ public class FlightService extends AuditModificationBaseEntity implements Serial
 
     @Column(name = "purchase_tax_percentage")
     private Double taxOnPurchase;
+
+    @Column(name = "commission_percentage")
+    private Double commission;
+
+    @Column(name = "comments")
+    private String comments;
+
+    @Column(name = "seller_id")
+    private Long sellerId;
+
+    @ManyToOne
+    @JoinColumn(name = "seller_id", nullable = false, insertable = false, updatable = false)
+    private User seller;
+
+    // ToDo: pendiente estados
+    @Column(name = "status", length = TextField.TEXT_20)
+    private String status;
 }
