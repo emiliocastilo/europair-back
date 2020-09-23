@@ -1,10 +1,11 @@
 package com.europair.management.impl.service.calculation;
 
 import com.europair.management.api.dto.taxes.RouteBalearicsPctVatDTO;
-import com.europair.management.api.enums.FileServiceEnum;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.service.taxes.IRouteBalearicsPctVatService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
+import com.europair.management.rest.model.common.exception.EuropairForeignTaxException;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.files.entity.Client;
 import com.europair.management.rest.model.files.entity.File;
@@ -32,7 +33,7 @@ public class CalculationServiceImpl implements ICalculationService {
     private IRouteBalearicsPctVatService balearicsPctVatService;
 
     @Override
-    public Double calculateFinalTaxToApply(Long fileId, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
+    public Double calculateFinalTaxToApply(Long fileId, Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
         Double taxToApply = calculateServiceTaxToApply(fileId, origin, destination, serviceType, isSale);
         Double taxPercentage = calculateTaxPercentageOnRoute(origin, destination, serviceType, isSale);
 
@@ -40,7 +41,7 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     @Override
-    public Double calculateServiceTaxToApply(Long fileId, Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
+    public Double calculateServiceTaxToApply(Long fileId, Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
         File file = fileRepository.findById(fileId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId));
 
@@ -79,7 +80,7 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     @Override
-    public Double calculateTaxPercentageOnRoute(Airport origin, Airport destination, FileServiceEnum serviceType, boolean isSale) {
+    public Double calculateTaxPercentageOnRoute(Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
         Double taxPercentage = 100D;
         if (checkBalearicIslandsSpecialConditions(isSale, serviceType)) {
             taxPercentage = getTaxBalearicIslands(origin.getId(), destination.getId());
@@ -343,7 +344,7 @@ public class CalculationServiceImpl implements ICalculationService {
         return tax;
     }
 
-    private boolean checkBalearicIslandsSpecialConditions(boolean isSale, FileServiceEnum service) {
+    private boolean checkBalearicIslandsSpecialConditions(boolean isSale, ServiceTypeEnum service) {
         boolean hasBalearicIslandSpecialConditions = false;
 
         switch (service) {
@@ -364,8 +365,7 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private void taxFromOtherCountry(Country country) {
-        throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The tax that applies if from another country, must apply tax manually from: " +
-                country.getCode() + " - " + country.getName());
+        throw new EuropairForeignTaxException("Must apply tax from: " + country.getCode() + " - " + country.getName());
     }
 
     private Double getSpainTax() {

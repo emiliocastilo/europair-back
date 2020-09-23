@@ -1,6 +1,6 @@
 package com.europair.management.api.enums;
 
-public enum FileServiceEnum {
+public enum ServiceTypeEnum {
     FLIGHT,
     CARGO,
     COMMISSION,

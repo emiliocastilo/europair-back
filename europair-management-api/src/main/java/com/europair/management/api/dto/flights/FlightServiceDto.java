@@ -3,8 +3,8 @@ package com.europair.management.api.dto.flights;
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.dto.files.ProviderDto;
+import com.europair.management.api.dto.services.ServiceDto;
 import com.europair.management.api.dto.users.UserDTO;
-import com.europair.management.api.enums.FileServiceEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,12 +25,12 @@ public class FlightServiceDto extends AuditModificationBaseDTO {
     @JsonProperty("flightId")
     private Long flightId;
 
-//    @JsonProperty("flight")
-//    private FlightDTO flight;
-
-    @JsonProperty("serviceType")
+    @JsonProperty("serviceId")
     @NotNull
-    private FileServiceEnum serviceType;
+    private Long serviceId;
+
+    @JsonProperty("service")
+    private ServiceDto service;
 
     @JsonProperty("description")
     @Size(max = TextField.TEXT_255)

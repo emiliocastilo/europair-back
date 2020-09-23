@@ -48,9 +48,9 @@ public class FlightServiceController implements IFlightServiceController {
     }
 
     @Override
-    public ResponseEntity<FlightServiceDto> updateFlightService(@NotNull Long fileId, @NotNull Long routeId, @NotNull Long flightId, @NotNull Long id, @NotNull FlightServiceDto flightServiceDto) {
-        FlightServiceDto resultDto = flightServiceService.updateFlightService(fileId, routeId, flightId, id, flightServiceDto);
-        return ResponseEntity.ok(resultDto);
+    public ResponseEntity<?> updateFlightService(@NotNull Long fileId, @NotNull Long routeId, @NotNull Long flightId, @NotNull Long id, @NotNull FlightServiceDto flightServiceDto) {
+        flightServiceService.updateFlightService(fileId, routeId, flightId, id, flightServiceDto);
+        return ResponseEntity.noContent().build();
     }
 
     @Override

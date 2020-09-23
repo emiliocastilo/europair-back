@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.flights;
 
-import com.europair.management.api.enums.FileServiceEnum;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.impl.service.calculation.ICalculationService;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -44,9 +44,9 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Something went wrong. There are no flights in the contribution for the tax calculation.");
         }
 
-        FileServiceEnum serviceType = FileServiceEnum.FLIGHT;
+        ServiceTypeEnum serviceType = ServiceTypeEnum.FLIGHT;
         if (contribution.getFile() != null && OperationTypeEnum.CHARGE.equals(contribution.getFile().getOperationType())) {
-            serviceType = FileServiceEnum.CARGO;
+            serviceType = ServiceTypeEnum.CARGO;
         }
 
         for (Flight flight : route.getFlights()) {

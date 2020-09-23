@@ -1,16 +1,14 @@
 package com.europair.management.rest.model.flights.entity;
 
-import com.europair.management.api.enums.FileServiceEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.files.entity.Provider;
+import com.europair.management.rest.model.services.entity.Service;
 import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,9 +34,12 @@ public class FlightService extends AuditModificationBaseEntity implements Serial
     @JoinColumn(name = "flight_id", nullable = false, insertable = false, updatable = false)
     private Flight flight;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private FileServiceEnum serviceType;
+    @Column(name = "service_id", nullable = false)
+    private Long serviceId;
+
+    @ManyToOne
+    @JoinColumn(name = "service_id", nullable = false, insertable = false, updatable = false)
+    private Service service;
 
     @Column
     private String description;
