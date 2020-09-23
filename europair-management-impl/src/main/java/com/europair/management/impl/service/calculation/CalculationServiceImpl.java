@@ -230,6 +230,10 @@ public class CalculationServiceImpl implements ICalculationService {
         return Utils.Constants.SPAIN_CODE.equals(client.getCountry().getCode());
     }
 
+    private boolean isEUClient(Client client) {
+        return Boolean.TRUE.equals(client.getCountry().getEuropeanUnion());
+    }
+
     private boolean isSpainProvider(Provider provider) {
         return Utils.Constants.SPAIN_CODE.equals(provider.getCountry().getCode());
     }
@@ -276,15 +280,8 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     private Double genericRouteSaleTaxCalculation(final Airport origin, final Airport destination, final Double nationalTaxToApply) {
-        Double tax;
-        if (isCanaryIslandsRoute(origin, destination)) {
-            tax = TAX_FREE;
-        } else if (isSpainInternalRoute(origin, destination)) {
-            tax = nationalTaxToApply;
-        } else {
-            tax = TAX_FREE;
-        }
-        return tax;
+        return (isSpainInternalRoute(origin, destination) && !isCanaryIslandsRoute(origin, destination)) ?
+                nationalTaxToApply : TAX_FREE;
     }
 
     private Double genericClientSaleTaxCalculation(final Client client, final Double nationalTaxToApply) {
@@ -293,7 +290,7 @@ public class CalculationServiceImpl implements ICalculationService {
             tax = TAX_FREE;
         } else if (isVIESClient(client)) {
             tax = TAX_0;
-        } else if (isNationalClient(client)) {
+        } else if (isNationalClient(client) || (isEUClient(client) && !isVIESClient(client))) {
             tax = nationalTaxToApply;
         } else {
             tax = TAX_FREE;
