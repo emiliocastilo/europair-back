@@ -120,9 +120,25 @@ databaseChangeLog:
       id: 20200917_flight_services_v1_20200922_service_type_changes
       context: dev or pre or pro
       author: axel.sanchezsalom
-      comment: "Add fk with service types"
+      comment: "Rename and update Services table and add fk flight-service_services"
       changes:
 
+        # Changes in Services table
+        - delete:
+            tableName: service_types
+        - addColumn:
+            tableName: service_types
+            columns:
+              - column:
+                  name: service_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - renameTable:
+            oldTableName: service_types
+            newTableName: services
+
+        # Changes in Flight services table
         - dropColumn:
             tableName: flight_services
             columns:
@@ -131,7 +147,6 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
-
         - addColumn:
             tableName: flight_services
             columns:
