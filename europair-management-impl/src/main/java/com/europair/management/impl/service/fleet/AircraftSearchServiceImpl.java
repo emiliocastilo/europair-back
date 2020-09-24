@@ -3,8 +3,10 @@ package com.europair.management.impl.service.fleet;
 
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
+import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
+import com.europair.management.impl.mappers.fleet.IAircraftMapper;
 import com.europair.management.impl.mappers.fleet.IAircraftSearchMapper;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
@@ -68,6 +70,17 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
     @Autowired
     private ConversionService conversionService;
+
+    @Override
+    public List<AircraftDto> test(final AircraftFilterDto filterDto) {
+        List<Aircraft> aircraftList = aircraftRepository.test(
+                filterDto.getBaseIds(),
+                filterDto.getCountryIds()
+//                , filterDto.getRegionId()
+                );
+
+        return aircraftList.stream().map(IAircraftMapper.INSTANCE::toDto).collect(Collectors.toList());
+    }
 
     @Override
     public List<AircraftSearchResultDataDto> searchAircraft(final AircraftFilterDto filterDto) {

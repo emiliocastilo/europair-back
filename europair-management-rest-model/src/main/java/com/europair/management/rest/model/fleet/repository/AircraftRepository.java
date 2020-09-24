@@ -46,5 +46,20 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             @Param(value = "operatorIds") List<Long> operatorIds
     );
 
+    @Query("select distinct aircraft from Aircraft aircraft" +
+            " inner join aircraft.bases base" +
+            " inner join base.airport airport" +
+            " inner join airport.country country" +
+            " where" +
+            " (aircraft.removedAt is null)" +
+            " and ((:baseIds) is null or airport.id in (:baseIds))" +
+            " and ((:countryIds) is null or country.id in (:countryIds))"
+    )
+    List<Aircraft> test(
+            @Param(value = "baseIds") List<Long> baseIds,
+            @Param(value = "countryIds") List<Long> countryIds
+//            ,@Param(value = "regionId") Long regionId
+    );
+
 
 }

@@ -95,4 +95,8 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     @JsonProperty("distanceUnit")
     private Unit distanceUnit;
 
+    @Schema(description = "Specified region id where the aircraft must have some base")
+    @JsonProperty("region")
+    private Long regionId;
+
 }

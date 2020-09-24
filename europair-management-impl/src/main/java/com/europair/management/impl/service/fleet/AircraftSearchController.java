@@ -1,5 +1,6 @@
 package com.europair.management.impl.service.fleet;
 
+import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
 import com.europair.management.api.service.fleet.IAircraftSearchController;
@@ -20,5 +21,10 @@ public class AircraftSearchController implements IAircraftSearchController {
     @Override
     public ResponseEntity<List<AircraftSearchResultDataDto>> searchAircraft(AircraftFilterDto filterDto) {
         return ResponseEntity.ok(aircraftSearchService.searchAircraft(filterDto));
+    }
+
+    @Override
+    public ResponseEntity<List<AircraftDto>> test(AircraftFilterDto filterDto) {
+        return ResponseEntity.ok(aircraftSearchService.test(filterDto));
     }
 }
