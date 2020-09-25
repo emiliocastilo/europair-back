@@ -1,8 +1,8 @@
 package com.europair.management.impl.mappers.servicetypes;
 
-import com.europair.management.api.dto.servicetypes.ServiceTypeDTO;
+import com.europair.management.api.dto.services.ServiceDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
-import com.europair.management.rest.model.servicetypes.entity.ServiceType;
+import com.europair.management.rest.model.services.entity.Service;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
@@ -14,10 +14,10 @@ public interface IServiceTypeMapper {
 
   IServiceTypeMapper INSTANCE = Mappers.getMapper(IServiceTypeMapper.class);
 
-  ServiceTypeDTO toDto(final ServiceType entity);
+  ServiceDto toDto(final Service entity);
 
-  ServiceType toEntity(final ServiceTypeDTO serviceTypeDTO);
+  Service toEntity(final ServiceDto serviceDto);
 
-  void updateFromDto(final ServiceTypeDTO serviceTypeDTO, @MappingTarget ServiceType serviceType);
+  void updateFromDto(final ServiceDto serviceDto, @MappingTarget Service service);
 
 }

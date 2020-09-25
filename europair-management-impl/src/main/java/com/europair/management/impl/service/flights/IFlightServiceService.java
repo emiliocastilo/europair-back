@@ -13,7 +13,7 @@ public interface IFlightServiceService {
 
     FlightServiceDto saveFlightService(Long fileId, Long routeId, Long flightId, FlightServiceDto flightServiceDto);
 
-    FlightServiceDto updateFlightService(Long fileId, Long routeId, Long flightId, Long id, FlightServiceDto flightServiceDto);
+    void updateFlightService(Long fileId, Long routeId, Long flightId, Long id, FlightServiceDto flightServiceDto);
 
     void deleteFlightService(Long fileId, Long routeId, Long flightId, Long id);
 }
