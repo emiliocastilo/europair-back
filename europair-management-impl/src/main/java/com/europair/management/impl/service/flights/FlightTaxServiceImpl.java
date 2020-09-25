@@ -1,6 +1,6 @@
 package com.europair.management.impl.service.flights;
 
-import com.europair.management.api.enums.FileServiceEnum;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.impl.service.calculation.ICalculationService;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -44,9 +44,9 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Something went wrong. There are no flights in the contribution for the tax calculation.");
         }
 
-        FileServiceEnum serviceType = FileServiceEnum.FLIGHT;
+        ServiceTypeEnum serviceType = ServiceTypeEnum.FLIGHT;
         if (contribution.getFile() != null && OperationTypeEnum.CHARGE.equals(contribution.getFile().getOperationType())) {
-            serviceType = FileServiceEnum.CARGO;
+            serviceType = ServiceTypeEnum.CARGO;
         }
 
         for (Flight flight : route.getFlights()) {
@@ -54,14 +54,21 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
             ft.setContributionId(contribution.getId());
             ft.setFlightId(flight.getId());
 
-            // Calculate flight taxes
-            Airport origin = airportMap.get(flight.getOrigin());
-            Airport destination = airportMap.get(flight.getDestination());
+            if (Boolean.TRUE.equals(flight.getPositionalFlight())) {
+                // No taxes
+                ft.setTaxOnSale(null);
+                ft.setTaxOnPurchase(null);
 
-            Double taxOnSale = calculationService.calculateFinalTaxToApply(contribution.getFileId(), origin, destination, serviceType, true);
-            ft.setTaxOnSale(taxOnSale);
-            Double taxOnPurchase = calculationService.calculateFinalTaxToApply(contribution.getFileId(), origin, destination, serviceType, false);
-            ft.setTaxOnPurchase(taxOnPurchase);
+            } else {
+                // Calculate flight taxes
+                Airport origin = airportMap.get(flight.getOrigin());
+                Airport destination = airportMap.get(flight.getDestination());
+
+                Double taxOnSale = calculationService.calculateFinalTaxToApply(contribution.getFileId(), origin, destination, serviceType, true);
+                ft.setTaxOnSale(taxOnSale);
+                Double taxOnPurchase = calculationService.calculateFinalTaxToApply(contribution.getFileId(), origin, destination, serviceType, false);
+                ft.setTaxOnPurchase(taxOnPurchase);
+            }
 
             flightTaxes.add(ft);
         }

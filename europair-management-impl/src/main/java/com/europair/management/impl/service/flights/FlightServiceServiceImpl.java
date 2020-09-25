@@ -15,20 +15,21 @@ import com.europair.management.rest.model.flights.repository.IFlightRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
+import com.europair.management.rest.model.services.entity.Service;
+import com.europair.management.rest.model.services.repository.ServiceRepository;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
+@org.springframework.stereotype.Service
 @Transactional
 public class FlightServiceServiceImpl implements IFlightServiceService {
 
@@ -48,6 +49,9 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
     @Autowired
     private FlightServiceRepository flightServiceRepository;
+
+    @Autowired
+    private ServiceRepository serviceTypeRepository;
 
     @Autowired
     private ICalculationService calculationService;
@@ -92,7 +96,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     }
 
     @Override
-    public FlightServiceDto updateFlightService(Long fileId, Long routeId, Long flightId, Long id, FlightServiceDto flightServiceDto) {
+    public void updateFlightService(Long fileId, Long routeId, Long flightId, Long id, FlightServiceDto flightServiceDto) {
         validatePathIds(fileId, routeId, flightId);
         FlightService flightService = flightServiceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id));
@@ -102,8 +106,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
         IFlightServiceMapper.INSTANCE.updateFromDto(flightServiceDto, flightService);
         flightService = flightServiceRepository.save(flightService);
-
-        return IFlightServiceMapper.INSTANCE.toDto(flightService);
+        // ToDo: Log result ok??
     }
 
     @Override
@@ -133,6 +136,8 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No route found with id: " + routeId));
         final Flight flight = flightRepository.findById(flightId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No flight found with id: " + flightId));
+        final Service serviceType = serviceTypeRepository.findById(flightServiceDto.getServiceId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No service type found with id: " + flightServiceDto.getServiceId()));
         final Map<String, Airport> airportMap = route.getAirports().stream()
                 .map(RouteAirport::getAirport)
                 .distinct()
@@ -140,8 +145,8 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         final Airport origin = airportMap.get(flight.getOrigin());
         final Airport destination = airportMap.get(flight.getDestination());
 
-        Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, flightServiceDto.getServiceType(), true);
-        Double taxOnPurchase = calculationService.calculateServiceTaxToApply(fileId, origin, destination, flightServiceDto.getServiceType(), false);
+        Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), true);
+        Double taxOnPurchase = calculationService.calculateServiceTaxToApply(fileId, origin, destination, serviceType.getType(), false);
 
         // Update dto values
         flightServiceDto.setTaxOnSale(taxOnSale);
