@@ -7,10 +7,12 @@ import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -43,13 +45,14 @@ public class Utils {
                                         operator = OperatorEnum.valueOf(paramValues[1].toUpperCase());
                                     } catch (IllegalArgumentException e) {
                                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                          "Invalid filter params, operator not valid: " + paramValues[1], e);
+                                                "Invalid filter params, operator not valid: " + paramValues[1], e);
                                     }
 
                                     return Restriction.builder()
                                             .column(entry.getKey().replace(FILTER_PARAM_PREFIX, ""))
                                             .value(paramValues[0])
                                             .operator(operator)
+                                            .queryOperator(paramValues.length > 2 ? Predicate.BooleanOperator.OR : Predicate.BooleanOperator.AND)
                                             .build();
                                 }).collect(Collectors.toList()));
             }
