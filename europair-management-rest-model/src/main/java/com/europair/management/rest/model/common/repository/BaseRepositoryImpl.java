@@ -269,8 +269,9 @@ public abstract class BaseRepositoryImpl<T> {
 
         if (!CollectionUtils.isEmpty(criteria.getRestrictions())) {
             for (Restriction restriction : criteria.getRestrictions()) {
-                restrictions.add(
-                        Pair.of(createRestriction(builder, root, restriction), restriction.getQueryOperator()));
+                restrictions.add(Pair.of(
+                        createRestriction(builder, root, restriction),
+                        restriction.getQueryOperator() == null ? Predicate.BooleanOperator.AND : restriction.getQueryOperator()));
             }
         }
 
@@ -304,8 +305,9 @@ public abstract class BaseRepositoryImpl<T> {
 
         if (!CollectionUtils.isEmpty(criteria.getRestrictions())) {
             for (Restriction restriction : criteria.getRestrictions()) {
-                restrictions.add(
-                        Pair.of(createRestriction(builder, root, restriction), restriction.getQueryOperator()));
+                restrictions.add(Pair.of(
+                        createRestriction(builder, root, restriction),
+                        restriction.getQueryOperator() == null ? Predicate.BooleanOperator.AND : restriction.getQueryOperator()));
             }
         }
 
