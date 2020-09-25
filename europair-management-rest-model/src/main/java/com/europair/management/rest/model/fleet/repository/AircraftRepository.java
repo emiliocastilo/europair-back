@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAircraftRepositoryCustom {
@@ -30,7 +31,9 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             " and (:subcategoryId is null or (:exactSubcategory = true and subcategory.id = :subcategoryId) or (subcategory.parentCategory.id = :categoryId and subcategory.order >= :minSubcategory))" +
             " and (:ambulance is null or aircraft.ambulance = :ambulance)" +
             " and ((:aircraftTypeIds) is null or aircraftType.id in (:aircraftTypeIds))" +
-            " and ((:operatorIds) is null or operator.id in (:operatorIds))"
+            " and ((:operatorIds) is null or operator.id in (:operatorIds))" +
+            " and (:regionId is null or (country.id in (:regionCountryIds) or airport.id in (:regionAirportIds)))" +
+            " "
     )
     List<Aircraft> searchAircraft(
             @Param(value = "baseIds") List<Long> baseIds,
@@ -43,23 +46,10 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             @Param(value = "minSubcategory") Integer minSubcategory,
             @Param(value = "ambulance") Boolean ambulance,
             @Param(value = "aircraftTypeIds") List<Long> aircraftTypeIds,
-            @Param(value = "operatorIds") List<Long> operatorIds
+            @Param(value = "operatorIds") List<Long> operatorIds,
+            @Param(value = "regionId") Long regionId,
+            @Param(value = "regionAirportIds") Set<Long> regionAirportIds,
+            @Param(value = "regionCountryIds") Set<Long> regionCountryIds
     );
-
-    @Query("select distinct aircraft from Aircraft aircraft" +
-            " inner join aircraft.bases base" +
-            " inner join base.airport airport" +
-            " inner join airport.country country" +
-            " where" +
-            " (aircraft.removedAt is null)" +
-            " and ((:baseIds) is null or airport.id in (:baseIds))" +
-            " and ((:countryIds) is null or country.id in (:countryIds))"
-    )
-    List<Aircraft> test(
-            @Param(value = "baseIds") List<Long> baseIds,
-            @Param(value = "countryIds") List<Long> countryIds
-//            ,@Param(value = "regionId") Long regionId
-    );
-
 
 }

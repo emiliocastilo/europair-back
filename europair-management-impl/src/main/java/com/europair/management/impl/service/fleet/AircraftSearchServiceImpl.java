@@ -3,16 +3,15 @@ package com.europair.management.impl.service.fleet;
 
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
-import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
-import com.europair.management.impl.mappers.fleet.IAircraftMapper;
 import com.europair.management.impl.mappers.fleet.IAircraftSearchMapper;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
+import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.entity.AircraftCategory;
@@ -20,6 +19,8 @@ import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
 import com.europair.management.rest.model.fleet.repository.AircraftCategoryRepository;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
+import com.europair.management.rest.model.regions.entity.Region;
+import com.europair.management.rest.model.regionscountries.repository.IRegionRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,18 +71,10 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     private AirportRepository airportRepository;
 
     @Autowired
+    private IRegionRepository regionRepository;
+
+    @Autowired
     private ConversionService conversionService;
-
-    @Override
-    public List<AircraftDto> test(final AircraftFilterDto filterDto) {
-        List<Aircraft> aircraftList = aircraftRepository.test(
-                filterDto.getBaseIds(),
-                filterDto.getCountryIds()
-//                , filterDto.getRegionId()
-                );
-
-        return aircraftList.stream().map(IAircraftMapper.INSTANCE::toDto).collect(Collectors.toList());
-    }
 
     @Override
     public List<AircraftSearchResultDataDto> searchAircraft(final AircraftFilterDto filterDto) {
@@ -116,6 +110,16 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             }
         }
 
+        // Region filter setup
+        Set<Long> regionAirportIds = null;
+        Set<Long> regionCountryIds = null;
+        if (filterDto.getRegionId() != null) {
+            Region region = regionRepository.findById(filterDto.getRegionId()).orElseThrow(() ->
+                    new ResponseStatusException(HttpStatus.NOT_FOUND, "Region not found with id: " + filterDto.getRegionId()));
+            regionAirportIds = region.getAirports().stream().map(Airport::getId).collect(Collectors.toSet());
+            regionCountryIds = region.getCountries().stream().map(Country::getId).collect(Collectors.toSet());
+        }
+
         List<Aircraft> aircraftFiltered = aircraftRepository.searchAircraft(
                 airportBaseIds,
                 filterDto.getCountryIds(),
@@ -127,11 +131,12 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                 minSubcategory,
                 filterDto.getAmbulance(),
                 filterDto.getAircraftTypes(),
-                filterDto.getOperators()
+                filterDto.getOperators(),
+                filterDto.getRegionId(), regionAirportIds, regionCountryIds
         );
 
         final Airport destinationAirport = airportRepository.findById(filterDto.getDestinationAirportId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destinarion Airport not found with id: " + filterDto.getDestinationAirportId()));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destination Airport not found with id: " + filterDto.getDestinationAirportId()));
 
         final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
