@@ -11,6 +11,7 @@ import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
+import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.entity.AircraftCategory;
@@ -18,6 +19,11 @@ import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
 import com.europair.management.rest.model.fleet.repository.AircraftCategoryRepository;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
+import com.europair.management.rest.model.regions.entity.Region;
+import com.europair.management.rest.model.regionscountries.repository.IRegionRepository;
+import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.entity.RouteAirport;
+import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,8 +37,13 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -67,15 +78,44 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     private AirportRepository airportRepository;
 
     @Autowired
+    private IRegionRepository regionRepository;
+
+    @Autowired
+    private RouteRepository routeRepository;
+
+    @Autowired
     private ConversionService conversionService;
 
     @Override
     public List<AircraftSearchResultDataDto> searchAircraft(final AircraftFilterDto filterDto) {
 
-        List<Long> airportBaseIds = new ArrayList<>(filterDto.getBaseIds());
-        if (!CollectionUtils.isEmpty(filterDto.getBaseIds()) && filterDto.getFromDistance() != null
-                && filterDto.getToDistance() != null && filterDto.getDistanceUnit() != null) {
-            airportBaseIds.addAll(findNearbyAirports(filterDto));
+        Route route = routeRepository.findById(filterDto.getRouteId()).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + filterDto.getRouteId()));
+        Airport origin = route.getAirports().stream()
+                .min(Comparator.comparing(RouteAirport::getOrder))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No origin airport found for route with id: " + route.getId()))
+                .getAirport();
+        Airport destination = route.getAirports().stream()
+                .filter(routeAirport -> !origin.getId().equals(routeAirport.getAirport().getId()))
+                .min(Comparator.comparing(RouteAirport::getOrder))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No destination airport found for route with id: " + route.getId()))
+                .getAirport();
+
+        Set<Long> airportBaseIds = null;
+        if (!CollectionUtils.isEmpty(filterDto.getBaseIds())) {
+            airportBaseIds = new HashSet<>(filterDto.getBaseIds());
+        }
+        Set<Long> countryIds = null;
+        if (!CollectionUtils.isEmpty(filterDto.getCountryIds())) {
+            countryIds = new HashSet<>(filterDto.getCountryIds());
+        }
+
+        // Nearby Airports filter setup
+        if (!CollectionUtils.isEmpty(filterDto.getBaseIds()) && !CollectionUtils.isEmpty(airportBaseIds) &&
+                filterDto.getFromDistance() != null && filterDto.getToDistance() != null && filterDto.getDistanceUnit() != null) {
+            airportBaseIds.addAll(findNearbyAirports(filterDto, route));
         }
 
         if (filterDto.getOperationType() != null && filterDto.getCategoryId() == null) {
@@ -103,9 +143,19 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             }
         }
 
+        // Region filter setup
+        Set<Long> regionAirportIds = null;
+        Set<Long> regionCountryIds = null;
+        if (filterDto.getRegionId() != null) {
+            Region region = regionRepository.findById(filterDto.getRegionId()).orElseThrow(() ->
+                    new ResponseStatusException(HttpStatus.NOT_FOUND, "Region not found with id: " + filterDto.getRegionId()));
+            regionAirportIds = region.getAirports().stream().map(Airport::getId).collect(Collectors.toSet());
+            regionCountryIds = region.getCountries().stream().map(Country::getId).collect(Collectors.toSet());
+        }
+
         List<Aircraft> aircraftFiltered = aircraftRepository.searchAircraft(
                 airportBaseIds,
-                filterDto.getCountryIds(),
+                countryIds,
                 filterDto.getSeats(),
                 filterDto.getBeds(),
                 filterDto.getCategoryId(),
@@ -114,29 +164,33 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                 minSubcategory,
                 filterDto.getAmbulance(),
                 filterDto.getAircraftTypes(),
-                filterDto.getOperators()
+                filterDto.getOperators(),
+                filterDto.getRegionId(), regionAirportIds, regionCountryIds
         );
 
-        final Airport destinationAirport = airportRepository.findById(filterDto.getDestinationAirportId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destinarion Airport not found with id: " + filterDto.getDestinationAirportId()));
-
         final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
+        final Map<Long, Integer> aircraftTypeConnectionsMap = new HashMap<>();
 
         List<AircraftSearchResultDataDto> result = aircraftFiltered.stream()
-                .filter(aircraft -> filterAircraftByRangeAndCalculateTime(aircraft, destinationAirport, dsDataList))
+                .filter(aircraft -> filterAircraftByRangeAndCalculateTime(filterDto, aircraft, origin, destination,
+                        dsDataList, aircraftTypeConnectionsMap, route))
                 .map(aircraft -> {
-                    // ToDo: que origen usamos??
-                    final Long originId = aircraft.getBases().stream()
-                            .filter(AircraftBase::getMainBase)
-                            .findFirst()
-                            .map(aircraftBase -> aircraftBase.getAirport().getId())
-                            .orElse(null);
-
                     AircraftSearchResultDataDto dataDto = IAircraftSearchMapper.INSTANCE.toDto(aircraft);
                     dataDto.setTimeInHours(dsDataList.stream()
                             .filter(dsu -> dsu.getAircraftTypeId().equals(aircraft.getAircraftType().getId())
-                                    && dsu.getOriginId().equals(originId) && dsu.getDestinationId().equals(destinationAirport.getId()))
+                                    && dsu.getOriginId().equals(origin.getId()) && dsu.getDestinationId().equals(destination.getId()))
                             .findFirst().map(DistanceSpeedUtils::getTimeInHours).orElse(null));
+
+                    Airport mainBase = aircraft.getBases().stream()
+                            .filter(AircraftBase::getMainBase)
+                            .findAny()
+                            .map(AircraftBase::getAirport)
+                            .orElse(null);
+                    dataDto.setMainBaseId(mainBase == null ? null : mainBase.getId());
+                    dataDto.setMainBaseName(mainBase == null ? null : mainBase.getName());
+
+                    dataDto.setConnectionFlights(
+                            aircraftTypeConnectionsMap.getOrDefault(aircraft.getAircraftType().getId(), null));
 
                     return dataDto;
                 }).collect(Collectors.toList());
@@ -144,7 +198,12 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         return result;
     }
 
-    private List<Long> findNearbyAirports(final AircraftFilterDto filterDto) {
+    private List<Long> findNearbyAirports(final AircraftFilterDto filterDto, final Route route) {
+        Airport destination = route.getAirports().stream()
+                .max(Comparator.comparing(RouteAirport::getOrder))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "No destination airport found for route with id: " + route.getId()))
+                .getAirport();
         // Find all active airports that have latitude and longitude values
         List<Airport> allAirports = airportRepository.findByRemovedAtNullAndLatitudeNotNullAndLongitudeNotNull();
 
@@ -154,7 +213,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             if (filterDto.getBaseIds().contains(airport.getId())) {
                 searchedAirports.add(airport);
             } else {
-                if (!airport.getId().equals(filterDto.getDestinationAirportId())) {
+                if (!airport.getId().equals(destination.getId())) {
                     remainingAirports.add(airport);
                 }
             }
@@ -196,43 +255,48 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                 .collect(Collectors.toList());
     }
 
-    private boolean filterAircraftByRangeAndCalculateTime(final Aircraft aircraft, final Airport destinationAirport,
-                                                          @NotNull List<DistanceSpeedUtils> dsDataList) {
-
-        // ToDo: cual es el origen???
-        Airport origin = aircraft.getBases().stream().filter(AircraftBase::getMainBase).findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No main base found for Aircraft with id: " + aircraft.getId()))
-                .getAirport();
+    private boolean filterAircraftByRangeAndCalculateTime(
+            final AircraftFilterDto filterDto, final Aircraft aircraft, final Airport origin, final Airport destination,
+            @NotNull List<DistanceSpeedUtils> dsDataList, @NotNull Map<Long, Integer> aircraftTypeConnectionsMap,
+            final Route route) {
+        List<RouteAirport> routeAirports = route.getAirports().stream()
+                .sorted(Comparator.comparing(RouteAirport::getOrder))
+                .collect(Collectors.toList());
 
         // If distance has been calculated before we get the data, otherwise we do the calculation and save the data
         DistanceSpeedUtils dsData;
         Optional<DistanceSpeedUtils> optionalData = dsDataList.stream().filter(dsu -> dsu.getOriginId().equals(origin.getId())
-                && dsu.getDestinationId().equals(destinationAirport.getId())
+                && dsu.getDestinationId().equals(destination.getId())
                 && dsu.getAircraftTypeId().equals(aircraft.getAircraftType().getId()))
                 .findFirst();
         if (optionalData.isPresent()) {
             dsData = optionalData.get();
         } else {
-            dsData = calculateDistanceAndSpeed(aircraft.getAircraftType(), origin, destinationAirport);
+            dsData = calculateDistanceAndSpeed(aircraft.getAircraftType(), origin, destination);
             dsDataList.add(dsData);
         }
 
-        Double flightRangeInDefaultUnit = aircraft.getAircraftType().getFlightRange();
-        if (aircraft.getAircraftType().getFlightRange() != null && !DEFAULT_DISTANCE_UNIT.equals(aircraft.getAircraftType().getFlightRangeUnit())) {
-            // Convert flight range to default unit
-            ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
-            ct.setSrcUnit(aircraft.getAircraftType().getFlightRangeUnit());
-            ct.setValue(aircraft.getAircraftType().getFlightRange());
-
-            ConversionDataDTO conversionData = new ConversionDataDTO();
-            conversionData.setDstUnit(DEFAULT_DISTANCE_UNIT);
-            conversionData.setDataToConvert(Collections.singletonList(ct));
-
-            List<Double> result = conversionService.convertData(conversionData);
-            flightRangeInDefaultUnit = result.get(0);
+        int maxConnections = filterDto.getMaxConnectingFlights() != null ? filterDto.getMaxConnectingFlights() : 0;
+        // If connections data has been calculated before we get it, otherwise we do the calculation and save it
+        Integer connections;
+        if (aircraftTypeConnectionsMap.containsKey(aircraft.getAircraftType().getId())) {
+            connections = aircraftTypeConnectionsMap.get(aircraft.getAircraftType().getId());
+        } else {
+            connections = null;
+            for (int i = 0; i < routeAirports.size() - 1; i++) {
+                try {
+                    int flightConnections = Utils.calculateConnectingFlights(routeAirports.get(i).getAirport(),
+                            routeAirports.get(i + 1).getAirport(), aircraft.getAircraftType(), conversionService);
+                    if (connections == null || connections < flightConnections) {
+                        connections = flightConnections;
+                    }
+                } catch (ResponseStatusException ignored) {
+                } // If some data is missing for the calculation we still count the aircraft
+            }
+            aircraftTypeConnectionsMap.put(aircraft.getAircraftType().getId(), connections);
         }
 
-        return flightRangeInDefaultUnit == null || flightRangeInDefaultUnit >= dsData.getDistance();
+        return connections == null || connections >= maxConnections;
     }
 
 
