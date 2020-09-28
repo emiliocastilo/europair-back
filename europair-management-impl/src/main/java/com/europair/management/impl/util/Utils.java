@@ -1,15 +1,19 @@
 package com.europair.management.impl.util;
 
+import com.europair.management.api.dto.conversions.ConversionDataDTO;
+import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.enums.UTCEnum;
+import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
+import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.criteria.Predicate;
@@ -17,6 +21,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -196,6 +201,38 @@ public class Utils {
         }
 
         return resultMap;
+    }
+
+    public static int calculateConnectingFlights(final Airport origin, final Airport destination, final AircraftType aircraftType,
+                                                 final ConversionService conversionService) {
+        if (origin.getLatitude() == null || origin.getLongitude() == null || destination.getLatitude() != null || destination.getLongitude() == null) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                    "One of the airports doesn't have all the coordinates data to calculate the distance.");
+        }
+        if (aircraftType.getFlightRange() == null || aircraftType.getFlightRangeUnit() == null) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                    "No flight range data for aircraft type with id: " + aircraftType.getId());
+        }
+        Unit defaultUnit = Unit.NAUTIC_MILE;
+        Double flightRangeInDefaultUnit = aircraftType.getFlightRange();
+        if (!Unit.NAUTIC_MILE.equals(aircraftType.getFlightRangeUnit())) {
+            ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
+            ct.setSrcUnit(aircraftType.getFlightRangeUnit());
+            ct.setValue(aircraftType.getFlightRange());
+            ConversionDataDTO conversionData = new ConversionDataDTO();
+            conversionData.setDstUnit(defaultUnit);
+            conversionData.setDataToConvert(Collections.singletonList(ct));
+            List<Double> result = conversionService.convertData(conversionData);
+            if (CollectionUtils.isEmpty(result)) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Conversion service error while converting flight ranges.");
+            }
+            flightRangeInDefaultUnit = result.get(0);
+        }
+        double distance = Utils.getDistanceInNM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
+                destination.getLongitude());
+
+        return (int) Math.ceil(distance / flightRangeInDefaultUnit) - 1;
     }
 
 

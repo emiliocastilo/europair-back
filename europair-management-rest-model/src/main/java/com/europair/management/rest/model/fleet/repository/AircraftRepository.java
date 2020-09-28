@@ -36,8 +36,8 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             " "
     )
     List<Aircraft> searchAircraft(
-            @Param(value = "baseIds") List<Long> baseIds,
-            @Param(value = "countryIds") List<Long> countryIds,
+            @Param(value = "baseIds") Set<Long> baseIds,
+            @Param(value = "countryIds") Set<Long> countryIds,
             @Param(value = "seats") Integer seats,
             @Param(value = "beds") Integer beds,
             @Param(value = "categoryId") Long categoryId,
