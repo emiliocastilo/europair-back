@@ -16,13 +16,22 @@ public interface IAircraftSearchMapper {
 
     IAircraftSearchMapper INSTANCE = Mappers.getMapper(IAircraftSearchMapper.class);
 
-    @Mapping(target = "bases", qualifiedByName = "toAircraftBaseSimpleDto")
-    @Mapping(target = "aircraftType.category.subcategories", ignore = true)
-    @Mapping(target = "aircraftType.category.parentCategory", ignore = true)
-    @Mapping(target = "aircraftType.subcategory.parentCategory", ignore = true)
-    @Mapping(target = "aircraftType.subcategory.subcategories", ignore = true)
-    @Mapping(target = "aircraftType.averageSpeed", ignore = true)
-    @Mapping(target = "aircraftType.observations", ignore = true)
+    @Mapping(target = "operatorId", source = "operator.id")
+    @Mapping(target = "operatorName", source = "operator.name")
+    @Mapping(target = "operatorAocLastRevisionDate", source = "operator.aocLastRevisionDate")
+    @Mapping(target = "operatorInsuranceExpirationDate", source = "operator.insuranceExpirationDate")
+
+    @Mapping(target = "aircraftTypeId", source = "aircraftType.id")
+    @Mapping(target = "aircraftTypeDescription", source = "aircraftType.description")
+    @Mapping(target = "maxCargo", source = "aircraftType.maxCargo")
+
+    @Mapping(target = "aircraftCategoryId", source = "aircraftType.category.id")
+    @Mapping(target = "aircraftCategoryCode", source = "aircraftType.category.code")
+
+    @Mapping(target = "aircraftSubcategoryId", source = "aircraftType.subcategory.id")
+    @Mapping(target = "aircraftSubcategoryCode", source = "aircraftType.subcategory.code")
+
+    @Mapping(target = "aircraftId", source = "id")
     @Mapping(target = "daytimeConfiguration", source = "entity", qualifiedByName = "seatingToDayTimeConfig")
     @Mapping(target = "nighttimeConfiguration", source = "entity", qualifiedByName = "mapNightTimeConfig")
     AircraftSearchResultDataDto toDto(final Aircraft entity);

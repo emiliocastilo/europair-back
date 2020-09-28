@@ -13,6 +13,7 @@ import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
+import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.entity.AircraftCategory;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
@@ -180,6 +181,17 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                                     && dsu.getOriginId().equals(origin.getId()) && dsu.getDestinationId().equals(destination.getId()))
                             .findFirst().map(DistanceSpeedUtils::getTimeInHours).orElse(null));
 
+                    Airport mainBase = aircraft.getBases().stream()
+                            .filter(AircraftBase::getMainBase)
+                            .findAny()
+                            .map(AircraftBase::getAirport)
+                            .orElse(null);
+                    dataDto.setMainBaseId(mainBase == null ? null : mainBase.getId());
+                    dataDto.setMainBaseName(mainBase == null ? null : mainBase.getName());
+
+                    dataDto.setConnectionFlights(
+                            aircraftTypeConnectionsMap.getOrDefault(aircraft.getAircraftType().getId(), null));
+
                     return dataDto;
                 }).collect(Collectors.toList());
 
@@ -283,23 +295,6 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             }
             aircraftTypeConnectionsMap.put(aircraft.getAircraftType().getId(), connections);
         }
-
-        /*
-        Double flightRangeInDefaultUnit = aircraft.getAircraftType().getFlightRange();
-        if (aircraft.getAircraftType().getFlightRange() != null && !DEFAULT_DISTANCE_UNIT.equals(aircraft.getAircraftType().getFlightRangeUnit())) {
-            // Convert flight range to default unit
-            ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
-            ct.setSrcUnit(aircraft.getAircraftType().getFlightRangeUnit());
-            ct.setValue(aircraft.getAircraftType().getFlightRange());
-
-            ConversionDataDTO conversionData = new ConversionDataDTO();
-            conversionData.setDstUnit(DEFAULT_DISTANCE_UNIT);
-            conversionData.setDataToConvert(Collections.singletonList(ct));
-
-            List<Double> result = conversionService.convertData(conversionData);
-            flightRangeInDefaultUnit = result.get(0);
-        }
-         */
 
         return connections == null || connections >= maxConnections;
     }

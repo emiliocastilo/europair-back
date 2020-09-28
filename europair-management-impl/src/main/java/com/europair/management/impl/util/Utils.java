@@ -205,7 +205,7 @@ public class Utils {
 
     public static int calculateConnectingFlights(final Airport origin, final Airport destination, final AircraftType aircraftType,
                                                  final ConversionService conversionService) {
-        if (origin.getLatitude() == null || origin.getLongitude() == null || destination.getLatitude() != null || destination.getLongitude() == null) {
+        if (origin.getLatitude() == null || origin.getLongitude() == null || destination.getLatitude() == null || destination.getLongitude() == null) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
                     "One of the airports doesn't have all the coordinates data to calculate the distance.");
         }

@@ -22,7 +22,7 @@ import java.util.List;
 public class AircraftFilterDto extends AuditModificationBaseDTO {
 
     @Schema(description = "Identifier of the route(rotation)", required = true)
-    @JsonProperty("route")
+    @JsonProperty("routeId")
     @NotNull
     private Long routeId;
 
@@ -84,7 +84,7 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     private Unit distanceUnit;
 
     @Schema(description = "Specified region id where the aircraft must have some base")
-    @JsonProperty("region")
+    @JsonProperty("regionId")
     private Long regionId;
 
     @Schema(description = "Max number of connecting flights to filter")
