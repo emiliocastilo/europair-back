@@ -1,4 +1,4 @@
-package com.europair.management.api.dto.integration;
+package com.europair.management.api.integrations.office365.dto;
 
 import lombok.Data;
 
