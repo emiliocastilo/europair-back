@@ -97,7 +97,7 @@ public interface IFlightServiceController {
      */
     @PutMapping("/{id}")
     @Operation(description = "Updates existing flight service", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<FlightServiceDto> updateFlightService(
+    ResponseEntity<?> updateFlightService(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
             @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId,

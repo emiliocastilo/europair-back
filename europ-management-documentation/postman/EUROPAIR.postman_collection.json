@@ -2747,7 +2747,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\": null,\r\n    \"flightId\": null,\r\n    \"serviceType\": \"EXTRAS_ON_BOARD\",\r\n    \"description\": null,\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 19.99,\r\n    \"salePrice\": 29.99,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}",
+									"raw": "{\r\n    \"id\": null,\r\n    \"flightId\": null,\r\n    \"serviceId\": 1,\r\n    \"description\": null,\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 19.99,\r\n    \"salePrice\": 29.99,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2779,7 +2779,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\": 1,\r\n    \"flightId\": 1,\r\n    \"serviceType\": \"EXTRAS_ON_GROUND\",\r\n    \"description\": \"updated\",\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 18.99,\r\n    \"salePrice\": 28.99,\r\n    \"taxOnSale\": 8.05,\r\n    \"taxOnPurchase\": 10.0,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments updated\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}\r\n\r\n",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"flightId\": 1,\r\n    \"serviceId\": 1,\r\n    \"description\": \"updated\",\r\n    \"quantity\": 1,\r\n    \"providerId\": 1,\r\n    \"purchasePrice\": 18.99,\r\n    \"salePrice\": 28.99,\r\n    \"taxOnSale\": 8.05,\r\n    \"taxOnPurchase\": 10.0,\r\n    \"commission\": 2,\r\n    \"comments\": \"comments updated\",\r\n    \"sellerId\": null,\r\n    \"status\": \"PENDING\"\r\n}\r\n\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2968,6 +2968,140 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Services",
+			"item": [
+				{
+					"name": "service - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/services",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "service - find by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/services/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"services",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "service - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": null,\r\n    \"code\": \"TEST-EXTRA-GRD\",\r\n    \"name\": \"Pruebas Extras on Ground\",\r\n    \"type\": \"EXTRAS_ON_GROUND\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/services",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "service - update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"code\": \"TEST-EXTRA-BRD\",\r\n    \"name\": \"Pruebas Extras on Board updated\",\r\n    \"type\": \"EXTRAS_ON_BOARD\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/services/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"services",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "service - delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/services/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"services",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d0bbc096-0071-421a-bb4a-c88db4b1712d",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "95c54862-e1fb-4118-a278-4009a5d6ee65",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -3322,17 +3456,17 @@
 	],
 	"variable": [
 		{
-			"id": "a20de69a-7df4-4a41-9973-ed6360a721c0",
+			"id": "acea0206-8569-4b45-b455-588865b5c670",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "fb4c518b-ef36-400e-afa9-357407652554",
+			"id": "6b3388ad-bae1-48c5-8b04-1cf01f6a0f03",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "42b12d19-a4c8-4488-be4a-8e1d47a7b3e6",
+			"id": "1cbcdec6-228e-4849-8a02-9ee2f720d829",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}

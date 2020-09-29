@@ -21,13 +21,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.query.QueryUtils;
+import org.springframework.data.util.Pair;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.security.auth.login.AccountException;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
@@ -245,9 +252,10 @@ public abstract class BaseRepositoryImpl<T> {
 
     /**
      * Create a criteria tp the given entity ordered by pageable sort properties
-     * @param criteria CoreCriteria
+     *
+     * @param criteria  CoreCriteria
      * @param rootClass Root class
-     * @param pageable Pageable with sort information
+     * @param pageable  Pageable with sort information
      * @return Criteria Query object
      */
     protected CriteriaQuery<?> buildCriteria(CoreCriteria criteria, Class rootClass, Pageable pageable) {
@@ -257,16 +265,26 @@ public abstract class BaseRepositoryImpl<T> {
         Root<?> root = crit.from(rootClass);
         crit.select(root);
 
-        List<Predicate> restrictions = new ArrayList<>();
+        List<Pair<Predicate, Predicate.BooleanOperator>> restrictions = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(criteria.getRestrictions())) {
             for (Restriction restriction : criteria.getRestrictions()) {
-                restrictions.add(createRestriction(builder, root, restriction));
+                restrictions.add(Pair.of(
+                        createRestriction(builder, root, restriction),
+                        restriction.getQueryOperator() == null ? Predicate.BooleanOperator.AND : restriction.getQueryOperator()));
             }
         }
 
         if (!restrictions.isEmpty()) {
-            crit.where(restrictions.toArray(new Predicate[restrictions.size()]));
+            Predicate finalPredicate = null;
+            for (Pair<Predicate, Predicate.BooleanOperator> r : restrictions) {
+                if (Predicate.BooleanOperator.OR.equals(r.getSecond())) {
+                    finalPredicate = finalPredicate == null ? builder.or(r.getFirst()) : builder.or(finalPredicate, r.getFirst());
+                } else {
+                    finalPredicate = finalPredicate == null ? builder.and(r.getFirst()) : builder.and(finalPredicate, r.getFirst());
+                }
+            }
+            crit.where(finalPredicate);
         }
 
         if (pageable != null) {
@@ -283,16 +301,26 @@ public abstract class BaseRepositoryImpl<T> {
 
 
         Root<?> root = critCount.from(rootClass);
-        List<Predicate> restrictions = new ArrayList<>();
+        List<Pair<Predicate, Predicate.BooleanOperator>> restrictions = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(criteria.getRestrictions())) {
             for (Restriction restriction : criteria.getRestrictions()) {
-                restrictions.add(createRestriction(builder, root, restriction));
+                restrictions.add(Pair.of(
+                        createRestriction(builder, root, restriction),
+                        restriction.getQueryOperator() == null ? Predicate.BooleanOperator.AND : restriction.getQueryOperator()));
             }
         }
 
         if (!restrictions.isEmpty()) {
-            critCount.where(restrictions.toArray(new Predicate[restrictions.size()]));
+            Predicate finalPredicate = null;
+            for (Pair<Predicate, Predicate.BooleanOperator> r : restrictions) {
+                if (Predicate.BooleanOperator.OR.equals(r.getSecond())) {
+                    finalPredicate = finalPredicate == null ? builder.or(r.getFirst()) : builder.or(finalPredicate, r.getFirst());
+                } else {
+                    finalPredicate = finalPredicate == null ? builder.and(r.getFirst()) : builder.and(finalPredicate, r.getFirst());
+                }
+            }
+            critCount.where(finalPredicate);
         }
 
         Expression<Long> count = builder.count(root);
