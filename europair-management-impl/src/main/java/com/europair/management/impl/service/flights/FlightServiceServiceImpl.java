@@ -11,7 +11,7 @@ import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
-import com.europair.management.rest.model.flights.repository.IFlightRepository;
+import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
@@ -42,7 +42,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     private RouteRepository routeRepository;
 
     @Autowired
-    private IFlightRepository flightRepository;
+    private FlightRepository flightRepository;
 
     @Autowired
     private IUserRepository userRepository;

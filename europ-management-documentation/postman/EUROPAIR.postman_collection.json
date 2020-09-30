@@ -2863,6 +2863,27 @@
 					],
 					"protocolProfileBehavior": {},
 					"_postman_isSubFolder": true
+				},
+				{
+					"name": "flight - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/flights",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"flights"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -3471,17 +3492,17 @@
 	],
 	"variable": [
 		{
-			"id": "5b157971-048c-4493-a7a4-a61a7f390a84",
+			"id": "78a919fb-4bed-4585-8b32-0625d074db6e",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "8f769848-8663-4fed-95e0-3e82316551fb",
+			"id": "270fef85-a074-4eef-b9b3-284f4104c2f2",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "eddd5678-85cf-4e91-9be3-943993c5990a",
+			"id": "21e42ff6-36d0-45a3-a69f-c634e0b54821",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}
