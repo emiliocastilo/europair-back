@@ -29,13 +29,13 @@ public class ContributionDataDto implements Serializable {
 
     private BigDecimal purchasePriceOnSaleCurrency;
 
-    private Double marginPercentage;
-    private BigDecimal marginAmount;
-
     private BigDecimal salePrice;
     private Double saleCommissionPercentage;
     private BigDecimal saleCommissionAmount;
     private BigDecimal saleNetPrice;
+
+    private Double marginPercentage;
+    private BigDecimal marginAmount;
 
     private String seller; // ToDo: nombre usuario, nombre+apellidos??
 
