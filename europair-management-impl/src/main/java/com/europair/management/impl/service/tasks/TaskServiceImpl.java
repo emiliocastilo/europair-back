@@ -51,9 +51,12 @@ public class TaskServiceImpl implements ITaskService {
 
   @Override
   public TaskDTO updateTask(final Long id, final TaskDTO taskDTO) {
-
+    taskDTO.setId(id);
     Task taskBD = taskRepository.findById(id)
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found on id: " + id));
+
+    TaskMapper.INSTANCE.updateFromDto(taskDTO, taskBD);
+    taskRepository.save(taskBD);
 
     /*
       must iterate over the dto screens list adding all the screens that are not in the screens JPA list
