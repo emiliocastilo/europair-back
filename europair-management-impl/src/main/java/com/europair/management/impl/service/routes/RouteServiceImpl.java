@@ -33,6 +33,7 @@ import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -338,7 +339,7 @@ public class RouteServiceImpl implements IRouteService {
             flightDTO.setOrigin(airports.get(i).getIataCode());
             flightDTO.setDestination(airports.get(i + 1).getIataCode());
             // ToDo: setear más campos???
-            flightDTO.setDepartureTime(LocalDate.now()); // Está como not null en bdd ??
+            flightDTO.setDepartureTime(LocalDateTime.now()); // Está como not null en bdd ??
             flightService.saveFlight(fileId, rotation.getId(), flightDTO);
         }
     }
