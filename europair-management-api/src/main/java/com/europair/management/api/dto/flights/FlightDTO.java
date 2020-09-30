@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +21,7 @@ public class FlightDTO extends AuditModificationBaseDTO {
 
   @JsonProperty("departureTime")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
-  private LocalDate departureTime;
+  private LocalDateTime departureTime;
 
   @JsonProperty("timeZone")
   private UTCEnum timeZone;
