@@ -60,9 +60,13 @@ public class RoleServiceImpl implements IRoleService {
   @Transactional(readOnly = false)
   @Override
   public RoleDTO updateRole(final Long id, final RoleDTO roleDTO) {
-
+    roleDTO.setId(id);
     Role role = roleRepository.findById(id)
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id));
+
+    RoleMapper.INSTANCE.updateFromDto(roleDTO, role);
+    role = roleRepository.save(role);
+
 
       /*
       must iterate over the dto list adding all the task that are not in the JPA list
