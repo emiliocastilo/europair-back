@@ -12,7 +12,6 @@ public class ContributionDataDto implements Serializable {
 
     private String aircraftType; // ToDo: cod? desc??
     private String aircraftBase; // ToDo: base principal? nombre? Iata?
-    private String aircraftTotalSpeed; // ToDo: ???? como se saca esto?
 
     private CurrencyEnum currencyOnPurchase;
     private ExchangeBuyTypeEnum exchangeTypeOnPurchase;
