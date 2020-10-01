@@ -34,7 +34,11 @@ import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -102,6 +106,7 @@ public class RouteServiceImpl implements IRouteService {
         file.setId(fileId);
         route.setFile(file);
 
+        // Persist entity
         route = routeRepository.save(route);
 
         // Save route frequency days
@@ -116,8 +121,23 @@ public class RouteServiceImpl implements IRouteService {
             route.setFrequencyDays(frequencyDays);
         }
 
+        // Calculate rotation dates and update rotation number
+        List<LocalDate> rotationDates = new ArrayList<>();
+        LocalDate auxDate = route.getStartDate();
+        while (auxDate != null && auxDate.isBefore(routeDto.getEndDate().plusDays(1))) {
+            auxDate = calculateRotationDate(auxDate, route, auxDate.equals(route.getStartDate()));
+            if (auxDate != null) {
+                rotationDates.add(auxDate);
+                if (auxDate.equals(route.getStartDate())) {
+                    auxDate = auxDate.plusDays(1);
+                }
+            }
+        }
+        route.setRotationsNumber(rotationDates.size());
+        route = routeRepository.save(route);
+
         // Create rotations
-        List<Route> rotations = createRotations(route, routeAirports);
+        List<Route> rotations = createRotations(route, routeAirports, rotationDates);
         route.setRotations(rotations);
 
         return IRouteMapper.INSTANCE.toDto(route);
@@ -170,22 +190,19 @@ public class RouteServiceImpl implements IRouteService {
 
     // Route Rotations
 
-    private List<Route> createRotations(@NotNull final Route parentRoute, final Map<String, Airport> routeAirportMap) {
-        List<Route> rotations = new ArrayList<>();
-
-        LocalDate auxDate = parentRoute.getStartDate();
-        for (int i = 0; i < parentRoute.getRotationsNumber(); i++) {
-            Route newRotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
+    private List<Route> createRotations(@NotNull final Route parentRoute, final Map<String, Airport> routeAirportMap,
+                                        final List<LocalDate> rotationDates) {
+        List<Route> rotations = rotationDates.stream().map(date -> {
+            Route rotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
             // Set relationships
-            newRotation.setFile(parentRoute.getFile());
-            newRotation.setParentRoute(parentRoute);
+            rotation.setFile(parentRoute.getFile());
+            rotation.setParentRoute(parentRoute);
 
-            auxDate = calculateRotationDate(auxDate, parentRoute, i == 0);
-            newRotation.setStartDate(auxDate);
-            newRotation.setEndDate(auxDate);
+            rotation.setStartDate(date);
+            rotation.setEndDate(date);
 
-            rotations.add(newRotation);
-        }
+            return rotation;
+        }).collect(Collectors.toList());
 
         if (rotations.size() > 0) {
             rotations = routeRepository.saveAll(rotations);
@@ -299,7 +316,7 @@ public class RouteServiceImpl implements IRouteService {
                 try {
                     nextMonthDate = LocalDate.of(nextMonthDate.getYear(), nextMonthDate.getMonth(), nextMonthDay);
                     if (nextMonthDate.isAfter(route.getEndDate())) {
-                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rotation date after end date: " + nextMonthDate);
+                        return null;
                     } else {
                         return nextMonthDate;
                     }
@@ -311,7 +328,8 @@ public class RouteServiceImpl implements IRouteService {
                 }
         }
 
-        return rotationDate;
+        // Reached end of for loop, no more available dates
+        return null;
     }
 
     @Override
