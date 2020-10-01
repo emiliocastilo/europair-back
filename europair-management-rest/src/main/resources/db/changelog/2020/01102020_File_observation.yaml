@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01102020_File_observation
+      context: dev or pre or pro
+      author: emilio.castillogonza
+      comment: "Add observation column to File table"
+      changes:
+        - addColumn :
+            tableName: files
+            columns:
+              - column:
+                    name: observation
+                    type: varchar(5000)
+        - addColumn :
+            tableName: files_aud
+            columns:
+              - column:
+                    name: observation
+                    type: varchar(5000)

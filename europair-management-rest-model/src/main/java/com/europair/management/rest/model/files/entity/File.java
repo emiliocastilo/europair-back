@@ -88,4 +88,7 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
   @OneToMany(orphanRemoval = true, mappedBy = "file")
   private List<Route> routes;
 
+  @Column
+  private String observation;
+
 }
