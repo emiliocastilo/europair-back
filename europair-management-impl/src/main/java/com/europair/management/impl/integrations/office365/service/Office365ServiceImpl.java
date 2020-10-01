@@ -4,6 +4,7 @@ import com.europair.management.api.integrations.office365.dto.ConfirmedOperation
 import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
 import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
+import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
 import com.europair.management.rest.model.flights.entity.FlightService;
@@ -17,7 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,19 +39,15 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Override
     public void confirmOperation(Long routeId, Long contributionId) {
 
-        // ToDo: get data
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
 
         Contribution contribution = contributionRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
-
-        // ToDo: convert
         ConfirmedOperationDto confirmedOperationDto = mapConfirmedOperation(route, contribution);
 
         // ToDo: send data
-
 
     }
 
@@ -71,18 +70,38 @@ public class Office365ServiceImpl implements IOffice365Service {
             dto.setOperationType(route.getFile().getOperationType());
             dto.setPaxTotalNumber(flight.getSeatsC() + flight.getSeatsF() + flight.getSeatsY());
             dto.setBedsNumber(flight.getBeds());
+            dto.setStretchersNumber(flight.getStretchers());
             dto.setOriginAirport(flight.getOrigin());
             dto.setDestinationAirport(flight.getDestination());
 //            dto.setStartDate(flight.getDepartureTime()); // ToDo: pendiente cambio modelo
 //            dto.setEndDate(flight.getDepartureTime()); // ToDo: calcular tiempo de vuelo y sumarlo
             dto.setPlateNumber(contribution.getAircraft().getPlateNumber());
-            dto.setOperator(contribution.getOperator().getName());
-            dto.setStretchersNumber(flight.getStretchers());
+            dto.setOperator(contribution.getAircraft().getOperator().getName());
+            dto.setClient(route.getFile().getClient().getCode() + " | " + route.getFile().getClient().getName());
             dto.setCharge(null); // ToDo: de donde lo sacamos?
-            dto.setClient(route.getFile().getClient().getCode() + "|" + route.getFile().getClient().getName());
             dto.setFlightNumber(null);// ToDo: de donde lo sacamos?
 
             dto.setServices(mapFlightServices(flight.getId()));
+
+
+/*
+            final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
+
+            DistanceSpeedUtils dsData;
+            Optional<DistanceSpeedUtils> optionalData = dsDataList.stream().filter(dsu -> dsu.getOriginId().equals(origin.getId())
+                    && dsu.getDestinationId().equals(destination.getId())
+                    && dsu.getAircraftTypeId().equals(aircraft.getAircraftType().getId()))
+                    .findFirst();
+            if (optionalData.isPresent()) {
+                dsData = optionalData.get();
+            } else {
+                dsData = calculateDistanceAndSpeed(aircraft.getAircraftType(), origin, destination);
+                dsDataList.add(dsData);
+            }
+*/
+
+
+
 
             return dto;
         }).collect(Collectors.toList());

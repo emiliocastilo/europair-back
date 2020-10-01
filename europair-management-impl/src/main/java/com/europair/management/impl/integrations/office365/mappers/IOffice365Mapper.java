@@ -22,8 +22,8 @@ public interface IOffice365Mapper {
     IOffice365Mapper INSTANCE = Mappers.getMapper(IOffice365Mapper.class);
 
 
-    @Mapping(target = "fileInfo.code", source = "route.file.code")
-    @Mapping(target = "fileInfo.description", source = "route.file.description")
+    @Mapping(target = "code", source = "route.file.code")
+    @Mapping(target = "description", source = "route.file.description")
     FileSharingInfoDTO mapFile(Route route);
 
     @Named("mapFlightService")
