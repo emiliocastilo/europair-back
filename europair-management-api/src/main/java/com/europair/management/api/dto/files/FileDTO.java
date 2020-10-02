@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.util.List;
@@ -21,18 +22,22 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("id")
   private Long id;
 
+  @NotNull
   @JsonProperty("code")
   private String code;
 
+  @NotNull
   @JsonProperty("description")
   private String description;
 
+  @NotNull
   @JsonProperty("statusId")
   private Long statusId;
 
   @JsonProperty("status")
   private FileStatusDto status;
 
+  @NotNull
   @JsonProperty("clientId")
   private Long clientId;
 
@@ -45,6 +50,7 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("contact")
   private ContactDto contact;
 
+  @NotNull
   @JsonProperty("providerId")
   private Long providerId;
 
@@ -63,6 +69,7 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("saleAgent")
   private UserDTO saleAgent;
 
+  @NotNull
   @JsonProperty("operationType")
   private OperationTypeEnum operationType;
   
