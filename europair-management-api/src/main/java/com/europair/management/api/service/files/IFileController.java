@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ public interface IFileController {
    */
   @PostMapping
   @Operation(description = "Save a new file", security = {@SecurityRequirement(name = "bearerAuth")})
-  ResponseEntity<FileDTO> saveFile(@Parameter(description = "File object") @NotNull @RequestBody final FileDTO fileDTO);
+  ResponseEntity<FileDTO> saveFile(@Parameter(description = "File object") @NotNull @Valid @RequestBody final FileDTO fileDTO);
 
 
   /**
