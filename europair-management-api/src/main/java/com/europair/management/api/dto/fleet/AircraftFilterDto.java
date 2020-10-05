@@ -21,15 +21,15 @@ import java.util.List;
 @AllArgsConstructor
 public class AircraftFilterDto extends AuditModificationBaseDTO {
 
+    @Schema(description = "Identifier of the route(rotation)", required = true)
+    @JsonProperty("routeId")
+    @NotNull
+    private Long routeId;
+
     @Schema(description = "List of airport ids where the aircraft must have a base", example = "1,2,11", required = true)
     @JsonProperty("bases")
     @NotEmpty
     private List<Long> baseIds;
-
-    @Schema(description = "Id of the destination Airport", required = true)
-    @JsonProperty("destinationAirport")
-    @NotNull
-    private Long destinationAirportId;
 
     @Schema(description = "List of countries ids of the airports where the aircraft must have a base", example = "1,2,11")
     @JsonProperty("countries")
@@ -54,18 +54,6 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     @Schema(description = "Flag to filter only by specified subcategory or superior ones by order")
     @JsonProperty("exactSubcategory")
     private Boolean exactSubcategory;
-
-    @Schema(description = "Start Date to check other files and show a warning. Format: yyyy-MM-dd")
-    @JsonProperty("startDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @NotNull
-    private Date startDate;
-
-    @Schema(description = "End Date to check other files and show a warning. Format: yyyy-MM-dd")
-    @JsonProperty("endDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @NotNull
-    private Date endDate;
 
     @Schema(description = "Flag to filter ambulance aircraft")
     @JsonProperty("ambulance")
@@ -94,5 +82,13 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     @Schema(description = "To search near airports distance unit")
     @JsonProperty("distanceUnit")
     private Unit distanceUnit;
+
+    @Schema(description = "Specified region id where the aircraft must have some base")
+    @JsonProperty("regionId")
+    private Long regionId;
+
+    @Schema(description = "Max number of connecting flights to filter")
+    @JsonProperty("maxConnectingFlights")
+    private Integer maxConnectingFlights;
 
 }

@@ -1,45 +1,25 @@
 package com.europair.management.api.dto.fleet;
 
 
-import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
-import com.europair.management.api.dto.common.TextField;
-import com.europair.management.api.dto.operators.OperatorDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AircraftSearchResultDataDto extends AuditModificationBaseDTO {
+public class AircraftSearchResultDataDto {
 
-    @JsonProperty("id")
-    private Long id;
+    // Aircraft fields
 
-    @JsonProperty("operator")
-    private OperatorDTO operator;
-
-    @JsonProperty("aircraftType")
-    private AircraftTypeDto aircraftType;
-
-    @JsonProperty("aircraftCategory")
-    private AircraftCategoryDto aircraftCategory;
-
-    @JsonProperty("aircraftSubcategory")
-    private AircraftCategoryDto aircraftSubcategory;
-
-    @JsonProperty("bases")
-    private List<AircraftBaseDto> bases;
-
-    @JsonProperty("insuranceEndDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date insuranceEndDate;
+    @JsonProperty("aircraftId")
+    private Long aircraftId;
 
     @JsonProperty("quantity")
     private Integer quantity;
@@ -62,27 +42,68 @@ public class AircraftSearchResultDataDto extends AuditModificationBaseDTO {
     @JsonProperty("observations")
     private List<AircraftObservationDto> observations;
 
+    @JsonProperty("insuranceEndDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date insuranceEndDate;
+
     @JsonProperty("timeInHours")
     private Double timeInHours;
 
+    @JsonProperty("connectionFlights")
+    private Integer connectionFlights;
 
-    // ToDo: Otras propiedades de Aircraft que no sé si hacen falta
 
-    @JsonProperty("plateNumber")
-    @Size(min = 0, max = TextField.TEXT_20)
-    private String plateNumber;
+    // Bases
 
-    @JsonProperty("productionYear")
-    private Integer productionYear;
+    @JsonProperty("mainBaseId")
+    private Long mainBaseId;
 
-    @JsonProperty("ambulance")
-    private Boolean ambulance;
+    @JsonProperty("mainBaseName")
+    private String mainBaseName;
 
-    @JsonProperty("insideUpgradeYear")
-    private Integer insideUpgradeYear;
 
-    @JsonProperty("outsideUpgradeYear")
-    private Integer outsideUpgradeYear;
+    // Operator fields
 
+    @JsonProperty("operatorId")
+    private Long operatorId;
+
+    @JsonProperty("operatorName")
+    private String operatorName;
+
+    @JsonProperty("operatorAocLastRevisionDate")
+    private LocalDate operatorAocLastRevisionDate;
+
+    @JsonProperty("operatorInsuranceExpirationDate")
+    private LocalDate operatorInsuranceExpirationDate;
+
+
+    // Aircraft Type fields
+
+    @JsonProperty("aircraftTypeId")
+    private Long aircraftTypeId;
+
+    @JsonProperty("aircraftTypeDescription")
+    private String aircraftTypeDescription;
+
+    @JsonProperty("maxCargo")
+    private Double maxCargo;
+
+
+    // Aircraft Category
+
+    @JsonProperty("aircraftCategoryId")
+    private Long aircraftCategoryId;
+
+    @JsonProperty("aircraftCategoryCode")
+    private String aircraftCategoryCode;
+
+
+    // Aircraft Subcategory
+
+    @JsonProperty("aircraftSubcategoryId")
+    private Long aircraftSubcategoryId;
+
+    @JsonProperty("aircraftSubcategoryCode")
+    private String aircraftSubcategoryCode;
 
 }

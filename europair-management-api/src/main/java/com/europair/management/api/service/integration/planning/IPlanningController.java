@@ -1,6 +1,7 @@
 package com.europair.management.api.service.integration.planning;
 
-import com.europair.management.api.dto.integration.PlanningFlightsDTO;
+
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;

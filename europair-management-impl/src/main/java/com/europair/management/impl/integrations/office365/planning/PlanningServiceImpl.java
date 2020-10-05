@@ -1,10 +1,9 @@
-package com.europair.management.impl.service.planning;
+package com.europair.management.impl.integrations.office365.planning;
 
-import com.europair.management.api.dto.integration.FileSharingInfoDTO;
-import com.europair.management.api.dto.integration.FlightSharingInfoDTO;
-import com.europair.management.api.dto.integration.PlanningFlightsDTO;
 import com.europair.management.api.enums.ContributionStates;
-import com.europair.management.api.enums.UTCEnum;
+import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
+import com.europair.management.api.integrations.office365.dto.FlightSharingInfoDTO;
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
@@ -13,7 +12,7 @@ import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
-import com.europair.management.rest.model.flights.repository.IFlightRepository;
+import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.operators.repository.OperatorRepository;
 import com.europair.management.rest.model.routes.entity.Route;
@@ -33,7 +32,7 @@ public class PlanningServiceImpl implements IPlanningService {
     private RouteRepository routeRepository;
 
     @Autowired
-    private IFlightRepository flightRepository;
+    private FlightRepository flightRepository;
 
     @Autowired
     private AirportRepository airportRepository;
@@ -103,8 +102,6 @@ public class PlanningServiceImpl implements IPlanningService {
                 planningFlightsDTO.getFlightSharingInfoDTO().setEndDate(flight.getDepartureTime().plusHours(distanceSpeedUtils.getTimeInHours().longValue()) );
 
                 // TODO: transformar la fecha que obtenemos a fecha y hora local
-
-                ZonedDateTime
 
                 // flight dates (local)
                 planningFlightsDTO.getFlightSharingInfoDTO().setLocalStartDate(

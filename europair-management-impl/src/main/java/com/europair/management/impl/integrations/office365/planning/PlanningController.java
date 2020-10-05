@@ -1,6 +1,6 @@
-package com.europair.management.impl.service.planning;
+package com.europair.management.impl.integrations.office365.planning;
 
-import com.europair.management.api.dto.integration.PlanningFlightsDTO;
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.service.integration.planning.IPlanningController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

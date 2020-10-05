@@ -20,6 +20,9 @@ public interface RoleMapper {
 
   Role toEntity (final RoleDTO roleDTO);
 
+  @Mapping(target = "tasks", ignore = true)
+  @Mapping(target = "users", ignore = true)
+  @Mapping(target = "rolesTasks", ignore = true)
   void updateFromDto(final RoleDTO roleDTO, @MappingTarget Role role);
 
   @Named("roleNoTask")

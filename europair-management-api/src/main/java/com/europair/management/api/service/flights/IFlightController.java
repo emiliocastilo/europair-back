@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 @RequestMapping("/files/{fileId}/routes/{routeId}/flights")
 public interface IFlightController {
@@ -19,15 +20,20 @@ public interface IFlightController {
      * Retrieves a paginated list of Flight filtered by properties criteria.
      * </p>
      *
+     * @param fileId   File identifier
+     * @param routeId  Route (rotation) identifier
      * @param pageable pagination info
+     * @param reqParam Map of filter params, values and operators. (pe: filter_description=asd,CONTAINS)
      * @return Paginated list of flights
      */
     @GetMapping
     @Operation(description = "Paged result of flights with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
-    public ResponseEntity<Page<FlightDTO>> getAllFlightsPaginated(
+    ResponseEntity<Page<FlightDTO>> getAllFlightsPaginated(
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
       @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
-      @Parameter(description = "Pagination filter") final Pageable pageable);
+      @Parameter(description = "Pagination filter") final Pageable pageable,
+      @Parameter(description = "Map of properties to filter with value and operator, (pe: filter_description=asd,CONTAINS)") @RequestParam
+    Map<String, String> reqParam);
 
 
     /**

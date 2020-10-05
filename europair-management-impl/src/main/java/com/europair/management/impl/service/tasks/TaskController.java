@@ -21,31 +21,22 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/tasks")
 public class TaskController implements ITaskController {
 
   private final ITaskService taskService;
 
-  @GetMapping("")
-  @Operation(description = "Paged result of master task with filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
-  public ResponseEntity<Page<TaskDTO>> getAllSTasksPaginated(
-          @Parameter(description = "Pagination filter") final Pageable pageable,
-          @Parameter(description = "Map of properties to filter with value and operator, (pe: description=test,CONTAINS)") @RequestParam Map<String, String> reqParam) {
-
+  public ResponseEntity<Page<TaskDTO>> getAllSTasksPaginated(final Pageable pageable, Map<String, String> reqParam) {
     CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
     final Page<TaskDTO> pageTaskssDTO = taskService.findAllPaginated(pageable, criteria);
     return ResponseEntity.ok().body(pageTaskssDTO);
   }
 
-  @GetMapping("/{id}")
-  public ResponseEntity<TaskDTO> getTaskById(@PathVariable final Long id) {
+  public ResponseEntity<TaskDTO> getTaskById(final Long id) {
     final TaskDTO taskDTO = taskService.findById(id);
     return ResponseEntity.ok().body(taskDTO);
   }
 
-  @PostMapping("")
-  public ResponseEntity<TaskDTO> saveTask(@RequestBody final TaskDTO taskDTO) {
-
+  public ResponseEntity<TaskDTO> saveTask(final TaskDTO taskDTO) {
     final TaskDTO taskDTOSaved = taskService.saveTask(taskDTO);
 
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -54,29 +45,16 @@ public class TaskController implements ITaskController {
             .toUri();
 
     return ResponseEntity.created(location).body(taskDTOSaved);
-
   }
 
-  @PutMapping("/{id}")
-  public ResponseEntity<TaskDTO> updateTask(@PathVariable final Long id, @RequestBody final TaskDTO taskDTO) {
-
+  public ResponseEntity<TaskDTO> updateTask(final Long id, final TaskDTO taskDTO) {
     final TaskDTO taskDTOSaved = taskService.updateTask(id, taskDTO);
-
-    URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(taskDTOSaved.getId())
-            .toUri();
-
     return ResponseEntity.ok().body(taskDTOSaved);
-
   }
 
-  @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteTask(@PathVariable final Long id) {
-
+  public ResponseEntity<?> deleteTask(final Long id) {
     taskService.deleteTask(id);
     return ResponseEntity.noContent().build();
-
   }
 
 }

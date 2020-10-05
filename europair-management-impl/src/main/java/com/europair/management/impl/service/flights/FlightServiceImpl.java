@@ -2,9 +2,12 @@ package com.europair.management.impl.service.flights;
 
 import com.europair.management.api.dto.flights.FlightDTO;
 import com.europair.management.impl.mappers.flights.IFlightMapper;
+import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.common.CoreCriteria;
+import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
-import com.europair.management.rest.model.flights.repository.IFlightRepository;
+import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,12 @@ import org.springframework.web.server.ResponseStatusException;
 @Transactional(readOnly = true)
 public class FlightServiceImpl implements IFlightService {
 
+    private final String FILE_ID_FILTER = "route.file.id";
+    private final String ROUTE_ID_FILTER = "route.id";
+    private final String PARENT_ROUTE_ID_FILTER = "route.parentRoute.id";
+
     @Autowired
-    private IFlightRepository flightRepository;
+    private FlightRepository flightRepository;
 
     @Autowired
     private RouteRepository routeRepository;
@@ -30,11 +37,20 @@ public class FlightServiceImpl implements IFlightService {
 
 
     @Override
-    public Page<FlightDTO> findAllPaginated(final Long fileId, final Long routeId, Pageable pageable) {
+    public Page<FlightDTO> findAllPaginated(final Long fileId, final Long routeId, Pageable pageable, CoreCriteria criteria) {
       checkIfFileExists(fileId);
-      checkIfRouteExists(routeId);
+      Route route = routeRepository.findById(routeId).orElseThrow(() ->
+              new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
 
-      return flightRepository.findAll(pageable).map(IFlightMapper.INSTANCE::toDto);
+        Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
+
+        if (route.getParentRoute() == null) {
+            Utils.addCriteriaIfNotExists(criteria, PARENT_ROUTE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(routeId));
+        } else {
+            Utils.addCriteriaIfNotExists(criteria, ROUTE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(routeId));
+        }
+
+      return flightRepository.findFlightByCriteria(criteria, pageable).map(IFlightMapper.INSTANCE::toDto);
     }
 
     @Override

@@ -5,10 +5,12 @@ import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
 
@@ -16,6 +18,7 @@ import java.util.List;
 /**
  * This entity refers to Expediente in Spanish. This is a direct request of the Product Owner.
  */
+@DynamicUpdate
 @Entity
 @Table(name = "files")
 @Data
@@ -26,13 +29,16 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column
+  @NotNull
+  @Column(nullable = false)
   private String code;
 
-  @Column
+  @NotNull
+  @Column(nullable = false)
   private String description;
 
-  @Column(name = "status_id")
+  @NotNull
+  @Column(name = "status_id", nullable = false)
   private Long statusId;
 
   @NotAudited
@@ -40,7 +46,8 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
   @JoinColumn(name = "status_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
   private FileStatus status;
 
-  @Column(name = "client_Id")
+  @NotNull
+  @Column(name = "client_Id", nullable = false)
   private Long clientId;
 
   @NotAudited
@@ -56,7 +63,8 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
   @JoinColumn(name = "contact_id", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
   private Contact contact;
 
-  @Column(name = "provider_id")
+  @NotNull
+  @Column(name = "provider_id",nullable = false)
   private Long providerId;
 
   @NotAudited
@@ -69,7 +77,7 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
 
   @NotAudited
   @ManyToOne
-  @JoinColumn(name = "sale_person_id", referencedColumnName = "id", nullable = false,insertable = false, updatable = false)
+  @JoinColumn(name = "sale_person_id", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
   private User salePerson;
 
   @Column(name = "sale_agent_id")
@@ -77,9 +85,10 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
 
   @NotAudited
   @ManyToOne
-  @JoinColumn(name = "sale_agent_id", referencedColumnName = "id", nullable = false,insertable = false, updatable = false)
+  @JoinColumn(name = "sale_agent_id", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
   private User saleAgent;
 
+  @NotNull
   @Column(name = "operation_type")
   @Enumerated(EnumType.STRING)
   private OperationTypeEnum operationType;
@@ -87,5 +96,8 @@ public class File extends SoftRemovableBaseEntity implements Serializable {
   @NotAudited
   @OneToMany(orphanRemoval = true, mappedBy = "file")
   private List<Route> routes;
+
+  @Column
+  private String observation;
 
 }

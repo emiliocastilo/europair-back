@@ -21,4 +21,5 @@ public class AircraftSearchController implements IAircraftSearchController {
     public ResponseEntity<List<AircraftSearchResultDataDto>> searchAircraft(AircraftFilterDto filterDto) {
         return ResponseEntity.ok(aircraftSearchService.searchAircraft(filterDto));
     }
+
 }

@@ -9,7 +9,10 @@ import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
+<<<<<<< HEAD
 import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
+=======
+>>>>>>> origin/develop
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import org.springframework.data.util.Pair;
@@ -21,8 +24,17 @@ import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+<<<<<<< HEAD
 import java.util.*;
+=======
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+>>>>>>> origin/develop
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -232,6 +244,9 @@ public class Utils {
         return (int) Math.ceil(distance / flightRangeInDefaultUnit) - 1;
     }
 
+<<<<<<< HEAD
+
+
     public static DistanceSpeedUtils calculateDistanceAndSpeed(
             final ConversionService conversionService, final AircraftType aircraftType, final Airport origin,
             final Airport destination) {
@@ -292,6 +307,8 @@ public class Utils {
 
         return dsData;
     }
+=======
+>>>>>>> origin/develop
 
     /**
      * Utils inner class containing constant values of the application
