@@ -30,7 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Profile("dev")
+/*    @Profile("dev")
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -41,8 +41,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
           .anyRequest().authenticated().and()
           .addFilter(new JWTAuthenticationFilter(authenticationManager())) // have permissions
           .addFilter(new JWTAuthorizationFilter(authenticationManager())); // evaluate user
+
         httpSecurity.headers().frameOptions().disable();
-    }
+    }*/
 
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
@@ -81,4 +82,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
+
+
+    /* new autentication with AZURE AAD */
+    @Profile("dev")
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors().and()
+                .authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt();
+    }
+
+
 }
