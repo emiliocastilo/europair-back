@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IPlanningService {
 
-    List<PlanningFlightsDTO> getPlanningFlightsInfo(Long fileId, Long routeId);
+    List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, String actionType);
 
 }

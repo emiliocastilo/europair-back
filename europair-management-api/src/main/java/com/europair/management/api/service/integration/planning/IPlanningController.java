@@ -17,8 +17,8 @@ public interface IPlanningController {
     @GetMapping("")
     @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(
-            @Parameter(description = "file id") @RequestParam final Long fileId,
-            @Parameter(description = "route id") @RequestParam final Long routeId
+            @Parameter(description = "route id") @RequestParam final Long routeId,
+            @Parameter(description = "action type") @RequestParam final String actionType
     );
 
 }

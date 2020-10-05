@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -15,8 +15,10 @@ public class FlightSharingInfoDTO {
     private OperationTypeEnum operationType;
     private String originAirport;
     private String destinationAirport;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+    private LocalDateTime localStartDate;
+    private LocalDateTime localEndDate;
     private String flightNumber;
     private String operator;
     private String plateNumber;

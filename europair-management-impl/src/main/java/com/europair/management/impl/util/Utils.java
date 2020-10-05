@@ -1,26 +1,27 @@
 package com.europair.management.impl.util;
 
+import com.europair.management.api.dto.conversions.ConversionDataDTO;
+import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.enums.UTCEnum;
+import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
+import com.europair.management.rest.model.fleet.entity.AircraftType;
+import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
-import org.springframework.util.StringUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -106,16 +107,16 @@ public class Utils {
          * @param toUTCIndicator
          * @return
          */
-        public static LocalTime getLocalTimeInOtherUTC(UTCEnum fromUTCIndicator, String time, UTCEnum toUTCIndicator) {
-            LocalTime utcZeroTime;
+        public static LocalDateTime getLocalTimeInOtherUTC(UTCEnum fromUTCIndicator, String time, UTCEnum toUTCIndicator) {
+            LocalDateTime utcZeroTime;
             // If fromUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
             if (0 < fromUTCIndicator.getHours()) {
-                utcZeroTime = addHoursMinutesToLocalTime(LocalTime.parse(time), (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
+                utcZeroTime = addHoursMinutesToLocalTime(LocalDateTime.parse(time), (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
             } else {
-                utcZeroTime = addHoursMinutesToLocalTime(LocalTime.parse(time), (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
+                utcZeroTime = addHoursMinutesToLocalTime(LocalDateTime.parse(time), (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
             }
 
-            LocalTime utcTime = null;
+            LocalDateTime utcTime = null;
             //After that we have to add the hours from toUTCIndicator
             // If toUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
             if (0 < toUTCIndicator.getHours()) {
@@ -126,11 +127,11 @@ public class Utils {
             return utcTime;
         }
 
-        private static LocalTime addHoursMinutesToLocalTime(LocalTime localTime, Integer hours, Integer minutes) {
+        private static LocalDateTime addHoursMinutesToLocalTime(LocalDateTime localDateTime, Integer hours, Integer minutes) {
 
-            LocalTime res = null;
+            LocalDateTime res = null;
 
-            res = localTime.plusHours(hours);
+            res = localDateTime.plusHours(hours);
             res = res.plusMinutes(minutes);
 
             return res;
@@ -198,6 +199,100 @@ public class Utils {
         return resultMap;
     }
 
+    public static int calculateConnectingFlights(final Airport origin, final Airport destination, final AircraftType aircraftType,
+                                                 final ConversionService conversionService) {
+        if (origin.getLatitude() == null || origin.getLongitude() == null || destination.getLatitude() == null || destination.getLongitude() == null) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                    "One of the airports doesn't have all the coordinates data to calculate the distance.");
+        }
+        if (aircraftType.getFlightRange() == null || aircraftType.getFlightRangeUnit() == null) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                    "No flight range data for aircraft type with id: " + aircraftType.getId());
+        }
+        Unit defaultUnit = Unit.NAUTIC_MILE;
+        Double flightRangeInDefaultUnit = aircraftType.getFlightRange();
+        if (!Unit.NAUTIC_MILE.equals(aircraftType.getFlightRangeUnit())) {
+            ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
+            ct.setSrcUnit(aircraftType.getFlightRangeUnit());
+            ct.setValue(aircraftType.getFlightRange());
+            ConversionDataDTO conversionData = new ConversionDataDTO();
+            conversionData.setDstUnit(defaultUnit);
+            conversionData.setDataToConvert(Collections.singletonList(ct));
+            List<Double> result = conversionService.convertData(conversionData);
+            if (CollectionUtils.isEmpty(result)) {
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Conversion service error while converting flight ranges.");
+            }
+            flightRangeInDefaultUnit = result.get(0);
+        }
+        double distance = Utils.getDistanceInNM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
+                destination.getLongitude());
+
+        return (int) Math.ceil(distance / flightRangeInDefaultUnit) - 1;
+    }
+
+
+
+    public static DistanceSpeedUtils calculateDistanceAndSpeed(
+            final ConversionService conversionService, final AircraftType aircraftType, final Airport origin,
+            final Airport destination) {
+        DistanceSpeedUtils dsData = new DistanceSpeedUtils();
+        dsData.setOriginId(origin.getId());
+        dsData.setDestinationId(destination.getId());
+        dsData.setAircraftTypeId(aircraftType.getId());
+
+        // Calculate distance
+        double distance = Utils.getDistanceInNM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
+                destination.getLongitude());
+        dsData.setDistance(distance);
+
+        // Filter avg speeds to get the one that matches the distance
+        AircraftTypeAverageSpeed speed = aircraftType.getAverageSpeed().stream()
+                .filter(avgSpeed -> {
+                    List<Double> distanceRange = Arrays.asList(avgSpeed.getFromDistance(), avgSpeed.getToDistance());
+                    if (!Constants.DEFAULT_DISTANCE_UNIT.equals(avgSpeed.getDistanceUnit())) {
+                        // Convert distances to default unit
+                        ConversionDataDTO.ConversionTuple ctFrom = new ConversionDataDTO.ConversionTuple();
+                        ctFrom.setSrcUnit(avgSpeed.getDistanceUnit());
+                        ctFrom.setValue(avgSpeed.getFromDistance());
+
+                        ConversionDataDTO.ConversionTuple ctTo = new ConversionDataDTO.ConversionTuple();
+                        ctTo.setSrcUnit(avgSpeed.getDistanceUnit());
+                        ctTo.setValue(avgSpeed.getToDistance());
+
+                        ConversionDataDTO conversionData = new ConversionDataDTO();
+                        conversionData.setDstUnit(Constants.DEFAULT_DISTANCE_UNIT);
+                        conversionData.setDataToConvert(Arrays.asList(ctFrom, ctTo));
+
+                        List<Double> result = conversionService.convertData(conversionData);
+                        distanceRange = Arrays.asList(result.get(0), result.get(1));
+                    }
+
+                    return distance >= distanceRange.get(0) && distance <= distanceRange.get(1);
+                }).findFirst().orElse(null);
+
+        Double speedInDefaultUnit = null;
+        if (speed != null) {
+            speedInDefaultUnit = speed.getAverageSpeed();
+            if (!Constants.DEFAULT_SPEED_UNIT.equals(speed.getAverageSpeedUnit())) {
+                // Convert speed to default unit
+                ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
+                ct.setSrcUnit(speed.getAverageSpeedUnit());
+                ct.setValue(speed.getAverageSpeed());
+
+                ConversionDataDTO conversionData = new ConversionDataDTO();
+                conversionData.setDstUnit(Constants.DEFAULT_SPEED_UNIT);
+                conversionData.setDataToConvert(Collections.singletonList(ct));
+
+                List<Double> result = conversionService.convertData(conversionData);
+                speedInDefaultUnit = result.get(0);
+            }
+        }
+
+        dsData.setSpeed(speedInDefaultUnit);
+
+        return dsData;
+    }
 
     /**
      * Utils inner class containing constant values of the application
@@ -207,6 +302,8 @@ public class Utils {
         public static final String TAX_ES_CODE = "ES";
         public static final String TAX_ES_REDUCED_CODE = "ES_REDUCED";
         public static final String TAX_ES_IGIC_CODE = "ES_IGIC";
+        public static final Unit DEFAULT_SPEED_UNIT = Unit.KNOTS;
+        public static final Unit DEFAULT_DISTANCE_UNIT = Unit.NAUTIC_MILE;
     }
 
 }

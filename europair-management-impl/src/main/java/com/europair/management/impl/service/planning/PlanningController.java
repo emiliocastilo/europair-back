@@ -15,9 +15,9 @@ public class PlanningController implements IPlanningController {
     private IPlanningService planningService;
 
     @Override
-    public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(Long fileId, Long routeId) {
+    public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(Long routeId, String actionType) {
 
-        final List<PlanningFlightsDTO> planningFlightsDTOList = planningService.getPlanningFlightsInfo(fileId, routeId);
+        final List<PlanningFlightsDTO> planningFlightsDTOList = planningService.getPlanningFlightsInfo(routeId, actionType);
         return ResponseEntity.ok(planningFlightsDTOList);
     }
 }
