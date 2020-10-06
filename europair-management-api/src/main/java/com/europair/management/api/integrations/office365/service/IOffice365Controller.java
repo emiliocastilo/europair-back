@@ -30,10 +30,13 @@ public interface IOffice365Controller {
             @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 
 
-    @GetMapping("/send/flight/contribution")
+    @GetMapping("/get/flight/contribution")
     @Operation(description = "Send an url to the Office365 systems to indicate that the information is enabled, and can be retrieved from the url", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<?> sendEnabledFlightContributionInformation(@Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+    ResponseEntity<?> getEnabledFlightContributionInformation(@Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
                                                                @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
                                                                @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId);
+
+    @GetMapping("/get/flight/contribution/test")
+    ResponseEntity<?> testEnabledFlightContributionInformation();
 
 }

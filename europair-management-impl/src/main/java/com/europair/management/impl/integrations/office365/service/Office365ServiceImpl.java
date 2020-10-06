@@ -13,6 +13,7 @@ import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
+import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
@@ -75,10 +76,16 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     @Override
-    public void sendEnabledFlightContributionInformation(Long routeId, Long contributionId, Long flightId) {
+    public ResponseContributionFlights getEnabledFlightContributionInformation(Long routeId, Long contributionId, Long flightId) {
 
         ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
 
+        // precondiciones
+        Contribution contribution = this.contributionRepository.findById(contributionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+
+        Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + contribution.getAircraftId()));
 
         // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
         Route route = this.routeRepository.findById(routeId)
@@ -89,25 +96,43 @@ public class Office365ServiceImpl implements IOffice365Service {
         PlanningFlightsDTO planningFlightsDTO = this.iPlanningService.getPlanningFlightsDTO(null,route,file,flight);
 
         // seccond step: aircraftSharingDTO
-        Contribution contribution = this.contributionRepository.findById(contributionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
-
-        Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + contribution.getAircraftId()));
-
-
         AircraftSharingDTO aircraftSharingDTO = new AircraftSharingDTO();
-  /*      aircraftSharingDTO.setBaseCode(aircraft.getb);
-        aircraftSharingDTO.setBaseName();
-        aircraftSharingDTO.setCategoryCode();
-        aircraftSharingDTO.setCategoryName();
-        aircraftSharingDTO.setSubcategoryCode();
-        aircraftSharingDTO.setSubcategoryName();
-        aircraftSharingDTO.setTypeCode();
-        aircraftSharingDTO.setTypeName();*/
+
+        for (AircraftBase aircraftBase: aircraft.getBases()) {
+            if (null != aircraftBase.getMainBase()) {
+                aircraftSharingDTO.setBaseCode(aircraftBase.getAirport().getIataCode());
+                aircraftSharingDTO.setBaseName(aircraftBase.getAirport().getName());
+            }
+        }
+        if (null != aircraft.getAircraftType()) {
+            aircraftSharingDTO.setTypeCode(aircraft.getAircraftType().getCode());
+            aircraftSharingDTO.setTypeName(aircraft.getAircraftType().getDescription());
+
+            if( null != aircraft.getAircraftType().getCategory()) {
+                aircraftSharingDTO.setCategoryCode(aircraft.getAircraftType().getCategory().getCode());
+                aircraftSharingDTO.setCategoryName(aircraft.getAircraftType().getCategory().getName());
+            }
+
+            if (null != aircraft.getAircraftType().getSubcategory()) {
+                aircraftSharingDTO.setSubcategoryCode(aircraft.getAircraftType().getSubcategory().getCode());
+                aircraftSharingDTO.setSubcategoryName(aircraft.getAircraftType().getSubcategory().getName());
+            }
+        }
         // third step: operatorSharingDTO;
+        OperatorSharingDTO operatorSharingDTO = new OperatorSharingDTO();
 
+        if ( null != contribution.getOperator()) {
+            operatorSharingDTO.setIataCode(contribution.getOperator().getIataCode());
+            operatorSharingDTO.setIcaoCode(contribution.getOperator().getIcaoCode());
+            operatorSharingDTO.setName(contribution.getOperator().getName());
+        }
 
+        // union de datos
+        responseContributionFlights.setAircraftSharingDTO(aircraftSharingDTO);
+        responseContributionFlights.setOperatorSharingDTO(operatorSharingDTO);
+        responseContributionFlights.setPlanningFlightsDTO(planningFlightsDTO);
+
+        return responseContributionFlights;
     }
 
 
