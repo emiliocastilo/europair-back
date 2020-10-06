@@ -39,6 +39,22 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     @JsonProperty("seats")
     private Integer seats;
 
+    @Schema(description = "Minimum number of seats in category F")
+    @JsonProperty("seatingF")
+    private Integer seatingF;
+
+    @Schema(description = "Minimum number of seats in category C")
+    @JsonProperty("seatingC")
+    private Integer seatingC;
+
+    @Schema(description = "Minimum number of seats in category Y")
+    @JsonProperty("seatingY")
+    private Integer seatingY;
+
+    @Schema(description = "Minimum number of seats in category F plus C")
+    @JsonProperty("seatingFC")
+    private Integer seatingFC;
+
     @Schema(description = "Minimum number of beds for the nighttime config.")
     @JsonProperty("beds")
     private Integer beds;

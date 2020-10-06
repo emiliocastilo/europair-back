@@ -90,6 +90,9 @@ public class RouteServiceImpl implements IRouteService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Route expected. Identifier %s got", routeDto.getId()));
         }
 
+        // Route validations
+        routeValidations(routeDto);
+
         // Validate Route Airports
         List<String> iataCodes = Utils.mapRouteAirportIataCodes(routeDto.getLabel());
         Map<String, Airport> routeAirports = iataCodes.stream()
@@ -240,7 +243,7 @@ public class RouteServiceImpl implements IRouteService {
         LocalDate rotationDate = lastRotationDate != null ? lastRotationDate : route.getStartDate();
 
         if (route.getFrequency() == null || FrequencyEnum.ADHOC.equals(route.getFrequency())) {
-            return rotationDate;
+            return firstRotation ? rotationDate : null;
         }
 
         final List<DayOfWeek> dayOfWeekList = route.getFrequencyDays().stream()
@@ -359,6 +362,13 @@ public class RouteServiceImpl implements IRouteService {
             // ToDo: setear más campos???
             flightDTO.setDepartureTime(LocalDateTime.now()); // Está como not null en bdd ??
             flightService.saveFlight(fileId, rotation.getId(), flightDTO);
+        }
+    }
+
+    // Validations
+    private void routeValidations(final RouteDto routeDto) {
+        if (routeDto.getStartDate().isAfter(routeDto.getEndDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Route start date is after end date.");
         }
     }
 
