@@ -110,6 +110,15 @@ public class Contribution extends SoftRemovableBaseEntity implements Serializabl
     @Column(name = "sales_price_without_vat", precision = 12, scale = 4)
     private BigDecimal salesPricewithoutVAT;
 
+    @Column(name = "block_hour", precision = 12, scale = 4)
+    private BigDecimal blockHour;
+
+    @Column(name = "price_per_seat", precision = 12, scale = 4)
+    private BigDecimal pricePerSeat;
+
+    @Column(name = "price_per_pax", precision = 12, scale = 4)
+    private BigDecimal pricePerPax;
+
 
     /**
      * Duda: no entiendo:

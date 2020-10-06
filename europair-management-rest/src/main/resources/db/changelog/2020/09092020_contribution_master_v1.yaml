@@ -150,3 +150,26 @@ databaseChangeLog:
                   name: removed_at
                   type: timestamp
                   remarks: soft removal timestamp
+
+
+  - changeSet:
+      id: 20201005_contribution_master_v2_hour_block
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add column hour block and price columns"
+      changes:
+        - addColumn:
+            tableName: contributions
+            columns:
+              - column:
+                  name: block_hour
+                  type: decimal(12,4)
+                  remarks: Computed price per hour
+              - column:
+                  name: price_per_seat
+                  type: decimal(12,4)
+                  remarks: Price per seat
+              - column:
+                  name: price_per_pax
+                  type: decimal(12,4)
+                  remarks: Price per pax
