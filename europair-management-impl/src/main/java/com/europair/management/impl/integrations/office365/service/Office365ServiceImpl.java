@@ -4,6 +4,7 @@ import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
+import com.europair.management.impl.service.fleet.IAircraftService;
 import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
@@ -11,6 +12,8 @@ import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
 import com.europair.management.rest.model.files.entity.File;
+import com.europair.management.rest.model.fleet.entity.Aircraft;
+import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.flights.repository.FlightRepository;
@@ -53,6 +56,9 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Autowired
     private FlightRepository flightRepository;
 
+    @Autowired
+    private AircraftRepository aircraftRepository;
+
     @Override
     public void confirmOperation(Long routeId, Long contributionId) {
 
@@ -83,7 +89,22 @@ public class Office365ServiceImpl implements IOffice365Service {
         PlanningFlightsDTO planningFlightsDTO = this.iPlanningService.getPlanningFlightsDTO(null,route,file,flight);
 
         // seccond step: aircraftSharingDTO
+        Contribution contribution = this.contributionRepository.findById(contributionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
+        Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + contribution.getAircraftId()));
+
+
+        AircraftSharingDTO aircraftSharingDTO = new AircraftSharingDTO();
+  /*      aircraftSharingDTO.setBaseCode(aircraft.getb);
+        aircraftSharingDTO.setBaseName();
+        aircraftSharingDTO.setCategoryCode();
+        aircraftSharingDTO.setCategoryName();
+        aircraftSharingDTO.setSubcategoryCode();
+        aircraftSharingDTO.setSubcategoryName();
+        aircraftSharingDTO.setTypeCode();
+        aircraftSharingDTO.setTypeName();*/
         // third step: operatorSharingDTO;
 
 
