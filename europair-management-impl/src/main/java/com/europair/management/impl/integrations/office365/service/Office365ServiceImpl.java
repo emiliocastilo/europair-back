@@ -1,16 +1,23 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
-import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
-import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
+import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
+import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
+import com.europair.management.impl.service.fleet.IAircraftService;
+import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.files.entity.File;
+import com.europair.management.rest.model.fleet.entity.Aircraft;
+import com.europair.management.rest.model.fleet.entity.AircraftBase;
+import com.europair.management.rest.model.fleet.repository.AircraftRepository;
+import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
+import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
@@ -44,6 +51,15 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Autowired
     private ConversionService conversionService;
 
+    @Autowired
+    private IPlanningService iPlanningService;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
+    @Autowired
+    private AircraftRepository aircraftRepository;
+
     @Override
     public void confirmOperation(Long routeId, Long contributionId) {
 
@@ -57,6 +73,66 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         // ToDo: send data
 
+    }
+
+    @Override
+    public ResponseContributionFlights getEnabledFlightContributionInformation(Long routeId, Long contributionId, Long flightId) {
+
+        ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
+
+        // precondiciones
+        Contribution contribution = this.contributionRepository.findById(contributionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+
+        Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + contribution.getAircraftId()));
+
+        // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
+        Route route = this.routeRepository.findById(routeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+        File file = route.getFile();
+        Flight flight = this.flightRepository.findById(flightId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId));
+        PlanningFlightsDTO planningFlightsDTO = this.iPlanningService.getPlanningFlightsDTO(null,route,file,flight);
+
+        // seccond step: aircraftSharingDTO
+        AircraftSharingDTO aircraftSharingDTO = new AircraftSharingDTO();
+
+        for (AircraftBase aircraftBase: aircraft.getBases()) {
+            if (null != aircraftBase.getMainBase()) {
+                aircraftSharingDTO.setBaseCode(aircraftBase.getAirport().getIataCode());
+                aircraftSharingDTO.setBaseName(aircraftBase.getAirport().getName());
+            }
+        }
+        if (null != aircraft.getAircraftType()) {
+            aircraftSharingDTO.setTypeCode(aircraft.getAircraftType().getCode());
+            aircraftSharingDTO.setTypeName(aircraft.getAircraftType().getDescription());
+
+            if( null != aircraft.getAircraftType().getCategory()) {
+                aircraftSharingDTO.setCategoryCode(aircraft.getAircraftType().getCategory().getCode());
+                aircraftSharingDTO.setCategoryName(aircraft.getAircraftType().getCategory().getName());
+            }
+
+            if (null != aircraft.getAircraftType().getSubcategory()) {
+                aircraftSharingDTO.setSubcategoryCode(aircraft.getAircraftType().getSubcategory().getCode());
+                aircraftSharingDTO.setSubcategoryName(aircraft.getAircraftType().getSubcategory().getName());
+            }
+        }
+        // third step: operatorSharingDTO;
+        OperatorSharingDTO operatorSharingDTO = new OperatorSharingDTO();
+
+        if ( null != contribution.getOperator()) {
+            operatorSharingDTO.setIataCode(contribution.getOperator().getIataCode());
+            operatorSharingDTO.setIcaoCode(contribution.getOperator().getIcaoCode());
+            operatorSharingDTO.setName(contribution.getOperator().getName());
+        }
+
+        // union de datos
+        responseContributionFlights.setAircraftSharingDTO(aircraftSharingDTO);
+        responseContributionFlights.setOperatorSharingDTO(operatorSharingDTO);
+        responseContributionFlights.setPlanningFlightsDTO(planningFlightsDTO);
+
+        return responseContributionFlights;
     }
 
 
@@ -110,11 +186,13 @@ public class Office365ServiceImpl implements IOffice365Service {
             if (optionalData.isPresent()) {
                 dsData = optionalData.get();
             } else {
-                dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
-                dsDataList.add(dsData);
+                // TODO: uncomment this lines. this lines was commited to share the code. Under construction
+                //dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
+                //dsDataList.add(dsData);
             }
-            dto.setEndDate(dsData.getTimeInHours() != null ?
-                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
+            // TODO: uncomment this lines. this lines was commited to share the code. Under construction
+            /*dto.setEndDate(dsData.getTimeInHours() != null ?
+                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);*/
 
 
             return dto;
