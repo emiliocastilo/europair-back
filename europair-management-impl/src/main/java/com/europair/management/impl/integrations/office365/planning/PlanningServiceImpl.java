@@ -108,8 +108,8 @@ public class PlanningServiceImpl implements IPlanningService {
         // flight dates (UTC)
         planningFlightsDTO.getFlightSharingInfoDTO().setStartDate(flight.getDepartureTime());
         // TODO: uncomment this lines. this was commited to the repository to share the code
-        DistanceSpeedUtils distanceSpeedUtils = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), originAirport, destinationAirport);
-        planningFlightsDTO.getFlightSharingInfoDTO().setEndDate(flight.getDepartureTime().plusHours(distanceSpeedUtils.getTimeInHours().longValue()) );
+        //DistanceSpeedUtils distanceSpeedUtils = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), originAirport, destinationAirport);
+        //planningFlightsDTO.getFlightSharingInfoDTO().setEndDate(flight.getDepartureTime().plusHours(distanceSpeedUtils.getTimeInHours().longValue()) );
 
         // TODO: transformar la fecha que obtenemos a fecha y hora local
 

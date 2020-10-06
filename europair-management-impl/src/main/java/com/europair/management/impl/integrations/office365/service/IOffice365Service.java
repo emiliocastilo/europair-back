@@ -4,4 +4,5 @@ public interface IOffice365Service {
 
     void confirmOperation(Long routeId, Long contributionId);
 
+    void sendEnabledFlightContributionInformation(Long routeId, Long contributionId, Long flightId);
 }

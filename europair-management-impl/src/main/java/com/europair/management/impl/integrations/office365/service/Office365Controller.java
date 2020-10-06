@@ -20,4 +20,10 @@ public class Office365Controller implements IOffice365Controller {
         service.confirmOperation(routeId, contributionId);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<?> sendEnabledFlightContributionInformation(@NotNull Long routeId, @NotNull Long contributionId, @NotNull Long flightId) {
+        service.sendEnabledFlightContributionInformation(routeId, contributionId, flightId);
+        return ResponseEntity.ok().build();
+    }
 }

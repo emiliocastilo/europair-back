@@ -1,16 +1,19 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
-import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
-import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
+import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
+import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
+import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.files.entity.File;
+import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
+import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
@@ -44,6 +47,12 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Autowired
     private ConversionService conversionService;
 
+    @Autowired
+    private IPlanningService iPlanningService;
+
+    @Autowired
+    private FlightRepository flightRepository;
+
     @Override
     public void confirmOperation(Long routeId, Long contributionId) {
 
@@ -56,6 +65,27 @@ public class Office365ServiceImpl implements IOffice365Service {
         ConfirmedOperationDto confirmedOperationDto = mapConfirmedOperation(route, contribution);
 
         // ToDo: send data
+
+    }
+
+    @Override
+    public void sendEnabledFlightContributionInformation(Long routeId, Long contributionId, Long flightId) {
+
+        ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
+
+
+        // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
+        Route route = this.routeRepository.findById(routeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+        File file = route.getFile();
+        Flight flight = this.flightRepository.findById(flightId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId));
+        PlanningFlightsDTO planningFlightsDTO = this.iPlanningService.getPlanningFlightsDTO(null,route,file,flight);
+
+        // seccond step: aircraftSharingDTO
+
+        // third step: operatorSharingDTO;
+
 
     }
 
@@ -110,11 +140,13 @@ public class Office365ServiceImpl implements IOffice365Service {
             if (optionalData.isPresent()) {
                 dsData = optionalData.get();
             } else {
-                dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
-                dsDataList.add(dsData);
+                // TODO: uncomment this lines. this lines was commited to share the code. Under construction
+                //dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
+                //dsDataList.add(dsData);
             }
-            dto.setEndDate(dsData.getTimeInHours() != null ?
-                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
+            // TODO: uncomment this lines. this lines was commited to share the code. Under construction
+            /*dto.setEndDate(dsData.getTimeInHours() != null ?
+                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);*/
 
 
             return dto;

@@ -27,7 +27,13 @@ public interface IOffice365Controller {
     @Operation(description = "Retrieve master airport data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> confirmOperation(
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
-            @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId
-    );
+            @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
+
+
+    @GetMapping("/send/flight/contribution")
+    @Operation(description = "Send an url to the Office365 systems to indicate that the information is enabled, and can be retrieved from the url", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> sendEnabledFlightContributionInformation(@Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+                                                               @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
+                                                               @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId);
 
 }
