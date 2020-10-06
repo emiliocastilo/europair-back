@@ -55,92 +55,96 @@ public class PlanningServiceImpl implements IPlanningService {
 
         for (Route routeRotation : route.getRotations()) {
             for (Flight flight: routeRotation.getFlights()) {
-
-                PlanningFlightsDTO planningFlightsDTO = new PlanningFlightsDTO();
-
-                planningFlightsDTO.setActionType(actionType);
-
-                // file info
-                planningFlightsDTO.setFileSharingInfoDTO(new FileSharingInfoDTO());
-
-                planningFlightsDTO.getFileSharingInfoDTO().setCode(file.getCode());
-                planningFlightsDTO.getFileSharingInfoDTO().setDescription(file.getDescription());
-                planningFlightsDTO.getFileSharingInfoDTO().setFileUrl(
-                        ServletUriComponentsBuilder.fromCurrentRequest()
-                                .path("/files/" + file.getId())
-                                .build().toUri().toString()
-                );
-
-                // flight info
-                planningFlightsDTO.setFlightSharingInfoDTO(new FlightSharingInfoDTO());
-
-                planningFlightsDTO.getFlightSharingInfoDTO().setOperationType(file.getOperationType());
-
-                // origin airport (IATA | ICAO | Name)
-                Airport originAirport = airportRepository.findFirstByIataCode(flight.getOrigin()).orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Origin airport not found with IATA code: " + flight.getOrigin()));
-                planningFlightsDTO.getFlightSharingInfoDTO().setOriginAirport(
-                        originAirport.getIataCode() + " | " + originAirport.getIcaoCode() + " | " + originAirport.getName());
-
-                // destination airport (IATA | ICAO | Name)
-                Airport destinationAirport = airportRepository.findFirstByIataCode(flight.getDestination()).orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destination airport not found with IATA code: " + flight.getDestination()));
-                planningFlightsDTO.getFlightSharingInfoDTO().setDestinationAirport(
-                        destinationAirport.getIataCode() + " | " + destinationAirport.getIcaoCode() + " | " + destinationAirport.getName());
-
-                // Take aircraft info from contribution
-                Contribution contribution = null;
-                for ( Contribution contributionAux: route.getContributions()) {
-                    if (contributionAux.getContributionState().equals(ContributionStates.CONFIRMED)) {
-                        contribution = contributionAux;
-                    }
-                }
-
-                // flight dates (UTC)
-                planningFlightsDTO.getFlightSharingInfoDTO().setStartDate(flight.getDepartureTime());
-                DistanceSpeedUtils distanceSpeedUtils = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), originAirport, destinationAirport);
-                planningFlightsDTO.getFlightSharingInfoDTO().setEndDate(flight.getDepartureTime().plusHours(distanceSpeedUtils.getTimeInHours().longValue()) );
-
-                // TODO: transformar la fecha que obtenemos a fecha y hora local
-
-                // flight dates (local)
-                planningFlightsDTO.getFlightSharingInfoDTO().setLocalStartDate(
-                        planningFlightsDTO.getFlightSharingInfoDTO().getStartDate()
-                                .plusHours(originAirport.getTimeZone().getHours())
-                                .plusMinutes(originAirport.getTimeZone().getMinutes())
-                );
-
-                ZonedDateTime.now();
-                //TODO: Utils.TimeConverter.getLocalTimeInOtherUTC(UTCEnum.ONE, routeRotation.getStartDate().toString(), originAirport.getTimeZone());
-
-                planningFlightsDTO.getFlightSharingInfoDTO().setLocalEndDate(
-                        planningFlightsDTO.getFlightSharingInfoDTO().getEndDate()
-                                .plusHours(destinationAirport.getTimeZone().getHours())
-                                .plusMinutes(destinationAirport.getTimeZone().getMinutes())
-                );
-
-                planningFlightsDTO.getFlightSharingInfoDTO().setFlightNumber("");
-
-                final Long contributionId = contribution.getOperatorId();
-                Operator operator = operatorRepository.findById(contributionId).orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found with id: " + contributionId)
-                );
-                planningFlightsDTO.getFlightSharingInfoDTO().setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
-                planningFlightsDTO.getFlightSharingInfoDTO().setPlateNumber(contribution.getAircraft().getPlateNumber());
-
-                planningFlightsDTO.getFlightSharingInfoDTO().setClient(file.getClient().getCode() + " | " + file.getClient().getName());
-                planningFlightsDTO.getFlightSharingInfoDTO().setPaxTotalNumber(flight.getSeatsF() + flight.getSeatsC() + flight.getSeatsY());
-                planningFlightsDTO.getFlightSharingInfoDTO().setBedsNumber(flight.getBeds());
-                planningFlightsDTO.getFlightSharingInfoDTO().setStretchersNumber(flight.getStretchers());
-
-                //TODO: carga será un valor numérico, ¿de dónde se obtiene?
-                planningFlightsDTO.getFlightSharingInfoDTO().setCharge("0");
-
+                PlanningFlightsDTO planningFlightsDTO = getPlanningFlightsDTO(actionType, route, file, flight);
                 planningFlightsDTOList.add(planningFlightsDTO);
             }
         }
 
         return planningFlightsDTOList;
+    }
 
+    @Override
+    public PlanningFlightsDTO getPlanningFlightsDTO(String actionType, Route route, File file, Flight flight) {
+        PlanningFlightsDTO planningFlightsDTO = new PlanningFlightsDTO();
+
+        planningFlightsDTO.setActionType(actionType);
+
+        // file info
+        planningFlightsDTO.setFileSharingInfoDTO(new FileSharingInfoDTO());
+
+        planningFlightsDTO.getFileSharingInfoDTO().setCode(file.getCode());
+        planningFlightsDTO.getFileSharingInfoDTO().setDescription(file.getDescription());
+        planningFlightsDTO.getFileSharingInfoDTO().setFileUrl(
+                ServletUriComponentsBuilder.fromCurrentRequest()
+                        .path("/files/" + file.getId())
+                        .build().toUri().toString()
+        );
+
+        // flight info
+        planningFlightsDTO.setFlightSharingInfoDTO(new FlightSharingInfoDTO());
+
+        planningFlightsDTO.getFlightSharingInfoDTO().setOperationType(file.getOperationType());
+
+        // origin airport (IATA | ICAO | Name)
+        Airport originAirport = airportRepository.findFirstByIataCode(flight.getOrigin()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Origin airport not found with IATA code: " + flight.getOrigin()));
+        planningFlightsDTO.getFlightSharingInfoDTO().setOriginAirport(
+                originAirport.getIataCode() + " | " + originAirport.getIcaoCode() + " | " + originAirport.getName());
+
+        // destination airport (IATA | ICAO | Name)
+        Airport destinationAirport = airportRepository.findFirstByIataCode(flight.getDestination()).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destination airport not found with IATA code: " + flight.getDestination()));
+        planningFlightsDTO.getFlightSharingInfoDTO().setDestinationAirport(
+                destinationAirport.getIataCode() + " | " + destinationAirport.getIcaoCode() + " | " + destinationAirport.getName());
+
+        // Take aircraft info from contribution
+        Contribution contribution = null;
+        for ( Contribution contributionAux: route.getContributions()) {
+            if (contributionAux.getContributionState().equals(ContributionStates.CONFIRMED)) {
+                contribution = contributionAux;
+            }
+        }
+
+        // flight dates (UTC)
+        planningFlightsDTO.getFlightSharingInfoDTO().setStartDate(flight.getDepartureTime());
+        // TODO: uncomment this lines. this was commited to the repository to share the code
+        DistanceSpeedUtils distanceSpeedUtils = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), originAirport, destinationAirport);
+        planningFlightsDTO.getFlightSharingInfoDTO().setEndDate(flight.getDepartureTime().plusHours(distanceSpeedUtils.getTimeInHours().longValue()) );
+
+        // TODO: transformar la fecha que obtenemos a fecha y hora local
+
+        // flight dates (local)
+        planningFlightsDTO.getFlightSharingInfoDTO().setLocalStartDate(
+                planningFlightsDTO.getFlightSharingInfoDTO().getStartDate()
+                        .plusHours(originAirport.getTimeZone().getHours())
+                        .plusMinutes(originAirport.getTimeZone().getMinutes())
+        );
+
+        ZonedDateTime.now();
+        //TODO: Utils.TimeConverter.getLocalTimeInOtherUTC(UTCEnum.ONE, routeRotation.getStartDate().toString(), originAirport.getTimeZone());
+
+        planningFlightsDTO.getFlightSharingInfoDTO().setLocalEndDate(
+                planningFlightsDTO.getFlightSharingInfoDTO().getEndDate()
+                        .plusHours(destinationAirport.getTimeZone().getHours())
+                        .plusMinutes(destinationAirport.getTimeZone().getMinutes())
+        );
+
+        planningFlightsDTO.getFlightSharingInfoDTO().setFlightNumber("");
+
+        final Long contributionId = contribution.getOperatorId();
+        Operator operator = operatorRepository.findById(contributionId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found with id: " + contributionId)
+        );
+        planningFlightsDTO.getFlightSharingInfoDTO().setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
+        planningFlightsDTO.getFlightSharingInfoDTO().setPlateNumber(contribution.getAircraft().getPlateNumber());
+
+        planningFlightsDTO.getFlightSharingInfoDTO().setClient(file.getClient().getCode() + " | " + file.getClient().getName());
+        planningFlightsDTO.getFlightSharingInfoDTO().setPaxTotalNumber(flight.getSeatsF() + flight.getSeatsC() + flight.getSeatsY());
+        planningFlightsDTO.getFlightSharingInfoDTO().setBedsNumber(flight.getBeds());
+        planningFlightsDTO.getFlightSharingInfoDTO().setStretchersNumber(flight.getStretchers());
+
+        //TODO: carga será un valor numérico, ¿de dónde se obtiene?
+        planningFlightsDTO.getFlightSharingInfoDTO().setCharge("0");
+        return planningFlightsDTO;
     }
 }

@@ -65,8 +65,6 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     @Value("${europair.aircraft.search.default.category.operation.group}")
     private static String DEFAULT_TYPE_FOR_OPERATION_GROUP;
 
-    private final Unit DEFAULT_SPEED_UNIT = Unit.KNOTS;
-    private final Unit DEFAULT_DISTANCE_UNIT = Unit.NAUTIC_MILE;
 
     @Autowired
     private AircraftRepository aircraftRepository;
@@ -222,7 +220,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         final Double fromDistance;
         final Double toDistance;
 
-        if (DEFAULT_DISTANCE_UNIT.equals(filterDto.getDistanceUnit())) {
+        if (Utils.Constants.DEFAULT_DISTANCE_UNIT.equals(filterDto.getDistanceUnit())) {
             fromDistance = filterDto.getFromDistance();
             toDistance = filterDto.getToDistance();
 
@@ -237,7 +235,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             ctTo.setValue(filterDto.getToDistance());
 
             ConversionDataDTO conversionData = new ConversionDataDTO();
-            conversionData.setDstUnit(DEFAULT_DISTANCE_UNIT);
+            conversionData.setDstUnit(Utils.Constants.DEFAULT_DISTANCE_UNIT);
             conversionData.setDataToConvert(Arrays.asList(ctFrom, ctTo));
 
             List<Double> result = conversionService.convertData(conversionData);
@@ -272,7 +270,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         if (optionalData.isPresent()) {
             dsData = optionalData.get();
         } else {
-            dsData = calculateDistanceAndSpeed(aircraft.getAircraftType(), origin, destination);
+            dsData = Utils.calculateDistanceAndSpeed(conversionService, aircraft.getAircraftType(), origin, destination);
             dsDataList.add(dsData);
         }
 
@@ -300,64 +298,6 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     }
 
 
-    private DistanceSpeedUtils calculateDistanceAndSpeed(final AircraftType aircraftType, final Airport origin, final Airport destination) {
-        DistanceSpeedUtils dsData = new DistanceSpeedUtils();
-        dsData.setOriginId(origin.getId());
-        dsData.setDestinationId(destination.getId());
-        dsData.setAircraftTypeId(aircraftType.getId());
-
-        // Calculate distance
-        double distance = Utils.getDistanceInNM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
-                destination.getLongitude());
-        dsData.setDistance(distance);
-
-        // Filter avg speeds to get the one that matches the distance
-        AircraftTypeAverageSpeed speed = aircraftType.getAverageSpeed().stream()
-                .filter(avgSpeed -> {
-                    List<Double> distanceRange = Arrays.asList(avgSpeed.getFromDistance(), avgSpeed.getToDistance());
-                    if (!DEFAULT_DISTANCE_UNIT.equals(avgSpeed.getDistanceUnit())) {
-                        // Convert distances to default unit
-                        ConversionDataDTO.ConversionTuple ctFrom = new ConversionDataDTO.ConversionTuple();
-                        ctFrom.setSrcUnit(avgSpeed.getDistanceUnit());
-                        ctFrom.setValue(avgSpeed.getFromDistance());
-
-                        ConversionDataDTO.ConversionTuple ctTo = new ConversionDataDTO.ConversionTuple();
-                        ctTo.setSrcUnit(avgSpeed.getDistanceUnit());
-                        ctTo.setValue(avgSpeed.getToDistance());
-
-                        ConversionDataDTO conversionData = new ConversionDataDTO();
-                        conversionData.setDstUnit(DEFAULT_DISTANCE_UNIT);
-                        conversionData.setDataToConvert(Arrays.asList(ctFrom, ctTo));
-
-                        List<Double> result = conversionService.convertData(conversionData);
-                        distanceRange = Arrays.asList(result.get(0), result.get(1));
-                    }
-
-                    return distance >= distanceRange.get(0) && distance <= distanceRange.get(1);
-                }).findFirst().orElse(null);
-
-        Double speedInDefaultUnit = null;
-        if (speed != null) {
-            speedInDefaultUnit = speed.getAverageSpeed();
-            if (!DEFAULT_SPEED_UNIT.equals(speed.getAverageSpeedUnit())) {
-                // Convert speed to default unit
-                ConversionDataDTO.ConversionTuple ct = new ConversionDataDTO.ConversionTuple();
-                ct.setSrcUnit(speed.getAverageSpeedUnit());
-                ct.setValue(speed.getAverageSpeed());
-
-                ConversionDataDTO conversionData = new ConversionDataDTO();
-                conversionData.setDstUnit(DEFAULT_SPEED_UNIT);
-                conversionData.setDataToConvert(Collections.singletonList(ct));
-
-                List<Double> result = conversionService.convertData(conversionData);
-                speedInDefaultUnit = result.get(0);
-            }
-        }
-
-        dsData.setSpeed(speedInDefaultUnit);
-
-        return dsData;
-    }
 
 
 }
