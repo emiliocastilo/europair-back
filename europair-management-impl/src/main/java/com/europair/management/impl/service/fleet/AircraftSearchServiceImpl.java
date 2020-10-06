@@ -89,16 +89,19 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
         Route route = routeRepository.findById(filterDto.getRouteId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + filterDto.getRouteId()));
-        Airport origin = route.getAirports().stream()
+
+        Route rotationSample = route.getParentRoute() == null ? route.getRotations().get(0) : route;
+
+        Airport origin = rotationSample.getAirports().stream()
                 .min(Comparator.comparing(RouteAirport::getOrder))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No origin airport found for route with id: " + route.getId()))
+                        "No origin airport found for route with id: " + rotationSample.getId()))
                 .getAirport();
-        Airport destination = route.getAirports().stream()
+        Airport destination = rotationSample.getAirports().stream()
                 .filter(routeAirport -> !origin.getId().equals(routeAirport.getAirport().getId()))
                 .min(Comparator.comparing(RouteAirport::getOrder))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No destination airport found for route with id: " + route.getId()))
+                        "No destination airport found for route with id: " + rotationSample.getId()))
                 .getAirport();
 
         Set<Long> airportBaseIds = null;
@@ -113,7 +116,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         // Nearby Airports filter setup
         if (!CollectionUtils.isEmpty(filterDto.getBaseIds()) && !CollectionUtils.isEmpty(airportBaseIds) &&
                 filterDto.getFromDistance() != null && filterDto.getToDistance() != null && filterDto.getDistanceUnit() != null) {
-            airportBaseIds.addAll(findNearbyAirports(filterDto, route));
+            airportBaseIds.addAll(findNearbyAirports(filterDto, rotationSample));
         }
 
         if (filterDto.getOperationType() != null && filterDto.getCategoryId() == null) {
@@ -155,6 +158,10 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                 airportBaseIds,
                 countryIds,
                 filterDto.getSeats(),
+                filterDto.getSeatingF(),
+                filterDto.getSeatingC(),
+                filterDto.getSeatingY(),
+                filterDto.getSeatingFC(),
                 filterDto.getBeds(),
                 filterDto.getCategoryId(),
                 filterDto.getSubcategoryId(),
@@ -171,7 +178,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
         List<AircraftSearchResultDataDto> result = aircraftFiltered.stream()
                 .filter(aircraft -> filterAircraftByRangeAndCalculateTime(filterDto, aircraft, origin, destination,
-                        dsDataList, aircraftTypeConnectionsMap, route))
+                        dsDataList, aircraftTypeConnectionsMap, rotationSample))
                 .map(aircraft -> {
                     AircraftSearchResultDataDto dataDto = IAircraftSearchMapper.INSTANCE.toDto(aircraft);
                     dataDto.setTimeInHours(dsDataList.stream()

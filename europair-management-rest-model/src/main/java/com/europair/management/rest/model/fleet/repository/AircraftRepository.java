@@ -26,6 +26,10 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             " and ((:baseIds) is null or airport.id in (:baseIds))" +
             " and ((:countryIds) is null or country.id in (:countryIds))" +
             " and (:seats is null or :seats <= (aircraft.seatingF + aircraft.seatingC + aircraft.seatingY))" +
+            " and (:seatingF is null or :seatingF <= aircraft.seatingF)" +
+            " and (:seatingC is null or :seatingC <= aircraft.seatingC)" +
+            " and (:seatingY is null or :seatingY <= aircraft.seatingY)" +
+            " and (:seatingFC is null or :seatingFC <= (aircraft.seatingF + aircraft.seatingC))" +
             " and (:beds is null or :beds <= aircraft.nighttimeConfiguration or (aircraft.nighttimeConfiguration is null and :beds <= (aircraft.seatingF + aircraft.seatingC + aircraft.seatingY)))" +
             " and (:categoryId is null or category.id = :categoryId)" +
             " and (:subcategoryId is null or (:exactSubcategory = true and subcategory.id = :subcategoryId) or (subcategory.parentCategory.id = :categoryId and subcategory.order >= :minSubcategory))" +
@@ -39,6 +43,10 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             @Param(value = "baseIds") Set<Long> baseIds,
             @Param(value = "countryIds") Set<Long> countryIds,
             @Param(value = "seats") Integer seats,
+            @Param(value = "seatingF") Integer seatingF,
+            @Param(value = "seatingC") Integer seatingC,
+            @Param(value = "seatingY") Integer seatingY,
+            @Param(value = "seatingFC") Integer seatingFC,
             @Param(value = "beds") Integer beds,
             @Param(value = "categoryId") Long categoryId,
             @Param(value = "subcategoryId") Long subcategoryId,

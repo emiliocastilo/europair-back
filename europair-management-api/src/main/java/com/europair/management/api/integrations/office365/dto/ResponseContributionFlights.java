@@ -11,11 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ResponseContributionFlights {
 
-    @JsonProperty("fileSharingInfoDTO")
-    private FileSharingInfoDTO fileSharingInfoDTO;
-
-    @JsonProperty("flightSharingInfoDTO")
-    private FlightSharingInfoDTO flightSharingInfoDTO;
+    // this wrapper contains information about: fileSharingInfoDTO and flightSharingInfoDTO
+    @JsonProperty("planningFlightsDTO")
+    private PlanningFlightsDTO planningFlightsDTO;
 
     @JsonProperty("aircraftSharingDTO")
     private AircraftSharingDTO aircraftSharingDTO;
