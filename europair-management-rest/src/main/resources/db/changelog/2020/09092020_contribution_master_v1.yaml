@@ -150,3 +150,17 @@ databaseChangeLog:
                   name: removed_at
                   type: timestamp
                   remarks: soft removal timestamp
+
+  - changeSet:
+      id: 20201006_contribution_master_v2_currency_on_sale_column
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add column currency_on_sale to table"
+      changes:
+        - addColumn:
+            tableName: contributions
+            columns:
+              - column:
+                  name: currency_on_sale
+                  type: varchar(20)
+                  remarks: Currency on sale

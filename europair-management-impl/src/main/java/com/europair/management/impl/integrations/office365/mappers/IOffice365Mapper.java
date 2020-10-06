@@ -15,6 +15,7 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
@@ -64,10 +65,12 @@ public interface IOffice365Mapper {
 
         dto.setIncludedVAT(contribution.getIncludedVAT());
 
-        dto.setCurrencyOnSale(contribution.getCurrency()); // ToDo: de donde lo sacamos?
-        dto.setExchangeTypeOnSale(contribution.getExchangeBuyType()); // ToDo: de donde lo sacamos?
+        dto.setCurrencyOnSale(contribution.getCurrencyOnSale());
+        dto.setExchangeTypeOnSale(contribution.getExchangeBuyType()); // ToDo: pendiente saber como hacemos las conversiones de divisas
 
-        dto.setPurchasePriceOnSaleCurrency(contribution.getPurchasePrice()); // ToDo: calcular después de sacar el tipo de cambio de venta
+        // ToDo: pendiente saber como hacemos las conversiones de divisas
+        dto.setPurchasePriceOnSaleCurrency(contribution.getCurrency().equals(contribution.getCurrencyOnSale()) ?
+                contribution.getPurchasePrice() : null);
 
         dto.setSalePrice(contribution.getSalesPrice());
         dto.setSaleCommissionPercentage(contribution.getSalesCommissionPercent().doubleValue());
@@ -76,7 +79,7 @@ public interface IOffice365Mapper {
         dto.setSaleNetPrice(dto.getSalePrice().add(dto.getSaleCommissionAmount()));
 
         dto.setMarginPercentage(dto.getSalePrice().multiply(BigDecimal.valueOf(100d))
-                .divide(dto.getPurchasePrice()).doubleValue() - 100);
+                .divide(dto.getPurchasePrice(), RoundingMode.HALF_EVEN).doubleValue() - 100);
         dto.setMarginAmount(dto.getSalePrice().subtract(dto.getPurchasePrice()));
 
         dto.setSeller(contribution.getFile().getSalePerson().getUsername());

@@ -186,13 +186,11 @@ public class Office365ServiceImpl implements IOffice365Service {
             if (optionalData.isPresent()) {
                 dsData = optionalData.get();
             } else {
-                // TODO: uncomment this lines. this lines was commited to share the code. Under construction
-                //dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
-                //dsDataList.add(dsData);
+                dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
+                dsDataList.add(dsData);
             }
-            // TODO: uncomment this lines. this lines was commited to share the code. Under construction
-            /*dto.setEndDate(dsData.getTimeInHours() != null ?
-                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);*/
+            dto.setEndDate(dsData.getTimeInHours() != null ?
+                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
 
 
             return dto;
