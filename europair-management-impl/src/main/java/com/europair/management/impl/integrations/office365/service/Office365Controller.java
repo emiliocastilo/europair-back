@@ -16,6 +16,9 @@ public class Office365Controller implements IOffice365Controller {
     @Autowired
     private IOffice365Service service;
 
+    @Autowired
+    private FeignClientBuilder feignClientBuilder;
+
     @Override
     public ResponseEntity<?> confirmOperation(@NotNull Long routeId, @NotNull Long contributionId) {
         service.confirmOperation(routeId, contributionId);
@@ -29,9 +32,18 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<?> testEnabledFlightContributionInformation() {
+    public ResponseEntity<?> sendEnabledFlightContributionInformation() {
 
+        // TODO: substituir la url hardcodeada por un parametro en properties @Param
+        FeignClientOffice365 feignClientOffice365 = this.feignClientBuilder.getFeignClientOffice365Client();
+        feignClientOffice365.sendUriToEnabledFlightContributionInformation("http://localhost:8080/send/flight/contribution/test/collecturi");
 
         return null;
+    }
+
+    @Override
+    public ResponseEntity<?> sendEnabledFlightContributionInformation(String fileUri) {
+        System.out.println("Received URL : " + fileUri);
+        return ResponseEntity.ok().body(fileUri);
     }
 }
