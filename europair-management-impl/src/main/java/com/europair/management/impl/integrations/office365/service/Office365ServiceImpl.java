@@ -4,8 +4,6 @@ import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
-import com.europair.management.impl.service.fleet.IAircraftService;
-import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -60,6 +58,10 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Autowired
     private AircraftRepository aircraftRepository;
 
+    @Autowired
+    private Office365Client office365Client;
+
+
     @Override
     public void confirmOperation(Long routeId, Long contributionId) {
 
@@ -71,8 +73,8 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         ConfirmedOperationDto confirmedOperationDto = mapConfirmedOperation(route, contribution);
 
-        // ToDo: send data
-
+        // Send data
+        office365Client.sendConfirmedOperationData(confirmedOperationDto);
     }
 
     @Override
