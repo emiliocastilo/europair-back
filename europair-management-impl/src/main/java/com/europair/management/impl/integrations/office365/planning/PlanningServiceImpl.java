@@ -19,13 +19,16 @@ import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class PlanningServiceImpl implements IPlanningService {
 
     @Autowired
@@ -65,6 +68,7 @@ public class PlanningServiceImpl implements IPlanningService {
 
     @Override
     public PlanningFlightsDTO getPlanningFlightsDTO(String actionType, Route route, File file, Flight flight) {
+
         PlanningFlightsDTO planningFlightsDTO = new PlanningFlightsDTO();
 
         planningFlightsDTO.setActionType(actionType);
@@ -107,9 +111,13 @@ public class PlanningServiceImpl implements IPlanningService {
 
         // flight dates (UTC)
         planningFlightsDTO.getFlightSharingInfoDTO().setStartDate(flight.getDepartureTime());
-        // TODO: uncomment this lines. this was commited to the repository to share the code
-        //DistanceSpeedUtils distanceSpeedUtils = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), originAirport, destinationAirport);
-        //planningFlightsDTO.getFlightSharingInfoDTO().setEndDate(flight.getDepartureTime().plusHours(distanceSpeedUtils.getTimeInHours().longValue()) );
+
+        if (null != contribution) {
+            DistanceSpeedUtils distanceSpeedUtils =
+                    Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), originAirport, destinationAirport);
+            planningFlightsDTO.getFlightSharingInfoDTO().setEndDate(
+                    flight.getDepartureTime().plusHours(distanceSpeedUtils.getTimeInHours().longValue()));
+        }
 
         // TODO: transformar la fecha que obtenemos a fecha y hora local
 
@@ -120,7 +128,7 @@ public class PlanningServiceImpl implements IPlanningService {
                         .plusMinutes(originAirport.getTimeZone().getMinutes())
         );
 
-        ZonedDateTime.now();
+        ZonedDateTime.of(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate(), ZoneId.systemDefault());
         //TODO: Utils.TimeConverter.getLocalTimeInOtherUTC(UTCEnum.ONE, routeRotation.getStartDate().toString(), originAirport.getTimeZone());
 
         planningFlightsDTO.getFlightSharingInfoDTO().setLocalEndDate(
@@ -131,12 +139,14 @@ public class PlanningServiceImpl implements IPlanningService {
 
         planningFlightsDTO.getFlightSharingInfoDTO().setFlightNumber("");
 
-        final Long contributionId = contribution.getOperatorId();
-        Operator operator = operatorRepository.findById(contributionId).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found with id: " + contributionId)
-        );
-        planningFlightsDTO.getFlightSharingInfoDTO().setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
-        planningFlightsDTO.getFlightSharingInfoDTO().setPlateNumber(contribution.getAircraft().getPlateNumber());
+        if (null != contribution) {
+            final Long operatorId = contribution.getOperatorId();
+            Operator operator = operatorRepository.findById(operatorId).orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found with id: " + operatorId)
+            );
+            planningFlightsDTO.getFlightSharingInfoDTO().setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
+            planningFlightsDTO.getFlightSharingInfoDTO().setPlateNumber(contribution.getAircraft().getPlateNumber());
+        }
 
         planningFlightsDTO.getFlightSharingInfoDTO().setClient(file.getClient().getCode() + " | " + file.getClient().getName());
         planningFlightsDTO.getFlightSharingInfoDTO().setPaxTotalNumber(flight.getSeatsF() + flight.getSeatsC() + flight.getSeatsY());
