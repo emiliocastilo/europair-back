@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -77,4 +78,9 @@ public class FlightServiceDto extends AuditModificationBaseDTO {
     @JsonProperty("status")
     @Size(max = TextField.TEXT_20)
     private String status;
+
+    // Only for adding services
+    @JsonProperty("flightIdList")
+    private List<Long> flightIdList;
+
 }

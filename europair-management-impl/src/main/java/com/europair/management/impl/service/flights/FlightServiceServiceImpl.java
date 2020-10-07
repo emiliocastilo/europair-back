@@ -10,8 +10,8 @@ import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
-import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.flights.repository.FlightRepository;
+import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
@@ -24,8 +24,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -74,35 +77,51 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     }
 
     @Override
-    public FlightServiceDto saveFlightService(Long fileId, Long routeId, Long flightId, FlightServiceDto flightServiceDto) {
-        validatePathIds(fileId, routeId, flightId);
+    public List<FlightServiceDto> saveFlightService(Long fileId, Long routeId, FlightServiceDto flightServiceDto) {
+        validatePathIds(fileId);
+        Route route = getRoute(routeId);
         if (flightServiceDto.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New FlightService expected. Identifier %s got", flightServiceDto.getId()));
         }
+        if (CollectionUtils.isEmpty(flightServiceDto.getFlightIdList())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No flight ids found in request body");
+        }
 
-        // Set relationship ids
-        flightServiceDto.setFlightId(flightId);
+        Service serviceType = getService(flightServiceDto.getServiceId());
+        final Map<String, Airport> airportMap = getAirportMap(route);
+
+        // Set seller id
         if (flightServiceDto.getSellerId() == null) {
             flightServiceDto.setSellerId(getLoggedUserId());
         }
 
-        // Calculate VAT
-        calculateVat(fileId, routeId, flightId, flightServiceDto);
+        List<FlightService> flightServices = flightServiceDto.getFlightIdList().stream()
+                .map(flightId -> {
+                    Flight flight = getFlight(flightId);
+                    FlightService flightService = IFlightServiceMapper.INSTANCE.toEntity(flightServiceDto);
+                    flightService.setFlightId(flightId);
+                    // Calculate VAT
+                    calculateVat(fileId, serviceType, flight, flightServiceDto, airportMap);
+                    return flightService;
+                }).collect(Collectors.toList());
 
-        FlightService flightService = IFlightServiceMapper.INSTANCE.toEntity(flightServiceDto);
-        flightService = flightServiceRepository.save(flightService);
+        flightServices = flightServiceRepository.saveAll(flightServices);
 
-        return IFlightServiceMapper.INSTANCE.toDto(flightService);
+        return flightServices.stream().map(IFlightServiceMapper.INSTANCE::toDto).collect(Collectors.toList());
     }
 
     @Override
     public void updateFlightService(Long fileId, Long routeId, Long flightId, Long id, FlightServiceDto flightServiceDto) {
-        validatePathIds(fileId, routeId, flightId);
+        validatePathIds(fileId);
+        Route route = getRoute(routeId);
+        Flight flight = getFlight(flightId);
+        Service serviceType = getService(flightServiceDto.getServiceId());
         FlightService flightService = flightServiceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id));
+        final Map<String, Airport> airportMap = getAirportMap(route);
 
         // Recalculate vat
-        calculateVat(fileId, routeId, flightId, flightServiceDto);
+        calculateVat(fileId, serviceType, flight, flightServiceDto, airportMap);
 
         IFlightServiceMapper.INSTANCE.updateFromDto(flightServiceDto, flightService);
         flightService = flightServiceRepository.save(flightService);
@@ -120,9 +139,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
 
     private void validatePathIds(final Long fileId, final Long routeId, final Long flightId) {
-        if (!fileRepository.existsById(fileId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
-        }
+        validatePathIds(fileId);
         if (!routeRepository.existsById(routeId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
         }
@@ -131,17 +148,36 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         }
     }
 
-    private void calculateVat(final Long fileId, final Long routeId, final Long flightId, final FlightServiceDto flightServiceDto) {
-        final Route route = routeRepository.findById(routeId).orElseThrow(() ->
+    private void validatePathIds(final Long fileId) {
+        if (!fileRepository.existsById(fileId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
+        }
+    }
+
+    private Route getRoute(@NotNull Long routeId) {
+        return routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No route found with id: " + routeId));
-        final Flight flight = flightRepository.findById(flightId).orElseThrow(() ->
+    }
+
+    private Flight getFlight(@NotNull Long flightId) {
+        return flightRepository.findById(flightId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No flight found with id: " + flightId));
-        final Service serviceType = serviceTypeRepository.findById(flightServiceDto.getServiceId()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No service type found with id: " + flightServiceDto.getServiceId()));
-        final Map<String, Airport> airportMap = route.getAirports().stream()
+    }
+
+    private Service getService(@NotNull Long serviceTypeId) {
+        return serviceTypeRepository.findById(serviceTypeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No service type found with id: " + serviceTypeId));
+    }
+
+    private Map<String, Airport> getAirportMap(Route route) {
+        return route.getAirports().stream()
                 .map(RouteAirport::getAirport)
                 .distinct()
                 .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+    }
+
+    private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightServiceDto flightServiceDto,
+                              Map<String, Airport> airportMap) {
         final Airport origin = airportMap.get(flight.getOrigin());
         final Airport destination = airportMap.get(flight.getDestination());
 

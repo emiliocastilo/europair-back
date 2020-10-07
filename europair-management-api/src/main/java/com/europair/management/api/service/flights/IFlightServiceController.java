@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/files/{fileId}/routes/{routeId}/flights/{flightId}/services")
+@RequestMapping("/files/{fileId}/routes/{routeId}/flights")
 public interface IFlightServiceController {
 
     /**
@@ -34,7 +34,7 @@ public interface IFlightServiceController {
      * @param reqParam Map of filter params, values and operators. (pe: filter_description=asd,CONTAINS)
      * @return Paginated list of flights
      */
-    @GetMapping
+    @GetMapping("/{flightId}/services")
     @Operation(description = "Paged result of flight services with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<Page<FlightServiceDto>> getAllFlightServicesPaginated(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -56,7 +56,7 @@ public interface IFlightServiceController {
      * @param id       Unique identifier by id.
      * @return Flight service data
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{flightId}/services/{id}")
     @Operation(description = "Retrieve flight service data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<FlightServiceDto> getFlightServiceById(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -71,16 +71,14 @@ public interface IFlightServiceController {
      *
      * @param fileId           File identifier
      * @param routeId          Route (rotation) identifier
-     * @param flightId         Flight identifier
      * @param flightServiceDto Data of the Flight service to create
      * @return Data of the created flight service
      */
-    @PostMapping
-    @Operation(description = "Save a new flight service", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<FlightServiceDto> saveFlightService(
+    @PostMapping("/services")
+    @Operation(description = "Save a new flight services", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> saveFlightService(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
-            @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId,
             @Parameter(description = "Flight service data") @NotNull @RequestBody final FlightServiceDto flightServiceDto);
 
     /**
@@ -95,7 +93,7 @@ public interface IFlightServiceController {
      * @param flightServiceDto Updated flight service data
      * @return The updated flight
      */
-    @PutMapping("/{id}")
+    @PutMapping("/{flightId}/services/{id}")
     @Operation(description = "Updates existing flight service", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> updateFlightService(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -115,7 +113,7 @@ public interface IFlightServiceController {
      * @param id       Unique identifier
      * @return No content
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{flightId}/services/{id}")
     @Operation(description = "Deletes existing flight service by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteFlightService(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
