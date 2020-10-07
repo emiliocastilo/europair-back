@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.flights;
 
-import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.api.enums.OperationTypeEnum;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.service.calculation.ICalculationService;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -35,12 +36,32 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
     @Override
     public List<FlightTax> saveFlightTaxes(Contribution contribution, Route route) {
         List<FlightTax> flightTaxes = new ArrayList<>();
-        final Map<String, Airport> airportMap = route.getAirports().stream()
-                .map(RouteAirport::getAirport)
-                .distinct()
-                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
-        if (CollectionUtils.isEmpty(route.getFlights())) {
+        final Map<String, Airport> airportMap;
+        List<Flight> routeFlights;
+
+        if (route.getParentRoute() == null) {
+            // Route
+            airportMap = route.getRotations().stream()
+                    .map(Route::getAirports)
+                    .flatMap(Collection::stream)
+                    .map(RouteAirport::getAirport)
+                    .distinct()
+                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+            routeFlights = route.getRotations().stream()
+                    .map(Route::getFlights)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        } else {
+            // Rotation
+            airportMap = route.getAirports().stream()
+                    .map(RouteAirport::getAirport)
+                    .distinct()
+                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+            routeFlights = route.getFlights();
+        }
+
+        if (CollectionUtils.isEmpty(routeFlights)) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Something went wrong. There are no flights in the contribution for the tax calculation.");
         }
 
@@ -49,7 +70,7 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
             serviceType = ServiceTypeEnum.CARGO;
         }
 
-        for (Flight flight : route.getFlights()) {
+        for (Flight flight : routeFlights) {
             FlightTax ft = new FlightTax();
             ft.setContributionId(contribution.getId());
             ft.setFlightId(flight.getId());

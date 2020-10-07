@@ -16,6 +16,9 @@ public class Office365Controller implements IOffice365Controller {
     @Autowired
     private IOffice365Service service;
 
+    @Autowired
+    private Office365Client office365Client;
+
     @Override
     public ResponseEntity<?> confirmOperation(@NotNull Long routeId, @NotNull Long contributionId) {
         service.confirmOperation(routeId, contributionId);
@@ -29,9 +32,15 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<?> testEnabledFlightContributionInformation() {
+    public ResponseEntity<?> sendEnabledFlightContributionInformation() {
 
-
+        office365Client.sendUriToEnabledFlightContributionInformation("http://localhost:8080/send/flight/contribution/test/collecturi");
         return null;
+    }
+
+    @Override
+    public ResponseEntity<?> sendEnabledFlightContributionInformation(String fileUri) {
+        System.out.println("Received URL : " + fileUri);
+        return ResponseEntity.ok().body(fileUri);
     }
 }

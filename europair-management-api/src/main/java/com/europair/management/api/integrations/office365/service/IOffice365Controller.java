@@ -3,10 +3,12 @@ package com.europair.management.api.integrations.office365.service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotNull;
 
@@ -36,7 +38,10 @@ public interface IOffice365Controller {
                                                                @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
                                                                @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId);
 
-    @GetMapping("/get/flight/contribution/test")
-    ResponseEntity<?> testEnabledFlightContributionInformation();
+    @GetMapping("/send/flight/contribution/test")
+    ResponseEntity<?> sendEnabledFlightContributionInformation();
+
+    @GetMapping("/get/flight/contribution/test/collecturi")
+    ResponseEntity<?> sendEnabledFlightContributionInformation(@Param("fileUri") String fileUri);
 
 }

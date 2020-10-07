@@ -85,6 +85,10 @@ public class Contribution extends SoftRemovableBaseEntity implements Serializabl
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currency;
 
+    @Column(name = "currency_on_sale")
+    @Enumerated(EnumType.STRING)
+    private CurrencyEnum currencyOnSale;
+
     @Column(name = "comments", length = 255)
     private String comments;
 

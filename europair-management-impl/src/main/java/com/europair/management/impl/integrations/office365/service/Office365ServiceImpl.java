@@ -1,11 +1,16 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.*;
+import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
+import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
+import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
+import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
+import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
+import com.europair.management.api.integrations.office365.dto.OperatorSharingDTO;
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
+import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
-import com.europair.management.impl.service.fleet.IAircraftService;
-import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -19,6 +24,7 @@ import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
+import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
@@ -28,8 +34,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,6 +68,10 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Autowired
     private AircraftRepository aircraftRepository;
 
+    @Autowired
+    private Office365Client office365Client;
+
+
     @Override
     public void confirmOperation(Long routeId, Long contributionId) {
 
@@ -71,8 +83,8 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         ConfirmedOperationDto confirmedOperationDto = mapConfirmedOperation(route, contribution);
 
-        // ToDo: send data
-
+        // Send data
+        office365Client.sendConfirmedOperationData(confirmedOperationDto);
     }
 
     @Override
@@ -139,14 +151,31 @@ public class Office365ServiceImpl implements IOffice365Service {
     // Mapping functions
 
     private ConfirmedOperationDto mapConfirmedOperation(final Route route, final Contribution contribution) {
-        Map<String, Airport> airportIataMap = route.getAirports().stream()
-                .map(RouteAirport::getAirport)
-                .distinct()
-                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+        final Map<String, Airport> airportIataMap;
+        if (route.getParentRoute() == null) {
+            // Route
+            airportIataMap = route.getRotations().stream()
+                    .map(Route::getAirports)
+                    .flatMap(Collection::stream)
+                    .map(RouteAirport::getAirport)
+                    .distinct()
+                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+        } else {
+            // Rotation
+            airportIataMap = route.getAirports().stream()
+                    .map(RouteAirport::getAirport)
+                    .distinct()
+                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+        }
         final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
         ConfirmedOperationDto dto = new ConfirmedOperationDto();
-        dto.setFileInfo(IOffice365Mapper.INSTANCE.mapFile(route));
+
+        FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
+        fileSharingInfo.setFileUrl(ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/files/" + route.getFile().getId()).build().toUri().toString());
+        dto.setFileInfo(fileSharingInfo);
+
         dto.setFlightsInfo(mapFlightsWithServices(route, contribution, airportIataMap, dsDataList));
         dto.setContributionInfo(IOffice365Mapper.INSTANCE.mapContribution(contribution));
         dto.setObservations(route.getFile().getObservation());
@@ -157,25 +186,46 @@ public class Office365ServiceImpl implements IOffice365Service {
     private List<FlightExtendedInfoDto> mapFlightsWithServices(final Route route, final Contribution contribution,
                                                                final Map<String, Airport> airportIataMap,
                                                                final List<DistanceSpeedUtils> dsDataList) {
-        return route.getFlights().stream().map(flight -> {
+        List<Flight> routeFlights;
+        if (route.getParentRoute() == null) {
+            // Route
+            routeFlights = route.getRotations().stream()
+                    .map(Route::getFlights)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        } else {
+            // Rotation
+            routeFlights = route.getFlights();
+        }
+
+        return routeFlights.stream().map(flight -> {
             Airport origin = airportIataMap.get(flight.getOrigin());
             Airport destination = airportIataMap.get(flight.getDestination());
+            Operator operator = contribution.getAircraft().getOperator();
 
             FlightExtendedInfoDto dto = new FlightExtendedInfoDto();
             dto.setOperationType(route.getFile().getOperationType());
-            dto.setPaxTotalNumber(flight.getSeatsC() + flight.getSeatsF() + flight.getSeatsY());
+            dto.setPaxTotalNumber((flight.getSeatsC() == null ? 0 : flight.getSeatsC()) +
+                    (flight.getSeatsF() == null ? 0 : flight.getSeatsF()) +
+                    (flight.getSeatsY() == null ? 0 : flight.getSeatsY()));
             dto.setBedsNumber(flight.getBeds());
             dto.setStretchersNumber(flight.getStretchers());
-            dto.setOriginAirport(origin.getIataCode() + " | " + origin.getName());
-            dto.setDestinationAirport(destination.getIataCode() + " | " + destination.getName());
-            dto.setStartDate(flight.getDepartureTime());
+            dto.setOriginAirport(origin.getIataCode() + " | " + origin.getIcaoCode() + " | " + origin.getName());
+            dto.setDestinationAirport(destination.getIataCode() + " | " + destination.getIcaoCode() + " | " + destination.getName());
             dto.setPlateNumber(contribution.getAircraft().getPlateNumber());
-            dto.setOperator(contribution.getAircraft().getOperator().getName());
+            dto.setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
             dto.setClient(route.getFile().getClient().getCode() + " | " + route.getFile().getClient().getName());
             dto.setCharge(null); // ToDo: de donde lo sacamos?
             dto.setFlightNumber(null);// ToDo: de donde lo sacamos?
 
             dto.setServices(mapFlightServices(flight.getId()));
+
+            // Dates
+            dto.setStartDate(flight.getDepartureTime());
+            dto.setLocalStartDate(flight.getDepartureTime()
+                    .plusHours(origin.getTimeZone().getHours())
+                    .plusMinutes(origin.getTimeZone().getMinutes())
+            );
 
             // Calculate arrivalTime
             DistanceSpeedUtils dsData;
@@ -186,13 +236,14 @@ public class Office365ServiceImpl implements IOffice365Service {
             if (optionalData.isPresent()) {
                 dsData = optionalData.get();
             } else {
-                // TODO: uncomment this lines. this lines was commited to share the code. Under construction
-                //dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
-                //dsDataList.add(dsData);
+                dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
+                dsDataList.add(dsData);
             }
-            // TODO: uncomment this lines. this lines was commited to share the code. Under construction
-            /*dto.setEndDate(dsData.getTimeInHours() != null ?
-                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);*/
+            dto.setEndDate(dsData.getTimeInHours() != null ?
+                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
+            dto.setLocalEndDate(dto.getEndDate() == null ? null : dto.getEndDate()
+                    .plusHours(destination.getTimeZone().getHours())
+                    .plusMinutes(destination.getTimeZone().getMinutes()));
 
 
             return dto;
