@@ -49,10 +49,10 @@ public interface IOffice365Mapper {
         AircraftBase mainBase = contribution.getAircraft().getBases().stream()
                 .filter(AircraftBase::getMainBase).findFirst().orElse(null);
 
-        dto.setAircraftType(contribution.getAircraft().getAircraftType().getCode() + "|" +
+        dto.setAircraftType(contribution.getAircraft().getAircraftType().getCode() + " | " +
                 contribution.getAircraft().getAircraftType().getDescription());
         dto.setAircraftBase(mainBase == null ? null :
-                (mainBase.getAirport().getIataCode() + "|" + mainBase.getAirport().getName()));
+                (mainBase.getAirport().getIataCode() + " | " + mainBase.getAirport().getName()));
 
         dto.setCurrencyOnPurchase(contribution.getCurrency());
         dto.setExchangeTypeOnPurchase(contribution.getExchangeBuyType());
@@ -63,7 +63,7 @@ public interface IOffice365Mapper {
                 BigDecimal.valueOf(dto.getPurchaseCommissionPercentage() / 100)));
         dto.setPurchaseNetPrice(dto.getPurchasePrice().add(dto.getPurchaseCommissionAmount()));
 
-        dto.setIncludedVAT(contribution.getIncludedVAT());
+        dto.setIncludedVAT(Boolean.TRUE.equals(contribution.getIncludedVAT()));
 
         dto.setCurrencyOnSale(contribution.getCurrencyOnSale());
         dto.setExchangeTypeOnSale(contribution.getExchangeBuyType()); // ToDo: pendiente saber como hacemos las conversiones de divisas
