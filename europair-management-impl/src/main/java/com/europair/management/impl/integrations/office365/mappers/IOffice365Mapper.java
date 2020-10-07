@@ -33,7 +33,7 @@ public interface IOffice365Mapper {
         dto.setCode(flightService.getService().getCode());
         dto.setComments(flightService.getComments());
         dto.setDescription(flightService.getDescription());
-        dto.setProvider(flightService.getProvider().getCode() + "|" + flightService.getProvider().getName());
+        dto.setProvider(flightService.getProvider().getCode() + " | " + flightService.getProvider().getName());
         dto.setPurchaseAmount(flightService.getPurchasePrice());
         dto.setQuantity(flightService.getQuantity());
         dto.setSaleAmount(flightService.getSalePrice());
