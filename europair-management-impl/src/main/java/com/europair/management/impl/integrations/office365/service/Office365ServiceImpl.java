@@ -249,21 +249,24 @@ public class Office365ServiceImpl implements IOffice365Service {
         }
 
         // map info values
-        return routeFlights.stream().map(flight -> {
-                    PlanningFlightsDTO dto = new PlanningFlightsDTO();
-
-                    FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
-                    fileSharingInfo.setFileUrl(ServletUriComponentsBuilder.fromCurrentRequest()
-                            .path("/files/" + route.getFile().getId()).build().toUri().toString());
-                    dto.setFileSharingInfoDTO(fileSharingInfo);
-
-                    dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
-
-                    return dto;
-                }
-        ).collect(Collectors.toList());
-
+        return routeFlights.stream()
+                .map(flight ->  mapPlanningFlight(route, contribution, airportIataMap, dsDataList, flight))
+                .collect(Collectors.toList());
     }
+
+    private PlanningFlightsDTO mapPlanningFlight(Route route, Contribution contribution, Map<String, Airport> airportIataMap, List<DistanceSpeedUtils> dsDataList, Flight flight) {
+        PlanningFlightsDTO dto = new PlanningFlightsDTO();
+
+        FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
+        fileSharingInfo.setFileUrl(ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/files/" + route.getFile().getId()).build().toUri().toString());
+        dto.setFileSharingInfoDTO(fileSharingInfo);
+
+        dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
+
+        return dto;
+    }
+
 
     private FlightSharingInfoDTO getFlightSharingInfoDTO(Route route, Contribution contribution, Map<String,
                                                          Airport> airportIataMap, List<DistanceSpeedUtils> dsDataList,
