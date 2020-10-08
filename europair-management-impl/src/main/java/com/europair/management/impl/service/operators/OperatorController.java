@@ -24,7 +24,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/operators")
 public class OperatorController implements IOperatorController {
 
   private final IOperatorService operatorService;

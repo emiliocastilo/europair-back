@@ -19,7 +19,6 @@ import java.net.URI;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/operators/{operatorId}/comments")
 public class OperatorCommentController implements IOperatorCommentController {
 
   private final IOperatorCommentService operatorCommentService;
