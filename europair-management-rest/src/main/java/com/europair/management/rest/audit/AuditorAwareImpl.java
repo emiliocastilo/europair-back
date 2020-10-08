@@ -23,8 +23,9 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         Optional auditoryOptionalForExternal = userRepository.findByUsername(username).map(u -> u.getName() + " " + u.getSurname());
-        Optional defectOptionalForInternal = Optional.ofNullable(username.substring(0,username.length()%10));
-        return (auditoryOptionalForExternal.isEmpty() ? defectOptionalForInternal : auditoryOptionalForExternal);
+        Optional userNameFromAzure = Optional.ofNullable(username.substring(0,username.length()%30));
+
+        return (auditoryOptionalForExternal.isEmpty() ? userNameFromAzure : auditoryOptionalForExternal);
 
     }
 }
