@@ -1,13 +1,6 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
-import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
-import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
-import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
-import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
-import com.europair.management.api.integrations.office365.dto.OperatorSharingDTO;
-import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
-import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
+import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
@@ -36,11 +29,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -92,7 +81,7 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
 
-        // precondiciones
+        // preconditions
         Contribution contribution = this.contributionRepository.findById(contributionId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
@@ -107,7 +96,7 @@ public class Office365ServiceImpl implements IOffice365Service {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId));
         PlanningFlightsDTO planningFlightsDTO = this.iPlanningService.getPlanningFlightsDTO(null,route,file,flight);
 
-        // seccond step: aircraftSharingDTO
+        // second step: aircraftSharingDTO
         AircraftSharingDTO aircraftSharingDTO = new AircraftSharingDTO();
 
         for (AircraftBase aircraftBase: aircraft.getBases()) {
@@ -130,7 +119,8 @@ public class Office365ServiceImpl implements IOffice365Service {
                 aircraftSharingDTO.setSubcategoryName(aircraft.getAircraftType().getSubcategory().getName());
             }
         }
-        // third step: operatorSharingDTO;
+
+        // third step: operatorSharingDTO
         OperatorSharingDTO operatorSharingDTO = new OperatorSharingDTO();
 
         if ( null != contribution.getOperator()) {
@@ -147,8 +137,22 @@ public class Office365ServiceImpl implements IOffice365Service {
         return responseContributionFlights;
     }
 
+    @Override
+    public List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId, String actionType) {
 
-    // Mapping functions
+        Route route = routeRepository.findById(routeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+
+        Contribution contribution = contributionRepository.findById(routeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+
+        return mapPlanningFlightsInfo(route, contribution);
+
+    }
+
+    ///////////////////////
+    // Mapping functions //
+    ///////////////////////
 
     private ConfirmedOperationDto mapConfirmedOperation(final Route route, final Contribution contribution) {
         final Map<String, Airport> airportIataMap;
@@ -199,56 +203,120 @@ public class Office365ServiceImpl implements IOffice365Service {
         }
 
         return routeFlights.stream().map(flight -> {
-            Airport origin = airportIataMap.get(flight.getOrigin());
-            Airport destination = airportIataMap.get(flight.getDestination());
-            Operator operator = contribution.getAircraft().getOperator();
 
-            FlightExtendedInfoDto dto = new FlightExtendedInfoDto();
-            dto.setOperationType(route.getFile().getOperationType());
-            dto.setPaxTotalNumber((flight.getSeatsC() == null ? 0 : flight.getSeatsC()) +
-                    (flight.getSeatsF() == null ? 0 : flight.getSeatsF()) +
-                    (flight.getSeatsY() == null ? 0 : flight.getSeatsY()));
-            dto.setBedsNumber(flight.getBeds());
-            dto.setStretchersNumber(flight.getStretchers());
-            dto.setOriginAirport(origin.getIataCode() + " | " + origin.getIcaoCode() + " | " + origin.getName());
-            dto.setDestinationAirport(destination.getIataCode() + " | " + destination.getIcaoCode() + " | " + destination.getName());
-            dto.setPlateNumber(contribution.getAircraft().getPlateNumber());
-            dto.setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
-            dto.setClient(route.getFile().getClient().getCode() + " | " + route.getFile().getClient().getName());
-            dto.setCharge(null); // ToDo: de donde lo sacamos?
-            dto.setFlightNumber(null);// ToDo: de donde lo sacamos?
-
-            dto.setServices(mapFlightServices(flight.getId()));
-
-            // Dates
-            dto.setStartDate(flight.getDepartureTime());
-            dto.setLocalStartDate(flight.getDepartureTime()
-                    .plusHours(origin.getTimeZone().getHours())
-                    .plusMinutes(origin.getTimeZone().getMinutes())
-            );
-
-            // Calculate arrivalTime
-            DistanceSpeedUtils dsData;
-            Optional<DistanceSpeedUtils> optionalData = dsDataList.stream().filter(dsu -> dsu.getOriginId().equals(origin.getId())
-                    && dsu.getDestinationId().equals(destination.getId())
-                    && dsu.getAircraftTypeId().equals(contribution.getAircraft().getAircraftType().getId()))
-                    .findFirst();
-            if (optionalData.isPresent()) {
-                dsData = optionalData.get();
-            } else {
-                dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
-                dsDataList.add(dsData);
-            }
-            dto.setEndDate(dsData.getTimeInHours() != null ?
-                    flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
-            dto.setLocalEndDate(dto.getEndDate() == null ? null : dto.getEndDate()
-                    .plusHours(destination.getTimeZone().getHours())
-                    .plusMinutes(destination.getTimeZone().getMinutes()));
-
-
-            return dto;
-        }).collect(Collectors.toList());
+                FlightExtendedInfoDto dto = (FlightExtendedInfoDto) getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight);
+                dto.setServices(mapFlightServices(flight.getId()));
+                return dto;
+            }).collect(Collectors.toList());
     }
+
+
+    private List<PlanningFlightsDTO> mapPlanningFlightsInfo(Route route, Contribution contribution) {
+
+        final Map<String, Airport> airportIataMap;
+
+        // retrieve a map with the airports
+        if (route.getParentRoute() == null) {
+            // Route
+            airportIataMap = route.getRotations().stream()
+                    .map(Route::getAirports)
+                    .flatMap(Collection::stream)
+                    .map(RouteAirport::getAirport)
+                    .distinct()
+                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+        } else {
+            // Rotation
+            airportIataMap = route.getAirports().stream()
+                    .map(RouteAirport::getAirport)
+                    .distinct()
+                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+        }
+
+        final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
+
+        List<Flight> routeFlights;
+
+        // retrieves flights list from route or rotation
+        if (route.getParentRoute() == null) {
+            // Route
+            routeFlights = route.getRotations().stream()
+                    .map(Route::getFlights)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
+        } else {
+            // Rotation
+            routeFlights = route.getFlights();
+        }
+
+        // map info values
+        return routeFlights.stream().map(flight -> {
+                    PlanningFlightsDTO dto = new PlanningFlightsDTO();
+
+                    FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
+                    fileSharingInfo.setFileUrl(ServletUriComponentsBuilder.fromCurrentRequest()
+                            .path("/files/" + route.getFile().getId()).build().toUri().toString());
+                    dto.setFileSharingInfoDTO(fileSharingInfo);
+
+                    dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
+
+                    return dto;
+                }
+        ).collect(Collectors.toList());
+
+    }
+
+    private FlightSharingInfoDTO getFlightSharingInfoDTO(Route route, Contribution contribution, Map<String,
+                                                         Airport> airportIataMap, List<DistanceSpeedUtils> dsDataList,
+                                                         Flight flight) {
+
+        Airport origin = airportIataMap.get(flight.getOrigin());
+        Airport destination = airportIataMap.get(flight.getDestination());
+        Operator operator = contribution.getAircraft().getOperator();
+
+        FlightSharingInfoDTO dto = new FlightSharingInfoDTO();
+        dto.setOperationType(route.getFile().getOperationType());
+        dto.setPaxTotalNumber((flight.getSeatsC() == null ? 0 : flight.getSeatsC()) +
+                (flight.getSeatsF() == null ? 0 : flight.getSeatsF()) +
+                (flight.getSeatsY() == null ? 0 : flight.getSeatsY()));
+        dto.setBedsNumber(flight.getBeds());
+        dto.setStretchersNumber(flight.getStretchers());
+        dto.setOriginAirport(origin.getIataCode() + " | " + origin.getIcaoCode() + " | " + origin.getName());
+        dto.setDestinationAirport(destination.getIataCode() + " | " + destination.getIcaoCode() + " | " + destination.getName());
+        dto.setPlateNumber(contribution.getAircraft().getPlateNumber());
+        dto.setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
+        dto.setClient(route.getFile().getClient().getCode() + " | " + route.getFile().getClient().getName());
+        dto.setCharge("0"); // ToDo: de donde lo sacamos?
+        dto.setFlightNumber("");// ToDo: de donde lo sacamos?
+
+        // Dates
+        dto.setStartDate(flight.getDepartureTime());
+        dto.setLocalStartDate(flight.getDepartureTime()
+                .plusHours(origin.getTimeZone().getHours())
+                .plusMinutes(origin.getTimeZone().getMinutes())
+        );
+
+        // Calculate arrivalTime
+        DistanceSpeedUtils dsData;
+        Optional<DistanceSpeedUtils> optionalData = dsDataList.stream().filter(dsu -> dsu.getOriginId().equals(origin.getId())
+                && dsu.getDestinationId().equals(destination.getId())
+                && dsu.getAircraftTypeId().equals(contribution.getAircraft().getAircraftType().getId()))
+                .findFirst();
+        if (optionalData.isPresent()) {
+            dsData = optionalData.get();
+        } else {
+            dsData = Utils.calculateDistanceAndSpeed(conversionService, contribution.getAircraft().getAircraftType(), origin, destination);
+            dsDataList.add(dsData);
+        }
+
+        dto.setEndDate(dsData.getTimeInHours() != null ?
+                flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
+        dto.setLocalEndDate(dto.getEndDate() == null ? null : dto.getEndDate()
+                .plusHours(destination.getTimeZone().getHours())
+                .plusMinutes(destination.getTimeZone().getMinutes()));
+
+        return dto;
+    }
+
 
     private List<FlightServiceDataDto> mapFlightServices(final Long flightId) {
         List<FlightService> flightServices = flightServiceRepository.findAllByFlightId(flightId);

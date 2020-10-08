@@ -1,5 +1,6 @@
 package com.europair.management.api.integrations.office365.service;
 
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RequestMapping("/integration/office")
 public interface IOffice365Controller {
@@ -43,5 +45,12 @@ public interface IOffice365Controller {
 
     @GetMapping("/get/flight/contribution/test/collecturi")
     ResponseEntity<?> sendEnabledFlightContributionInformation(@Param("fileUri") String fileUri);
+
+    @GetMapping("/planning")
+    @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(
+            @Parameter(description = "route id") @RequestParam @NotNull final Long routeId,
+            @Parameter(description = "Contribution identifier") @RequestParam @NotNull final Long contributionId,
+            @Parameter(description = "action type") @RequestParam @NotNull final String actionType);
 
 }
