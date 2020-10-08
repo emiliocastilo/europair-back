@@ -25,6 +25,6 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         Optional auditoryOptionalForExternal = userRepository.findByUsername(username).map(u -> u.getName() + " " + u.getSurname());
         Optional defectOptionalForInternal = Optional.ofNullable(username.substring(0,username.length()%10));
         return (auditoryOptionalForExternal.isEmpty() ? defectOptionalForInternal : auditoryOptionalForExternal);
-        //return Optional.of("AUDIT_TEST_USER");
+
     }
 }
