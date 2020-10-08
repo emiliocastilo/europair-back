@@ -203,8 +203,8 @@ public class Office365ServiceImpl implements IOffice365Service {
         }
 
         return routeFlights.stream().map(flight -> {
-
-                FlightExtendedInfoDto dto = (FlightExtendedInfoDto) getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight);
+                FlightExtendedInfoDto dto = new FlightExtendedInfoDto(
+                        getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
                 dto.setServices(mapFlightServices(flight.getId()));
                 return dto;
             }).collect(Collectors.toList());
