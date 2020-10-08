@@ -34,4 +34,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
+    //TODO: charge user name in http session for access log
+
 }
