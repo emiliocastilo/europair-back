@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201008_flights_aud_v1_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add flights audit table to the database"
+      changes:
+        # Flights_aud
+        - createTable:
+            tableName: flights_aud
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flights_aud_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flights_aud_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+              - column:
+                  name: departure_time
+                  type: timestamp
+              - column:
+                  name: time_zone
+                  type: varchar(50)
+              - column:
+                  name: origin
+                  type: varchar(3)
+              - column:
+                  name: destination
+                  type: varchar(3)
+              - column:
+                  name: seats_F
+                  type: int
+              - column:
+                  name: seats_C
+                  type: int
+              - column:
+                  name: seats_Y
+                  type: int
+              - column:
+                  name: beds
+                  type: int
+              - column:
+                  name: stretchers
+                  type: int
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+              - column:
+                  name: route_id
+                  type: int
+              - column:
+                  name: positional_flight
+                  type: bool

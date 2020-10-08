@@ -105,9 +105,7 @@ public class RouteServiceImpl implements IRouteService {
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
 
         // Set relationships
-        File file = new File();
-        file.setId(fileId);
-        route.setFile(file);
+        route.setFileId(fileId);
 
         // Persist entity
         route = routeRepository.save(route);
@@ -198,8 +196,8 @@ public class RouteServiceImpl implements IRouteService {
         List<Route> rotations = rotationDates.stream().map(date -> {
             Route rotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
             // Set relationships
-            rotation.setFile(parentRoute.getFile());
-            rotation.setParentRoute(parentRoute);
+            rotation.setFileId(parentRoute.getFile().getId());
+            rotation.setParentRouteId(parentRoute.getId());
 
             rotation.setStartDate(date);
             rotation.setEndDate(date);

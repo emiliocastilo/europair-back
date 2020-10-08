@@ -73,10 +73,7 @@ public class FlightServiceImpl implements IFlightService {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New flight expected. Identifier %s got", flightDTO.getId()));
       }
       Flight flight = IFlightMapper.INSTANCE.toEntity(flightDTO);
-
-      Route route = new Route();
-      route.setId(routeId);
-      flight.setRoute(route);
+      flight.setRouteId(routeId);
 
       flight = flightRepository.save(flight);
 
