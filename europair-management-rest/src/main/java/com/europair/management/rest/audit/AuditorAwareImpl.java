@@ -16,11 +16,16 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     @Autowired
     private IUserRepository userRepository;
 
+
     @Override
     public Optional<String> getCurrentAuditor() {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username).map(u -> u.getName() + " " + u.getSurname());
-        //return Optional.of("AUDIT_TEST_USER");
+
+        Optional auditoryOptionalForExternal = userRepository.findByUsername(username).map(u -> u.getName() + " " + u.getSurname());
+        Optional userNameFromAzure = Optional.ofNullable(username.substring(0,username.length()%30));
+
+        return (auditoryOptionalForExternal.isEmpty() ? userNameFromAzure : auditoryOptionalForExternal);
+
     }
 }

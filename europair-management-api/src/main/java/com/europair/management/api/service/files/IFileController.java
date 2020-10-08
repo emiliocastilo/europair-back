@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/files")
+@RequestMapping(value = {"/files", "/external/files"})
 public interface IFileController {
 
   /**

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/aircraft-categories")
+@RequestMapping(value = {"/aircraft-categories", "/external/aircraft-categories"})
 public interface IAircraftCategoryController {
 
     public final String SUBCATEGORY_ENDPOINT = "/{categoryId}/subcategories";

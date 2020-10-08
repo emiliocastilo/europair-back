@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/files/{fileId}/routes/{routeId}/flights")
+@RequestMapping(value = {"/files/{fileId}/routes/{routeId}/flights", "/external/files/{fileId}/routes/{routeId}/flights"})
 public interface IFlightController {
 
     /**

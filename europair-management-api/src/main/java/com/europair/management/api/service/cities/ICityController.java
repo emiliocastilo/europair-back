@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/cities")
+@RequestMapping(value = {"/cities", "/external/cities"})
 public interface ICityController {
 
     /**

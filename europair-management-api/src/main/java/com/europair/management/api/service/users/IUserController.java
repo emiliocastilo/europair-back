@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@RequestMapping("/users")
+@RequestMapping(value = {"/users", "/external/users"})
 public interface IUserController {
 
 

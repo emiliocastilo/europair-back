@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/operators/{operatorId}/comments")
+@RequestMapping(value = {"/operators/{operatorId}/comments", "/external/operators/{operatorId}/comments"})
 public interface IOperatorCommentController {
 
   /**

@@ -16,7 +16,6 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/roles")
 public class RoleController implements IRoleController {
 
   private final IRoleService IRoleService;
