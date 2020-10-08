@@ -82,7 +82,8 @@ public class CalculationServiceImpl implements ICalculationService {
     @Override
     public Double calculateTaxPercentageOnRoute(Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
         Double taxPercentage = 100D;
-        if (checkBalearicIslandsSpecialConditions(isSale, serviceType)) {
+        if ((Boolean.TRUE.equals(origin.getBalearics()) || Boolean.TRUE.equals(destination.getBalearics())) &&
+                checkBalearicIslandsSpecialConditions(isSale, serviceType)) {
             taxPercentage = getTaxBalearicIslands(origin.getId(), destination.getId());
         }
 
