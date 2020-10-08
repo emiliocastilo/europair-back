@@ -128,6 +128,33 @@ public class Utils {
             return utcTime;
         }
 
+        /**
+         * Operation to transform date time from an utc indicator to another
+         * @param fromUTCIndicator
+         * @param dateTime
+         * @param toUTCIndicator
+         * @return
+         */
+        public static LocalDateTime getLocalTimeInOtherUTC(UTCEnum fromUTCIndicator, LocalDateTime dateTime, UTCEnum toUTCIndicator) {
+            LocalDateTime utcZeroTime;
+            // If fromUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
+            if (0 < fromUTCIndicator.getHours()) {
+                utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
+            } else {
+                utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
+            }
+
+            LocalDateTime utcTime = null;
+            //After that we have to add the hours from toUTCIndicator
+            // If toUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
+            if (0 < toUTCIndicator.getHours()) {
+                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), toUTCIndicator.getMinutes());
+            } else {
+                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), (-toUTCIndicator.getMinutes()));
+            }
+            return utcTime;
+        }
+
         private static LocalDateTime addHoursMinutesToLocalTime(LocalDateTime localDateTime, Integer hours, Integer minutes) {
 
             LocalDateTime res = null;

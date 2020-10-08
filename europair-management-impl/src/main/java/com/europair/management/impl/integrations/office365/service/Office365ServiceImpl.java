@@ -1,5 +1,6 @@
 package com.europair.management.impl.integrations.office365.service;
 
+import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
@@ -293,10 +294,8 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         // Dates
         dto.setStartDate(flight.getDepartureTime());
-        dto.setLocalStartDate(flight.getDepartureTime()
-                .plusHours(origin.getTimeZone().getHours())
-                .plusMinutes(origin.getTimeZone().getMinutes())
-        );
+        dto.setLocalStartDate(Utils.TimeConverter.getLocalTimeInOtherUTC(flight.getTimeZone(), flight.getDepartureTime(),
+                origin.getTimeZone()));
 
         // Calculate arrivalTime
         DistanceSpeedUtils dsData;
@@ -313,9 +312,7 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         dto.setEndDate(dsData.getTimeInHours() != null ?
                 flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
-        dto.setLocalEndDate(dto.getEndDate() == null ? null : dto.getEndDate()
-                .plusHours(destination.getTimeZone().getHours())
-                .plusMinutes(destination.getTimeZone().getMinutes()));
+        dto.setLocalEndDate(Utils.TimeConverter.getLocalTimeInOtherUTC(flight.getTimeZone(), dto.getEndDate(), destination.getTimeZone()));
 
         return dto;
     }
