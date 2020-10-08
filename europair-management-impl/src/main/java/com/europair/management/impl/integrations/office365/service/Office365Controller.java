@@ -1,5 +1,6 @@
 package com.europair.management.impl.integrations.office365.service;
 
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
 import com.europair.management.api.integrations.office365.service.IOffice365Controller;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -26,7 +28,9 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<?> getEnabledFlightContributionInformation(@NotNull Long routeId, @NotNull Long contributionId, @NotNull Long flightId) {
+    public ResponseEntity<?> getEnabledFlightContributionInformation(@NotNull Long routeId,
+                                                                     @NotNull Long contributionId,
+                                                                     @NotNull Long flightId) {
         ResponseContributionFlights responseContributionFlights = service.getEnabledFlightContributionInformation(routeId, contributionId, flightId);
         return ResponseEntity.ok().body(responseContributionFlights);
     }
@@ -42,5 +46,14 @@ public class Office365Controller implements IOffice365Controller {
     public ResponseEntity<?> sendEnabledFlightContributionInformation(String fileUri) {
         System.out.println("Received URL : " + fileUri);
         return ResponseEntity.ok().body(fileUri);
+    }
+
+    @Override
+    public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(@NotNull Long routeId,
+                                                                            @NotNull Long contributionId,
+                                                                            String actionType) {
+
+        final List<PlanningFlightsDTO> planningFlightsDTOList = service.getPlanningFlightsInfo(routeId, contributionId, actionType);
+        return ResponseEntity.ok(planningFlightsDTOList);
     }
 }

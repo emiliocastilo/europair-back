@@ -20,6 +20,7 @@ import java.math.RoundingMode;
 @Mapper(config = AuditModificationBaseMapperConfig.class,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
 public interface IOffice365Mapper {
+
     IOffice365Mapper INSTANCE = Mappers.getMapper(IOffice365Mapper.class);
 
 

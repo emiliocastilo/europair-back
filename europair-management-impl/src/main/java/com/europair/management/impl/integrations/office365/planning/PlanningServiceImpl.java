@@ -57,6 +57,7 @@ public class PlanningServiceImpl implements IPlanningService {
         File file = route.getFile();
 
         for (Route routeRotation : route.getRotations()) {
+            //TODO: validar estado ruta
             for (Flight flight: routeRotation.getFlights()) {
                 PlanningFlightsDTO planningFlightsDTO = getPlanningFlightsDTO(actionType, route, file, flight);
                 planningFlightsDTOList.add(planningFlightsDTO);
