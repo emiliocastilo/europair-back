@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping(value = {"/files/{fileId}/routes", "/files/{fileId}/routes"})
+@RequestMapping(value = {"/files/{fileId}/routes", "/external/files/{fileId}/routes"})
 public interface IRouteController {
 
 
