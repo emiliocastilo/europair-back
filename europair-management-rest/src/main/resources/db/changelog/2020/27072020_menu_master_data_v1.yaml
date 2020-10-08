@@ -544,3 +544,28 @@ databaseChangeLog:
                   name: modified_by
                   value: "Sistema"
             where: name IN ('CONFIGURATION')
+  - changeSet:
+      id: 07102020_menu_v10_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Change name for option FILES_NEW TO FILES_LIST"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: name
+                  value: "FILES_LIST"
+              - column:
+                  name: route
+                  value: "/files"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.files.list"
+              - column:
+                  name: modified_at
+                  value: "2020-10-07"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('FILES_NEW')

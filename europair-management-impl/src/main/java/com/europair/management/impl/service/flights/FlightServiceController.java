@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -38,11 +39,11 @@ public class FlightServiceController implements IFlightServiceController {
     }
 
     @Override
-    public ResponseEntity<FlightServiceDto> saveFlightService(@NotNull Long fileId, @NotNull Long routeId, @NotNull Long flightId, @NotNull FlightServiceDto flightServiceDto) {
-        FlightServiceDto resultDto = flightServiceService.saveFlightService(fileId, routeId, flightId, flightServiceDto);
+    public ResponseEntity<List<FlightServiceDto>> saveFlightService(@NotNull Long fileId, @NotNull Long routeId, @NotNull FlightServiceDto flightServiceDto) {
+        List<FlightServiceDto> resultDto = flightServiceService.saveFlightService(fileId, routeId, flightServiceDto);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(fileId, routeId, flightId, resultDto.getId())
+                .buildAndExpand(fileId, routeId)
                 .toUri();
         return ResponseEntity.created(location).body(resultDto);
     }

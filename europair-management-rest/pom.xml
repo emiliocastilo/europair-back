@@ -91,6 +91,11 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
+		<!-- MYSQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
 		<!-- MapStruct -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
@@ -156,6 +161,7 @@
 						<excludes>
 							<exclude>*-pre.*</exclude>
 							<exclude>*-pro.*</exclude>
+							<exclude>*-int.*</exclude>
 						</excludes>
 						<filtering>true</filtering>
 					</resource>
@@ -224,16 +230,6 @@
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>com.h2database</groupId>
-					<artifactId>h2</artifactId>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>mysql</groupId>
-					<artifactId>mysql-connector-java</artifactId>
-					<version>8.0.17</version>
 				</dependency>
 			</dependencies>
 		</profile>
