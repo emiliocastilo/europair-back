@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/countries")
+@RequestMapping(value = {"/countries", "/external/countries"})
 public interface ICountryController {
 
     /**

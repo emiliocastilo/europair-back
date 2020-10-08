@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/operators")
+@RequestMapping(value = {"/operators", "/external/operators"})
 public interface IOperatorController {
 
 

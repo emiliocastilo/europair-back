@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@RequestMapping("/conversion")
+@RequestMapping(value = {"/conversion", "/external/conversion"})
 public interface IConversionController {
 
     /**
