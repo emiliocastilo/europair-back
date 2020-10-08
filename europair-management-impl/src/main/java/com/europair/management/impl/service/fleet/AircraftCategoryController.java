@@ -22,7 +22,6 @@ import java.util.Map;
 
 @RestController
 @Slf4j
-@RequestMapping("/aircraft-categories")
 public class AircraftCategoryController implements IAircraftCategoryController {
 
     private final String SUBCATEGORY_ENDPOINT = "/{categoryId}/subcategories";
