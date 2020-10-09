@@ -22,7 +22,9 @@ import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +62,9 @@ public class Office365ServiceImpl implements IOffice365Service {
 
     @Autowired
     private Office365Client office365Client;
+
+    @Value("${europair.web.file.url}")
+    private String fileUrl;
 
 
     @Override
@@ -177,8 +182,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         ConfirmedOperationDto dto = new ConfirmedOperationDto();
 
         FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
-        fileSharingInfo.setFileUrl(ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/files/" + route.getFile().getId()).build().toUri().toString());
+        fileSharingInfo.setFileUrl(fileUrl + route.getFile().getId());
         dto.setFileInfo(fileSharingInfo);
 
         dto.setFlightsInfo(mapFlightsWithServices(route, contribution, airportIataMap, dsDataList));
@@ -259,8 +263,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         PlanningFlightsDTO dto = new PlanningFlightsDTO();
 
         FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
-        fileSharingInfo.setFileUrl(ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/files/" + route.getFile().getId()).build().toUri().toString());
+        fileSharingInfo.setFileUrl(fileUrl + route.getFile().getId());
         dto.setFileSharingInfoDTO(fileSharingInfo);
 
         dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
