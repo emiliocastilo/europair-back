@@ -26,13 +26,13 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<?> getEnabledFlightContributionInformation(@NotNull Long routeId, @NotNull Long contributionId, @NotNull Long flightId) {
+    public ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@NotNull Long routeId, @NotNull Long contributionId, @NotNull Long flightId) {
         ResponseContributionFlights responseContributionFlights = service.getEnabledFlightContributionInformation(routeId, contributionId, flightId);
         return ResponseEntity.ok().body(responseContributionFlights);
     }
 
     @Override
-    public ResponseEntity<?> sendEnabledFlightContributionInformation() {
+    public ResponseEntity<String> sendEnabledFlightContributionInformation() {
 
         // TODO: substituir la url hardcodeada por un parametro en properties @Param
         FeignClientOffice365 feignClientOffice365 = this.feignClientBuilder.getFeignClientOffice365Client();
