@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -84,7 +84,7 @@ public class ContributionServiceImpl implements IContributionService {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
 
-        contribution.setRemovedAt(LocalDate.now());
+        contribution.setRemovedAt(LocalDateTime.now());
         contributionRepository.save(contribution);
     }
 }

@@ -196,7 +196,7 @@ public class RouteServiceImpl implements IRouteService {
         List<Route> rotations = rotationDates.stream().map(date -> {
             Route rotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
             // Set relationships
-            rotation.setFileId(parentRoute.getFile().getId());
+            rotation.setFileId(parentRoute.getFileId());
             rotation.setParentRouteId(parentRoute.getId());
 
             rotation.setStartDate(date);
@@ -211,7 +211,7 @@ public class RouteServiceImpl implements IRouteService {
             rotations.forEach(rotation -> rotation.setAirports(new HashSet<>(createRouteAirports(rotation, routeAirportMap))));
 
             // Add flights
-            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFile().getId()));
+            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFileId()));
 
         } else {
             rotations = null;

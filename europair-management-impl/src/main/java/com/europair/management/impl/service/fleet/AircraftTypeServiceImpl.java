@@ -3,7 +3,6 @@ package com.europair.management.impl.service.fleet;
 import com.europair.management.api.dto.fleet.AircraftTypeDto;
 import com.europair.management.impl.mappers.fleet.IAircraftTypeMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
-import com.europair.management.rest.model.common.exception.InvalidArgumentException;
 import com.europair.management.rest.model.fleet.entity.AircraftCategory;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.repository.AircraftTypeRepository;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -84,7 +83,7 @@ public class AircraftTypeServiceImpl implements IAircraftTypeService {
         AircraftType aircraftType = aircraftTypeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AircraftType not found with id: " + id));
 
-        aircraftType.setRemovedAt(LocalDate.now());
+        aircraftType.setRemovedAt(LocalDateTime.now());
         aircraftTypeRepository.save(aircraftType);
     }
 

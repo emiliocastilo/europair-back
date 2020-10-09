@@ -2,6 +2,7 @@ package com.europair.management.rest.model.routes.entity;
 
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
@@ -34,7 +35,7 @@ import java.util.Set;
 @Audited
 @Data
 @EqualsAndHashCode(exclude = {"rotations", "flights", "frequencyDays", "contributions", "airports"})
-public class Route extends AuditModificationBaseEntity implements Serializable {
+public class Route extends AuditModificationBaseEntityHardAudited implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

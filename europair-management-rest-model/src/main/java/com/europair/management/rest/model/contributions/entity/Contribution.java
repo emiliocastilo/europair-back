@@ -3,7 +3,7 @@ package com.europair.management.rest.model.contributions.entity;
 import com.europair.management.api.enums.ContributionStates;
 import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.ExchangeBuyTypeEnum;
-import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.operators.entity.Operator;
@@ -28,7 +28,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "contributions")
 @Data
-public class Contribution extends SoftRemovableBaseEntity implements Serializable{
+public class Contribution extends SoftRemovableBaseEntityHardAudited implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

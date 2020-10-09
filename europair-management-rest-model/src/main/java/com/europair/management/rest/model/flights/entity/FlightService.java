@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.flights.entity;
 
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.files.entity.Provider;
 import com.europair.management.rest.model.services.entity.Service;
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "flight_services")
 @Data
-public class FlightService extends AuditModificationBaseEntity implements Serializable {
+public class FlightService extends AuditModificationBaseEntityHardAudited implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

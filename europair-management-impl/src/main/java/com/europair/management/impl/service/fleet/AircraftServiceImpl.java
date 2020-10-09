@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -89,7 +89,7 @@ public class AircraftServiceImpl implements IAircraftService {
     public void deleteAircraft(Long id) {
         Aircraft aircraft = aircraftRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + id));
-        aircraft.setRemovedAt(LocalDate.now());
+        aircraft.setRemovedAt(LocalDateTime.now());
         aircraftRepository.save(aircraft);
     }
 

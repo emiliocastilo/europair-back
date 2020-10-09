@@ -1,7 +1,7 @@
 package com.europair.management.rest.model.flights.entity;
 
 import com.europair.management.api.enums.UTCEnum;
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import org.hibernate.envers.Audited;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Table(name = "flights")
 @Audited
 @Data
-public class Flight extends AuditModificationBaseEntity implements Serializable {
+public class Flight extends AuditModificationBaseEntityHardAudited implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -7,11 +7,9 @@ package com.europair.management.api.dto.audit;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class AuditModificationBaseDTO implements Serializable {
@@ -22,7 +20,7 @@ public class AuditModificationBaseDTO implements Serializable {
 	 * Audit: Creation date @see AuditModificationsBaseEntity.createdAt
 	 */
 	@Schema(description = "Audit creation date")
-	private LocalDate createdAt;
+	private LocalDateTime createdAt;
 	
 	/**
 	 * Audit: Creation author @see AuditModificationsBaseEntity.createdBy
@@ -35,7 +33,7 @@ public class AuditModificationBaseDTO implements Serializable {
 	 * Audit: Modification date @see AuditModificationsBaseEntity.modifiedAt
 	 */
 	@Schema(description = "Audit modification date")
-	private LocalDate modifiedAt;
+	private LocalDateTime modifiedAt;
 	
 	/**
 	 * Audit: Modification author @see AuditModificationsBaseEntity.modifiedBy

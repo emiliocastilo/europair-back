@@ -7,7 +7,7 @@ databaseChangeLog:
       changes:
 
         - createTable:
-            tableName: flight_services
+            tableName: flight_services_aud
             columns:
               - column:
                   name: id
