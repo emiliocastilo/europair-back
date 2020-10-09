@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 
-@RequestMapping("/regions")
+@RequestMapping(value = {"/regions", "/external/regions"})
 public interface IRegionController {
 
   @GetMapping("")

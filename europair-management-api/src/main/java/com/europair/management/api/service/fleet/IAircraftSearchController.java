@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@RequestMapping("/aircraft-search")
+@RequestMapping(value = {"/aircraft-search", "/external/aircraft-search"})
 public interface IAircraftSearchController {
 
     /**

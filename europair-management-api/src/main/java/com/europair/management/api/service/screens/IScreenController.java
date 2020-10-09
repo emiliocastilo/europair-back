@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/screens")
+@RequestMapping(value = {"/screens", "/external/screens"})
 public interface IScreenController {
 
     /**

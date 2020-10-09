@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/services")
+@RequestMapping(value = {"/services", "/external/services"})
 public interface IServiceController {
 
   /**

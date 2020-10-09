@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@RequestMapping("/tasks")
+@RequestMapping(value = {"/tasks", "/external/tasks"})
 public interface ITaskController {
 
 

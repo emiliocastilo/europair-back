@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/contacts")
+@RequestMapping(value = {"/contacts", "/external/contacts"})
 public interface IContactController {
 
     /**
