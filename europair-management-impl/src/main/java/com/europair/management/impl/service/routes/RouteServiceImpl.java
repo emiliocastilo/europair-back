@@ -361,6 +361,7 @@ public class RouteServiceImpl implements IRouteService {
             flightDTO.setDestination(airports.get(i + 1).getIataCode());
             // ToDo: setear más campos???
             flightDTO.setDepartureTime(LocalDateTime.now()); // Está como not null en bdd ??
+            flightDTO.setTimeZone(airports.get(i).getTimeZone());
             flightService.saveFlight(fileId, rotation.getId(), flightDTO);
         }
     }
