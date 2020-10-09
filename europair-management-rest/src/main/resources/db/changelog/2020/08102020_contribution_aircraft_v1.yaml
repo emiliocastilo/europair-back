@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 08102020_tasks_screens_v1_screens_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Add contribution_aircraft table to the database"
+      changes:
+        # Tasks_Screens
+        - createTable:
+            tableName: contribution_aircraft
+            remarks: The contribution and aircraft relationship
+            columns:
+              - column:
+                    name: id
+                    type: int
+                    constraints:
+                      nullable: false
+              - column:
+                  name: contribution_id
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: aircraft_id
+                  type: int
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames: id
+            constraintName: contribution_aircraft_pk
+            tableName: contribution_aircraft
+            validate: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: contribution_aircraft
