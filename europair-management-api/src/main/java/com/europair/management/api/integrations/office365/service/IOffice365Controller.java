@@ -56,7 +56,7 @@ public interface IOffice365Controller {
     ResponseEntity<String> sendEnabledFlightContributionInformation();
 
     @GetMapping("/get/flight/contribution/test/collecturi")
-    ResponseEntity<?> sendEnabledFlightContributionInformation(@Param("fileUri") String fileUri);
+    ResponseEntity<?> testOfSendEnabledFlightContributionInformation(@Param("fileUri") String fileUri);
 
     @GetMapping("/planning")
     @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})

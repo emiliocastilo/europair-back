@@ -41,7 +41,7 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<?> sendEnabledFlightContributionInformation(String fileUri) {
+    public ResponseEntity<?> testOfSendEnabledFlightContributionInformation(String fileUri) {
         System.out.println("Received URL : " + fileUri);
         return ResponseEntity.ok().body(fileUri);
     }
