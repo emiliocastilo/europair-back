@@ -1,0 +1,95 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201008_contribution_aud_v1_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contribution audit table to database"
+      changes:
+        - createTable:
+            tableName: contributions_aud
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contributions_aud_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contributions_aud_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+              - column:
+                  name: file_id
+                  type: int
+              - column:
+                  name: route_id
+                  type: int
+              - column:
+                  name: contribution_state
+                  type: varchar(20)
+              - column:
+                  name: operator_id
+                  type: int
+              - column:
+                  name: aircraft_id
+                  type: int
+              - column:
+                  name: request_time
+                  type: timestamp
+              - column:
+                  name: quoted_time
+                  type: timestamp
+              - column:
+                  name: cargo_airborne
+                  type: double
+              - column:
+                  name: currency
+                  type: varchar(20)
+              - column:
+                  name: comments
+                  type: varchar(255)
+              - column:
+                  name: exchange_buy_type
+                  type: varchar(20)
+              - column:
+                  name: purchase_price
+                  type: decimal(12,4)
+              - column:
+                  name: purchase_commission_percent
+                  type: decimal(12,4)
+              - column:
+                  name: included_vat
+                  type: boolean
+              - column:
+                  name: sales_price
+                  type: decimal(12,4)
+              - column:
+                  name: sales_commission_percent
+                  type: int
+              - column:
+                  name: sales_price_without_vat
+                  type: decimal(12,4)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+              - column:
+                  name: removed_at
+                  type: timestamp
