@@ -68,7 +68,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
 
-        Contribution contribution = contributionRepository.findById(routeId).orElseThrow(() ->
+        Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
         ConfirmedOperationDto confirmedOperationDto = mapConfirmedOperation(route, contribution);
@@ -144,7 +144,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
 
-        Contribution contribution = contributionRepository.findById(routeId).orElseThrow(() ->
+        Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
         return mapPlanningFlightsInfo(route, contribution);
