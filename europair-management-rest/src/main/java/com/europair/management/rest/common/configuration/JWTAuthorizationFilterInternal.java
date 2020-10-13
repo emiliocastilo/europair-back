@@ -41,6 +41,11 @@ public class JWTAuthorizationFilterInternal extends BasicAuthenticationFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
     throws IOException, ServletException {
+    String header = req.getHeader(HEADER_AUTHORIZACION_KEY);
+    if (header == null || !header.startsWith(TOKEN_BEARER_PREFIX)) {
+      chain.doFilter(req, res);
+      return;
+    }
     chargeAuthoritiesIntoAuthenticationSecurityContextHolder();
     chain.doFilter(req, res);
   }
