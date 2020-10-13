@@ -42,11 +42,11 @@ public interface IOffice365Controller {
      * @param flightId
      * @return
      */
-    @GetMapping("/get/flight/contribution")
+    @GetMapping("/get/flight/contribution/{routeId}/{flightId}/{contributionId}")
     @Operation(description = "Send an url to the Office365 systems to indicate that the information is enabled, and can be retrieved from the url", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
-                                                                                        @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
-                                                                                        @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId);
+                                                                                        @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId,
+                                                                                        @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 
     /**
      * This opperation sends to office_365 the signal and the path who needs to know that the information is enabled and ready to consume
