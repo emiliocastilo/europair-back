@@ -45,13 +45,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Profile("dev")
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated().and().cors()
                 .and()
+                .addFilter(new JWTAuthorizationFilterInternal(authenticationManager(), userRepository))
                 .oauth2ResourceServer()
                 .jwt();
-
-        http.addFilter(new JWTAuthorizationFilterInternal(authenticationManager(), userRepository));
 
     }
 
