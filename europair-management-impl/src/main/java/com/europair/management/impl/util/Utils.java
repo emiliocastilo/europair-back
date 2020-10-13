@@ -11,21 +11,19 @@ import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
+import com.europair.management.rest.model.users.entity.User;
+import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -87,25 +85,27 @@ public class Utils {
 
     /**
      * Maps string of airport codes of route as List
+     *
      * @param routeLabel String of route label with format "XXX-YYY-ZZZ"
      * @return List of Iata Codes
      */
     public static List<String> mapRouteAirportIataCodes(final String routeLabel) {
-         String trimmedLabel = routeLabel.replaceAll("\\s+", "");
-         return Arrays.asList(trimmedLabel.split("-"));
+        String trimmedLabel = routeLabel.replaceAll("\\s+", "");
+        return Arrays.asList(trimmedLabel.split("-"));
     }
 
 
     /**
      * Utils.TimeConverter API to convert time from:
      * * UTC: getLocalTimeInOtherUTC
-     *
+     * <p>
      * * (if we have more conversiones must add the description here)
      */
     public static class TimeConverter {
 
         /**
          * Operation to transform date time from an utc indicator to another
+         *
          * @param fromUTCIndicator
          * @param time
          * @param toUTCIndicator
@@ -244,6 +244,32 @@ public class Utils {
         public static final String TAX_ES_CODE = "ES";
         public static final String TAX_ES_REDUCED_CODE = "ES_REDUCED";
         public static final String TAX_ES_IGIC_CODE = "ES_IGIC";
+    }
+
+    /**
+     * The application has 2 different users ( /external/  &  from Azure AAD )
+     */
+    public static class GetUserFromSecurityContext {
+
+        public static Long getLoggedUserId(IUserRepository userRepository) {
+            Long res = null;
+
+            // User name for externals
+            final String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            Optional<User> optionalUser = userRepository.findByUsername(username);
+            if (!optionalUser.isEmpty()) {
+                res = optionalUser.get().getId();
+            } else {
+                // User name for Azure users
+                final String azureUserEmail = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("unique_name");
+                res = userRepository.findByEmail(azureUserEmail).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User of the token authentication not found searched by email: " + azureUserEmail)).getId();
+            }
+
+            return res;
+
+        }
     }
 
 }

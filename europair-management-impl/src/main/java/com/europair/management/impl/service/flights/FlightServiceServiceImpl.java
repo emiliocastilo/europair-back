@@ -17,6 +17,7 @@ import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import com.europair.management.rest.model.services.entity.Service;
 import com.europair.management.rest.model.services.repository.ServiceRepository;
+import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,10 +27,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
@@ -92,7 +95,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
         // Set seller id
         if (flightServiceDto.getSellerId() == null) {
-            flightServiceDto.setSellerId(getLoggedUserId());
+            flightServiceDto.setSellerId(Utils.GetUserFromSecurityContext.getLoggedUserId(this.userRepository));
         }
 
         List<FlightService> flightServices = flightServiceDto.getFlightIdList().stream()
@@ -189,10 +192,4 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         flightServiceDto.setTaxOnPurchase(taxOnPurchase);
     }
 
-    private Long getLoggedUserId() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "User of the token authentication not found: " + username))
-                .getId();
-    }
 }
