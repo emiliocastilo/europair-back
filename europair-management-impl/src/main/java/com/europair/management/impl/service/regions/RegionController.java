@@ -16,7 +16,6 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/regions")
 public class RegionController implements IRegionController {
 
   private final IRegionService regionService;

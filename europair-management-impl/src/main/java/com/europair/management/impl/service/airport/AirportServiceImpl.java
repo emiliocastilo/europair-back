@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -60,7 +60,7 @@ public class AirportServiceImpl implements IAirportService {
         Airport airport = airportRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + id));
 
-        airport.setRemovedAt(LocalDate.now());
+        airport.setRemovedAt(LocalDateTime.now());
         airportRepository.save(airport);
     }
 }

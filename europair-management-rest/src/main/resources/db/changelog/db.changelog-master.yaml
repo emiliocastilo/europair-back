@@ -140,6 +140,18 @@ databaseChangeLog:
      file: 2020/01102020_File_observation.yaml
      relativeToChangelogFile: true
   - include:
+      file: 2020/20201008_flights_aud_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20201008_routes_aud_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20201008_contribution_aud_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20201008_flight_services_aud_v1.yaml
+      relativeToChangelogFile: true
+  - include:
       file: 2020/08102020_contribution_aircraft_v1.yaml
       relativeToChangelogFile: true
 

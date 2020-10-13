@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional(readOnly = true)
@@ -71,7 +71,7 @@ public class OperatorServiceImpl implements IOperatorService {
     Operator operator = operatorRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + id));
 
-    operator.setRemovedAt(LocalDate.now());
+    operator.setRemovedAt(LocalDateTime.now());
     operatorRepository.save(operator);
 
   }

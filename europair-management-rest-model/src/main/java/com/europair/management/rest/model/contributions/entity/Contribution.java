@@ -3,23 +3,32 @@ package com.europair.management.rest.model.contributions.entity;
 import com.europair.management.api.enums.ContributionStates;
 import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.ExchangeBuyTypeEnum;
-import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "contributions")
 @Data
-public class Contribution extends SoftRemovableBaseEntity implements Serializable{
+public class Contribution extends SoftRemovableBaseEntityHardAudited implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

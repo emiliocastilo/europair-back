@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 
 
-@RequestMapping("/roles")
+@RequestMapping(value = {"/roles", "/external/roles"})
 public interface IRoleController {
 
   @GetMapping("")

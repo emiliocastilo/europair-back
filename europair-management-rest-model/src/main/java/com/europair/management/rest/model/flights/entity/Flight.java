@@ -1,18 +1,31 @@
 package com.europair.management.rest.model.flights.entity;
 
 import com.europair.management.api.enums.UTCEnum;
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "flights")
+@Audited
 @Data
-public class Flight extends AuditModificationBaseEntity implements Serializable {
+public class Flight extends AuditModificationBaseEntityHardAudited implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +38,12 @@ public class Flight extends AuditModificationBaseEntity implements Serializable 
   @Enumerated(EnumType.STRING)
   private UTCEnum timeZone;
 
-  @Column
+  @NotNull
+  @Column(nullable = false)
   private String origin;
 
-  @Column
+  @NotNull
+  @Column(nullable = false)
   private String destination;
 
   @Column(name = "seats_F")
@@ -46,7 +61,13 @@ public class Flight extends AuditModificationBaseEntity implements Serializable 
   @Column
   private Integer stretchers;
 
+  @NotNull
+  @Column(name = "route_id", nullable = false)
+  private Long routeId;
+
+  @NotAudited
   @ManyToOne
+  @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
   private Route route;
 
   @Column(name = "positional_flight")

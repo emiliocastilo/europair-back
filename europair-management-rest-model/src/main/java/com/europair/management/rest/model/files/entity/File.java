@@ -2,6 +2,7 @@ package com.europair.management.rest.model.files.entity;
 
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
@@ -23,7 +24,7 @@ import java.util.List;
 @Table(name = "files")
 @Data
 @Audited
-public class File extends SoftRemovableBaseEntity implements Serializable {
+public class File extends SoftRemovableBaseEntityHardAudited implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

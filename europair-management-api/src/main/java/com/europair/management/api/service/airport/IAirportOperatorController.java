@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping("/airports/{airportId}/operators")
+@RequestMapping(value = {"/airports/{airportId}/operators", "/external/airports/{airportId}/operators"})
 public interface IAirportOperatorController {
 
 

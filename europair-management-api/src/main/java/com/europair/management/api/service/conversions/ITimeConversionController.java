@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.constraints.NotNull;
 
-@RequestMapping("/conversions/time")
+@RequestMapping(value = {"/conversions/time", "/external/conversions/time"})
 public interface ITimeConversionController {
 
 

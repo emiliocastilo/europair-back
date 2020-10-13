@@ -161,3 +161,16 @@ databaseChangeLog:
             oldColumnName: sale_agent
             remarks: A String for user id
             tableName: files_aud
+
+  - changeSet:
+      id: 20201008_files_master_v2_drop_fks
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Drop unnecessary foreign keys"
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: files_aud
+            constraintName: file_aud_sale_person_fk
+        - dropForeignKeyConstraint:
+            baseTableName: files_aud
+            constraintName: file_aud_sale_agent_fk

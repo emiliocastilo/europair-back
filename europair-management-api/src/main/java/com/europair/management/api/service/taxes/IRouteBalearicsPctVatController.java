@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotNull;
 
-@RequestMapping("/routeBalearicsPctVat")
+@RequestMapping(value = {"/routeBalearicsPctVat", "/external/routeBalearicsPctVat"})
 public interface IRouteBalearicsPctVatController {
 
   /**
