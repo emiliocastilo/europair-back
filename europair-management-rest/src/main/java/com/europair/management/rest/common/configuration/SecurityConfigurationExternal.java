@@ -23,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
-@Order(1)
+@Order(2)
 public class SecurityConfigurationExternal extends WebSecurityConfigurerAdapter {
 
     @Value("${cors.origins.allowed}")
