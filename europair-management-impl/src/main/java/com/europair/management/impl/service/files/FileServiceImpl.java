@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,7 +67,7 @@ public class FileServiceImpl implements IFileService {
     File file = fileRepository.findById(id)
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found on id: " + id));
 
-    file.setRemovedAt(LocalDate.now());
+    file.setRemovedAt(LocalDateTime.now());
     fileRepository.save(file);
   }
 }

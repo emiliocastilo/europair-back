@@ -1,0 +1,83 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201008_flight_services_aud_v1_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add flight services audit table"
+      changes:
+
+        - createTable:
+            tableName: flight_services_aud
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flight_services_aud_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: flight_services_aud_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+              - column:
+                  name: flight_id
+                  type: int
+              - column:
+                  name: provider_id
+                  type: int
+              - column:
+                  name: service_type
+                  type: varchar(50)
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: quantity
+                  type: int
+              - column:
+                  name: purchase_price
+                  type: decimal(12,4)
+              - column:
+                  name: sale_price
+                  type: decimal(12,4)
+              - column:
+                  name: sale_tax_percentage
+                  type: double
+              - column:
+                  name: purchase_tax_percentage
+                  type: double
+              - column:
+                  name: commission_percentage
+                  type: double
+              - column:
+                  name: comments
+                  type: varchar(255)
+              - column:
+                  name: seller_id
+                  type: int
+              - column:
+                  name: status
+                  type: varchar(20)
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+              - column:
+                  name: service_id
+                  type: int
+
