@@ -73,6 +73,9 @@ public class ContributionDTO {
     @JsonProperty("currency")
     private CurrencyEnum currency;
 
+    @JsonProperty("currencyOnSale")
+    private CurrencyEnum currencyOnSale;
+
     @JsonProperty("comments")
     private String comments;
 

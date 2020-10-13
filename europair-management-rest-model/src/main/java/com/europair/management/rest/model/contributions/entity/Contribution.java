@@ -94,6 +94,10 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currency;
 
+    @Column(name = "currency_on_sale")
+    @Enumerated(EnumType.STRING)
+    private CurrencyEnum currencyOnSale;
+
     @Column(name = "comments", length = 255)
     private String comments;
 

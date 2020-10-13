@@ -27,13 +27,13 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
         // Audit for External users
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        res = userRepository.findByUsername(username).map(u -> u.getName() + " " + u.getSurname());
+        res = userRepository.findByUsername(username).map(u -> u.getUsername());
 
         // Audit for Azure users
         if ( res.isEmpty()) {
-            String userNameAzure = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("name");
-            Optional userNameFromAzure = Optional.ofNullable(userNameAzure);
-            res= userNameFromAzure;
+            String emailAzure = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("unique_name");
+            Optional <String> azureUserName = userRepository.findByEmail(emailAzure).map(u -> u.getUsername());
+            res= azureUserName;
         }
 
         return res;

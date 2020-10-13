@@ -3,13 +3,14 @@ package com.europair.management.api.integrations.office365.dto;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class ConfirmedOperationDto implements Serializable {
 
-//    private FileSharingInfoDTO fileInfo;
+    private FileSharingInfoDTO fileInfo;
 
-//    private List<FlightSharingInfoDTO> flightsInfo;
+    private List<FlightExtendedInfoDto> flightsInfo;
 
     private ContributionDataDto contributionInfo;
 

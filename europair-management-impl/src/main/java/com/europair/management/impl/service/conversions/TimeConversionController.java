@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @RestController
@@ -24,7 +25,7 @@ public class TimeConversionController implements ITimeConversionController {
 
         String res = null;
 
-        LocalTime utcTime = null;
+        LocalDateTime utcTime = null;
         utcTime = Utils.TimeConverter.getLocalTimeInOtherUTC(transformUTCTimeFromToDTO.getFromUTCIndicator(),
                 transformUTCTimeFromToDTO.getTime(),
                 transformUTCTimeFromToDTO.getToUTCIndicator());

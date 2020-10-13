@@ -1,5 +1,6 @@
 package com.europair.management.rest.common.configuration;
 
+import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,13 +32,16 @@ public class SecurityConfigurationExternal extends WebSecurityConfigurerAdapter 
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private IUserRepository userRepository;
+
     @Profile("dev")
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll().and()
                 .antMatcher("/external/**")
                 .addFilter(new JWTAuthenticationFilter(authenticationManager())) // have permissions
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()))// evaluate user
+                .addFilter(new JWTAuthorizationFilter(authenticationManager(), this.userRepository))// evaluate user
                 .cors().and()
                 .csrf().disable();
 

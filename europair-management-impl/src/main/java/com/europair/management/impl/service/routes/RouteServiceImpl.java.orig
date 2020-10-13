@@ -34,11 +34,15 @@ import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+<<<<<<< HEAD
+import java.util.*;
+=======
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+>>>>>>> origin/develop
 import java.util.stream.Collectors;
 
 @Service
@@ -90,9 +94,6 @@ public class RouteServiceImpl implements IRouteService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Route expected. Identifier %s got", routeDto.getId()));
         }
 
-        // Route validations
-        routeValidations(routeDto);
-
         // Validate Route Airports
         List<String> iataCodes = Utils.mapRouteAirportIataCodes(routeDto.getLabel());
         Map<String, Airport> routeAirports = iataCodes.stream()
@@ -105,7 +106,9 @@ public class RouteServiceImpl implements IRouteService {
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
 
         // Set relationships
-        route.setFileId(fileId);
+        File file = new File();
+        file.setId(fileId);
+        route.setFile(file);
 
         // Persist entity
         route = routeRepository.save(route);
@@ -196,8 +199,8 @@ public class RouteServiceImpl implements IRouteService {
         List<Route> rotations = rotationDates.stream().map(date -> {
             Route rotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
             // Set relationships
-            rotation.setFileId(parentRoute.getFileId());
-            rotation.setParentRouteId(parentRoute.getId());
+            rotation.setFile(parentRoute.getFile());
+            rotation.setParentRoute(parentRoute);
 
             rotation.setStartDate(date);
             rotation.setEndDate(date);
@@ -211,7 +214,7 @@ public class RouteServiceImpl implements IRouteService {
             rotations.forEach(rotation -> rotation.setAirports(new HashSet<>(createRouteAirports(rotation, routeAirportMap))));
 
             // Add flights
-            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFileId()));
+            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFile().getId()));
 
         } else {
             rotations = null;
@@ -241,7 +244,7 @@ public class RouteServiceImpl implements IRouteService {
         LocalDate rotationDate = lastRotationDate != null ? lastRotationDate : route.getStartDate();
 
         if (route.getFrequency() == null || FrequencyEnum.ADHOC.equals(route.getFrequency())) {
-            return firstRotation ? rotationDate : null;
+            return rotationDate;
         }
 
         final List<DayOfWeek> dayOfWeekList = route.getFrequencyDays().stream()
@@ -359,15 +362,7 @@ public class RouteServiceImpl implements IRouteService {
             flightDTO.setDestination(airports.get(i + 1).getIataCode());
             // ToDo: setear más campos???
             flightDTO.setDepartureTime(LocalDateTime.now()); // Está como not null en bdd ??
-            flightDTO.setTimeZone(airports.get(i).getTimeZone());
             flightService.saveFlight(fileId, rotation.getId(), flightDTO);
-        }
-    }
-
-    // Validations
-    private void routeValidations(final RouteDto routeDto) {
-        if (routeDto.getStartDate().isAfter(routeDto.getEndDate())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Route start date is after end date.");
         }
     }
 

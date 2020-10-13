@@ -9,15 +9,14 @@ import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
+<<<<<<< HEAD
 import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
+=======
+>>>>>>> origin/develop
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.entity.RouteAirport;
-import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,8 +24,17 @@ import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+<<<<<<< HEAD
 import java.util.*;
+=======
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+>>>>>>> origin/develop
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -92,22 +100,21 @@ public class Utils {
      * @return List of Iata Codes
      */
     public static List<String> mapRouteAirportIataCodes(final String routeLabel) {
-        String trimmedLabel = routeLabel.replaceAll("\\s+", "");
-        return Arrays.asList(trimmedLabel.split("-"));
+         String trimmedLabel = routeLabel.replaceAll("\\s+", "");
+         return Arrays.asList(trimmedLabel.split("-"));
     }
 
 
     /**
      * Utils.TimeConverter API to convert time from:
      * * UTC: getLocalTimeInOtherUTC
-     * <p>
+     *
      * * (if we have more conversiones must add the description here)
      */
     public static class TimeConverter {
 
         /**
          * Operation to transform date time from an utc indicator to another
-         *
          * @param fromUTCIndicator
          * @param time
          * @param toUTCIndicator
@@ -120,33 +127,6 @@ public class Utils {
                 utcZeroTime = addHoursMinutesToLocalTime(LocalDateTime.parse(time), (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
             } else {
                 utcZeroTime = addHoursMinutesToLocalTime(LocalDateTime.parse(time), (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
-            }
-
-            LocalDateTime utcTime = null;
-            //After that we have to add the hours from toUTCIndicator
-            // If toUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
-            if (0 < toUTCIndicator.getHours()) {
-                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), toUTCIndicator.getMinutes());
-            } else {
-                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), (-toUTCIndicator.getMinutes()));
-            }
-            return utcTime;
-        }
-
-        /**
-         * Operation to transform date time from an utc indicator to another
-         * @param fromUTCIndicator
-         * @param dateTime
-         * @param toUTCIndicator
-         * @return
-         */
-        public static LocalDateTime getLocalTimeInOtherUTC(UTCEnum fromUTCIndicator, LocalDateTime dateTime, UTCEnum toUTCIndicator) {
-            LocalDateTime utcZeroTime;
-            // If fromUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
-            if (0 < fromUTCIndicator.getHours()) {
-                utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
-            } else {
-                utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
             }
 
             LocalDateTime utcTime = null;
@@ -264,6 +244,9 @@ public class Utils {
         return (int) Math.ceil(distance / flightRangeInDefaultUnit) - 1;
     }
 
+<<<<<<< HEAD
+
+
     public static DistanceSpeedUtils calculateDistanceAndSpeed(
             final ConversionService conversionService, final AircraftType aircraftType, final Airport origin,
             final Airport destination) {
@@ -324,6 +307,8 @@ public class Utils {
 
         return dsData;
     }
+=======
+>>>>>>> origin/develop
 
     /**
      * Utils inner class containing constant values of the application
@@ -335,32 +320,6 @@ public class Utils {
         public static final String TAX_ES_IGIC_CODE = "ES_IGIC";
         public static final Unit DEFAULT_SPEED_UNIT = Unit.KNOTS;
         public static final Unit DEFAULT_DISTANCE_UNIT = Unit.NAUTIC_MILE;
-    }
-
-    /**
-     * The application has 2 different users ( /external/  &  from Azure AAD )
-     */
-    public static class GetUserFromSecurityContext {
-
-        public static Long getLoggedUserId(IUserRepository userRepository) {
-            Long res = null;
-
-            // User name for externals
-            final String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-            Optional<User> optionalUser = userRepository.findByUsername(username);
-            if (!optionalUser.isEmpty()) {
-                res = optionalUser.get().getId();
-            } else {
-                // User name for Azure users
-                final String azureUserEmail = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("unique_name");
-                res = userRepository.findByEmail(azureUserEmail).orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User of the token authentication not found searched by email: " + azureUserEmail)).getId();
-            }
-
-            return res;
-
-        }
     }
 
 }
