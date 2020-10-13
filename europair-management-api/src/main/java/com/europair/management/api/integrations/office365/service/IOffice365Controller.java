@@ -1,6 +1,7 @@
 package com.europair.management.api.integrations.office365.service;
 
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
+import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -33,18 +34,29 @@ public interface IOffice365Controller {
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
             @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 
-
-    @GetMapping("/get/flight/contribution")
+    /**
+     * This opperation allows to office_365 power app to retrieve all the information related with Flight&Contribution
+     *
+     * @param routeId
+     * @param contributionId
+     * @param flightId
+     * @return
+     */
+    @GetMapping("/get/flight/contribution/{routeId}/{flightId}/{contributionId}")
     @Operation(description = "Send an url to the Office365 systems to indicate that the information is enabled, and can be retrieved from the url", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<?> getEnabledFlightContributionInformation(@Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
-                                                               @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
-                                                               @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId);
+    ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+                                                                                        @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId,
+                                                                                        @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 
+    /**
+     * This opperation sends to office_365 the signal and the path who needs to know that the information is enabled and ready to consume
+     * @return
+     */
     @GetMapping("/send/flight/contribution/test")
-    ResponseEntity<?> sendEnabledFlightContributionInformation();
+    ResponseEntity<String> sendEnabledFlightContributionInformation();
 
     @GetMapping("/get/flight/contribution/test/collecturi")
-    ResponseEntity<?> sendEnabledFlightContributionInformation(@Param("fileUri") String fileUri);
+    ResponseEntity<?> testOfSendEnabledFlightContributionInformation(@Param("fileUri") String fileUri);
 
     @GetMapping("/planning")
     @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})

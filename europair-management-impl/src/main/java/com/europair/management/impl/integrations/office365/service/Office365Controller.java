@@ -28,22 +28,20 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<?> getEnabledFlightContributionInformation(@NotNull Long routeId,
-                                                                     @NotNull Long contributionId,
-                                                                     @NotNull Long flightId) {
+    public ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@NotNull Long routeId, @NotNull Long flightId, @NotNull Long contributionId ) {
         ResponseContributionFlights responseContributionFlights = service.getEnabledFlightContributionInformation(routeId, contributionId, flightId);
         return ResponseEntity.ok().body(responseContributionFlights);
     }
 
     @Override
-    public ResponseEntity<?> sendEnabledFlightContributionInformation() {
-
+    public ResponseEntity<String> sendEnabledFlightContributionInformation() {
+        // TODO: substituir la url hardcodeada por un parametro en properties @Param
         office365Client.sendUriToEnabledFlightContributionInformation("http://localhost:8080/send/flight/contribution/test/collecturi");
         return null;
     }
 
     @Override
-    public ResponseEntity<?> sendEnabledFlightContributionInformation(String fileUri) {
+    public ResponseEntity<?> testOfSendEnabledFlightContributionInformation(String fileUri) {
         System.out.println("Received URL : " + fileUri);
         return ResponseEntity.ok().body(fileUri);
     }

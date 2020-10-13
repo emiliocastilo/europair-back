@@ -1,6 +1,5 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
@@ -10,7 +9,6 @@ import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
-import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
@@ -94,18 +92,27 @@ public class Office365ServiceImpl implements IOffice365Service {
         Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + contribution.getAircraftId()));
 
-        // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
         Route route = this.routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
-        File file = route.getFile();
+
         Flight flight = this.flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId));
-        PlanningFlightsDTO planningFlightsDTO = this.iPlanningService.getPlanningFlightsDTO(null,route,file,flight);
+
+        final Map<String, Airport> airportIataMap = route.getAirports().stream()
+                .map(RouteAirport::getAirport)
+                .distinct()
+                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
+
+        List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
+
+        // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
+        PlanningFlightsDTO planningFlightsDTO = this.mapPlanningFlight(route, contribution, airportIataMap, dsDataList, flight);
+
 
         // second step: aircraftSharingDTO
         AircraftSharingDTO aircraftSharingDTO = new AircraftSharingDTO();
 
-        for (AircraftBase aircraftBase: aircraft.getBases()) {
+        for (AircraftBase aircraftBase : aircraft.getBases()) {
             if (null != aircraftBase.getMainBase()) {
                 aircraftSharingDTO.setBaseCode(aircraftBase.getAirport().getIataCode());
                 aircraftSharingDTO.setBaseName(aircraftBase.getAirport().getName());
@@ -115,7 +122,7 @@ public class Office365ServiceImpl implements IOffice365Service {
             aircraftSharingDTO.setTypeCode(aircraft.getAircraftType().getCode());
             aircraftSharingDTO.setTypeName(aircraft.getAircraftType().getDescription());
 
-            if( null != aircraft.getAircraftType().getCategory()) {
+            if (null != aircraft.getAircraftType().getCategory()) {
                 aircraftSharingDTO.setCategoryCode(aircraft.getAircraftType().getCategory().getCode());
                 aircraftSharingDTO.setCategoryName(aircraft.getAircraftType().getCategory().getName());
             }
@@ -129,13 +136,13 @@ public class Office365ServiceImpl implements IOffice365Service {
         // third step: operatorSharingDTO
         OperatorSharingDTO operatorSharingDTO = new OperatorSharingDTO();
 
-        if ( null != contribution.getOperator()) {
+        if (null != contribution.getOperator()) {
             operatorSharingDTO.setIataCode(contribution.getOperator().getIataCode());
             operatorSharingDTO.setIcaoCode(contribution.getOperator().getIcaoCode());
             operatorSharingDTO.setName(contribution.getOperator().getName());
         }
 
-        // union de datos
+        // union of data
         responseContributionFlights.setAircraftSharingDTO(aircraftSharingDTO);
         responseContributionFlights.setOperatorSharingDTO(operatorSharingDTO);
         responseContributionFlights.setPlanningFlightsDTO(planningFlightsDTO);
@@ -208,17 +215,17 @@ public class Office365ServiceImpl implements IOffice365Service {
         }
 
         return routeFlights.stream().map(flight -> {
-                FlightExtendedInfoDto dto = new FlightExtendedInfoDto(
-                        getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
-                dto.setServices(mapFlightServices(flight.getId()));
-                return dto;
-            }).collect(Collectors.toList());
+            FlightExtendedInfoDto dto = new FlightExtendedInfoDto(
+                    getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
+            dto.setServices(mapFlightServices(flight.getId()));
+            return dto;
+        }).collect(Collectors.toList());
     }
 
 
     private List<PlanningFlightsDTO> mapPlanningFlightsInfo(Route route, Contribution contribution) {
 
-        final Map<String, Airport> airportIataMap;
+        final Map<String, Airport> airportIataMap;  // HERE !!!
 
         // retrieve a map with the airports
         if (route.getParentRoute() == null) {
@@ -255,7 +262,7 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         // map info values
         return routeFlights.stream()
-                .map(flight ->  mapPlanningFlight(route, contribution, airportIataMap, dsDataList, flight))
+                .map(flight -> mapPlanningFlight(route, contribution, airportIataMap, dsDataList, flight))
                 .collect(Collectors.toList());
     }
 
@@ -273,7 +280,7 @@ public class Office365ServiceImpl implements IOffice365Service {
 
 
     private FlightSharingInfoDTO getFlightSharingInfoDTO(Route route, Contribution contribution, Map<String,
-                                                         Airport> airportIataMap, List<DistanceSpeedUtils> dsDataList,
+            Airport> airportIataMap, List<DistanceSpeedUtils> dsDataList,
                                                          Flight flight) {
 
         Airport origin = airportIataMap.get(flight.getOrigin());
