@@ -2244,6 +2244,125 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Contacts",
+			"item": [
+				{
+					"name": "contact - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/contacts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"contacts"
+							],
+							"query": [
+								{
+									"key": "filter_name",
+									"value": "J,CONTAINS",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contact - find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/contacts/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"contacts",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contact - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"crmCode\": \"CRMCODE-1\",\r\n    \"contactType\": \"INDIVIDUAL\",\r\n    \"companyCode\": \"ACME\",\r\n    \"companyName\": \"ACME Corp.\",\r\n    \"contactCategory\": \"OPERATOR\",\r\n    \"alias\": \"AliA\",\r\n    \"address\": null,\r\n    \"cityId\": null,\r\n    \"city\": null,\r\n    \"postalCode\": null,\r\n    \"province\": null,\r\n    \"countryId\": null,\r\n    \"country\": null,\r\n    \"commonOperationType\": \"ACMI\",\r\n    \"email\": \"test@test.test\",\r\n    \"phoneNumber\": \"+34-999888777\",\r\n    \"mobilePhoneNumber\": \"666555444\",\r\n    \"faxNumber\": null,\r\n    \"observation\": null,\r\n    \"id\": null,\r\n    \"code\": \"TEST-1\",\r\n    \"name\": \"Contact 1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/contacts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contact - update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"crmCode\": \"100001\",\r\n    \"contactType\": \"INDIVIDUAL\",\r\n    \"companyCode\": \"ACME\",\r\n    \"companyName\": \"ACME Corp.\",\r\n    \"contactCategory\": \"BROKER\",\r\n    \"alias\": \"AliG\",\r\n    \"address\": \"address\",\r\n    \"cityId\": 1,\r\n    \"postalCode\": \"070009\",\r\n    \"province\": \"Rivendell\",\r\n    \"countryId\": 1,\r\n    \"commonOperationType\": \"ACMI\",\r\n    \"email\": \"test@test.test\",\r\n    \"phoneNumber\": \"+34-999888777\",\r\n    \"mobilePhoneNumber\": \"666555444\",\r\n    \"faxNumber\": \"123123123\",\r\n    \"observation\": \"observation upd8\",\r\n    \"id\": 2,\r\n    \"code\": \"CONT1\",\r\n    \"name\": \"Contact 2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/contacts/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"contacts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contact - delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/contacts/4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"contacts",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Contribution",
 			"item": [
 				{
@@ -2769,13 +2888,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/files/1",
+							"raw": "{{url}}/files/2",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"files",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -2985,6 +3104,33 @@
 								"routes",
 								"2",
 								"flights"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Integration",
+			"item": [
+				{
+					"name": "office365 - confirm operation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/integration/office/confirmation/1/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"integration",
+								"office",
+								"confirmation",
+								"1",
+								"1"
 							]
 						}
 					},
@@ -3417,33 +3563,6 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Integration",
-			"item": [
-				{
-					"name": "office365 - confirm operation",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/integration/office/confirmation/1/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"integration",
-								"office",
-								"confirmation",
-								"1",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
 			"name": "login_generate_token",
 			"event": [
 				{
@@ -3647,17 +3766,17 @@
 	],
 	"variable": [
 		{
-			"id": "157007e6-1dce-4159-bf96-ac02aa9c4966",
+			"id": "67eca659-93be-48ef-b25d-571a49ed060b",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "4fdf3001-9ff0-4667-8085-b01faeec60d5",
+			"id": "d8ca01b5-045f-4c02-8341-feb94af36fe0",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "b17015d6-dcdb-4295-b7c1-449dd2878740",
+			"id": "1d41ab5c-df53-420c-aeea-e08124931e98",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}
