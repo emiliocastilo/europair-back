@@ -1,7 +1,6 @@
 package com.europair.management.rest.model.routes.entity;
 
 import com.europair.management.api.enums.FrequencyEnum;
-import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
@@ -95,9 +94,5 @@ public class Route extends AuditModificationBaseEntityHardAudited implements Ser
 
     @Column(name = "has_contributions")
     private Boolean hasContributions = false;
-
-    @NotAudited
-    @OneToMany(mappedBy = "route", orphanRemoval = true)
-    private Set<RouteAirport> airports;
 
 }

@@ -58,7 +58,7 @@ public class PlanningServiceImpl implements IPlanningService {
 
         for (Route routeRotation : route.getRotations()) {
             //TODO: validar estado ruta
-            for (Flight flight: routeRotation.getFlights()) {
+            for (Flight flight : routeRotation.getFlights()) {
                 PlanningFlightsDTO planningFlightsDTO = getPlanningFlightsDTO(actionType, route, file, flight);
                 planningFlightsDTOList.add(planningFlightsDTO);
             }
@@ -91,20 +91,18 @@ public class PlanningServiceImpl implements IPlanningService {
         planningFlightsDTO.getFlightSharingInfoDTO().setOperationType(file.getOperationType());
 
         // origin airport (IATA | ICAO | Name)
-        Airport originAirport = airportRepository.findFirstByIataCode(flight.getOrigin()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Origin airport not found with IATA code: " + flight.getOrigin()));
+        Airport originAirport = flight.getOrigin();
         planningFlightsDTO.getFlightSharingInfoDTO().setOriginAirport(
                 originAirport.getIataCode() + " | " + originAirport.getIcaoCode() + " | " + originAirport.getName());
 
         // destination airport (IATA | ICAO | Name)
-        Airport destinationAirport = airportRepository.findFirstByIataCode(flight.getDestination()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Destination airport not found with IATA code: " + flight.getDestination()));
+        Airport destinationAirport = flight.getDestination();
         planningFlightsDTO.getFlightSharingInfoDTO().setDestinationAirport(
                 destinationAirport.getIataCode() + " | " + destinationAirport.getIcaoCode() + " | " + destinationAirport.getName());
 
         // Take aircraft info from contribution
         Contribution contribution = null;
-        for ( Contribution contributionAux: route.getContributions()) {
+        for (Contribution contributionAux : route.getContributions()) {
             if (contributionAux.getContributionState().equals(ContributionStates.CONFIRMED)) {
                 contribution = contributionAux;
             }

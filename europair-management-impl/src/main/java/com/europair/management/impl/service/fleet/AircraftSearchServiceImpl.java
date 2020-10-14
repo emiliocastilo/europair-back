@@ -2,7 +2,6 @@ package com.europair.management.impl.service.fleet;
 
 
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
-import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
 import com.europair.management.impl.mappers.fleet.IAircraftSearchMapper;
@@ -15,14 +14,12 @@ import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.entity.AircraftCategory;
-import com.europair.management.rest.model.fleet.entity.AircraftType;
-import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
 import com.europair.management.rest.model.fleet.repository.AircraftCategoryRepository;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
+import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.regions.entity.Region;
 import com.europair.management.rest.model.regionscountries.repository.IRegionRepository;
 import com.europair.management.rest.model.routes.entity.Route;
-import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +33,6 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -92,17 +88,11 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
         Route rotationSample = route.getParentRoute() == null ? route.getRotations().get(0) : route;
 
-        Airport origin = rotationSample.getAirports().stream()
-                .min(Comparator.comparing(RouteAirport::getOrder))
+        Flight firstFlight = rotationSample.getFlights().stream().min(Comparator.comparing(Flight::getOrder))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No origin airport found for route with id: " + rotationSample.getId()))
-                .getAirport();
-        Airport destination = rotationSample.getAirports().stream()
-                .filter(routeAirport -> !origin.getId().equals(routeAirport.getAirport().getId()))
-                .min(Comparator.comparing(RouteAirport::getOrder))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No destination airport found for route with id: " + rotationSample.getId()))
-                .getAirport();
+                        "No first flight found for route with id: " + rotationSample.getId()));
+        Airport origin = firstFlight.getOrigin();
+        Airport destination = firstFlight.getDestination();
 
         Set<Long> airportBaseIds = null;
         if (!CollectionUtils.isEmpty(filterDto.getBaseIds())) {
@@ -204,11 +194,10 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     }
 
     private List<Long> findNearbyAirports(final AircraftFilterDto filterDto, final Route route) {
-        Airport destination = route.getAirports().stream()
-                .max(Comparator.comparing(RouteAirport::getOrder))
+        Flight lastFlight = route.getFlights().stream().max(Comparator.comparing(Flight::getOrder))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No destination airport found for route with id: " + route.getId()))
-                .getAirport();
+                        "No last flight found for route with id: " + route.getId()));
+        Airport destination = lastFlight.getDestination();
         // Find all active airports that have latitude and longitude values
         List<Airport> allAirports = airportRepository.findByRemovedAtNullAndLatitudeNotNullAndLongitudeNotNull();
 
@@ -264,9 +253,6 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             final AircraftFilterDto filterDto, final Aircraft aircraft, final Airport origin, final Airport destination,
             @NotNull List<DistanceSpeedUtils> dsDataList, @NotNull Map<Long, Integer> aircraftTypeConnectionsMap,
             final Route route) {
-        List<RouteAirport> routeAirports = route.getAirports().stream()
-                .sorted(Comparator.comparing(RouteAirport::getOrder))
-                .collect(Collectors.toList());
 
         // If distance has been calculated before we get the data, otherwise we do the calculation and save the data
         DistanceSpeedUtils dsData;
@@ -288,10 +274,10 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             connections = aircraftTypeConnectionsMap.get(aircraft.getAircraftType().getId());
         } else {
             connections = null;
-            for (int i = 0; i < routeAirports.size() - 1; i++) {
+            for (Flight f : route.getFlights()) {
                 try {
-                    int flightConnections = Utils.calculateConnectingFlights(routeAirports.get(i).getAirport(),
-                            routeAirports.get(i + 1).getAirport(), aircraft.getAircraftType(), conversionService);
+                    int flightConnections = Utils.calculateConnectingFlights(f.getOrigin(), f.getDestination(),
+                            aircraft.getAircraftType(), conversionService);
                     if (connections == null || connections < flightConnections) {
                         connections = flightConnections;
                     }
@@ -303,8 +289,5 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
         return connections == null || connections >= maxConnections;
     }
-
-
-
 
 }
