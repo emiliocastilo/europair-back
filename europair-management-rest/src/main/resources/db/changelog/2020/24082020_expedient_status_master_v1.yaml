@@ -320,10 +320,6 @@ databaseChangeLog:
                   name: crm_code
                   type: varchar(30)
                   remarks: "unique crm identifier code"
-                  constraints:
-                    nullable: false
-                    unique: true
-                    uniqueConstraintName: contacts_crm_code_uq
               - column:
                   name: contact_type
                   type: varchar(20)
@@ -336,7 +332,6 @@ databaseChangeLog:
                   name: company_name
                   type: varchar(30)
                   remarks: "Company name"
-
               - column:
                   name: contact_category
                   type: varchar(20)
@@ -388,5 +383,24 @@ databaseChangeLog:
               - column:
                   name: observation
                   type: varchar(255)
+
+
+# ToDo: se dejan preparadas las constraints para la integración, habrá que borrar los datos de la tabla de contactos o actualizarlos con liquibase
+#  - changeSet:
+#      id: 20201013_contacts_master_update_constraints
+#      context: dev or pre or pro
+#      author: axel.sanchezsalom
+#      comment: "Updates contacts table CRM constraints"
+#      changes:
+#        - addNotNullConstraint:
+#            tableName: contacts
+#            columnName: crm_code
+#            columnDataType: varchar(30)
+#            validate: true
+#        - addUniqueConstraint:
+#            tableName: contacts
+#            columnNames: crm_code
+#            constraintName: contacts_crm_code_uq
+#            validate: true
 
 

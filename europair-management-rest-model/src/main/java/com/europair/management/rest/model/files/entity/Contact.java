@@ -1,11 +1,12 @@
 package com.europair.management.rest.model.files.entity;
 
+import com.europair.management.api.enums.ContactCategoryEnum;
+import com.europair.management.api.enums.ContactTypeEnum;
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.countries.entity.Country;
-import com.europair.management.rest.model.enums.ClientTypeEnum;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -34,13 +35,14 @@ public class Contact extends AuditModificationBaseEntity implements Serializable
     @Column(name = "contact_code", nullable = false, unique = true, length = TextField.TEXT_20)
     private String code;
 
-    @NotNull
-    @Column(name = "crm_code", nullable = false, unique = true, length = TextField.TEXT_30)
+//    @NotNull
+//    @Column(name = "crm_code", nullable = false, unique = true, length = TextField.TEXT_30)
+    @Column(name = "crm_code", length = TextField.TEXT_30)
     private String crmCode;
 
     @Column(name = "contact_type", length = TextField.TEXT_20)
     @Enumerated(EnumType.STRING)
-    private ClientTypeEnum contactType;
+    private ContactTypeEnum contactType;
 
     @Column(name = "company_code", length = TextField.TEXT_30)
     private String companyCode;
@@ -49,7 +51,8 @@ public class Contact extends AuditModificationBaseEntity implements Serializable
     private String companyName;
 
     @Column(name = "contact_category", length = TextField.TEXT_20)
-    private String contactCategory; // ToDo: enum?? valores: proveedor aéreo, operador, cliente, proveedor servicios generales, bróker, agente de handling y otros
+    @Enumerated(EnumType.STRING)
+    private ContactCategoryEnum contactCategory;
 
     @NotNull
     @Column(name = "name", nullable = false)

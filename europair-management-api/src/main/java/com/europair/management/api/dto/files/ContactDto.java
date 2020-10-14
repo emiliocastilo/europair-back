@@ -5,6 +5,8 @@ import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
 import com.europair.management.api.dto.cities.CityDTO;
 import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.dto.countries.CountryDTO;
+import com.europair.management.api.enums.ContactCategoryEnum;
+import com.europair.management.api.enums.ContactTypeEnum;
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -32,12 +34,12 @@ public class ContactDto extends AuditModificationBaseDTO {
     @NotEmpty
     private String name;
 
-    @NotEmpty
+    //    @NotEmpty
     @Size(min = 1, max = TextField.TEXT_30)
     private String crmCode;
 
     @Size(max = TextField.TEXT_20)
-    private String contactType;
+    private ContactTypeEnum contactType;
 
     @Size(max = TextField.TEXT_30)
     private String companyCode;
@@ -45,7 +47,7 @@ public class ContactDto extends AuditModificationBaseDTO {
     private String companyName;
 
     @Size(max = TextField.TEXT_20)
-    private String contactCategory; // ToDo: enum?? valores: proveedor aéreo, operador, cliente, proveedor servicios generales, bróker, agente de handling y otros
+    private ContactCategoryEnum contactCategory;
 
     private String alias;
 
