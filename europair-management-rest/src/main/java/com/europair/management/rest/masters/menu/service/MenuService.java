@@ -108,7 +108,9 @@ public class MenuService {
         resultMenu.setScreenId(menuOptionOrigin.getScreenId());
 
         //this param is maintained to keep alive the menu on the Angular application must be changed if the menu evolves
-        resultMenu.setRoute(totalMapListScrens.get(menuOptionOrigin.getScreenId()).getRoute());
+        if (null != totalMapListScrens.get(menuOptionOrigin.getScreenId())) {
+            resultMenu.setRoute(totalMapListScrens.get(menuOptionOrigin.getScreenId()).getRoute());
+        }
 
         return resultMenu;
     }

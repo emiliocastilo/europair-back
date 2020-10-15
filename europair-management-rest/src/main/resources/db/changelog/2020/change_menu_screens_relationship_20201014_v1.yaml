@@ -301,7 +301,7 @@ databaseChangeLog:
                   value: "Contactos"
               - column:
                   name: description
-                  value: "Listado de contactos"
+                  value: "Maestro Listado de contactos"
               - column:
                   name: route
                   value: "/contacts"
@@ -526,3 +526,361 @@ databaseChangeLog:
             where: name IN ('MASTERS_CONTACTS')
 
 
+  - changeSet:
+      id: 15102020_roles_master_v1_roles_data
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Add data into roles table"
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "ROL_ADMIN"
+              - column:
+                  name: description
+                  value: "Rol Administrador del sistema"
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "ROL_MAESTROS"
+              - column:
+                  name: description
+                  value: "Rol Administrador de los maestros"
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "ROL_EXPEDIENTES"
+              - column:
+                  name: description
+                  value: "Rol Administrador de los expedientes "
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+  - changeSet:
+      id: 15102020_task_master_v1_task_data
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Add data into task table"
+      changes:
+        - insert:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Master_Task"
+              - column:
+                  name: description
+                  value: "Tarea agrupadora para maestros"
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "File_Task"
+              - column:
+                  name: description
+                  value: "Tarea agrupadora para expedientes"
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: tasks
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "Configuration_Task"
+              - column:
+                  name: description
+                  value: "Tarea agrupadora para configuraciones"
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+  - changeSet:
+      id: 15102020_roles_task_master_v1_roles_task_data
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Add data into roles_task table"
+      changes:
+        - insert:
+            tableName: roles_tasks
+            columns:
+              - column:
+                  name: role_id
+                  value: 1
+              - column:
+                  name: task_id
+                  value: 1
+
+        - insert:
+            tableName: roles_tasks
+            columns:
+              - column:
+                  name: role_id
+                  value: 1
+              - column:
+                  name: task_id
+                  value: 2
+
+        - insert:
+            tableName: roles_tasks
+            columns:
+              - column:
+                  name: role_id
+                  value: 1
+              - column:
+                  name: task_id
+                  value: 3
+
+        - insert:
+            tableName: roles_tasks
+            columns:
+              - column:
+                  name: role_id
+                  value: 2
+              - column:
+                  name: task_id
+                  value: 1
+
+        - insert:
+            tableName: roles_tasks
+            columns:
+              - column:
+                  name: role_id
+                  value: 3
+              - column:
+                  name: task_id
+                  value: 2
+
+  - changeSet:
+      id: 15102020_task_screens_master_v1_task_screens_data
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Add data into tasks_screens table"
+      changes:
+        - # master task 1
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 4
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 5
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 6
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 7
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 8
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 9
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 10
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 11
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 1
+              - column:
+                  name: screen_id
+                  value: 13
+
+        # file task 2
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 2
+              - column:
+                  name: screen_id
+                  value: 12
+
+        # configuration task 3
+        - insert:
+              tableName: tasks_screens
+              columns:
+                - column:
+                    name: task_id
+                    value: 3
+                - column:
+                    name: screen_id
+                    value: 1
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 3
+              - column:
+                  name: screen_id
+                  value: 2
+
+        - insert:
+            tableName: tasks_screens
+            columns:
+              - column:
+                  name: task_id
+                  value: 3
+              - column:
+                  name: screen_id
+                  value: 3
+
+  - changeSet:
+      id: 15102020_users_tasks_master_v1_users_tasks_data
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Add data into users_tasks table"
+      changes:
+        # master task 3
+        - insert:
+            tableName: users_tasks
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: task_id
+                  value: 1
+        # file task 3
+        - insert:
+            tableName: users_tasks
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: task_id
+                  value: 2
+
+        # configuration task 3
+        - insert:
+            tableName: users_tasks
+            columns:
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: task_id
+                  value: 3
