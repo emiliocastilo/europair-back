@@ -569,3 +569,36 @@ databaseChangeLog:
                   name: modified_by
                   value: "Sistema"
             where: name IN ('FILES_NEW')
+  - changeSet:
+      id: 15102020_menu_v11_menu_option_data
+      context: dev or pre or pro
+      author: emilio.castillogonza
+      comment: "Add data to the menu_option table (add contacts)"
+      changes:
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 18
+              - column:
+                  name: weight
+                  value: 13
+              - column:
+                  name: name
+                  value: "MASTERS_CONTACTS"
+              - column:
+                  name: label
+                  value: "core.left.sidebar.masters.contacts"
+              - column:
+                  name: route
+                  value: "/contacts"
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
