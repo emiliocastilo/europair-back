@@ -200,7 +200,7 @@ public class RouteServiceImpl implements IRouteService {
         if (rotations.size() > 0) {
             rotations = routeRepository.saveAll(rotations);
             // Add flights
-            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFileId(), routeAirportMap));
+            rotations.forEach(rotation -> createFlights(rotation, routeAirportMap));
 
         } else {
             rotations = null;
@@ -320,8 +320,9 @@ public class RouteServiceImpl implements IRouteService {
     }
 
     // Flights
-    private void createFlights(@NotNull final Route rotation, final Long fileId, final Map<String, Airport> routeAirportMap) {
+    private void createFlights(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap) {
         List<Pair<String, String>> iataFlightInfo = Utils.getRotationAirportsFlights(rotation);
+        int[] auxOrder = {1};
         flightRepository.saveAll(iataFlightInfo.stream()
                 .map(iataPair -> {
                     Airport origin = routeAirportMap.get(iataPair.getFirst());
@@ -331,6 +332,8 @@ public class RouteServiceImpl implements IRouteService {
                     flight.setTimeZone(origin.getTimeZone());
                     flight.setDepartureTime(rotation.getStartDate().atStartOfDay());
                     flight.setRouteId(rotation.getId());
+                    flight.setOrder(auxOrder[0]);
+                    auxOrder[0]++; // Increase order
                     return flight;
                 }).collect(Collectors.toList())
         );

@@ -48,11 +48,11 @@ public class FlightController implements IFlightController {
 
     }
 
-    public ResponseEntity<FlightDTO> updateFlight(@NotNull Long fileId, @NotNull Long routeId, @NotNull final Long id,
+    public ResponseEntity<?> updateFlight(@NotNull Long fileId, @NotNull Long routeId, @NotNull final Long id,
                                                   @NotNull final FlightDTO flightDTO) {
 
-      final FlightDTO flightDTOUpdated = flightService.updateFlight(fileId, routeId, id, flightDTO);
-      return ResponseEntity.ok().body(flightDTOUpdated);
+      flightService.updateFlight(fileId, routeId, id, flightDTO);
+      return ResponseEntity.noContent().build();
 
     }
 

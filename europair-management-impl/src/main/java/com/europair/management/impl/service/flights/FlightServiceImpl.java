@@ -18,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
+
 @Service
 @Transactional(readOnly = true)
 public class FlightServiceImpl implements IFlightService {
@@ -76,13 +79,14 @@ public class FlightServiceImpl implements IFlightService {
       flight.setRouteId(routeId);
 
       flight = flightRepository.save(flight);
+      updateRotationData(routeId);
 
       return IFlightMapper.INSTANCE.toDto(flight);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public FlightDTO updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
+    public void updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
 
       checkIfFileExists(fileId);
       checkIfRouteExists(routeId);
@@ -92,8 +96,7 @@ public class FlightServiceImpl implements IFlightService {
 
       IFlightMapper.INSTANCE.updateFromDto(flightDTO, flight);
       flight = flightRepository.save(flight);
-
-      return IFlightMapper.INSTANCE.toDto(flight);
+      updateRotationData(routeId);
     }
 
     @Override
@@ -107,6 +110,7 @@ public class FlightServiceImpl implements IFlightService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id);
       }
       flightRepository.deleteById(id);
+      updateRotationData(routeId);
     }
 
 
@@ -120,6 +124,54 @@ public class FlightServiceImpl implements IFlightService {
       if (!routeRepository.existsById(routeId)) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
       }
+    }
+
+    private void updateRotationDates(final Route rotation) {
+        LocalDateTime minDate = rotation.getFlights().stream()
+                .min(Comparator.comparing(Flight::getDepartureTime))
+                .map(Flight::getDepartureTime)
+                .orElse(null);
+        LocalDateTime maxDate = rotation.getFlights().stream()
+                .max(Comparator.comparing(Flight::getDepartureTime))
+                .map(flight -> flight.getArrivalTime() != null ? flight.getArrivalTime() : flight.getDepartureTime())
+                .orElse(null);
+        if (minDate != null && minDate.isBefore(rotation.getStartDate().atStartOfDay())) {
+            rotation.setStartDate(minDate.toLocalDate());
+        }
+        if (maxDate != null && maxDate.isAfter(rotation.getEndDate().plusDays(1).atStartOfDay())) {
+            rotation.setEndDate(maxDate.toLocalDate());
+        }
+    }
+
+    private void updateRotationLabel(final Route rotation) {
+        final String AIRPORT_SEPARATOR = "-";
+        final String SPECIAL_FLIGHT_SEPARATOR = " // ";
+        StringBuilder sb = new StringBuilder();
+        Flight previousFlight = null;
+        for (int i = 0; i < rotation.getFlights().size(); i++) {
+            Flight f = rotation.getFlights().get(i);
+            if (i == 0) {
+                // First flight
+                sb.append(f.getOrigin().getIataCode()).append(AIRPORT_SEPARATOR).append(f.getDestination().getIataCode());
+            } else {
+                if (previousFlight.getDestinationId().equals(f.getOriginId())) {
+                    // Connected flight
+                    sb.append(AIRPORT_SEPARATOR).append(f.getDestination().getIataCode());
+                } else {
+                    // Special unconnected flight
+                    sb.append(SPECIAL_FLIGHT_SEPARATOR).append(f.getOrigin().getIataCode()).append(AIRPORT_SEPARATOR).append(f.getDestination().getIataCode());
+                }
+            }
+            previousFlight = f;
+        }
+        rotation.setLabel(sb.toString());
+    }
+
+    private void updateRotationData(final Long routeId) {
+        Route rotation = routeRepository.findById(routeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+        updateRotationDates(rotation);
+        updateRotationLabel(rotation);
     }
 
 }

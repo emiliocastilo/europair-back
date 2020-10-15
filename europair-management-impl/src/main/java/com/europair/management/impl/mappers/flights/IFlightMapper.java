@@ -23,8 +23,6 @@ public interface IFlightMapper {
     @Mapping(target = "destination", qualifiedByName = "airportToSimpleDto")
     FlightDTO toDto(final Flight entity);
 
-    List<FlightDTO> toListDtos(final List<Flight> listEntities);
-
     Flight toEntity(final FlightDTO flightDTO);
 
     void updateFromDto(final FlightDTO flightDTO, @MappingTarget Flight flight);

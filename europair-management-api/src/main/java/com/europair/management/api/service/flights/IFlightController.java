@@ -73,11 +73,11 @@ public interface IFlightController {
      *
      * @param id        Unique identifier
      * @param flightDTO Updated flight data
-     * @return The updated flight
+     * @return No content
      */
     @PutMapping("/{id}")
     @Operation(description = "Updates existing flight", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<FlightDTO> updateFlight(
+    ResponseEntity<?> updateFlight(
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
       @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
       @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long id,
