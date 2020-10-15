@@ -1,0 +1,528 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14102020_screens_master_v1_screens_table
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Change screens add route column"
+      changes:
+        - addColumn:
+            tableName: screens
+            columns:
+              - column:
+                  name: route
+                  type: varchar(500)
+                  remarks: Route of the screen in the Angular application
+                  afterColumn: description
+                  constraints:
+                    nullable: true
+
+  # THIS CHANGE IS HARDCODED 14/10/2020
+  # TODO: change name value, add label column and put an i18n name to use in Angular app
+  - changeSet:
+      id: 14102020_screens_master_v4_screens_data
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Drop table content and renew"
+      changes:
+        - delete:
+            tableName: screens
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "Tareas"
+              - column:
+                  name: description
+                  value: "Maestro de tareas"
+              - column:
+                  name: route
+                  value: "/tasks"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: name
+                  value: "Roles"
+              - column:
+                  name: description
+                  value: "Maestro de roles"
+              - column:
+                  name: route
+                  value: "/roles"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: name
+                  value: "Usuarios"
+              - column:
+                  name: description
+                  value: "Maestro de usuarios"
+              - column:
+                  name: route
+                  value: "/users"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: name
+                  value: "Países"
+              - column:
+                  name: description
+                  value: "Maestro de paises"
+              - column:
+                  name: route
+                  value: "/countries"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: name
+                  value: "Regiones"
+              - column:
+                  name: description
+                  value: "Maestro de regiones"
+              - column:
+                  name: route
+                  value: "/regions"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: name
+                  value: "Ciudades"
+              - column:
+                  name: description
+                  value: "Maestro de ciudades"
+              - column:
+                  name: route
+                  value: "/cities"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: name
+                  value: "Aeropuertos"
+              - column:
+                  name: description
+                  value: "Maestro de aeropuertos"
+              - column:
+                  name: route
+                  value: "/airports"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: name
+                  value: "Aeronaves"
+              - column:
+                  name: description
+                  value: "Maestro de aeronaves"
+              - column:
+                  name: route
+                  value: "/fleet/aircraft"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: name
+                  value: "Categorias"
+              - column:
+                  name: description
+                  value: "Maestro de categorias de flota"
+              - column:
+                  name: route
+                  value: "/fleet/categories"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: name
+                  value: "Tipos"
+              - column:
+                  name: description
+                  value: "Maestro de tipos de flota"
+              - column:
+                  name: route
+                  value: "/fleet/types"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: name
+                  value: "Operadores"
+              - column:
+                  name: description
+                  value: "Maestro de tipos de operadores"
+              - column:
+                  name: route
+                  value: "/operators"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 12
+              - column:
+                  name: name
+                  value: "Listado"
+              - column:
+                  name: description
+                  value: "Listado de expedientes"
+              - column:
+                  name: route
+                  value: "/files"
+              - column:
+                  name: created_at
+                  value: "2020-07-24"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 13
+              - column:
+                  name: name
+                  value: "Contactos"
+              - column:
+                  name: description
+                  value: "Listado de contactos"
+              - column:
+                  name: route
+                  value: "/contacts"
+              - column:
+                  name: created_at
+                  value: "2020-10-15"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+  - changeSet:
+      id: 14102020_menu_v2_menu_options_table
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Change menu_options to relate with screens and migrate route column into screens table"
+      changes:
+        - dropColumn:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: route
+                  type: varchar(500)
+        - addColumn:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  type: int
+                  remarks: Screen id
+                  constraints:
+                    nullable: true
+                    foreignKeyName: menu_option_screens_fk
+                    references: screens(id)
+                    validateForeignKey: true
+
+  - changeSet:
+      id: 14102020_menu_v11_menu_option_data
+      context: dev or pre or pro
+      author: ivan.jesus.fanjul.cosent
+      comment: "Update all rows to relate with table screens"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 1
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_TASKS')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 2
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_ROLES')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 3
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_USERS')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 4
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_COUNTRIES')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 5
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_REGIONS')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 6
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_CITIES')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 7
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_AIRPORTS')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 8
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET_AIRCRAFT')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 9
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET_CATEGORIES')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 10
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET_TYPES')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 11
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_OPERATORS')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 12
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('FILES_LIST')
+
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: screen_id
+                  value: 13
+              - column:
+                  name: modified_at
+                  value: "2020-10-14"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_CONTACTS')
+
+

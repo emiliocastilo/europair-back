@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.masters.menu.entity;
 
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntity;
+import com.europair.management.rest.model.screens.entity.Screen;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,5 +29,13 @@ public class MenuOption extends AuditModificationBaseEntity {
     private MenuOption parent;
     @OneToMany(mappedBy = "parent")
     private List<MenuOption> childs;
+
+    @Column(name = "screen_id", nullable = true)
+    private Long screenId;
+
+    @OneToOne
+    @JoinColumn(name = "screen_id", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
+    private Screen screen;
+
 
 }
