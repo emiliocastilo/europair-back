@@ -36,7 +36,7 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "iata_code", unique = true, length = TextField.IATA_CODE, nullable = false)
+    @Column(name = "iata_code", unique = false, length = TextField.IATA_CODE, nullable = true)
     private String iataCode;
 
     @Column(name = "icao_code", unique = true, length = TextField.ICAO_CODE, nullable = false)
