@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping(value = {"/files/{fileId}/routes/{routeId}/flights", "/external/files/{fileId}/routes/{routeId}/flights"})
@@ -97,5 +98,22 @@ public interface IFlightController {
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
       @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
       @Parameter(description = "Flight identifier") @PathVariable @NotNull final Long id);
+
+    /**
+     * <p>
+     * Updates flight order of rotation flights.
+     * </p>
+     *
+     * @param fileId File identifier
+     * @param routeId  Rotation identifier
+     * @param flights Updated flight data
+     * @return No content
+     */
+    @PutMapping("/reorder")
+    @Operation(description = "Updates rotation flights order", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> updateFlightsOrder(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+            @Parameter(description = "Flights with updated order") @NotNull @RequestBody final List<FlightDTO> flights);
 
 }

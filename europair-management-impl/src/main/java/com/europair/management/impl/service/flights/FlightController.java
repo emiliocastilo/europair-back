@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -63,4 +64,9 @@ public class FlightController implements IFlightController {
 
     }
 
+    @Override
+    public ResponseEntity<?> updateFlightsOrder(@NotNull Long fileId, @NotNull Long routeId, @NotNull List<FlightDTO> flights) {
+        flightService.updateFlightsOrder(fileId, routeId, flights);
+        return ResponseEntity.noContent().build();
+    }
 }
