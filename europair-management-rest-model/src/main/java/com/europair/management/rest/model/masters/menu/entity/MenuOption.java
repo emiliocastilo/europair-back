@@ -22,7 +22,8 @@ public class MenuOption extends AuditModificationBaseEntity {
     private String label;
     @Column
     private String icon;
-    @Column
+
+    @Transient
     private String route;
 
     @ManyToOne
