@@ -11,6 +11,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
+@EnableWebSecurity
+public class MultipleEntryPointsSecurityConfig {
+
+    // common stuff here
+}
+
+
+
+/*@Configuration
 @Order(1)
 @EnableWebSecurity
 public class MultipleEntryPointsSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -50,4 +59,4 @@ public class MultipleEntryPointsSecurityConfig extends WebSecurityConfigurerAdap
             "/external/login"
     };
 
-}
+}*/
