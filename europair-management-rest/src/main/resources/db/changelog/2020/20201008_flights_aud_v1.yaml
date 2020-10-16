@@ -71,3 +71,34 @@ databaseChangeLog:
               - column:
                   name: positional_flight
                   type: bool
+
+  - changeSet:
+      id: 20201014_flights_aud_v1_update_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add columns to match flights table"
+      changes:
+        - dropColumn:
+            tableName: flights_aud
+            columns:
+              - column:
+                  name: origin
+                  type: varchar(3)
+              - column:
+                  name: destination
+                  type: varchar(3)
+        - addColumn:
+            tableName: flights_aud
+            columns:
+              - column:
+                  name: arrival_time
+                  type: timestamp
+              - column:
+                  name: origin_id
+                  type: int
+              - column:
+                  name: destination_id
+                  type: int
+              - column:
+                  name: flight_order
+                  type: int

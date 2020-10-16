@@ -69,4 +69,16 @@ public interface IAirportMapper {
     @Named("regionToSimpleDto")
     RegionDTO regionToSimpleDto(final Region entity);
 
+
+    @Mapping(target = "country", ignore = true)
+    @Mapping(target = "city", ignore = true)
+    @Mapping(target = "elevation", ignore = true)
+    @Mapping(target = "terminals", ignore = true)
+    @Mapping(target = "runways", ignore = true)
+    @Mapping(target = "observations", ignore = true)
+    @Mapping(target = "operators", ignore = true)
+    @Mapping(target = "regions", ignore = true)
+    @Named("airportToSimpleDto")
+    AirportDto toSimpleDto(final Airport entity);
+
 }

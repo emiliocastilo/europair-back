@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.flights.entity;
 
 import com.europair.management.api.enums.UTCEnum;
+import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
@@ -34,17 +35,33 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @Column(name = "departure_time")
   private LocalDateTime departureTime;
 
+  @Column(name = "arrival_time")
+  private LocalDateTime arrivalTime;
+
   @Column(name = "time_zone")
   @Enumerated(EnumType.STRING)
   private UTCEnum timeZone;
 
   @NotNull
-  @Column(nullable = false)
-  private String origin;
+  @Column(name = "origin_id", nullable = false)
+  private Long originId;
+
+  @NotAudited
+  @ManyToOne
+  @JoinColumn(name = "origin_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+  private Airport origin;
 
   @NotNull
-  @Column(nullable = false)
-  private String destination;
+  @Column(name = "destination_id", nullable = false)
+  private Long destinationId;
+
+  @NotAudited
+  @ManyToOne
+  @JoinColumn(name = "destination_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+  private Airport destination;
+
+  @Column(name = "flight_order")
+  private Integer order;
 
   @Column(name = "seats_F")
   private Integer seatsF;
