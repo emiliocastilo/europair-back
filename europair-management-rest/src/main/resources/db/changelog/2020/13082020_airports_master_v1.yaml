@@ -369,3 +369,14 @@ databaseChangeLog:
                   name: balearics
                   type: boolean
                   remarks: "this city belongs to Canary Islands"
+  - changeSet:
+      id: 15102020_airports_master_v2_airports_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add airports table to the database"
+      changes:
+        # Airports
+        - dropUniqueConstraint:
+            constraintName: iata_code_uq
+            tableName: airports
+            uniqueColumns: iata_code

@@ -26,4 +26,7 @@ public class Screen extends AuditModificationBaseEntity implements Serializable 
   @ManyToMany(mappedBy = "screens")
   private List<Task> tasks;
 
+  @Column(name = "route")
+  private String route;
+
 }

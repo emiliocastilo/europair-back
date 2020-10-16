@@ -306,3 +306,101 @@ databaseChangeLog:
                     nullable: true
                     foreignKeyName: clients_country_fk
                     references: countries(id)
+
+  - changeSet:
+      id: 20201013_contacts_master_update_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Updates contacts table with new columns"
+      changes:
+        - addColumn:
+            tableName: contacts
+            columns:
+              - column:
+                  name: crm_code
+                  type: varchar(30)
+                  remarks: "unique crm identifier code"
+              - column:
+                  name: contact_type
+                  type: varchar(20)
+                  remarks: "this contact is Individual or Business"
+              - column:
+                  name: company_code
+                  type: varchar(30)
+                  remarks: "Company code if contact type is individual"
+              - column:
+                  name: company_name
+                  type: varchar(30)
+                  remarks: "Company name"
+              - column:
+                  name: contact_category
+                  type: varchar(20)
+                  remarks: "Contact category"
+              - column:
+                  name: alias
+                  type: varchar(255)
+                  remarks: "Commercial name"
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: city_id
+                  type: int
+                  remarks: "city id"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contacts_cities_fk
+                    references: cities(id)
+              - column:
+                  name: postal_code
+                  type: varchar(20)
+              - column:
+                  name: province
+                  type: varchar(120)
+              - column:
+                  name: country_id
+                  type: int
+                  remarks: "country id"
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contacts_country_fk
+                    references: countries(id)
+              - column:
+                  name: common_operation_type
+                  type: varchar(30)
+              - column:
+                  name: email
+                  type: varchar(255)
+              - column:
+                  name: phone_number
+                  type: varchar(40)
+              - column:
+                  name: mobile_phone_number
+                  type: varchar(30)
+              - column:
+                  name: fax_number
+                  type: varchar(30)
+              - column:
+                  name: observation
+                  type: varchar(255)
+
+
+# ToDo: se dejan preparadas las constraints para la integración, habrá que borrar los datos de la tabla de contactos o actualizarlos con liquibase
+#  - changeSet:
+#      id: 20201013_contacts_master_update_constraints
+#      context: dev or pre or pro
+#      author: axel.sanchezsalom
+#      comment: "Updates contacts table CRM constraints"
+#      changes:
+#        - addNotNullConstraint:
+#            tableName: contacts
+#            columnName: crm_code
+#            columnDataType: varchar(30)
+#            validate: true
+#        - addUniqueConstraint:
+#            tableName: contacts
+#            columnNames: crm_code
+#            constraintName: contacts_crm_code_uq
+#            validate: true
+
+
