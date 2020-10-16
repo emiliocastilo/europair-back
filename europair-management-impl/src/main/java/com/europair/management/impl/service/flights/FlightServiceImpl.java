@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class FlightServiceImpl implements IFlightService {
 
     private final String FILE_ID_FILTER = "route.file.id";
@@ -74,7 +74,6 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public FlightDTO saveFlight(final Long fileId, final Long routeId, final FlightDTO flightDTO) {
 
       checkIfFileExists(fileId);
@@ -98,7 +97,6 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
 
       checkIfFileExists(fileId);
@@ -113,7 +111,6 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteFlight(final Long fileId, final Long routeId, final Long id) {
 
       checkIfFileExists(fileId);
@@ -127,7 +124,6 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
-    @Transactional
     public void updateFlightsOrder(Long fileId, Long routeId, List<FlightDTO> flights) {
         checkIfFileExists(fileId);
         Route rotation = getRoute(routeId);
@@ -141,6 +137,7 @@ public class FlightServiceImpl implements IFlightService {
             return flight;
         }).collect(Collectors.toList());
         updatedFlights = flightRepository.saveAll(updatedFlights);
+        updateRotationData(routeId);
     }
 
     private void checkIfFileExists(final Long fileId) {
@@ -165,12 +162,12 @@ public class FlightServiceImpl implements IFlightService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId));
     }
 
-    private void updateRotationDates(final Route rotation) {
-        LocalDateTime minDate = rotation.getFlights().stream()
+    private void updateRotationDates(final Route rotation, final List<Flight> flights) {
+        LocalDateTime minDate = flights.stream()
                 .min(Comparator.comparing(Flight::getDepartureTime))
                 .map(Flight::getDepartureTime)
                 .orElse(null);
-        LocalDateTime maxDate = rotation.getFlights().stream()
+        LocalDateTime maxDate = flights.stream()
                 .max(Comparator.comparing(Flight::getDepartureTime))
                 .map(flight -> flight.getArrivalTime() != null ? flight.getArrivalTime() : flight.getDepartureTime())
                 .orElse(null);
@@ -182,13 +179,13 @@ public class FlightServiceImpl implements IFlightService {
         }
     }
 
-    private void updateRotationLabel(final Route rotation) {
+    private void updateRotationLabel(final Route rotation, final List<Flight> flights) {
         final String AIRPORT_SEPARATOR = "-";
         final String SPECIAL_FLIGHT_SEPARATOR = " // ";
         StringBuilder sb = new StringBuilder();
         Flight previousFlight = null;
-        for (int i = 0; i < rotation.getFlights().size(); i++) {
-            Flight f = rotation.getFlights().get(i);
+        for (int i = 0; i < flights.size(); i++) {
+            Flight f = flights.get(i);
             Airport origin = f.getOrigin() != null ? f.getOrigin() : getAirport(f.getOriginId());
             Airport destination = f.getDestination() != null ? f.getDestination() : getAirport(f.getDestinationId());
             if (i == 0) {
@@ -210,8 +207,11 @@ public class FlightServiceImpl implements IFlightService {
 
     private void updateRotationData(final Long routeId) {
         Route rotation = getRoute(routeId);
-        updateRotationDates(rotation);
-        updateRotationLabel(rotation);
+        List<Flight> flights = flightRepository.findAllByRouteId(routeId);
+        flights.sort(Comparator.comparing(Flight::getOrder));
+
+        updateRotationDates(rotation, flights);
+        updateRotationLabel(rotation, flights);
         rotation = routeRepository.save(rotation);
     }
 
