@@ -64,3 +64,15 @@ databaseChangeLog:
                   name: modified_by
                   type: varchar(30)
 
+  - changeSet:
+      id: 20201016_routes_aud_master_v1_route_state
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add column route_state to table"
+      changes:
+        - addColumn:
+            tableName: routes_aud
+            columns:
+              - column:
+                  name: route_state
+                  type: varchar(30)
