@@ -1,12 +1,11 @@
 package com.europair.management.rest.model.routes.entity;
 
 import com.europair.management.api.enums.FrequencyEnum;
+import com.europair.management.api.enums.RouteStates;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -98,5 +97,9 @@ public class Route extends AuditModificationBaseEntityHardAudited implements Ser
 
     @Column(name = "has_contributions")
     private Boolean hasContributions = false;
+
+    @Column(name = "route_state")
+    @Enumerated(EnumType.STRING)
+    private RouteStates routeState;
 
 }

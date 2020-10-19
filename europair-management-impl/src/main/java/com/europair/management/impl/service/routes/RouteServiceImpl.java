@@ -3,6 +3,7 @@ package com.europair.management.impl.service.routes;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
+import com.europair.management.api.enums.RouteStates;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
 import com.europair.management.impl.util.Utils;
@@ -98,6 +99,9 @@ public class RouteServiceImpl implements IRouteService {
 
         // Set relationships
         route.setFileId(fileId);
+
+        // Default state
+        route.setRouteState(RouteStates.SALES);
 
         // Persist entity
         route = routeRepository.save(route);
