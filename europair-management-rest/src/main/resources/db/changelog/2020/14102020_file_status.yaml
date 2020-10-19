@@ -1,0 +1,112 @@
+databaseChangeLog:
+  - changeSet:
+      id: 14102020_file_status
+      context: dev or pre or pro
+      author: emilio.castillogonza
+      comment: "Add status of file"
+      changes:
+        - insert:
+            tableName: file_status
+            columns:
+              - column:
+                  name: file_status_code
+                  value: "NEW_REQUEST"
+              - column:
+                  name: name
+                  value: "Nueva solicitud"
+              - column:
+                  name: created_at
+                  value: "2020-10-14"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: file_status
+            columns:
+              - column:
+                  name: file_status_code
+                  value: "SALES"
+              - column:
+                  name: name
+                  value: "Ventas"
+              - column:
+                  name: created_at
+                  value: "2020-10-14"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: file_status
+            columns:
+              - column:
+                  name: file_status_code
+                  value: "OPTIONED"
+              - column:
+                  name: name
+                  value: "Opcionado"
+              - column:
+                  name: created_at
+                  value: "2020-10-14"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: file_status
+            columns:
+              - column:
+                  name: file_status_code
+                  value: "BLUE_BOOKED"
+              - column:
+                  name: name
+                  value: "Reservado Azul"
+              - column:
+                  name: created_at
+                  value: "2020-10-14"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: file_status
+            columns:
+              - column:
+                  name: file_status_code
+                  value: "GREEN_BOOKED"
+              - column:
+                  name: name
+                  value: "Reservado Verde"
+              - column:
+                  name: created_at
+                  value: "2020-10-14"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: file_status
+            columns:
+              - column:
+                  name: file_status_code
+                  value: "PREFLIGHT"
+              - column:
+                  name: name
+                  value: "Anterior al vuelo"
+              - column:
+                  name: created_at
+                  value: "2020-10-14"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: file_status
+            columns:
+              - column:
+                  name: file_status_code
+                  value: "CNX"
+              - column:
+                  name: name
+                  value: "Cancelado"
+              - column:
+                  name: created_at
+                  value: "2020-10-14"
+              - column:
+                  name: created_by
+                  value: "Sistema"
