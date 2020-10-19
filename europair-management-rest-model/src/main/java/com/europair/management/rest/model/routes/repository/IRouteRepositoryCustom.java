@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.routes.repository;
 
+import com.europair.management.api.enums.RouteStates;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.routes.entity.Route;
 import org.springframework.data.domain.Page;
@@ -10,4 +11,6 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface IRouteRepositoryCustom {
 
     Page<Route> findRouteByCriteria(CoreCriteria criteria, Pageable pageable);
+
+    boolean canChangeState(final RouteStates stateFrom, final RouteStates stateTo);
 }

@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.files.repository;
 
+import com.europair.management.api.enums.FileStates;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.files.entity.File;
 import org.springframework.data.domain.Page;
@@ -14,4 +15,6 @@ public interface IFileRepositoryCustom {
   Page<File> findFilesByCriteria(CoreCriteria criteria, Pageable pageable);
 
   List<File> findFilesByCriteria(CoreCriteria criteria);
+
+  boolean canChangeState(final FileStates stateFrom, final FileStates stateTo);
 }

@@ -3,6 +3,7 @@ package com.europair.management.api.enums;
 public enum RouteStates {
 
     SALES,
+    OPTIONED,
     WON,
     LOST_DECLINED,
     LOST_CANX_REQUEST,
