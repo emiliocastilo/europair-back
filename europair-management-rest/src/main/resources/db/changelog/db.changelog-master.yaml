@@ -157,3 +157,9 @@ databaseChangeLog:
   - include:
       file: 2020/change_menu_screens_relationship_20201014_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/14102020_file_status.yaml
+      relativeToChangelogFile: true
+
+
+
