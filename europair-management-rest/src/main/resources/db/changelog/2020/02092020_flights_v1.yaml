@@ -123,3 +123,44 @@ databaseChangeLog:
                   name: positional_flight
                   type: bool
                   remarks: Flag to identify positional flights
+
+  - changeSet:
+      id: 20201014_flights_v1_update_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add columns"
+      changes:
+        - dropColumn:
+            tableName: flights
+            columns:
+              - column:
+                  name: origin
+                  type: varchar(3)
+              - column:
+                  name: destination
+                  type: varchar(3)
+        - addColumn:
+            tableName: flights
+            columns:
+              - column:
+                  name: arrival_time
+                  type: timestamp
+              - column:
+                  name: origin_id
+                  type: int
+                  remarks: origin airport id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: flight_origin_airport_fk
+                    references: airports(id)
+              - column:
+                  name: destination_id
+                  type: int
+                  remarks: destination airport id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: flight_destination_airport_fk
+                    references: airports(id)
+              - column:
+                  name: flight_order
+                  type: int

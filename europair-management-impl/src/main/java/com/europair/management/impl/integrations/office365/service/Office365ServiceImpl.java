@@ -1,6 +1,14 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.*;
+import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
+import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
+import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
+import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
+import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
+import com.europair.management.api.integrations.office365.dto.FlightSharingInfoDTO;
+import com.europair.management.api.integrations.office365.dto.OperatorSharingDTO;
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
+import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
@@ -18,9 +26,7 @@ import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
-import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,9 +34,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -98,15 +106,10 @@ public class Office365ServiceImpl implements IOffice365Service {
         Flight flight = this.flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId));
 
-        final Map<String, Airport> airportIataMap = route.getAirports().stream()
-                .map(RouteAirport::getAirport)
-                .distinct()
-                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
-
         List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
         // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
-        PlanningFlightsDTO planningFlightsDTO = this.mapPlanningFlight(route, contribution, airportIataMap, dsDataList, flight);
+        PlanningFlightsDTO planningFlightsDTO = this.mapPlanningFlight(route, contribution, dsDataList, flight);
 
 
         // second step: aircraftSharingDTO
@@ -168,22 +171,6 @@ public class Office365ServiceImpl implements IOffice365Service {
     ///////////////////////
 
     private ConfirmedOperationDto mapConfirmedOperation(final Route route, final Contribution contribution) {
-        final Map<String, Airport> airportIataMap;
-        if (route.getParentRoute() == null) {
-            // Route
-            airportIataMap = route.getRotations().stream()
-                    .map(Route::getAirports)
-                    .flatMap(Collection::stream)
-                    .map(RouteAirport::getAirport)
-                    .distinct()
-                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
-        } else {
-            // Rotation
-            airportIataMap = route.getAirports().stream()
-                    .map(RouteAirport::getAirport)
-                    .distinct()
-                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
-        }
         final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
         ConfirmedOperationDto dto = new ConfirmedOperationDto();
@@ -192,7 +179,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         fileSharingInfo.setFileUrl(fileUrl + route.getFile().getId());
         dto.setFileInfo(fileSharingInfo);
 
-        dto.setFlightsInfo(mapFlightsWithServices(route, contribution, airportIataMap, dsDataList));
+        dto.setFlightsInfo(mapFlightsWithServices(route, contribution, dsDataList));
         dto.setContributionInfo(IOffice365Mapper.INSTANCE.mapContribution(contribution));
         dto.setObservations(route.getFile().getObservation());
 
@@ -200,7 +187,6 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     private List<FlightExtendedInfoDto> mapFlightsWithServices(final Route route, final Contribution contribution,
-                                                               final Map<String, Airport> airportIataMap,
                                                                final List<DistanceSpeedUtils> dsDataList) {
         List<Flight> routeFlights;
         if (route.getParentRoute() == null) {
@@ -216,7 +202,7 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         return routeFlights.stream().map(flight -> {
             FlightExtendedInfoDto dto = new FlightExtendedInfoDto(
-                    getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
+                    getFlightSharingInfoDTO(route, contribution, dsDataList, flight));
             dto.setServices(mapFlightServices(flight.getId()));
             return dto;
         }).collect(Collectors.toList());
@@ -224,25 +210,6 @@ public class Office365ServiceImpl implements IOffice365Service {
 
 
     private List<PlanningFlightsDTO> mapPlanningFlightsInfo(Route route, Contribution contribution) {
-
-        final Map<String, Airport> airportIataMap;  // HERE !!!
-
-        // retrieve a map with the airports
-        if (route.getParentRoute() == null) {
-            // Route
-            airportIataMap = route.getRotations().stream()
-                    .map(Route::getAirports)
-                    .flatMap(Collection::stream)
-                    .map(RouteAirport::getAirport)
-                    .distinct()
-                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
-        } else {
-            // Rotation
-            airportIataMap = route.getAirports().stream()
-                    .map(RouteAirport::getAirport)
-                    .distinct()
-                    .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
-        }
 
         final List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
@@ -262,29 +229,27 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         // map info values
         return routeFlights.stream()
-                .map(flight -> mapPlanningFlight(route, contribution, airportIataMap, dsDataList, flight))
+                .map(flight -> mapPlanningFlight(route, contribution, dsDataList, flight))
                 .collect(Collectors.toList());
     }
 
-    private PlanningFlightsDTO mapPlanningFlight(Route route, Contribution contribution, Map<String, Airport> airportIataMap, List<DistanceSpeedUtils> dsDataList, Flight flight) {
+    private PlanningFlightsDTO mapPlanningFlight(Route route, Contribution contribution, List<DistanceSpeedUtils> dsDataList, Flight flight) {
         PlanningFlightsDTO dto = new PlanningFlightsDTO();
 
         FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
         fileSharingInfo.setFileUrl(fileUrl + route.getFile().getId());
         dto.setFileSharingInfoDTO(fileSharingInfo);
 
-        dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, airportIataMap, dsDataList, flight));
+        dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, dsDataList, flight));
 
         return dto;
     }
 
 
-    private FlightSharingInfoDTO getFlightSharingInfoDTO(Route route, Contribution contribution, Map<String,
-            Airport> airportIataMap, List<DistanceSpeedUtils> dsDataList,
-                                                         Flight flight) {
-
-        Airport origin = airportIataMap.get(flight.getOrigin());
-        Airport destination = airportIataMap.get(flight.getDestination());
+    private FlightSharingInfoDTO getFlightSharingInfoDTO(Route route, Contribution contribution,
+                                                         List<DistanceSpeedUtils> dsDataList, Flight flight) {
+        Airport origin = flight.getOrigin();
+        Airport destination = flight.getDestination();
         Operator operator = contribution.getAircraft().getOperator();
 
         FlightSharingInfoDTO dto = new FlightSharingInfoDTO();

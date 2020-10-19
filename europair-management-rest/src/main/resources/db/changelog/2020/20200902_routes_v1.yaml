@@ -200,6 +200,15 @@ databaseChangeLog:
             tableName: route_airports
 
   - changeSet:
+      id: 20201014_routes_v1_drop_route_airport_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Drop route airport table"
+      changes:
+        - dropTable:
+            tableName: route_airports
+
+  - changeSet:
       id: 20201016_routes_master_v3_route_state
       context: dev or pre or pro
       author: axel.sanchezsalom

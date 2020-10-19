@@ -6,8 +6,9 @@ import com.europair.management.rest.model.audit.entity.AuditModificationBaseEnti
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -33,8 +34,9 @@ import java.util.Set;
 @Entity
 @Table(name = "routes")
 @Audited
-@Data
-@EqualsAndHashCode(exclude = {"rotations", "flights", "frequencyDays", "contributions", "airports"})
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class Route extends AuditModificationBaseEntityHardAudited implements Serializable {
 
     @Id
@@ -95,10 +97,6 @@ public class Route extends AuditModificationBaseEntityHardAudited implements Ser
 
     @Column(name = "has_contributions")
     private Boolean hasContributions = false;
-
-    @NotAudited
-    @OneToMany(mappedBy = "route", orphanRemoval = true)
-    private Set<RouteAirport> airports;
 
     @Column(name = "route_state")
     @Enumerated(EnumType.STRING)
