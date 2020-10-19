@@ -221,3 +221,6 @@ databaseChangeLog:
                   name: route_state
                   type: varchar(30)
                   remarks: Route State
+                  value: "SALES"
+                  constraints:
+                    nullable: false
