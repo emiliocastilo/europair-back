@@ -1,11 +1,13 @@
 package com.europair.management.api.service.contribution;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +56,10 @@ public interface IContributionController {
     @Operation(description = "Save a new Contribution", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<ContributionDTO> saveContribution(@Parameter(description = "Contribution object") @NotNull @RequestBody final ContributionDTO contributionDTO);
 
+    @PostMapping("/{contributionId}/linecontributionroute/{id}")
+    @Operation(description = "Save a new LineContributionRoute", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<Long> saveLineContributionRoute(@Parameter(description = "LineContributionRoute object") @NotNull @RequestBody final LineContributionRouteDTO lineContributionRouteDTO);
+
     /**
      * <p>
      * Updated master contribution information
@@ -71,6 +77,21 @@ public interface IContributionController {
 
     /**
      * <p>
+     *     Update amount of a LineContributionRoute
+     * </p>
+     * @param contributionId Unique identifier
+     * @param lineContributionRouteId Unique identifier
+     * @return
+     */
+    @PutMapping("/{contributionId}/linecontributionroute/{id}")
+    @Operation(description = "Updates existing linecontributionroute", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<HttpStatus> updateLineContributionRoute(
+            @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
+            @Parameter(description = "LineContributionRoute identifier") @NotNull @PathVariable final Long lineContributionRouteId,
+            @Parameter(description = "Amount to be updated") @RequestBody final LineContributionRouteDTO lineContributionRouteDTO);
+
+    /**
+     * <p>
      * Soft deletes a contribution by id.
      * </p>
      *
@@ -80,4 +101,10 @@ public interface IContributionController {
     @DeleteMapping("/{id}")
     @Operation(description = "Soft Delete existing master contribution by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteContribution(@Parameter(description = "Contribution identifier") @PathVariable @NotNull final Long id);
+
+    @DeleteMapping("/{contributionId}/linecontributionroute/{id}")
+    @Operation(description = "Soft Delete existing master contribution by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> deleteLineContributionRoute(
+            @Parameter(description = "Contribution identifier") @PathVariable @NotNull final Long contributionId,
+            @Parameter(description = "LineContributionRoute identifier") @PathVariable @NotNull final Long lineContributionRouteId);
 }
