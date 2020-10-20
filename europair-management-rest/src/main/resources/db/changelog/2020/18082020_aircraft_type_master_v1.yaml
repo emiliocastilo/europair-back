@@ -308,3 +308,18 @@ databaseChangeLog:
             referencedColumnNames:  id
             referencedTableName: aircraft_types
             validate:  true
+
+  - changeSet:
+      id: 20102020_aircraft_type_master_v2_
+      context: dev or pre or pro
+      author: ivan.fanjul
+      comment: "Alter aircraft_types table -> type_code and iata_code can have null values"
+      changes:
+        - dropNotNullConstraint:
+              columnDataType: varchar(20)
+              columnName: type_code
+              tableName: aircraft_types
+        - dropNotNullConstraint:
+            columnDataType: varchar(20)
+            columnName: iata_code
+            tableName: aircraft_types

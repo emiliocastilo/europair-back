@@ -2,7 +2,6 @@ package com.europair.management.impl.service.contribution;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
-import com.europair.management.api.enums.TypeLineContributionRoute;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.mappers.contributions.ILineContributionRouteMapper;
 import com.europair.management.impl.service.flights.IFlightTaxService;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

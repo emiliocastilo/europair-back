@@ -1,6 +1,6 @@
 package com.europair.management.api.enums;
 
-public enum TypeLineContributionRoute {
+public enum LineContributionRouteType {
 
     PURCHASE, SALE;
 

@@ -2,16 +2,12 @@ package com.europair.management.rest.model.contributions.entity;
 
 import com.europair.management.api.enums.*;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
-import com.europair.management.rest.model.files.entity.File;
-import com.europair.management.rest.model.fleet.entity.Aircraft;
-import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * This entity only relates contributions with rotations and aditional services with route
@@ -21,7 +17,7 @@ import java.time.LocalDateTime;
  * En el caso de que se deseen asociar a una ruta tendrán que modificarse.
  */
 @Entity
-@Table(name = "contributionlines_route")
+@Table(name = "lines_contribution_route")
 @Data
 public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited implements Serializable{
 
@@ -46,7 +42,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @Column(name = "comments", length = 255)
     private String comments;
 
-    @Column(name = "purchase_price", precision = 12, scale = 4)
+    @Column(name = "price", precision = 12, scale = 4)
     private BigDecimal price;
 
     @Column(name = "included_vat")
@@ -55,7 +51,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     //Poner TIPO : compra o venta
     @Column(name = "line_contribution_route_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private TypeLineContributionRoute typeLineContributionRoute;
+    private LineContributionRouteType lineContributionRouteType;
 
     // poner TIPO_SERVICIO : vuelo, catering, son los tipos que ya tenemos creados
     @Column(name = "service_type", nullable = false)
