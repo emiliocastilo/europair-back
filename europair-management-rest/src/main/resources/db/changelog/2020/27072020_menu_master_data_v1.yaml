@@ -622,3 +622,23 @@ databaseChangeLog:
                   name: modified_by
                   value: "Sistema"
             where: name IN ('MASTERS_FLEET')
+
+  - changeSet:
+      id: 20102020_menu_v12_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "change label in masters_fleet menu option"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: label
+                  value: "MENU.MASTERS.FLEET.TITLE"
+              - column:
+                  name: modified_at
+                  value: "2020-10-20"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET')
