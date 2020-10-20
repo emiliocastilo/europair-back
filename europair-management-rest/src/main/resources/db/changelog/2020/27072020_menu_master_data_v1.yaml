@@ -19,7 +19,7 @@ databaseChangeLog:
                   value: "PARENT"
               - column:
                   name: label
-                  value: "core.left.sidebar.parent"
+                  value: "MENU.PARENT"
               - column:
                   name: created_at
                   value: "2020-07-24"
@@ -40,7 +40,7 @@ databaseChangeLog:
                   value: "MASTERS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters"
+                  value: "MENU.MASTERS.TITLE"
               - column:
                   name: icon
                   value: "import_contacts"
@@ -67,7 +67,7 @@ databaseChangeLog:
                   value: "MASTERS_TASKS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.tasks"
+                  value: "MENU.MASTERS.TASKS"
               - column:
                   name: route
                   value: "/tasks"
@@ -94,7 +94,7 @@ databaseChangeLog:
                   value: "MASTERS_ROLES"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.roles"
+                  value: "MENU.MASTERS.ROLES"
               - column:
                   name: route
                   value: "/roles"
@@ -121,7 +121,7 @@ databaseChangeLog:
                   value: "MASTERS_USERS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.users"
+                  value: "MENU.MASTERS.USERS"
               - column:
                   name: route
                   value: "/users"
@@ -148,7 +148,7 @@ databaseChangeLog:
                   value: "MASTERS_COUNTRIES"
               - column:
                   name: label
-                  value: "Países"
+                  value: "MENU.MASTERS.COUNTRIES"
               - column:
                   name: route
                   value: "/countries"
@@ -175,7 +175,7 @@ databaseChangeLog:
                   value: "MASTERS_REGIONS"
               - column:
                   name: label
-                  value: "Regiones"
+                  value: "MENU.MASTERS.REGIONS"
               - column:
                   name: route
                   value: "/regions"
@@ -202,7 +202,7 @@ databaseChangeLog:
                   value: "MASTERS_CITIES"
               - column:
                   name: label
-                  value: "Ciudades"
+                  value: "MENU.MASTERS.CITIES"
               - column:
                   name: route
                   value: "/cities"
@@ -235,7 +235,7 @@ databaseChangeLog:
                   value: "MASTERS_AIRPORTS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.airports"
+                  value: "MENU.MASTERS.AIRPORTS"
               - column:
                   name: route
                   value: "/airports"
@@ -268,7 +268,7 @@ databaseChangeLog:
                   value: "MASTERS_FLEET"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.fleet"
+                  value: "MENU.MASTERS.FLEET"
               - column:
                   name: route
                   value: "/fleet"
@@ -301,7 +301,7 @@ databaseChangeLog:
                   value: "MASTERS_FLEET_AIRCRAFT"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.fleet.aircraft"
+                  value: "MENU.MASTERS.FLEET.AIRCRAFT"
               - column:
                   name: route
                   value: "/aircraft"
@@ -328,7 +328,7 @@ databaseChangeLog:
                   value: "MASTERS_FLEET_CATEGORIES"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.fleet.categories"
+                  value: "MENU.MASTERS.FLEET.CATEGORIES"
               - column:
                   name: route
                   value: "/categories"
@@ -355,7 +355,7 @@ databaseChangeLog:
                   value: "MASTERS_FLEET_TYPES"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.fleet.types"
+                  value: "MENU.MASTERS.FLEET.TYPES"
               - column:
                   name: route
                   value: "/types"
@@ -407,7 +407,7 @@ databaseChangeLog:
                   value: "MASTERS_OPERATORS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.operators"
+                  value: "MENU.MASTERS.OPERATORS"
               - column:
                   name: route
                   value: "/operators"
@@ -440,7 +440,7 @@ databaseChangeLog:
                   value: "FILES"
               - column:
                   name: label
-                  value: "core.left.sidebar.files"
+                  value: "MENU.FILES.TITLE"
               - column:
                   name: icon
                   value: "text_snippet"
@@ -467,7 +467,7 @@ databaseChangeLog:
                   value: "FILES_NEW"
               - column:
                   name: label
-                  value: "core.left.sidebar.files.new"
+                  value: "MENU.FILES.NEW"
               - column:
                   name: route
                   value: "/files/new"
@@ -504,7 +504,7 @@ databaseChangeLog:
                   value: "CONFIGURATION"
               - column:
                   name: label
-                  value: "core.left.sidebar.configuration"
+                  value: "MENU.CONFIGURATION.TITLE"
               - column:
                   name: created_at
                   value: "2020-09-17"
@@ -561,7 +561,7 @@ databaseChangeLog:
                   value: "/files"
               - column:
                   name: label
-                  value: "core.left.sidebar.files.list"
+                  value: "MENU.FILES.LIST"
               - column:
                   name: modified_at
                   value: "2020-10-07"
@@ -589,7 +589,7 @@ databaseChangeLog:
                   value: "MASTERS_CONTACTS"
               - column:
                   name: label
-                  value: "core.left.sidebar.masters.contacts"
+                  value: "MENU.MASTERS.CONTACTS"
               - column:
                   name: route
                   value: "/contacts"
@@ -602,3 +602,76 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+
+  - changeSet:
+      id: 20102020_menu_v12_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Move Fleet to principal node menu"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: 1
+              - column:
+                  name: modified_at
+                  value: "2020-10-20"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET')
+
+  - changeSet:
+      id: 20102020_menu_v13_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "change label in masters_fleet menu option"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: label
+                  value: "MENU.MASTERS.FLEET.TITLE"
+              - column:
+                  name: modified_at
+                  value: "2020-10-20"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET')
+
+  - changeSet:
+      id: 20102020_menu_v14_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Move Fleet to principal node menu"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: NULL
+              - column:
+                  name: modified_at
+                  value: "2020-10-20"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET')
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: modified_at
+                  value: "2020-10-20"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET_AIRCRAFT', 'MASTERS_FLEET_CATEGORIES', 'MASTERS_FLEET_TYPES')

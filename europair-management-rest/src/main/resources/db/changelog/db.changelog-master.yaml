@@ -51,9 +51,6 @@ databaseChangeLog:
       file: 2020/09072020_screens_master_data_v3.yaml
       relativeToChangelogFile: true
   - include:
-      file: 2020/16072020_countries_master_data_v2.yaml
-      relativeToChangelogFile: true
-  - include:
       file: 2020/27072020_menu_master_data_v1.yaml
       relativeToChangelogFile: true
   - include:

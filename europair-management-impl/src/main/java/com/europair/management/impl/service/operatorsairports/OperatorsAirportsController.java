@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 
 @RestController
 @Slf4j
-@RequestMapping("/operators/{operatorId}/airports")
+@RequestMapping(value = {"/operators/{operatorId}/airports", "/external/operators/{operatorId}/airports"})
 public class OperatorsAirportsController {
 
   @Autowired

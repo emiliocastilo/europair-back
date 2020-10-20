@@ -92,7 +92,6 @@ public class StateChangeServiceImpl implements IStateChangeService {
     private File changeFileState(final File file, final FileStatesEnum state) {
         FileStatesEnum currentState = FileStatesEnum.valueOf(file.getStatus().getCode());
         if (fileRepository.canChangeState(currentState, state)) {
-            // ToDo: setear estado enum en Expediente
             FileStatus updatedStatus = fileStatusRepository.findFirstByCode(state.toString())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + state));
             file.setStatusId(updatedStatus.getId());

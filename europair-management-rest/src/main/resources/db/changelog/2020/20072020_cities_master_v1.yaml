@@ -24,8 +24,6 @@ databaseChangeLog:
                   remarks: city code
                   constraints:
                     nullable: false
-                    unique: true
-                    uniqueKeyName: city_code_uq
               - column:
                   name: name
                   type: varchar(255)
@@ -61,3 +59,14 @@ databaseChangeLog:
                   name: canary_islands
                   type: boolean
                   remarks: "this city belongs to Canary Islands"
+
+  - changeSet:
+      id: 20102020_cities_master_v3_cities_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Drop constraint code not null"
+      changes:
+        - addUniqueConstraint:
+              constraintName: cities_code_country_id_uq
+              tableName: cities
+              columnNames: code,country_id

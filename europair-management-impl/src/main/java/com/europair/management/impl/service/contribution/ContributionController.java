@@ -2,6 +2,7 @@ package com.europair.management.impl.service.contribution;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
 import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.service.contribution.IContributionController;
 import com.europair.management.impl.util.Utils;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -51,6 +53,19 @@ public class ContributionController implements IContributionController {
     }
 
     @Override
+    public ResponseEntity<Long> saveLineContributionRoute(@NotNull LineContributionRouteDTO lineContributionRouteDTO) {
+
+        final Long lineContributionRouteSavedId = this.contributionService.saveLineContributionRoute(lineContributionRouteDTO);
+
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(lineContributionRouteSavedId)
+                .toUri();
+
+        return ResponseEntity.created(location).body(lineContributionRouteSavedId);
+    }
+
+    @Override
     public ResponseEntity<ContributionDTO> updateContribution(@NotNull Long id, @NotNull ContributionDTO contributionDTO) {
         final ContributionDTO dtoSaved = contributionService.updateContribution(id, contributionDTO);
 
@@ -62,9 +77,31 @@ public class ContributionController implements IContributionController {
         return ResponseEntity.ok(dtoSaved);
     }
 
+    /**
+     * <p>
+     * Update amount of a LineContributionRoute
+     * </p>
+     *
+     * @param contributionId           Unique identifier
+     * @param lineContributionRouteId  Unique identifier
+     * @param lineContributionRouteDTO
+     * @return
+     */
+    @Override
+    public ResponseEntity<HttpStatus> updateLineContributionRoute(@NotNull Long contributionId, @NotNull Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
+        final Boolean res = contributionService.updateLineContributionRoute(contributionId, lineContributionRouteId, lineContributionRouteDTO);
+        return (res ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build());
+    }
+
     @Override
     public ResponseEntity<?> deleteContribution(@NotNull Long id) {
         contributionService.deleteContribution(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> deleteLineContributionRoute(@NotNull Long contributionId, @NotNull Long lineContributionRouteId) {
+        this.contributionService.deleteLineContributionRoute(contributionId, lineContributionRouteId);
         return ResponseEntity.noContent().build();
     }
 
@@ -73,4 +110,5 @@ public class ContributionController implements IContributionController {
         contributionService.updateStates(fileId, routeId, stateChangeDto.getIdList(), stateChangeDto.getState());
         return ResponseEntity.noContent().build();
     }
+
 }
