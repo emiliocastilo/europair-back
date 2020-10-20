@@ -617,7 +617,7 @@ databaseChangeLog:
                   value: 1
               - column:
                   name: modified_at
-                  value: "2020-20-10"
+                  value: "2020-10-20"
               - column:
                   name: modified_by
                   value: "Sistema"
