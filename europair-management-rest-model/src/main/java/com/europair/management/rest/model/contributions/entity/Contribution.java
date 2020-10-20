@@ -8,9 +8,7 @@ import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
-import com.europair.management.rest.model.routes.entity.RouteAirport;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -24,7 +22,7 @@ import java.util.Set;
 @Table(name = "contributions")
 @Audited
 @Data
-public class Contribution extends SoftRemovableBaseEntityHardAudited implements Serializable{
+public class Contribution extends SoftRemovableBaseEntityHardAudited implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,6 +49,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "operator_id")
     private Long operatorId;
 
+    @NotAudited
     @ManyToOne
     @JoinColumn(name = "operator_id", insertable = false, updatable = false)
     private Operator operator;
@@ -58,6 +57,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "aircraft_id")
     private Long aircraftId;
 
+    @NotAudited
     @ManyToOne
     @JoinColumn(name = "aircraft_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private Aircraft aircraft;
