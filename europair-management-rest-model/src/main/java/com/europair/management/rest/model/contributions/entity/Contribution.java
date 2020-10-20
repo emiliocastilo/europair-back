@@ -9,26 +9,20 @@ import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "contributions")
+@Audited
 @Data
-public class Contribution extends SoftRemovableBaseEntityHardAudited implements Serializable{
+public class Contribution extends SoftRemovableBaseEntityHardAudited implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +49,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "operator_id")
     private Long operatorId;
 
+    @NotAudited
     @ManyToOne
     @JoinColumn(name = "operator_id", insertable = false, updatable = false)
     private Operator operator;
@@ -62,6 +57,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "aircraft_id")
     private Long aircraftId;
 
+    @NotAudited
     @ManyToOne
     @JoinColumn(name = "aircraft_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private Aircraft aircraft;
@@ -72,23 +68,11 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "quoted_time")
     private LocalDateTime quotedTime;
 
-    /* TODO: this hours must be in the route delete if needed
-
-    // hour that confirms the airport to flight
-    @Column(name = "confirmed_time")
-    private LocalDateTime confirmedTime;
-
-    private LocalDateTime departureRealTime;
-
-    private LocalDateTime arriveRealTime;
-    */
-
-
     // maximum load who must be the airborne to the destiny
+    // TODO: tiene sentido si agrupamos varias aeronaves ??
     @Column(name = "cargo_airborne")
     private Long cargoAirborne;
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
@@ -123,23 +107,8 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "sales_price_without_vat", precision = 12, scale = 4)
     private BigDecimal salesPricewithoutVAT;
 
-
-    /**
-     * Duda: no entiendo:
-     *  + importe de comision
-     *  + precioNetoCompra
-     *  + precioNetoVenta
-     */
-    // importe de comision (
-    // precioNetoCompra
-    // precioNetoVenta
-
-
-    // ¿el usuario puede consultar el historico de comunicaciones de cotizacion ?
-
-    /**
-     * PENDIENTE: A la hora de añadir precios debe poder indicarse otro usuario de Europair ya que la creación o modificación de importes influye en el resparto de comisiones
-     * PENDIENTE: Otros tipos de importes en el expediente (en compra y venta siempre): servicios adicionales: tasas, combustible, catering. Etc.
-     */
+    @NotAudited
+    @OneToMany(mappedBy = "contribution", orphanRemoval = true)
+    private Set<LineContributionRoute> lineContributionRoute;
 
 }

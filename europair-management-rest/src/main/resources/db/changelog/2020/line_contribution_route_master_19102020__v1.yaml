@@ -1,0 +1,69 @@
+databaseChangeLog:
+  - changeSet:
+      id: line_contribution_route_master_19102020_v1
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add contribution table to database"
+      changes:
+        - createTable:
+            tableName: lines_contribution_route
+            remarks: The contributions table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  remarks: id of the lines_contribution_route
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lines_contribution_route_id_pk
+              - column:
+                  name: contribution_id
+                  type: int
+                  remarks: contribution id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: lines_contribution_route_contribution_fk
+                    references: contribution(id)
+                    validateForeignKey: true
+              - column:
+                  name: route_id
+                  type: int
+                  remarks: Route id
+                  constraints:
+                    nullable: false
+                    foreignKeyName: lines_contribution_route_route_fk
+                    references: routes(id)
+                    validateForeignKey: true
+              - column:
+                  name: comments
+                  type: varchar(255)
+                  remarks: Comments
+              - column:
+                  name: price
+                  type: decimal(12,4)
+                  remarks: Purchase price of the service
+              - column:
+                  name: included_vat
+                  type: boolean
+                  remarks: Flag that indicates on/off for included vat
+              - column:
+                  name: line_contribution_route_type
+                  type: varchar(20)
+                  remarks: Line contribution type purchase or sale
+              - column:
+                  name: line_contribution_route_type
+                  type: varchar(20)
+                  remarks: service type purchase or sale flight, cargo, commission, transport, airport tax, extras(on boarding/ground), etc.
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: contributions
+

@@ -19,6 +19,13 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+/**
+ * Esto son servicios adicionales de expediente. En esta entidad solo se verán persistidos aquellos servicios adicionales
+ * confirmados y se almacenan contra el expediente.
+ *
+ * P.ej: LineContributionRoute esta entidad aloja también servicios adicionales pero no confirmados, correspondientes a
+ * una rotacion y/o ruta.
+ */
 @Entity
 @Table(name = "flight_services")
 @Data

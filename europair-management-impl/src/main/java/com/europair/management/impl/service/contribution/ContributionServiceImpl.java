@@ -1,11 +1,15 @@
 package com.europair.management.impl.service.contribution;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
+import com.europair.management.impl.mappers.contributions.ILineContributionRouteMapper;
 import com.europair.management.impl.service.flights.IFlightTaxService;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.contributions.entity.Contribution;
+import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.contributions.repository.LineContributionRouteRepository;
 import com.europair.management.rest.model.flights.entity.FlightTax;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
@@ -19,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,6 +37,9 @@ public class ContributionServiceImpl implements IContributionService {
 
     @Autowired
     private IFlightTaxService flightTaxService;
+
+    @Autowired
+    private LineContributionRouteRepository lineContributionRouteRepository;
 
     @Override
     public Page<ContributionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
@@ -68,6 +76,30 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    public Long saveLineContributionRoute(LineContributionRouteDTO lineContributionRouteDTO) {
+        Long response = null;
+
+        //validate data
+        Optional<Contribution> contribution = this.contributionRepository.findById(lineContributionRouteDTO.getContributionId());
+        if (contribution.isPresent()) {
+
+            Long contributionRouteId = contribution.get().getRouteId();
+            if (lineContributionRouteDTO.getRouteId().equals(contributionRouteId)) {
+
+                LineContributionRoute lineContributionRoute = ILineContributionRouteMapper.INSTANCE.toEntity(lineContributionRouteDTO);
+                response = this.lineContributionRouteRepository.save(lineContributionRoute).getId();
+
+            } else {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Route not found with id: %s", lineContributionRouteDTO.getRouteId()));
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Contribution not found with id: %s", lineContributionRouteDTO.getContributionId()));
+        }
+
+        return response;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public ContributionDTO updateContribution(Long id, ContributionDTO contributionDTO) {
         Contribution contribution = contributionRepository.findById(id)
@@ -79,6 +111,26 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    public Boolean updateLineContributionRoute(Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
+        Boolean result = false;
+        LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Line Contribution Rotation not found : %s", lineContributionRouteId)));
+
+        if(lineContributionRoute.getContributionId().equals(contributionId)){
+            ILineContributionRouteMapper.INSTANCE.updateFromDto(lineContributionRouteDTO, lineContributionRoute);
+            this.lineContributionRouteRepository.save(lineContributionRoute);
+            result = true;
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("The given contribution id %s do not match with the related contribution id in the Line Contribution Rotation provided : %s"
+                            , contributionId
+                            , lineContributionRouteId));
+        }
+
+        return result;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void deleteContribution(Long id) {
         Contribution contribution = contributionRepository.findById(id)
@@ -86,5 +138,21 @@ public class ContributionServiceImpl implements IContributionService {
 
         contribution.setRemovedAt(LocalDateTime.now());
         contributionRepository.save(contribution);
+    }
+
+    @Override
+    public void deleteLineContributionRoute(Long contributionId, Long lineContributionRouteId) {
+        LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Line Contribution Rotation not found with id : %s", lineContributionRouteId)));
+
+        if (lineContributionRoute.getContributionId().equals(contributionId)){
+            lineContributionRoute.setRemovedAt(LocalDateTime.now());
+            this.lineContributionRouteRepository.save(lineContributionRoute);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                            String.format("The given contribution id %s do not match with the related contribution id in the Line Contribution Rotation provided : %s"
+                                    , contributionId
+                                    , lineContributionRouteId));
+        }
     }
 }
