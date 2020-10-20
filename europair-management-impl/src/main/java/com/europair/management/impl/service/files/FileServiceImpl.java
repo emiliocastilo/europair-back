@@ -1,6 +1,8 @@
 package com.europair.management.impl.service.files;
 
 import com.europair.management.api.dto.files.FileDTO;
+import com.europair.management.api.enums.FileStates;
+import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.files.IFileMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -19,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,6 +29,9 @@ public class FileServiceImpl implements IFileService {
 
   @Autowired
   private FileRepository fileRepository;
+
+  @Autowired
+  private IStateChangeService stateChangeService;
 
   @Override
   public Page<FileDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
@@ -115,4 +121,8 @@ public class FileServiceImpl implements IFileService {
     return sb.toString();
   }
 
+  @Override
+  public void updateStates(List<Long> fileIds, FileStates state) {
+    stateChangeService.changeState(fileIds, state);
+  }
 }

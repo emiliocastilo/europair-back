@@ -1,6 +1,8 @@
 package com.europair.management.api.service.routes;
 
+import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.routes.RouteDto;
+import com.europair.management.api.enums.RouteStates;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -122,4 +124,16 @@ public interface IRouteController {
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long id,
             @Parameter(description = "Route updated data") @NotNull @RequestBody final RouteDto routeDto);
 
+    /**
+     * <p>Changes a route state</p>
+     *
+     * @param fileId         File identifier
+     * @param stateChangeDto State change data
+     * @return No content
+     */
+    @PutMapping("/state")
+    @Operation(description = "Changes the state of a route")
+    ResponseEntity<?> changeState(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<RouteStates> stateChangeDto);
 }

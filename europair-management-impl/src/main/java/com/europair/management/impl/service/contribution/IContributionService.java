@@ -1,10 +1,12 @@
 package com.europair.management.impl.service.contribution;
 
-import com.europair.management.api.dto.airport.AirportDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.enums.ContributionStates;
 import com.europair.management.rest.model.common.CoreCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface IContributionService {
 
@@ -17,4 +19,6 @@ public interface IContributionService {
     ContributionDTO updateContribution(Long id, ContributionDTO contributionDTO);
 
     void deleteContribution(Long id);
+
+    void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStates state);
 }

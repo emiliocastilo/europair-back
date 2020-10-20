@@ -1,6 +1,8 @@
 package com.europair.management.impl.service.contribution;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.service.flights.IFlightTaxService;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -21,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class ContributionServiceImpl implements IContributionService {
 
     @Autowired
@@ -32,6 +34,9 @@ public class ContributionServiceImpl implements IContributionService {
 
     @Autowired
     private IFlightTaxService flightTaxService;
+
+    @Autowired
+    private IStateChangeService stateChangeService;
 
     @Override
     public Page<ContributionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
@@ -45,7 +50,6 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ContributionDTO saveContribution(ContributionDTO contributionDTO) {
         if (contributionDTO.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Contribution expected. Identifier %s got", contributionDTO.getId()));
@@ -68,7 +72,6 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public ContributionDTO updateContribution(Long id, ContributionDTO contributionDTO) {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
@@ -79,12 +82,19 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteContribution(Long id) {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
 
         contribution.setRemovedAt(LocalDateTime.now());
         contributionRepository.save(contribution);
+    }
+
+    @Override
+    public void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStates state) {
+        if (!routeRepository.existsById(routeId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
+        }
+        stateChangeService.changeState(contributionIds, state);
     }
 }

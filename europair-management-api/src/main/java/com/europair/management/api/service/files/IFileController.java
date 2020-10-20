@@ -1,6 +1,8 @@
 package com.europair.management.api.service.files;
 
+import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.files.FileDTO;
+import com.europair.management.api.enums.FileStates;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -8,7 +10,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -89,4 +99,14 @@ public interface IFileController {
   @ResponseStatus(code = HttpStatus.OK)
   void deleteFile(@Parameter(description = "File identifier") @PathVariable @NotNull final Long id);
 
+  /**
+   * <p>Changes a file state</p>
+   *
+   * @param stateChangeDto State change data
+   * @return No content
+   */
+  @PutMapping("/state")
+  @Operation(description = "Changes the state of a file")
+  ResponseEntity<?> changeState(
+          @Parameter(description = "State change data") @NotNull @Valid @RequestBody final StateChangeDto<FileStates> stateChangeDto);
 }
