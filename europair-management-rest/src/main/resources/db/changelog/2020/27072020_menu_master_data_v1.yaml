@@ -602,3 +602,23 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+
+  - changeSet:
+      id: 20102020_menu_v12_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Move Fleet to principal node menu"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: 1
+              - column:
+                  name: modified_at
+                  value: "2020-20-10"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET')
