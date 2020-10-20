@@ -24,8 +24,6 @@ databaseChangeLog:
                   remarks: city code
                   constraints:
                     nullable: false
-                    unique: true
-                    uniqueKeyName: city_code_uq
               - column:
                   name: name
                   type: varchar(255)
@@ -68,9 +66,6 @@ databaseChangeLog:
       author: jose.mendezgonzalez
       comment: "Drop constraint code not null"
       changes:
-        - dropUniqueConstraint:
-              constraintName: city_code_uq
-              tableName: cities
         - addUniqueConstraint:
               constraintName: cities_code_country_id_uq
               tableName: cities
