@@ -642,3 +642,36 @@ databaseChangeLog:
                   name: modified_by
                   value: "Sistema"
             where: name IN ('MASTERS_FLEET')
+
+  - changeSet:
+      id: 20102020_menu_v14_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Move Fleet to principal node menu"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: NULL
+              - column:
+                  name: modified_at
+                  value: "2020-10-20"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET')
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: modified_at
+                  value: "2020-10-20"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS_FLEET_AIRCRAFT', 'MASTERS_FLEET_CATEGORIES', 'MASTERS_FLEET_TYPES')
