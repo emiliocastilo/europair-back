@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.files.repository;
 
-import com.europair.management.api.enums.FileStates;
+import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.files.entity.File;
 import org.springframework.data.domain.Page;
@@ -16,5 +16,5 @@ public interface IFileRepositoryCustom {
 
   List<File> findFilesByCriteria(CoreCriteria criteria);
 
-  boolean canChangeState(final FileStates stateFrom, final FileStates stateTo);
+  boolean canChangeState(final FileStatesEnum stateFrom, final FileStatesEnum stateTo);
 }

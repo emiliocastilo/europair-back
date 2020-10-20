@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.routes.repository;
 
-import com.europair.management.api.enums.RouteStates;
+import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.repository.BaseRepositoryImpl;
 import com.europair.management.rest.model.routes.entity.Route;
@@ -15,11 +15,11 @@ public class RouteRepositoryImpl extends BaseRepositoryImpl<Route> implements IR
     }
 
     @Override
-    public boolean canChangeState(final RouteStates stateFrom, final RouteStates stateTo) {
+    public boolean canChangeState(final RouteStatesEnum stateFrom, final RouteStatesEnum stateTo) {
         return switch (stateFrom) {
             case SALES -> true;
-            case OPTIONED -> !RouteStates.SALES.equals(stateTo);
-            case WON -> !RouteStates.SALES.equals(stateTo) && !RouteStates.OPTIONED.equals(stateTo);
+            case OPTIONED -> !RouteStatesEnum.SALES.equals(stateTo);
+            case WON -> !RouteStatesEnum.SALES.equals(stateTo) && !RouteStatesEnum.OPTIONED.equals(stateTo);
             default -> false;
         };
     }

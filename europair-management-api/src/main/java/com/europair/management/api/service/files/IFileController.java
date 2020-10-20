@@ -2,7 +2,7 @@ package com.europair.management.api.service.files;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.files.FileDTO;
-import com.europair.management.api.enums.FileStates;
+import com.europair.management.api.enums.FileStatesEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -108,5 +108,5 @@ public interface IFileController {
   @PutMapping("/state")
   @Operation(description = "Changes the state of a file")
   ResponseEntity<?> changeState(
-          @Parameter(description = "State change data") @NotNull @Valid @RequestBody final StateChangeDto<FileStates> stateChangeDto);
+          @Parameter(description = "State change data") @NotNull @Valid @RequestBody final StateChangeDto<FileStatesEnum> stateChangeDto);
 }

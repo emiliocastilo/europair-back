@@ -1,12 +1,14 @@
 package com.europair.management.impl.common.service;
 
-import com.europair.management.api.enums.ContributionStates;
-import com.europair.management.api.enums.FileStates;
-import com.europair.management.api.enums.RouteStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
+import com.europair.management.api.enums.FileStatesEnum;
+import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
 import com.europair.management.rest.model.files.entity.File;
+import com.europair.management.rest.model.files.entity.FileStatus;
 import com.europair.management.rest.model.files.repository.FileRepository;
+import com.europair.management.rest.model.files.repository.FileStatusRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,22 +35,25 @@ public class StateChangeServiceImpl implements IStateChangeService {
     @Autowired
     private ContributionRepository contributionRepository;
 
+    @Autowired
+    private FileStatusRepository fileStatusRepository;
+
     @Override
-    public void changeState(@NotEmpty List<Long> fileIds, FileStates state) {
+    public void changeState(@NotEmpty List<Long> fileIds, FileStatesEnum state) {
         List<File> files = fileRepository.findAllByIdIn(fileIds);
         files = files.stream().map(file -> changeFileState(file, state)).collect(Collectors.toList());
         fileRepository.saveAll(files);
     }
 
     @Override
-    public void changeState(@NotEmpty List<Long> routeIds, RouteStates state) {
+    public void changeState(@NotEmpty List<Long> routeIds, RouteStatesEnum state) {
         List<Route> routes = routeRepository.findAllByIdIn(routeIds);
         routes = routes.stream().map(route -> changeRouteState(route, state)).collect(Collectors.toList());
         routeRepository.saveAll(routes);
     }
 
     @Override
-    public void changeState(@NotEmpty final List<Long> contributionIds, ContributionStates state) {
+    public void changeState(@NotEmpty final List<Long> contributionIds, ContributionStatesEnum state) {
         List<Contribution> contributions = contributionRepository.findAllByIdIn(contributionIds);
         contributions = contributions.stream().map(contribution -> changeContributionState(contribution, state)).collect(Collectors.toList());
         contributionRepository.saveAll(contributions);
@@ -62,12 +67,12 @@ public class StateChangeServiceImpl implements IStateChangeService {
      * @param state State to set to the route
      * @return Route with updated state
      */
-    private Route changeRouteState(final Route route, final RouteStates state) {
+    private Route changeRouteState(final Route route, final RouteStatesEnum state) {
         if (routeRepository.canChangeState(route.getRouteState(), state)) {
             route.setRouteState(state);
             // Change states from other entities
-            if (RouteStates.OPTIONED.equals(state)) {
-                changeState(Collections.singletonList(route.getFileId()), FileStates.OPTIONED);
+            if (RouteStatesEnum.OPTIONED.equals(state)) {
+                changeState(Collections.singletonList(route.getFileId()), FileStatesEnum.OPTIONED);
             }
             return route;
         } else {
@@ -84,15 +89,18 @@ public class StateChangeServiceImpl implements IStateChangeService {
      * @param state State to set to the file
      * @return File with updated state
      */
-    private File changeFileState(final File file, final FileStates state) {
-        FileStates currentState = FileStates.SALES; // ToDo: recuperar estado enum en Expediente
+    private File changeFileState(final File file, final FileStatesEnum state) {
+        FileStatesEnum currentState = FileStatesEnum.valueOf(file.getStatus().getCode());
         if (fileRepository.canChangeState(currentState, state)) {
             // ToDo: setear estado enum en Expediente
-//           file.setState(state);
+            FileStatus updatedStatus = fileStatusRepository.findFirstByCode(state.toString())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + state));
+            file.setStatusId(updatedStatus.getId());
+            file.setStatus(updatedStatus);
             // Change states from other entities
-            if (FileStates.CNX.equals(state)) {
+            if (FileStatesEnum.CNX.equals(state)) {
                 List<Long> routeIds = file.getRoutes().stream().map(Route::getId).collect(Collectors.toList());
-                changeState(routeIds, FileStates.OPTIONED);
+                changeState(routeIds, FileStatesEnum.OPTIONED);
             }
             return file;
         } else {
@@ -109,12 +117,12 @@ public class StateChangeServiceImpl implements IStateChangeService {
      * @param state        State to set to the contribution
      * @return Contribution with updated state
      */
-    private Contribution changeContributionState(final Contribution contribution, final ContributionStates state) {
+    private Contribution changeContributionState(final Contribution contribution, final ContributionStatesEnum state) {
         if (contributionRepository.canChangeState(contribution.getContributionState(), state)) {
             contribution.setContributionState(state);
             // Change states from other entities
-            if (ContributionStates.CONFIRMED.equals(state)) {
-                changeState(Collections.singletonList(contribution.getRouteId()), RouteStates.WON);
+            if (ContributionStatesEnum.CONFIRMED.equals(state)) {
+                changeState(Collections.singletonList(contribution.getRouteId()), RouteStatesEnum.WON);
             }
             return contribution;
         } else {

@@ -3,7 +3,7 @@ package com.europair.management.impl.service.routes;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.routes.RouteDto;
-import com.europair.management.api.enums.RouteStates;
+import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.service.routes.IRouteController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -79,7 +79,7 @@ public class RouteController implements IRouteController {
     }
 
     @Override
-    public ResponseEntity<?> changeState(@NotNull Long fileId, @NotNull StateChangeDto<RouteStates> stateChangeDto) {
+    public ResponseEntity<?> changeState(@NotNull Long fileId, @NotNull StateChangeDto<RouteStatesEnum> stateChangeDto) {
         routeService.updateStates(fileId, stateChangeDto.getIdList(), stateChangeDto.getState());
         return ResponseEntity.noContent().build();
     }

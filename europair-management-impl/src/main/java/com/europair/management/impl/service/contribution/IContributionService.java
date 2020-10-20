@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.contribution;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
-import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,5 +20,5 @@ public interface IContributionService {
 
     void deleteContribution(Long id);
 
-    void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStates state);
+    void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStatesEnum state);
 }

@@ -1,12 +1,12 @@
 package com.europair.management.api.enums;
 
-public enum FileStates {
+public enum FileStatesEnum {
 
     NEW_REQUEST,
     SALES,
     OPTIONED,
-    BOOKED,
-    BOOKED_SIGNED,
+    BLUE_BOOKED,
+    GREEN_BOOKED, // Signed
     PREFLIGHT,
     CNX
 

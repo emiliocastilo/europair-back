@@ -1,6 +1,6 @@
 package com.europair.management.api.enums;
 
-public enum RouteStates {
+public enum RouteStatesEnum {
 
     SALES,
     OPTIONED,

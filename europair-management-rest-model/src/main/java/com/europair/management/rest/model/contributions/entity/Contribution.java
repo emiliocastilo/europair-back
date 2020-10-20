@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.contributions.entity;
 
-import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.ExchangeBuyTypeEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
@@ -50,7 +50,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
 
     @Column(name = "contribution_state")
     @Enumerated(EnumType.STRING)
-    private ContributionStates contributionState;
+    private ContributionStatesEnum contributionState;
 
     @Column(name = "operator_id")
     private Long operatorId;

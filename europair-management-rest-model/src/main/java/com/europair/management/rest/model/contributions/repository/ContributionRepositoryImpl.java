@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.contributions.repository;
 
-import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.repository.BaseRepositoryImpl;
 import com.europair.management.rest.model.contributions.entity.Contribution;
@@ -17,11 +17,11 @@ public class ContributionRepositoryImpl extends BaseRepositoryImpl<Contribution>
     }
 
     @Override
-    public boolean canChangeState(final ContributionStates stateFrom, final ContributionStates stateTo) {
+    public boolean canChangeState(final ContributionStatesEnum stateFrom, final ContributionStatesEnum stateTo) {
         return switch (stateFrom) {
-            case PENDING -> ContributionStates.SENDED.equals(stateTo);
-            case SENDED -> ContributionStates.QUOTED.equals(stateTo);
-            case QUOTED -> ContributionStates.CONFIRMED.equals(stateTo);
+            case PENDING -> ContributionStatesEnum.SENDED.equals(stateTo);
+            case SENDED -> ContributionStatesEnum.QUOTED.equals(stateTo);
+            case QUOTED -> ContributionStatesEnum.CONFIRMED.equals(stateTo);
             default -> false;
         };
     }

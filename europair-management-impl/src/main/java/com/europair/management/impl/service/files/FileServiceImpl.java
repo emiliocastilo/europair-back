@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.files;
 
 import com.europair.management.api.dto.files.FileDTO;
-import com.europair.management.api.enums.FileStates;
+import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.files.IFileMapper;
 import com.europair.management.impl.util.Utils;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class FileServiceImpl implements IFileService {
 
   @Autowired
@@ -45,7 +45,6 @@ public class FileServiceImpl implements IFileService {
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id)));
   }
 
-  @Transactional(readOnly = false)
   @Override
   public FileDTO saveFile(FileDTO fileDTO) {
 
@@ -62,7 +61,6 @@ public class FileServiceImpl implements IFileService {
     return IFileMapper.INSTANCE.toDto(file);
   }
 
-  @Transactional(readOnly = false)
   @Override
   public Boolean updateFile(Long id, FileDTO fileDTO) {
 
@@ -75,7 +73,6 @@ public class FileServiceImpl implements IFileService {
     return Boolean.TRUE;
   }
 
-  @Transactional(readOnly = false)
   @Override
   public void deleteFile(Long id) {
 
@@ -122,7 +119,7 @@ public class FileServiceImpl implements IFileService {
   }
 
   @Override
-  public void updateStates(List<Long> fileIds, FileStates state) {
+  public void updateStates(List<Long> fileIds, FileStatesEnum state) {
     stateChangeService.changeState(fileIds, state);
   }
 }

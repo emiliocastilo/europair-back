@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.contribution;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
-import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.service.flights.IFlightTaxService;
@@ -91,7 +91,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
-    public void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStates state) {
+    public void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStatesEnum state) {
         if (!routeRepository.existsById(routeId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
         }

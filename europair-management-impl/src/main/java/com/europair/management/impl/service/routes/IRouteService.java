@@ -1,7 +1,7 @@
 package com.europair.management.impl.service.routes;
 
 import com.europair.management.api.dto.routes.RouteDto;
-import com.europair.management.api.enums.RouteStates;
+import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +22,5 @@ public interface IRouteService {
 
     RouteDto updateRouteRotation(Long routeId, Long id, RouteDto routeDto);
 
-    void updateStates(Long fileId, List<Long> routeIds, RouteStates state);
+    void updateStates(Long fileId, List<Long> routeIds, RouteStatesEnum state);
 }

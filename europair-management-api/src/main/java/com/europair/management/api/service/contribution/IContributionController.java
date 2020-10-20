@@ -2,7 +2,7 @@ package com.europair.management.api.service.contribution;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
-import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -103,5 +103,5 @@ public interface IContributionController {
     ResponseEntity<?> changeState(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
-            @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<ContributionStates> stateChangeDto);
+            @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<ContributionStatesEnum> stateChangeDto);
 }

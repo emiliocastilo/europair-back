@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.files.repository;
 
-import com.europair.management.api.enums.FileStates;
+import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.repository.BaseRepositoryImpl;
 import com.europair.management.rest.model.files.entity.File;
@@ -30,13 +30,13 @@ public class FileRepositoryImpl extends BaseRepositoryImpl<File> implements IFil
   }
 
   @Override
-  public boolean canChangeState(FileStates stateFrom, FileStates stateTo) {
+  public boolean canChangeState(FileStatesEnum stateFrom, FileStatesEnum stateTo) {
     return switch (stateFrom) {
-      case NEW_REQUEST -> FileStates.SALES.equals(stateTo);
-      case SALES -> FileStates.OPTIONED.equals(stateTo) || FileStates.BOOKED.equals(stateTo) || FileStates.CNX.equals(stateTo);
-      case OPTIONED -> FileStates.BOOKED.equals(stateTo) || FileStates.CNX.equals(stateTo);
-      case BOOKED -> FileStates.BOOKED_SIGNED.equals(stateTo) || FileStates.CNX.equals(stateTo);
-      case BOOKED_SIGNED -> FileStates.PREFLIGHT.equals(stateTo) || FileStates.CNX.equals(stateTo);
+      case NEW_REQUEST -> FileStatesEnum.SALES.equals(stateTo);
+      case SALES -> FileStatesEnum.OPTIONED.equals(stateTo) || FileStatesEnum.BLUE_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+      case OPTIONED -> FileStatesEnum.BLUE_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+      case BLUE_BOOKED -> FileStatesEnum.GREEN_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+      case GREEN_BOOKED -> FileStatesEnum.PREFLIGHT.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
       default -> false;
     };
   }

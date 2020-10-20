@@ -2,7 +2,7 @@ package com.europair.management.impl.service.files;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.files.FileDTO;
-import com.europair.management.api.enums.FileStates;
+import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.api.service.files.IFileController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -64,7 +64,7 @@ public class FileController implements IFileController {
     }
 
     @Override
-    public ResponseEntity<?> changeState(@NotNull @Valid StateChangeDto<FileStates> stateChangeDto) {
+    public ResponseEntity<?> changeState(@NotNull @Valid StateChangeDto<FileStatesEnum> stateChangeDto) {
         fileService.updateStates(stateChangeDto.getIdList(), stateChangeDto.getState());
         return ResponseEntity.noContent().build();
     }
