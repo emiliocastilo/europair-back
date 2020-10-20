@@ -61,3 +61,17 @@ databaseChangeLog:
                   name: canary_islands
                   type: boolean
                   remarks: "this city belongs to Canary Islands"
+
+  - changeSet:
+      id: 20102020_cities_master_v3_cities_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "Drop constraint code not null"
+      changes:
+        - dropUniqueConstraint:
+              constraintName: city_code_uq
+              tableName: cities
+        - addUniqueConstraint:
+              constraintName: cities_code_country_id_uq
+              tableName: cities
+              columnNames: code,country_id
