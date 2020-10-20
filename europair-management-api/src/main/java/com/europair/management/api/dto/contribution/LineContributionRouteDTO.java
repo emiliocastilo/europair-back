@@ -36,7 +36,7 @@ public class LineContributionRouteDTO {
     private String comments;
 
     @NotNull
-    @JsonProperty("purchasePrice")
+    @JsonProperty("price")
     private BigDecimal price;
 
     @JsonProperty("includedVAT")

@@ -76,6 +76,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Long saveLineContributionRoute(LineContributionRouteDTO lineContributionRouteDTO) {
         Long response = null;
 
@@ -111,6 +112,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Boolean updateLineContributionRoute(Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
         Boolean result = false;
         LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
@@ -141,6 +143,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteLineContributionRoute(Long contributionId, Long lineContributionRouteId) {
         LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Line Contribution Rotation not found with id : %s", lineContributionRouteId)));
