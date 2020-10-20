@@ -158,7 +158,7 @@ databaseChangeLog:
       file: 2020/14102020_file_status.yaml
       relativeToChangelogFile: true
   - include:
-      file: 2020/LINE_CONTRIBUTION_ROUTE_MASTER_19102020_V1.yaml
+      file: 2020/line_contribution_route_master_19102020_v1.yaml
       relativeToChangelogFile: true
 
 
