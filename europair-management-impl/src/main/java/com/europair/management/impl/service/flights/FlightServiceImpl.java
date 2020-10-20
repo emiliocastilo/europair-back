@@ -3,6 +3,8 @@ package com.europair.management.impl.service.flights;
 import com.europair.management.api.dto.flights.FlightDTO;
 import com.europair.management.impl.mappers.flights.IFlightMapper;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.airport.entity.Airport;
+import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.repository.FileRepository;
@@ -16,10 +18,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class FlightServiceImpl implements IFlightService {
 
     private final String FILE_ID_FILTER = "route.file.id";
@@ -35,12 +44,14 @@ public class FlightServiceImpl implements IFlightService {
     @Autowired
     private FileRepository fileRepository;
 
+    @Autowired
+    private AirportRepository airportRepository;
+
 
     @Override
     public Page<FlightDTO> findAllPaginated(final Long fileId, final Long routeId, Pageable pageable, CoreCriteria criteria) {
       checkIfFileExists(fileId);
-      Route route = routeRepository.findById(routeId).orElseThrow(() ->
-              new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+      Route route = getRoute(routeId);
 
         Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
 
@@ -63,26 +74,30 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
-    @Transactional(readOnly = false)
     public FlightDTO saveFlight(final Long fileId, final Long routeId, final FlightDTO flightDTO) {
 
       checkIfFileExists(fileId);
-      checkIfRouteExists(routeId);
+      Route rotation = getRoute(routeId);
 
       if (flightDTO.getId() != null) {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New flight expected. Identifier %s got", flightDTO.getId()));
       }
       Flight flight = IFlightMapper.INSTANCE.toEntity(flightDTO);
       flight.setRouteId(routeId);
+      // Add flight in last order
+      flight.setOrder(rotation.getFlights().stream()
+              .max(Comparator.comparing(Flight::getOrder))
+              .map(Flight::getOrder)
+              .orElse(0) + 1);
 
       flight = flightRepository.save(flight);
+      updateRotationData(routeId);
 
       return IFlightMapper.INSTANCE.toDto(flight);
     }
 
     @Override
-    @Transactional(readOnly = false)
-    public FlightDTO updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
+    public void updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
 
       checkIfFileExists(fileId);
       checkIfRouteExists(routeId);
@@ -92,12 +107,10 @@ public class FlightServiceImpl implements IFlightService {
 
       IFlightMapper.INSTANCE.updateFromDto(flightDTO, flight);
       flight = flightRepository.save(flight);
-
-      return IFlightMapper.INSTANCE.toDto(flight);
+      updateRotationData(routeId);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public void deleteFlight(final Long fileId, final Long routeId, final Long id) {
 
       checkIfFileExists(fileId);
@@ -107,8 +120,25 @@ public class FlightServiceImpl implements IFlightService {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id);
       }
       flightRepository.deleteById(id);
+      updateRotationData(routeId);
     }
 
+    @Override
+    public void updateFlightsOrder(Long fileId, Long routeId, List<FlightDTO> flights) {
+        checkIfFileExists(fileId);
+        Route rotation = getRoute(routeId);
+        if (CollectionUtils.isEmpty(rotation.getFlights())) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "No flights found for route with id: " + routeId);
+        }
+        Map<Long, Integer> flightIdOrderMap = flights.stream()
+                .collect(Collectors.toMap(FlightDTO::getId, FlightDTO::getOrder));
+        List<Flight> updatedFlights = rotation.getFlights().stream().map(flight -> {
+            flight.setOrder(flightIdOrderMap.get(flight.getId()));
+            return flight;
+        }).collect(Collectors.toList());
+        updatedFlights = flightRepository.saveAll(updatedFlights);
+        updateRotationData(routeId);
+    }
 
     private void checkIfFileExists(final Long fileId) {
       if (!fileRepository.existsById(fileId)) {
@@ -120,6 +150,69 @@ public class FlightServiceImpl implements IFlightService {
       if (!routeRepository.existsById(routeId)) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
       }
+    }
+
+    private Route getRoute(final Long routeId) {
+        return routeRepository.findById(routeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+    }
+
+    private Airport getAirport(final Long airportId) {
+        return airportRepository.findById(airportId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId));
+    }
+
+    private void updateRotationDates(final Route rotation, final List<Flight> flights) {
+        LocalDateTime minDate = flights.stream()
+                .min(Comparator.comparing(Flight::getDepartureTime))
+                .map(Flight::getDepartureTime)
+                .orElse(null);
+        LocalDateTime maxDate = flights.stream()
+                .max(Comparator.comparing(Flight::getDepartureTime))
+                .map(flight -> flight.getArrivalTime() != null ? flight.getArrivalTime() : flight.getDepartureTime())
+                .orElse(null);
+        if (minDate != null && minDate.isBefore(rotation.getStartDate().atStartOfDay())) {
+            rotation.setStartDate(minDate.toLocalDate());
+        }
+        if (maxDate != null && maxDate.isAfter(rotation.getEndDate().plusDays(1).atStartOfDay())) {
+            rotation.setEndDate(maxDate.toLocalDate());
+        }
+    }
+
+    private void updateRotationLabel(final Route rotation, final List<Flight> flights) {
+        final String AIRPORT_SEPARATOR = "-";
+        final String SPECIAL_FLIGHT_SEPARATOR = " // ";
+        StringBuilder sb = new StringBuilder();
+        Flight previousFlight = null;
+        for (int i = 0; i < flights.size(); i++) {
+            Flight f = flights.get(i);
+            Airport origin = f.getOrigin() != null ? f.getOrigin() : getAirport(f.getOriginId());
+            Airport destination = f.getDestination() != null ? f.getDestination() : getAirport(f.getDestinationId());
+            if (i == 0) {
+                // First flight
+                sb.append(origin.getIataCode()).append(AIRPORT_SEPARATOR).append(destination.getIataCode());
+            } else {
+                if (previousFlight.getDestinationId().equals(f.getOriginId())) {
+                    // Connected flight
+                    sb.append(AIRPORT_SEPARATOR).append(destination.getIataCode());
+                } else {
+                    // Special unconnected flight
+                    sb.append(SPECIAL_FLIGHT_SEPARATOR).append(origin.getIataCode()).append(AIRPORT_SEPARATOR).append(destination.getIataCode());
+                }
+            }
+            previousFlight = f;
+        }
+        rotation.setLabel(sb.toString());
+    }
+
+    private void updateRotationData(final Long routeId) {
+        Route rotation = getRoute(routeId);
+        List<Flight> flights = flightRepository.findAllByRouteId(routeId);
+        flights.sort(Comparator.comparing(Flight::getOrder));
+
+        updateRotationDates(rotation, flights);
+        updateRotationLabel(rotation, flights);
+        rotation = routeRepository.save(rotation);
     }
 
 }

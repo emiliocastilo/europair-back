@@ -1,29 +1,28 @@
 package com.europair.management.impl.service.routes;
 
-import com.europair.management.api.dto.flights.FlightDTO;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
+import com.europair.management.api.enums.RouteStates;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
-import com.europair.management.impl.service.flights.IFlightService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
-import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.repository.FileRepository;
+import com.europair.management.rest.model.flights.entity.Flight;
+import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.routes.entity.Route;
-import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.entity.RouteFrequencyDay;
-import com.europair.management.rest.model.routes.repository.RouteAirportRepository;
 import com.europair.management.rest.model.routes.repository.RouteFrequencyDayRepository;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,10 +32,8 @@ import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -61,10 +58,7 @@ public class RouteServiceImpl implements IRouteService {
     private AirportRepository airportRepository;
 
     @Autowired
-    private RouteAirportRepository routeAirportRepository;
-
-    @Autowired
-    private IFlightService flightService;
+    private FlightRepository flightRepository;
 
     @Override
     public Page<RouteDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
@@ -98,14 +92,16 @@ public class RouteServiceImpl implements IRouteService {
         Map<String, Airport> routeAirports = iataCodes.stream()
                 .distinct()
                 .map(iata -> airportRepository.findFirstByIataCode(iata)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No airport found with IATA: " + iata))
-                )
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No airport found with IATA: " + iata)))
                 .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
 
         // Set relationships
         route.setFileId(fileId);
+
+        // Default state
+        route.setRouteState(RouteStates.SALES);
 
         // Persist entity
         route = routeRepository.save(route);
@@ -207,34 +203,14 @@ public class RouteServiceImpl implements IRouteService {
 
         if (rotations.size() > 0) {
             rotations = routeRepository.saveAll(rotations);
-            // Add Route airports
-            rotations.forEach(rotation -> rotation.setAirports(new HashSet<>(createRouteAirports(rotation, routeAirportMap))));
-
             // Add flights
-            rotations.forEach(rotation -> createFlights(rotation, parentRoute.getFileId()));
+            rotations.forEach(rotation -> createFlights(rotation, routeAirportMap));
 
         } else {
             rotations = null;
         }
 
         return rotations;
-    }
-
-    private List<RouteAirport> createRouteAirports(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap) {
-        List<String> airportCodes = Utils.mapRouteAirportIataCodes(rotation.getLabel());
-        List<RouteAirport> airportList = new ArrayList<>();
-        for (int i = 0; i < airportCodes.size(); i++) {
-            RouteAirport routeAirport = new RouteAirport();
-            routeAirport.setRouteId(rotation.getId());
-            routeAirport.setRoute(rotation);
-            routeAirport.setAirportId(routeAirportMap.get(airportCodes.get(i)).getId());
-            routeAirport.setAirport(routeAirportMap.get(airportCodes.get(i)));
-            routeAirport.setOrder(i);
-            airportList.add(routeAirport);
-        }
-        airportList = routeAirportRepository.saveAll(airportList);
-
-        return airportList;
     }
 
     private LocalDate calculateRotationDate(LocalDate lastRotationDate, Route route, final boolean firstRotation) {
@@ -348,20 +324,23 @@ public class RouteServiceImpl implements IRouteService {
     }
 
     // Flights
-    private void createFlights(@NotNull final Route rotation, final Long fileId) {
-        List<Airport> airports = rotation.getAirports().stream()
-                .sorted(Comparator.comparing(RouteAirport::getOrder))
-                .map(RouteAirport::getAirport)
-                .collect(Collectors.toList());
-        for (int i = 0; i < airports.size() - 1; i++) {
-            FlightDTO flightDTO = new FlightDTO();
-            flightDTO.setOrigin(airports.get(i).getIataCode());
-            flightDTO.setDestination(airports.get(i + 1).getIataCode());
-            // ToDo: setear más campos???
-            flightDTO.setDepartureTime(LocalDateTime.now()); // Está como not null en bdd ??
-            flightDTO.setTimeZone(airports.get(i).getTimeZone());
-            flightService.saveFlight(fileId, rotation.getId(), flightDTO);
-        }
+    private void createFlights(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap) {
+        List<Pair<String, String>> iataFlightInfo = Utils.getRotationAirportsFlights(rotation);
+        int[] auxOrder = {1};
+        flightRepository.saveAll(iataFlightInfo.stream()
+                .map(iataPair -> {
+                    Airport origin = routeAirportMap.get(iataPair.getFirst());
+                    Flight flight = new Flight();
+                    flight.setOriginId(origin.getId());
+                    flight.setDestinationId(routeAirportMap.get(iataPair.getSecond()).getId());
+                    flight.setTimeZone(origin.getTimeZone());
+                    flight.setDepartureTime(rotation.getStartDate().atStartOfDay());
+                    flight.setRouteId(rotation.getId());
+                    flight.setOrder(auxOrder[0]);
+                    auxOrder[0]++; // Increase order
+                    return flight;
+                }).collect(Collectors.toList())
+        );
     }
 
     // Validations

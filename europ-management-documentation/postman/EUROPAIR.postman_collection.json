@@ -3108,6 +3108,142 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "flight - find by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/flights/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"flights",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flight - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"originId\": 2,\r\n    \"destinationId\": 4,\r\n    \"order\": null,\r\n    \"id\": null,\r\n    \"departureTime\": \"2020-10-06 00:00\",\r\n    \"arrivalTime\": null,\r\n    \"timeZone\": \"ONE\",\r\n    \"seatsF\": 10,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 30,\r\n    \"beds\": null,\r\n    \"stretchers\": null\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/flights",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"flights"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flight - update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"originId\": 2,\r\n    \"destinationId\": 4,\r\n    \"order\": 3,\r\n    \"id\": 9,\r\n    \"departureTime\": \"2020-10-04 10:30\",\r\n    \"arrivalTime\": \"2020-10-04 16:00\",\r\n    \"timeZone\": \"ONE\",\r\n    \"seatsF\": 15,\r\n    \"seatsC\": 55,\r\n    \"seatsY\": 35,\r\n    \"beds\": 10,\r\n    \"stretchers\": 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/flights/9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"flights",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flight - delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/flights/10",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"flights",
+								"10"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flight - reorder",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\"id\": 9, \"order\": 1},\r\n    {\"id\": 1, \"order\": 2},\r\n    {\"id\": 2, \"order\": 3},\r\n    {\"id\": 10, \"order\": 4}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/flights/reorder",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"flights",
+								"reorder"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -3766,17 +3902,17 @@
 	],
 	"variable": [
 		{
-			"id": "67eca659-93be-48ef-b25d-571a49ed060b",
+			"id": "2ebc9ada-cbe3-45be-80f9-233fbbf1a7a9",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "d8ca01b5-045f-4c02-8341-feb94af36fe0",
+			"id": "a459d238-caf8-4f4c-9dc7-6a48ff07993e",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "1d41ab5c-df53-420c-aeea-e08124931e98",
+			"id": "f0ca28da-802e-40df-90f8-682bf7356336",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}

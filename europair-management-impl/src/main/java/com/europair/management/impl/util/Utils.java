@@ -10,8 +10,8 @@ import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.common.Restriction;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
 import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
+import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.routes.entity.Route;
-import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.data.util.Pair;
@@ -24,9 +24,14 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -201,32 +206,34 @@ public class Utils {
      */
     public static Map<Pair<Long, Long>, Double> getRouteAirportDistancePercentage(@NotNull final Route route) {
         Map<Pair<Long, Long>, Double> resultMap = new HashMap<>();
-        List<RouteAirport> airportList = route.getAirports().stream()
-                .sorted(Comparator.comparing(RouteAirport::getOrder))
-                .collect(Collectors.toList());
-        double totalRouteDistance = 0D;
-        List<Double> distances = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(route.getFlights())) {
+            List<Flight> flightList = route.getFlights().stream()
+                    .sorted(Comparator.comparing(Flight::getOrder))
+                    .collect(Collectors.toList());
+            double totalRouteDistance = 0D;
+            List<Double> distances = new ArrayList<>();
 
-        // Calculate distances and total route distance
-        for (int i = 0; i < airportList.size() - 1; i++) {
-            Airport origin = airportList.get(i).getAirport();
-            Airport destination = airportList.get(i + 1).getAirport();
+            // Calculate distances and total route distance
+            for (Flight f : flightList) {
+                Airport origin = f.getOrigin();
+                Airport destination = f.getDestination();
 
-            double distance = Utils.getDistanceInKM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
-                    destination.getLongitude());
-            distances.add(distance);
-            totalRouteDistance = totalRouteDistance + distance;
-        }
+                double distance = Utils.getDistanceInKM(origin.getLatitude(), origin.getLongitude(), destination.getLatitude(),
+                        destination.getLongitude());
+                distances.add(distance);
+                totalRouteDistance = totalRouteDistance + distance;
+            }
 
-        // Calculate distance percentage with total and fill map data
-        for (int i = 0; i < airportList.size() - 1; i++) {
-            Airport origin = airportList.get(i).getAirport();
-            Airport destination = airportList.get(i + 1).getAirport();
+            // Calculate distance percentage with total and fill map data
+            for (int i = 0; i < flightList.size(); i++) {
+                Airport origin = flightList.get(i).getOrigin();
+                Airport destination = flightList.get(i).getDestination();
 
-            Pair<Long, Long> key = Pair.of(origin.getId(), destination.getId());
-            Double distance = distances.get(i);
-            double finalTotalRouteDistance = totalRouteDistance;
-            resultMap.computeIfAbsent(key, s -> distance * 100 / finalTotalRouteDistance);
+                Pair<Long, Long> key = Pair.of(origin.getId(), destination.getId());
+                Double distance = distances.get(i);
+                double finalTotalRouteDistance = totalRouteDistance;
+                resultMap.computeIfAbsent(key, s -> distance * 100 / finalTotalRouteDistance);
+            }
         }
 
         return resultMap;
@@ -363,4 +370,13 @@ public class Utils {
         }
     }
 
+    public static List<Pair<String, String>> getRotationAirportsFlights(@NotNull final Route rotation) {
+        List<String> airportCodes = mapRouteAirportIataCodes(rotation.getLabel());
+        List<Pair<String, String>> airportFLightList = new ArrayList<>();
+        for (int i = 0; i < airportCodes.size() - 1; i++) {
+            airportFLightList.add(Pair.of(airportCodes.get(i), airportCodes.get(i+1)));
+        }
+
+        return airportFLightList;
+    }
 }

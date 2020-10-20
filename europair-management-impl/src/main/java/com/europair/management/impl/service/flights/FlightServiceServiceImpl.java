@@ -13,26 +13,20 @@ import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.routes.entity.Route;
-import com.europair.management.rest.model.routes.entity.RouteAirport;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import com.europair.management.rest.model.services.entity.Service;
 import com.europair.management.rest.model.services.repository.ServiceRepository;
-import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
@@ -91,7 +85,6 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         }
 
         Service serviceType = getService(flightServiceDto.getServiceId());
-        final Map<String, Airport> airportMap = getAirportMap(route);
 
         // Set seller id
         if (flightServiceDto.getSellerId() == null) {
@@ -104,7 +97,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
                     FlightService flightService = IFlightServiceMapper.INSTANCE.toEntity(flightServiceDto);
                     flightService.setFlightId(flightId);
                     // Calculate VAT
-                    calculateVat(fileId, serviceType, flight, flightServiceDto, airportMap);
+                    calculateVat(fileId, serviceType, flight, flightServiceDto);
                     return flightService;
                 }).collect(Collectors.toList());
 
@@ -116,15 +109,14 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     @Override
     public void updateFlightService(Long fileId, Long routeId, Long flightId, Long id, FlightServiceDto flightServiceDto) {
         validatePathIds(fileId);
-        Route route = getRoute(routeId);
+        getRoute(routeId);
         Flight flight = getFlight(flightId);
         Service serviceType = getService(flightServiceDto.getServiceId());
         FlightService flightService = flightServiceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id));
-        final Map<String, Airport> airportMap = getAirportMap(route);
 
         // Recalculate vat
-        calculateVat(fileId, serviceType, flight, flightServiceDto, airportMap);
+        calculateVat(fileId, serviceType, flight, flightServiceDto);
 
         IFlightServiceMapper.INSTANCE.updateFromDto(flightServiceDto, flightService);
         flightService = flightServiceRepository.save(flightService);
@@ -172,17 +164,9 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No service type found with id: " + serviceTypeId));
     }
 
-    private Map<String, Airport> getAirportMap(Route route) {
-        return route.getAirports().stream()
-                .map(RouteAirport::getAirport)
-                .distinct()
-                .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
-    }
-
-    private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightServiceDto flightServiceDto,
-                              Map<String, Airport> airportMap) {
-        final Airport origin = airportMap.get(flight.getOrigin());
-        final Airport destination = airportMap.get(flight.getDestination());
+    private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightServiceDto flightServiceDto) {
+        final Airport origin = flight.getOrigin();
+        final Airport destination = flight.getDestination();
 
         Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), true);
         Double taxOnPurchase = calculationService.calculateServiceTaxToApply(fileId, origin, destination, serviceType.getType(), false);
