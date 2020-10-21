@@ -30,7 +30,6 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("description")
   private String description;
 
-  @NotNull
   @JsonProperty("statusId")
   private Long statusId;
 

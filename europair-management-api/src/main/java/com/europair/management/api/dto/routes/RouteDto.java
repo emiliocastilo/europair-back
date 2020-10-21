@@ -1,7 +1,7 @@
 package com.europair.management.api.dto.routes;
 
 import com.europair.management.api.enums.FrequencyEnum;
-import com.europair.management.api.enums.RouteStates;
+import com.europair.management.api.enums.RouteStatesEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -59,5 +59,5 @@ public class RouteDto {
     private Boolean hasContributions = false;
 
     @JsonProperty("routeState")
-    private RouteStates routeState;
+    private RouteStatesEnum routeState;
 }
