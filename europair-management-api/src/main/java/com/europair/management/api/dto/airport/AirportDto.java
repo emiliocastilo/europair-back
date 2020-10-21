@@ -13,8 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -53,10 +55,10 @@ public class AirportDto extends AuditModificationBaseDTO {
     private MeasureDto elevation;
 
     @JsonProperty("latitude")
-    private Double latitude;
+    private BigDecimal latitude;
 
     @JsonProperty("longitude")
-    private Double longitude;
+    private BigDecimal longitude;
 
     @JsonProperty("customs")
     private String customs;
