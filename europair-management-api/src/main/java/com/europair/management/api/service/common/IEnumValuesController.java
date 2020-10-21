@@ -19,7 +19,7 @@ public interface IEnumValuesController {
     @Operation(description = "Get route states enum values", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<String>> getRouteStatesValues();
 
-    @GetMapping("/contributions-states")
+    @GetMapping("/contribution-states")
     @Operation(description = "Get contributions states enum values", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<String>> getContributionStatesValues();
 

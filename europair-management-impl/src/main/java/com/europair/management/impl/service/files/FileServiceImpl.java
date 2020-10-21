@@ -8,7 +8,9 @@ import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.entity.File;
+import com.europair.management.rest.model.files.entity.FileStatus;
 import com.europair.management.rest.model.files.repository.FileRepository;
+import com.europair.management.rest.model.files.repository.FileStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +35,9 @@ public class FileServiceImpl implements IFileService {
   @Autowired
   private IStateChangeService stateChangeService;
 
+  @Autowired
+  private FileStatusRepository fileStatusRepository;
+
   @Override
   public Page<FileDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
     return fileRepository.findFilesByCriteria(criteria, pageable)
@@ -55,6 +60,14 @@ public class FileServiceImpl implements IFileService {
 
     // Generate file Code
     file.setCode(generateFileCode());
+
+    // Check status
+    if (file.getStatusId() == null) {
+      FileStatus status = fileStatusRepository.findFirstByCode(FileStatesEnum.SALES.toString())
+              .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + FileStatesEnum.SALES));
+      file.setStatusId(status.getId());
+      file.setStatus(status);
+    }
 
     file = fileRepository.save(file);
 
