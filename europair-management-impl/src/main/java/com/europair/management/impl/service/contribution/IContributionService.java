@@ -13,6 +13,8 @@ public interface IContributionService {
 
     Page<ContributionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria);
 
+    Page<LineContributionRouteDTO> findAllPaginatedLineContributionRouteByFilter(Pageable pageable, CoreCriteria criteria);
+
     ContributionDTO findById(Long id);
 
     ContributionDTO saveContribution(ContributionDTO contributionDTO);

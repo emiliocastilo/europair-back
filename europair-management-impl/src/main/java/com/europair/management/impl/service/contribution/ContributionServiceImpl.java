@@ -47,6 +47,11 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
+    public Page<LineContributionRouteDTO> findAllPaginatedLineContributionRouteByFilter(Pageable pageable, CoreCriteria criteria) {
+        return contributionRepository.findLineContributionRouteByCriteria(criteria, pageable).map(ILineContributionRouteMapper.INSTANCE::toDto);
+    }
+
+    @Override
     public ContributionDTO findById(Long id) {
         return IContributionMapper.INSTANCE.toDto(contributionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id)));
