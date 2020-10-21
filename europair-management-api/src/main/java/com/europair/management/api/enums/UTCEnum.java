@@ -21,7 +21,11 @@ public enum UTCEnum {
 
     MINUS_SIX(-6,0, "UTC -06:00"),
 
+    MINUS_HALF_PAST_FIVE(-5,30, "UTC -05:30"),
+
     MINUS_FIVE(-5,0, "UTC -05:00"),
+
+    MINUS_HALF_PAST_FOUR(-4,30, "UTC -04:30"),
 
     MINUS_FOUR(-4,0, "UTC -04:00"),
 
