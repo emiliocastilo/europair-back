@@ -48,7 +48,7 @@ public class ContributionServiceImpl implements IContributionService {
 
     @Override
     public Page<LineContributionRouteDTO> findAllPaginatedLineContributionRouteByFilter(Pageable pageable, CoreCriteria criteria) {
-        return contributionRepository.findLineContributionRouteByCriteria(criteria, pageable).map(ILineContributionRouteMapper.INSTANCE::toDto);
+        return lineContributionRouteRepository.findLineContributionRouteByCriteria(criteria, pageable).map(ILineContributionRouteMapper.INSTANCE::toDto);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ContributionServiceImpl implements IContributionService {
         LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Line Contribution Rotation not found : %s", lineContributionRouteId)));
 
-        if(lineContributionRoute.getContributionId().equals(contributionId)){
+        if (lineContributionRoute.getContributionId().equals(contributionId)) {
             ILineContributionRouteMapper.INSTANCE.updateFromDto(lineContributionRouteDTO, lineContributionRoute);
             this.lineContributionRouteRepository.save(lineContributionRoute);
             result = true;
@@ -153,14 +153,14 @@ public class ContributionServiceImpl implements IContributionService {
         LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Line Contribution Rotation not found with id : %s", lineContributionRouteId)));
 
-        if (lineContributionRoute.getContributionId().equals(contributionId)){
+        if (lineContributionRoute.getContributionId().equals(contributionId)) {
             lineContributionRoute.setRemovedAt(LocalDateTime.now());
             this.lineContributionRouteRepository.save(lineContributionRoute);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                            String.format("The given contribution id %s do not match with the related contribution id in the Line Contribution Rotation provided : %s"
-                                    , contributionId
-                                    , lineContributionRouteId));
+                    String.format("The given contribution id %s do not match with the related contribution id in the Line Contribution Rotation provided : %s"
+                            , contributionId
+                            , lineContributionRouteId));
         }
     }
 }
