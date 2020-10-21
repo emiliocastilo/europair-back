@@ -33,6 +33,8 @@ public enum UTCEnum {
 
     MINUS_HALF_PAST_TWO(-2,30, "UTC -02:30"),
 
+    MINUS_TWO(-2,0, "UTC -02:00"),
+
     MINUS_ONE(-1,0, "UTC -01:00"),
 
     ZERO(0,0, "UTC 00:00"),
