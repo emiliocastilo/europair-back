@@ -7,12 +7,14 @@ import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.service.contribution.IContributionController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -53,16 +55,26 @@ public class ContributionController implements IContributionController {
     }
 
     @Override
-    public ResponseEntity<Long> saveLineContributionRoute(@NotNull LineContributionRouteDTO lineContributionRouteDTO) {
+    public ResponseEntity<Long> saveLineContributionRoute(
+            @NotNull final Long fileId,
+            @NotNull final Long routeId,
+            @NotNull final Long contributionId,
+            @NotNull final LineContributionRouteDTO lineContributionRouteDTO) {
 
-        final Long lineContributionRouteSavedId = this.contributionService.saveLineContributionRoute(lineContributionRouteDTO);
+        if (routeId.equals(lineContributionRouteDTO.getRouteId()) && contributionId.equals(lineContributionRouteDTO.getContributionId())) {
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(lineContributionRouteSavedId)
-                .toUri();
+            final Long lineContributionRouteSavedId = this.contributionService.saveLineContributionRoute(lineContributionRouteDTO);
 
-        return ResponseEntity.created(location).body(lineContributionRouteSavedId);
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(lineContributionRouteSavedId)
+                    .toUri();
+
+            return ResponseEntity.created(location).body(lineContributionRouteSavedId);
+
+        } else {
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
 
     @Override
@@ -88,9 +100,23 @@ public class ContributionController implements IContributionController {
      * @return
      */
     @Override
-    public ResponseEntity<HttpStatus> updateLineContributionRoute(@NotNull Long contributionId, @NotNull Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
-        final Boolean res = contributionService.updateLineContributionRoute(contributionId, lineContributionRouteId, lineContributionRouteDTO);
-        return (res ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build());
+    public ResponseEntity<HttpStatus> updateLineContributionRoute(
+            @NotNull final Long fileId,
+            @NotNull final Long routeId,
+            @NotNull Long contributionId,
+            @NotNull Long lineContributionRouteId,
+            @NotNull LineContributionRouteDTO lineContributionRouteDTO) {
+
+        if ( routeId.equals(lineContributionRouteDTO.getRouteId())
+                && contributionId.equals(lineContributionRouteDTO.getContributionId())
+                && lineContributionRouteId.equals(lineContributionRouteDTO.getId()) ) {
+
+            final Boolean res = contributionService.updateLineContributionRoute(contributionId, lineContributionRouteId, lineContributionRouteDTO);
+            return (res ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build());
+
+        } else {
+            return ResponseEntity.unprocessableEntity().build();
+        }
     }
 
     @Override
@@ -100,7 +126,12 @@ public class ContributionController implements IContributionController {
     }
 
     @Override
-    public ResponseEntity<?> deleteLineContributionRoute(@NotNull Long contributionId, @NotNull Long lineContributionRouteId) {
+    public ResponseEntity<?> deleteLineContributionRoute(
+            @NotNull final Long fileId,
+            @NotNull final Long routeId,
+            @NotNull Long contributionId,
+            @NotNull Long lineContributionRouteId) {
+
         this.contributionService.deleteLineContributionRoute(contributionId, lineContributionRouteId);
         return ResponseEntity.noContent().build();
     }

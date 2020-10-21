@@ -254,9 +254,9 @@ INSERT INTO countries (code,name,european_union,created_at,created_by,modified_a
 INSERT INTO countries (code,name,european_union,created_at,created_by,modified_at,modified_by) VALUES ('ZW','ZIMBABWE',0,'2020-10-20 12:16:35.0','System',NULL,NULL);
 
 -- CITIES
-insert into cities values (null, 'PMI', 'PALMA DE MALLORCA', 1,false, SYSDATE(),'Sistema', null, null);
-insert into cities values (null, 'PPP', 'PPPPP', 1,false, SYSDATE(),'Sistema', null, null);
-insert into cities values (null, 'NO', 'NO SHOW', 2,false, SYSDATE(),'Sistema', null, null);
+insert into cities values (null, 'PMI', 'PALMA DE MALLORCA', 68,false, SYSDATE(),'Sistema', null, null);
+insert into cities values (null, 'PPP', 'PPPPP', 68,false, SYSDATE(),'Sistema', null, null);
+insert into cities values (null, 'NO', 'NO SHOW', 68,false, SYSDATE(),'Sistema', null, null);
 
 -- OPERATORS
 insert into operators VALUES (null, 'O1', 'Op1', 'Operator 1', null, null, null, SYSDATE(),'Sistema', null, null, null);
@@ -264,9 +264,9 @@ insert into operators VALUES (null, 'O2', 'Op2', 'Operator 2', null, null, null,
 insert into operators VALUES (null, 'o2', 'Op3', 'Operator 3', null, null, null, SYSDATE(),'Sistema', null, null, null);
 
 -- AIRPORTS
-insert into airports values (null,'PMI','A001','Airport Palma-1',1,1,'ONE',100,'KILOMETER',39.55,2.7333333,'NO',false,'IFR',SYSDATE(),'Sistema',null,null,null,false,true);
-insert into airports values (null,'MAD','A002','Airport Palma-2',1,1,'ONE',100,'KILOMETER',36.2,3.5,'NO',false,'IFR',SYSDATE(),'Sistema',null,null,null,false,true);
-insert into airports values (null,'NO1','NO01','No Show Airport IT-1',2,3,'ONE',100,'KILOMETER',1,1,'NO',false,'IFR',SYSDATE(),'Sistema',null,null,null,false,false);
+insert into airports values (null,'PMI','A001','Airport Palma-1',68,1,'ONE',100,'KILOMETER',39.55,2.7333333,'NO',false,'IFR',SYSDATE(),'Sistema',null,null,null,false,true);
+insert into airports values (null,'MAD','A002','Airport Palma-2',68,1,'ONE',100,'KILOMETER',36.2,3.5,'NO',false,'IFR',SYSDATE(),'Sistema',null,null,null,false,true);
+insert into airports values (null,'NO1','NO01','No Show Airport IT-1',68,3,'ONE',100,'KILOMETER',1,1,'NO',false,'IFR',SYSDATE(),'Sistema',null,null,null,false,false);
 
 -- REGIONS
 insert into regions values (null, 'R1', 'Region 1', SYSDATE(),'Sistema', null, null);
@@ -369,3 +369,13 @@ insert into files values(null,'TEST','DESC 1',2,1,1,1,1,1,'COMMERCIAL',SYSDATE()
 
 -- BALEARIC VAT
 insert into vat_balearics (origin_airport_id, destination_airport_id, percentage) values (2,1,80.5);
+
+
+-- ejecutar el postman para crear una ruta y después se podrá tener
+
+-- ejecutar postman para crear contribution
+
+-- ejecutar postman para crear/editar/borrar linecontributionroute
+-- Contribution con insert
+--INSERT INTO contributions(file_id, route_id, contribution_state, operator_id, aircraft_id, request_time, quoted_time, cargo_airborne, currency, comments, exchange_buy_type, purchase_price, purchase_commission_percent, included_vat, sales_price, sales_commission_percent, sales_price_without_vat, created_at, created_by, modified_at, modified_by, removed_at, currency_on_sale)
+--VALUES(1, 1, 'PENDING', 1, 1, '2020-10-20', '2020-10-20', 5000, 'AUD', 'Comentarios', 'AUD', 100000, 50, 1, 150000, 50, 100000, '2020-10-20', 'Sistema', NULL, NULL, NULL, 'AUD');

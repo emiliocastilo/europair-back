@@ -93,3 +93,17 @@ databaseChangeLog:
               - column:
                   name: removed_at
                   type: timestamp
+
+  - changeSet:
+      id: 20201020_contribution_aud_v1_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add currency on sale column in audit table contributions_aud"
+      changes:
+        - addColumn:
+            tableName: contributions_aud
+            columns:
+              - column:
+                  name: currency_on_sale
+                  type: varchar(20)
+                  remarks: Currency on sale
