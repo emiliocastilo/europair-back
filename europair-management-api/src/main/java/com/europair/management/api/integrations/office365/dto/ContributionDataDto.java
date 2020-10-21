@@ -6,12 +6,13 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ContributionDataDto implements Serializable {
 
-    private String aircraftType; // ToDo: cod? desc??
-    private String aircraftBase; // ToDo: base principal? nombre? Iata?
+    private String aircraftType;
+    private String aircraftBase;
 
     private CurrencyEnum currencyOnPurchase;
     private ExchangeBuyTypeEnum exchangeTypeOnPurchase;
@@ -36,6 +37,8 @@ public class ContributionDataDto implements Serializable {
     private Double marginPercentage;
     private BigDecimal marginAmount;
 
-    private String seller; // ToDo: nombre usuario, nombre+apellidos??
+    private String seller;
+
+    private List<ContributionLineDataDto> lines;
 
 }

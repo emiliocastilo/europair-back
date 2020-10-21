@@ -4,6 +4,7 @@ import com.europair.management.api.enums.*;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -30,6 +31,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
 
     @ManyToOne
     @JoinColumn(name = "contribution_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
     private Contribution contribution;
 
     @Column(name = "route_id")
@@ -37,6 +39,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
 
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
     private Route route;
 
     @Column(name = "comments", length = 255)

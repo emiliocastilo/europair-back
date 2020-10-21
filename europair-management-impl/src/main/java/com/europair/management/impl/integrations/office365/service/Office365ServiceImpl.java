@@ -2,6 +2,7 @@ package com.europair.management.impl.integrations.office365.service;
 
 import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
 import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
+import com.europair.management.api.integrations.office365.dto.ContributionDataDto;
 import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
 import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
 import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
@@ -180,7 +181,15 @@ public class Office365ServiceImpl implements IOffice365Service {
         dto.setFileInfo(fileSharingInfo);
 
         dto.setFlightsInfo(mapFlightsWithServices(route, contribution, dsDataList));
-        dto.setContributionInfo(IOffice365Mapper.INSTANCE.mapContribution(contribution));
+
+        ContributionDataDto contributionData = IOffice365Mapper.INSTANCE.mapContribution(contribution);
+        if (!CollectionUtils.isEmpty(contribution.getLineContributionRoute())) {
+            contributionData.setLines(contribution.getLineContributionRoute().stream()
+                    .map(IOffice365Mapper.INSTANCE::mapContributionLine)
+                    .collect(Collectors.toList()));
+        }
+        dto.setContributionInfo(contributionData);
+
         dto.setObservations(route.getFile().getObservation());
 
         return dto;
