@@ -1,10 +1,12 @@
 package com.europair.management.impl.integrations.office365.service;
 
+import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
 import com.europair.management.api.integrations.office365.service.IOffice365Controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,10 +23,30 @@ public class Office365Controller implements IOffice365Controller {
     @Autowired
     private Office365Client office365Client;
 
+    @Value("${europair.web.base.url}")
+    private String baseUrl;
+
+
     @Override
     public ResponseEntity<?> confirmOperation(@NotNull Long routeId, @NotNull Long contributionId) {
-        service.confirmOperation(routeId, contributionId);
+        ConfirmedOperationDto confirmedOperationDto = service.getConfirmedOperationData(routeId, contributionId);
+        // Send data
+        office365Client.sendConfirmedOperationData(confirmedOperationDto);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<String> sendConfirmedOperation(@NotNull Long routeId, @NotNull Long contributionId) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(baseUrl).append("/get/confirmation/").append(routeId).append("/").append(contributionId);
+        office365Client.sendConfirmedOperationUri(sb.toString());
+        return ResponseEntity.ok(sb.toString());
+    }
+
+    @Override
+    public ResponseEntity<ConfirmedOperationDto> getConfirmedOperation(@NotNull Long routeId, @NotNull Long contributionId) {
+        ConfirmedOperationDto confirmedOperationDto = service.getConfirmedOperationData(routeId, contributionId);
+        return ResponseEntity.ok(confirmedOperationDto);
     }
 
     @Override

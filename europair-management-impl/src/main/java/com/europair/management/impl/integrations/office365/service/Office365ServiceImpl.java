@@ -75,18 +75,14 @@ public class Office365ServiceImpl implements IOffice365Service {
 
 
     @Override
-    public void confirmOperation(Long routeId, Long contributionId) {
-
+    public ConfirmedOperationDto getConfirmedOperationData(Long routeId, Long contributionId) {
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
 
         Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
-        ConfirmedOperationDto confirmedOperationDto = mapConfirmedOperation(route, contribution);
-
-        // Send data
-        office365Client.sendConfirmedOperationData(confirmedOperationDto);
+        return mapConfirmedOperation(route, contribution);
     }
 
     @Override
