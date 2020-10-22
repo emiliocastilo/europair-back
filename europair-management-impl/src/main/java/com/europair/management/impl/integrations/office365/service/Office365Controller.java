@@ -57,9 +57,9 @@ public class Office365Controller implements IOffice365Controller {
 
     @Override
     public ResponseEntity<String> sendEnabledFlightContributionInformation() {
-        // TODO: substituir la url hardcodeada por un parametro en properties @Param
-        office365Client.sendUriToEnabledFlightContributionInformation("http://localhost:8080/send/flight/contribution/test/collecturi");
-        return null;
+        String dataUrl = baseUrl + "/send/flight/contribution/test/collecturi";
+        office365Client.sendUriToEnabledFlightContributionInformation(dataUrl);
+        return ResponseEntity.ok(dataUrl);
     }
 
     @Override
