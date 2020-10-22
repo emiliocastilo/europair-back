@@ -75,21 +75,18 @@ public interface IOffice365Controller {
      * @param flightId
      * @return
      */
-    @GetMapping("/get/flight/contribution/{routeId}/{flightId}/{contributionId}")
+    @GetMapping("/get/flight/contribution/{contributionId}/{flightId}")
     @Operation(description = "Send an url to the Office365 systems to indicate that the information is enabled, and can be retrieved from the url", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
-                                                                                        @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId,
+    ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@Parameter(description = "Flight identifier") @NotNull @PathVariable final Long flightId,
                                                                                         @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 
     /**
      * This opperation sends to office_365 the signal and the path who needs to know that the information is enabled and ready to consume
      * @return
      */
-    @GetMapping("/send/flight/contribution/test")
-    ResponseEntity<String> sendEnabledFlightContributionInformation();
+    @GetMapping("/send/flight/contribution")
+    ResponseEntity<String> sendEnabledFlightContributionInformation(final Long contributionId, final Long flightId);
 
-    @GetMapping("/get/flight/contribution/test/collecturi")
-    ResponseEntity<?> testOfSendEnabledFlightContributionInformation(@Param("fileUri") String fileUri);
 
     @GetMapping("/planning")
     @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
