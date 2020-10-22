@@ -82,6 +82,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currencyOnSale;
 
+    // TODO: cambiar por purchase_comments y meter un nuevo campo salesComments
     @Column(name = "comments", length = 255)
     private String comments;
 

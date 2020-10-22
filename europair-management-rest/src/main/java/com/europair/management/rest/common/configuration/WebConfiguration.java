@@ -1,6 +1,7 @@
 package com.europair.management.rest.common.configuration;
 
 import com.europair.management.rest.audit.AuditorAwareImpl;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -8,9 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
-@EnableJpaAuditing
 public class WebConfiguration {
     @Profile("h2")
     @Bean
