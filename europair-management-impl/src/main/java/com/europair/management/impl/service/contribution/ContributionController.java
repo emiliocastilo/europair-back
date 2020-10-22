@@ -112,9 +112,7 @@ public class ContributionController implements IContributionController {
             @NotNull Long lineContributionRouteId,
             @NotNull LineContributionRouteDTO lineContributionRouteDTO) {
 
-        if ( routeId.equals(lineContributionRouteDTO.getRouteId())
-                && contributionId.equals(lineContributionRouteDTO.getContributionId())
-                && lineContributionRouteId.equals(lineContributionRouteDTO.getId()) ) {
+        if (validateParametersOperationUpdate(routeId, contributionId, lineContributionRouteId, lineContributionRouteDTO)) {
 
             final Boolean res = contributionService.updateLineContributionRoute(contributionId, lineContributionRouteId, lineContributionRouteDTO);
             return (res ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build());
@@ -122,6 +120,12 @@ public class ContributionController implements IContributionController {
         } else {
             return ResponseEntity.unprocessableEntity().build();
         }
+    }
+
+    private boolean validateParametersOperationUpdate(Long routeId, Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
+        return routeId.equals(lineContributionRouteDTO.getRouteId())
+                && contributionId.equals(lineContributionRouteDTO.getContributionId())
+                && lineContributionRouteId.equals(lineContributionRouteDTO.getId());
     }
 
 
