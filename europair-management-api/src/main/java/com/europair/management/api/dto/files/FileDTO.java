@@ -49,7 +49,7 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("contact")
   private ContactDto contact;
 
-  @NotNull
+  // TODO: review - if this attribute must be required in front
   @JsonProperty("providerId")
   private Long providerId;
 
