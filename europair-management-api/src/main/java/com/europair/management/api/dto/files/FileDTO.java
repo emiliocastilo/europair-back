@@ -22,7 +22,6 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("id")
   private Long id;
 
-  @NotNull
   @JsonProperty("code")
   private String code;
 
@@ -30,7 +29,6 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("description")
   private String description;
 
-  @NotNull
   @JsonProperty("statusId")
   private Long statusId;
 
@@ -50,7 +48,7 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("contact")
   private ContactDto contact;
 
-  @NotNull
+  // TODO: review - if this attribute must be required in front
   @JsonProperty("providerId")
   private Long providerId;
 

@@ -1,12 +1,16 @@
 package com.europair.management.impl.service.files;
 
 import com.europair.management.api.dto.files.FileDTO;
+import com.europair.management.api.enums.FileStatesEnum;
+import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.files.IFileMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.files.entity.File;
+import com.europair.management.rest.model.files.entity.FileStatus;
 import com.europair.management.rest.model.files.repository.FileRepository;
+import com.europair.management.rest.model.files.repository.FileStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +23,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class FileServiceImpl implements IFileService {
 
   @Autowired
   private FileRepository fileRepository;
+
+  @Autowired
+  private IStateChangeService stateChangeService;
+
+  @Autowired
+  private FileStatusRepository fileStatusRepository;
 
   @Override
   public Page<FileDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
@@ -39,7 +50,6 @@ public class FileServiceImpl implements IFileService {
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id)));
   }
 
-  @Transactional(readOnly = false)
   @Override
   public FileDTO saveFile(FileDTO fileDTO) {
 
@@ -51,12 +61,19 @@ public class FileServiceImpl implements IFileService {
     // Generate file Code
     file.setCode(generateFileCode());
 
+    // Check status
+    if (file.getStatusId() == null) {
+      FileStatus status = fileStatusRepository.findFirstByCode(FileStatesEnum.SALES.toString())
+              .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + FileStatesEnum.SALES));
+      file.setStatusId(status.getId());
+      file.setStatus(status);
+    }
+
     file = fileRepository.save(file);
 
     return IFileMapper.INSTANCE.toDto(file);
   }
 
-  @Transactional(readOnly = false)
   @Override
   public Boolean updateFile(Long id, FileDTO fileDTO) {
 
@@ -69,7 +86,6 @@ public class FileServiceImpl implements IFileService {
     return Boolean.TRUE;
   }
 
-  @Transactional(readOnly = false)
   @Override
   public void deleteFile(Long id) {
 
@@ -115,4 +131,8 @@ public class FileServiceImpl implements IFileService {
     return sb.toString();
   }
 
+  @Override
+  public void updateStates(List<Long> fileIds, FileStatesEnum state) {
+    stateChangeService.changeState(fileIds, state);
+  }
 }

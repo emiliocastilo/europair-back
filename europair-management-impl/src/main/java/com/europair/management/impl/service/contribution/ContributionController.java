@@ -1,7 +1,9 @@
 package com.europair.management.impl.service.contribution;
 
+import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.service.contribution.IContributionController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -143,6 +145,13 @@ public class ContributionController implements IContributionController {
         this.contributionService.deleteLineContributionRoute(contributionId, lineContributionRouteId);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<?> changeState(@NotNull Long fileId, @NotNull Long routeId, @NotNull StateChangeDto<ContributionStatesEnum> stateChangeDto) {
+        contributionService.updateStates(fileId, routeId, stateChangeDto.getIdList(), stateChangeDto.getState());
+        return ResponseEntity.noContent().build();
+    }
+
 
     @Override
     public ResponseEntity<?> generateRouteContributionSaleLines(@NotNull Long contributionId) {

@@ -323,3 +323,15 @@ databaseChangeLog:
             columnDataType: varchar(20)
             columnName: iata_code
             tableName: aircraft_types
+
+  - changeSet:
+      id: 20201021_aircraft_type_master_v3
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "changes from origin database values"
+      changes:
+        # Aircraft Types
+        - dropNotNullConstraint:
+            columnName: subcategory_id
+            columnDataType: int
+            tableName: aircraft_types

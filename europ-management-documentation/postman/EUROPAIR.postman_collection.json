@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "fba8e325-4f5e-455a-b6ec-9eb67593f829",
+		"_postman_id": "ed83a647-b49b-4e62-8116-c15b90442dae",
 		"name": "EUROPAIR",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -289,7 +289,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "e306eebc-7400-4d3c-8ec8-3a542e129b14",
+								"id": "5379bded-70bc-4060-b48e-43144fced90b",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -299,7 +299,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "fe30a1c8-f676-41ee-9756-e0e6d0c93a68",
+								"id": "91341a93-462b-4f95-802d-f806e2fc92c4",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -977,7 +977,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "01158b59-6b5d-4d3e-a9fc-e4db4eeb3e5b",
+								"id": "69017eea-494c-41b1-82c9-436896f16e2d",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -987,7 +987,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8af5697d-7c2d-472f-8ae7-ef72b26c6105",
+								"id": "1b736b23-49bb-4419-a5cc-001a0321c7d5",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1139,7 +1139,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "2d2b531e-952f-4699-9bd6-72215da298ca",
+								"id": "4fc91708-5a6d-4d3a-908a-b8d7d858fa09",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1149,7 +1149,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "44bad381-eaad-47f3-821f-dd4d864e6fac",
+								"id": "8ac4837e-0814-4597-a462-01bf09eb68eb",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1304,7 +1304,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "f65c016d-00a6-481d-a886-5590b1a06eab",
+						"id": "a2dd56d0-3086-46ea-b9b9-489bec1afa2d",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1314,7 +1314,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "92c3ca2b-5247-44e5-a9d0-d79718223e5a",
+						"id": "96e65e36-79f4-45be-9515-9c38cc63ab25",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1746,7 +1746,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "27582383-c522-4801-886b-2eac570162ef",
+								"id": "172e4664-a9b4-4cff-94c3-1b9027f50f61",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1756,7 +1756,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "460e51e9-430d-4696-89dd-2634e4c4cdaf",
+								"id": "d016c45c-3365-4268-b0ec-961ecdbbb366",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -2244,6 +2244,66 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Commons",
+			"item": [
+				{
+					"name": "FileStateEnum values",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/enums/file-states",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"enums",
+								"file-states"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RouteStateEnum values",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/enums/route-states",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"enums",
+								"route-states"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ContributionStateEnum values",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/enums/contributions-states",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"enums",
+								"contributions-states"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "Contacts",
 			"item": [
 				{
@@ -2354,6 +2414,567 @@
 							"path": [
 								"contacts",
 								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Contribution",
+			"item": [
+				{
+					"name": "LineContributionRoute",
+					"item": [
+						{
+							"name": "prerequisitos",
+							"item": [
+								{
+									"name": "route - add - ADHOC Copy",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-10\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/files/1/routes",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"files",
+												"1",
+												"routes"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "saveContribution PENDING Copy",
+									"event": [
+										{
+											"listen": "prerequest",
+											"script": {
+												"id": "11f3f40c-50a0-40a2-847c-3c93427152bc",
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"2\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{url}}/files/1/routes/1/contributions",
+											"host": [
+												"{{url}}"
+											],
+											"path": [
+												"files",
+												"1",
+												"routes",
+												"1",
+												"contributions"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"protocolProfileBehavior": {},
+							"_postman_isSubFolder": true
+						},
+						{
+							"name": "save lineContributionRoute PURCHASE - FLIGHT",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":null,\r\n    \"contributionId\": 1,\r\n    \"routeId\": 1,\r\n    \"comments\": \"Comentario cualquiera\",\r\n    \"price\": 8000,\r\n    \"inlcudedVAT\": false,\r\n    \"lineContributionRouteType\":\"PURCHASE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"contributions",
+										"1",
+										"linecontributionroute"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "save lineContributionRoute SALES - FLIGHT",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":null,\r\n    \"contributionId\": 1,\r\n    \"routeId\": 1,\r\n    \"comments\": \"Comentario cualquiera\",\r\n    \"price\": 8000,\r\n    \"inlcudedVAT\": false,\r\n    \"lineContributionRouteType\":\"SALE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"contributions",
+										"1",
+										"linecontributionroute"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "lineContributionRoute - update only allowed parameters",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"contributionId\": 1,\r\n    \"routeId\": 1,\r\n    \"comments\": \"Cambiamos la descripcion y el precio\",\r\n    \"price\": 15000,\r\n    \"includedVAT\": true,\r\n    \"lineContributionRouteType\":\"SALE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"contributions",
+										"1",
+										"linecontributionroute",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "lineContributionRoute - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"contributions",
+										"1",
+										"linecontributionroute",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "getContributionByFilter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions?size=10&page=0&filter_fileId=1,EQUALS&filter_contributionState=CONFIRMED,EQUALS&filter_operatorId=1,EQUALS&filter_routeId=1,EQUALS",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "filter_fileId",
+									"value": "1,EQUALS"
+								},
+								{
+									"key": "filter_contributionState",
+									"value": "CONFIRMED,EQUALS"
+								},
+								{
+									"key": "filter_operatorId",
+									"value": "1,EQUALS"
+								},
+								{
+									"key": "filter_routeId",
+									"value": "1,EQUALS"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getContributionById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveContribution PENDING",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "92bf676e-becc-47ec-a3e4-16ad4e421ba6",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"2\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveContribution SENDED",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bfe44573-973b-46c6-a318-80013c8a5bce",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"SENDED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveContribution QUOTED",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d6de6de2-b98f-40b4-8402-b55ae4c1c139",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"QUOTED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "saveContribution CONFIRMED",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "51a4fef0-236f-460d-89e3-96516030cd14",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"CONFIRMED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fileId\": 1,\r\n    \"routeId\": 1,\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": 1,\r\n    \"aircraftId\": 1,\r\n    \"requestTime\": null,\r\n    \"quotedTime\": null,\r\n    \"cargoAirborne\": null,\r\n    \"currency\": \"EUR\",\r\n    \"currencyOnSale\": \"EUR\",\r\n    \"comments\": null,\r\n    \"exchangeBuyType\": null,\r\n    \"purchasePrice\": 8000,\r\n    \"purchaseCommissionPercent\": 0,\r\n    \"inlcudedIva\": false,\r\n    \"salesPrice\": 10000,\r\n    \"salesCommissionPercent\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - change state",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"idList\": [1],\r\n   \"state\": \"SENDED\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions/state",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions",
+								"state"
 							]
 						}
 					},
@@ -2728,6 +3349,35 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "route - change state",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"idList\": [1],\r\n   \"state\": \"OPTIONED\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/state",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"state"
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -2740,7 +3390,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": null,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1\",\r\n    \"statusId\": 1,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": null,\r\n    \"saleAgentId\": null,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null\r\n}",
+							"raw": "{\r\n    \"id\": null,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1\",\r\n    \"statusId\": null,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": null,\r\n    \"saleAgentId\": null,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2834,6 +3484,33 @@
 							"path": [
 								"files",
 								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "file - change state",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"idList\": [1],\r\n   \"state\": \"SALES\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/state",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"state"
 							]
 						}
 					},
@@ -2988,7 +3665,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "0ffd71c0-146d-423b-bb92-b6f72a143d37",
+								"id": "a49f640f-d0ab-44f5-aa3f-1eefe0c34a15",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -2998,7 +3675,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "fcaa704c-69ee-4caf-a366-dfcd0aaaccdc",
+								"id": "54e61b40-0da5-446f-8f91-52d54f61d1a9",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -3185,6 +3862,50 @@
 							"path": [
 								"integration",
 								"office",
+								"confirmation",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "office365 - send confirmed operation url",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/integration/office/send/confirmation/1/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"integration",
+								"office",
+								"send",
+								"confirmation",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "office365 - get confirmed operation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/integration/office/get/confirmation/1/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"integration",
+								"office",
+								"get",
 								"confirmation",
 								"1",
 								"1"
@@ -3424,7 +4145,7 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "cf5ccd7f-8b28-4c7f-bdae-b8b1166aede2",
+						"id": "76ba3863-c42d-407f-9cc9-a0ed53964cd9",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -3434,7 +4155,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "bccd37bf-0f19-428b-82f9-f2dce1833353",
+						"id": "01fd63d4-bf3b-459c-8104-78f1b8ec5eb9",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -3620,469 +4341,12 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Contribution",
-			"item": [
-				{
-					"name": "LineContributionRoute",
-					"item": [
-						{
-							"name": "prerequisitos",
-							"item": [
-								{
-									"name": "route - add - ADHOC Copy",
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-10\"\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}/files/1/routes",
-											"host": [
-												"{{url}}"
-											],
-											"path": [
-												"files",
-												"1",
-												"routes"
-											]
-										}
-									},
-									"response": []
-								},
-								{
-									"name": "saveContribution PENDING Copy",
-									"event": [
-										{
-											"listen": "prerequest",
-											"script": {
-												"id": "0500327f-4dea-4a14-80ed-ed438195a460",
-												"exec": [
-													""
-												],
-												"type": "text/javascript"
-											}
-										}
-									],
-									"request": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"2\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{url}}/files/1/routes/1/contributions",
-											"host": [
-												"{{url}}"
-											],
-											"path": [
-												"files",
-												"1",
-												"routes",
-												"1",
-												"contributions"
-											]
-										}
-									},
-									"response": []
-								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
-						},
-						{
-							"name": "save lineContributionRoute PURCHASE - FLIGHT",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"id\":null,\r\n    \"contributionId\": 1,\r\n    \"routeId\": 1,\r\n    \"comments\": \"Comentario cualquiera\",\r\n    \"price\": 8000,\r\n    \"inlcudedVAT\": false,\r\n    \"lineContributionRouteType\":\"PURCHASE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"files",
-										"1",
-										"routes",
-										"1",
-										"contributions",
-										"1",
-										"linecontributionroute"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "save lineContributionRoute SALES - FLIGHT",
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"id\":null,\r\n    \"contributionId\": 1,\r\n    \"routeId\": 1,\r\n    \"comments\": \"Comentario cualquiera\",\r\n    \"price\": 8000,\r\n    \"inlcudedVAT\": false,\r\n    \"lineContributionRouteType\":\"SALE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"files",
-										"1",
-										"routes",
-										"1",
-										"contributions",
-										"1",
-										"linecontributionroute"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "lineContributionRoute - update only allowed parameters",
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"id\": 1,\r\n    \"contributionId\": 1,\r\n    \"routeId\": 1,\r\n    \"comments\": \"Cambiamos la descripcion y el precio\",\r\n    \"price\": 15000,\r\n    \"includedVAT\": true,\r\n    \"lineContributionRouteType\":\"SALE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute/1",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"files",
-										"1",
-										"routes",
-										"1",
-										"contributions",
-										"1",
-										"linecontributionroute",
-										"1"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "lineContributionRoute - delete",
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute/1",
-									"host": [
-										"{{url}}"
-									],
-									"path": [
-										"files",
-										"1",
-										"routes",
-										"1",
-										"contributions",
-										"1",
-										"linecontributionroute",
-										"1"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "getContributionByFilter",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/files/1/routes/1/contributions?size=10&page=0&filter_fileId=1,EQUALS&filter_contributionState=CONFIRMED,EQUALS&filter_operatorId=1,EQUALS&filter_routeId=1,EQUALS",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1",
-								"routes",
-								"1",
-								"contributions"
-							],
-							"query": [
-								{
-									"key": "size",
-									"value": "10"
-								},
-								{
-									"key": "page",
-									"value": "0"
-								},
-								{
-									"key": "filter_fileId",
-									"value": "1,EQUALS"
-								},
-								{
-									"key": "filter_contributionState",
-									"value": "CONFIRMED,EQUALS"
-								},
-								{
-									"key": "filter_operatorId",
-									"value": "1,EQUALS"
-								},
-								{
-									"key": "filter_routeId",
-									"value": "1,EQUALS"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "getContributionById",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/files/1/routes/1/contributions/1",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1",
-								"routes",
-								"1",
-								"contributions",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "saveContribution PENDING",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "b307c14d-976b-4cd2-b03a-efd0b89f79f8",
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"2\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/files/1/routes/1/contributions",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1",
-								"routes",
-								"1",
-								"contributions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "saveContribution SENDED",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "a2e31e4e-c8df-4a4d-8a4f-77164c06f439",
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"SENDED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/files/1/routes/1/contributions",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1",
-								"routes",
-								"1",
-								"contributions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "saveContribution QUOTED",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "656d188d-9086-411f-a22b-24dfb62a98b5",
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"QUOTED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/files/1/routes/1/contributions",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1",
-								"routes",
-								"1",
-								"contributions"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "saveContribution CONFIRMED",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "bfdfc44a-7e96-42da-87f9-352acf2c54f5",
-								"exec": [
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{    \r\n    \"fileId\": \"1\",\r\n    \"routeId\": \"1\",\r\n    \"contributionState\": \"CONFIRMED\",\r\n    \"operatorId\": \"1\",\r\n    \"aircraftId\": \"1\",\r\n    \"requestTime\": \"{{timestamp}}\",\r\n    \"quotedTime\": \"{{timestamp}}\",\r\n    \"cargoAirborne\": 2019.0,\r\n    \"currency\": \"EUR\",\r\n    \"comments\": \"comentario\",\r\n    \"exchangeBuyType\": \"AUD\",\r\n    \"purchasePrice\": 100.00,\r\n    \"purchaseCommissionPercent\": 20,\r\n    \"includedIva\": false,\r\n    \"salesPrice\": 200.00,\r\n    \"salesCommissionPercent\": 80,\r\n    \"salesPricewithoutIVA\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{url}}/files/1/routes/1/contributions",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"files",
-								"1",
-								"routes",
-								"1",
-								"contributions"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
 			"name": "login_generate_token",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "dcdb1abd-2e8c-4ac7-aaed-9953d5c1b120",
+						"id": "14419e2d-6698-4b7b-bf46-8bde1b3e0436",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"pm.collectionVariables.set(\"token\", jsonData.jwtToken);"
@@ -4290,7 +4554,7 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "809098c6-e53a-421b-9437-9e2caa02e530",
+				"id": "477761d9-1911-4d76-a5c9-281cc36a3089",
 				"type": "text/javascript",
 				"exec": [
 					"var current_timestamp = new Date();",
@@ -4301,7 +4565,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "fb738d51-98e9-4522-b3a6-5133c7a47e28",
+				"id": "17c6e574-d72d-4da2-8727-f736eff80e8e",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -4311,17 +4575,17 @@
 	],
 	"variable": [
 		{
-			"id": "da562152-c83f-4a0a-8807-b413aa1914db",
+			"id": "8dc6ced2-1aba-4132-b69e-ec5c46fc032a",
 			"key": "token",
-			"value": "eyJhbGciOiJIUzUxMiJ9.eyJpYXQiOjE2MDMyMTQ2MzgsImlzcyI6IkV1cm9wYWlyIiwic3ViIjoiYWRtaW4iLCJleHAiOjE2MDQ1MTA2Mzh9.adNSzhS-Tydh6glA62rpNmZF8tm1CNRwZ_2exbNMIv3aceXQ_3yNk4p6yDYpkU-5-0SUpkYdBzZQAnaqZDZd6w"
+			"value": ""
 		},
 		{
-			"id": "867c3fc4-59d5-4925-9515-953b767eb797",
+			"id": "34dd96f1-b730-4219-87c1-318d8e0c5a0e",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "0acb4605-c1ed-4052-8b5a-e8595d2d4959",
+			"id": "162b286e-73d0-4c28-bc7b-9a105dfaf44c",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}

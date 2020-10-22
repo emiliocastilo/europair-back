@@ -1,7 +1,9 @@
 package com.europair.management.api.service.contribution;
 
+import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -93,7 +95,7 @@ public interface IContributionController {
      * Updated master contribution information
      * </p>
      *
-     * @param id         Unique identifier
+     * @param id              Unique identifier
      * @param contributionDTO Updated contribution data
      * @return The updated contribution
      */
@@ -105,9 +107,10 @@ public interface IContributionController {
 
     /**
      * <p>
-     *     Update amount of a LineContributionRoute
+     * Update amount of a LineContributionRoute
      * </p>
-     * @param contributionId Unique identifier
+     *
+     * @param contributionId          Unique identifier
      * @param lineContributionRouteId Unique identifier
      * @return
      */
@@ -139,6 +142,21 @@ public interface IContributionController {
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
             @Parameter(description = "Contribution identifier") @PathVariable @NotNull final Long contributionId,
             @Parameter(description = "LineContributionRoute identifier") @PathVariable @NotNull final Long lineContributionRouteId);
+
+    /**
+     * <p>Changes a contribution state</p>
+     *
+     * @param fileId         File identifier
+     * @param routeId        Route identifier
+     * @param stateChangeDto State change data
+     * @return No content
+     */
+    @PutMapping("/state")
+    @Operation(description = "Changes the state of a contribution")
+    ResponseEntity<?> changeState(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+            @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<ContributionStatesEnum> stateChangeDto);
 
     /**
      * <p>

@@ -1,6 +1,8 @@
 package com.europair.management.impl.service.files;
 
+import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.files.FileDTO;
+import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.api.service.files.IFileController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -8,12 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
@@ -62,4 +63,9 @@ public class FileController implements IFileController {
         fileService.deleteFile(id);
     }
 
+    @Override
+    public ResponseEntity<?> changeState(@NotNull @Valid StateChangeDto<FileStatesEnum> stateChangeDto) {
+        fileService.updateStates(stateChangeDto.getIdList(), stateChangeDto.getState());
+        return ResponseEntity.noContent().build();
+    }
 }

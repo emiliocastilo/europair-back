@@ -1,6 +1,6 @@
 package com.europair.management.impl.integrations.office365.planning;
 
-import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
 import com.europair.management.api.integrations.office365.dto.FlightSharingInfoDTO;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
@@ -103,7 +103,7 @@ public class PlanningServiceImpl implements IPlanningService {
         // Take aircraft info from contribution
         Contribution contribution = null;
         for (Contribution contributionAux : route.getContributions()) {
-            if (contributionAux.getContributionState().equals(ContributionStates.CONFIRMED)) {
+            if (contributionAux.getContributionState().equals(ContributionStatesEnum.CONFIRMED)) {
                 contribution = contributionAux;
             }
         }

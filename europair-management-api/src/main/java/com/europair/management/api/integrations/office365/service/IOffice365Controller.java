@@ -1,5 +1,6 @@
 package com.europair.management.api.integrations.office365.service;
 
+import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ public interface IOffice365Controller {
 
     /**
      * <p>
-     * Confirms operation and send operation data to another system.
+     * Confirms operation and send operation data to the office_365 endpoint.
      * </p>
      *
      * @param routeId        Unique route identifier.
@@ -29,8 +30,40 @@ public interface IOffice365Controller {
      * @return No content
      */
     @GetMapping("/confirmation/{routeId}/{contributionId}")
-    @Operation(description = "Retrieve master airport data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    @Operation(description = "Sends operation confirmed data to an url of the Office365 systems", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> confirmOperation(
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+            @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
+
+    /**
+     * <p>
+     * Sends url to get the confirmed operation data.
+     * </p>
+     *
+     * @param routeId        Unique route identifier.
+     * @param contributionId Unique contribution identifier.
+     * @return No content
+     */
+    @GetMapping("/send/confirmation/{routeId}/{contributionId}")
+    @Operation(description = "Send an url to the Office365 systems to indicate that the information is enabled, and can be retrieved from the url",
+            security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<String> sendConfirmedOperation(
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+            @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
+
+    /**
+     * <p>
+     * This operation allows to office_365 power app to retrieve all the information related with the confirmed operation
+     * </p>
+     *
+     * @param routeId        Unique route identifier.
+     * @param contributionId Unique contribution identifier.
+     * @return No content
+     */
+    @GetMapping("/get/confirmation/{routeId}/{contributionId}")
+    @Operation(description = "Retrieves confirmed operation data for the route and contribution selected.",
+            security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<ConfirmedOperationDto> getConfirmedOperation(
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
             @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 

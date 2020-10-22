@@ -42,6 +42,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "contribution_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
     private Contribution contribution;
 
     @Column(name = "route_id")
@@ -50,6 +51,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
     private Route route;
 
     @Column(name = "comments", length = 255)

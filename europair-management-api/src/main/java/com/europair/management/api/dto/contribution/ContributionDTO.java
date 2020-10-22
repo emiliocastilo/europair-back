@@ -4,10 +4,9 @@ import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.dto.fleet.AircraftDto;
 import com.europair.management.api.dto.operators.OperatorDTO;
 import com.europair.management.api.dto.routes.RouteDto;
-import com.europair.management.api.enums.ContributionStates;
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.ExchangeBuyTypeEnum;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -42,7 +40,7 @@ public class ContributionDTO {
     private RouteDto route;
 
     @JsonProperty("contributionState")
-    private ContributionStates contributionState;
+    private ContributionStatesEnum contributionState;
 
     @JsonProperty("operatorId")
     private Long operatorId;

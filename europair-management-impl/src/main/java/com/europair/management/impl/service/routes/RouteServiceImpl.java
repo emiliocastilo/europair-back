@@ -3,7 +3,8 @@ package com.europair.management.impl.service.routes;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
-import com.europair.management.api.enums.RouteStates;
+import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
 import com.europair.management.impl.util.Utils;
@@ -60,6 +61,9 @@ public class RouteServiceImpl implements IRouteService {
     @Autowired
     private FlightRepository flightRepository;
 
+    @Autowired
+    private IStateChangeService stateChangeService;
+
     @Override
     public Page<RouteDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
         checkIfFileExists(fileId);
@@ -101,7 +105,7 @@ public class RouteServiceImpl implements IRouteService {
         route.setFileId(fileId);
 
         // Default state
-        route.setRouteState(RouteStates.SALES);
+        route.setRouteState(RouteStatesEnum.SALES);
 
         // Persist entity
         route = routeRepository.save(route);
@@ -321,6 +325,12 @@ public class RouteServiceImpl implements IRouteService {
 
         // ToDo: modificar vuelos??
         return IRouteMapper.INSTANCE.toDto(route);
+    }
+
+    @Override
+    public void updateStates(Long fileId, List<Long> routeIds, RouteStatesEnum state) {
+        checkIfFileExists(fileId);
+        stateChangeService.changeState(routeIds, state);
     }
 
     // Flights
