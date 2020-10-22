@@ -21,10 +21,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 @Transactional
 public class RouteCheckStatusScheduler {
 
@@ -40,24 +39,25 @@ public class RouteCheckStatusScheduler {
     @Scheduled(cron = "0 0/1 * * * ?")
     @SchedulerLock(name = "RouteCheckStatusScheduler_checkRouteStatus", lockAtLeastForString = "PT2M", lockAtMostForString = "PT14M")
     public void checkRouteStatus() {
-
         // first step is to populate the securedSession with the System user
-        User user = this.userRepository.findByUsername("system")
-                .orElseThrow(
-                    () -> new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    String.format("Something when wrong retrieveing the System user. Check if exist on database"))
-                );
-
-        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), null, new ArrayList<>()));
-
+        populateSecurityContextForAuditorWithSystemUser();
         // Take a look at the state of a route, check the date of the flight associated with It
         // and if is before than the current date then transit the state to expired.
         List<Route> routeList = this.routeRepository.searchNotLostRoutesAndNotWon(RouteStates.SALES);
-
         List<Flight> flightList = routeList.stream().map(Route::getFlights).flatMap(Collection::stream).collect(Collectors.toList());
 
-        for ( Flight flight : flightList ){
+        transitRotationToLostExpiredIfFlightIsAreGone(flightList);
+        // now we must take a look over all the Routes and see if all the rotations are in LOST_EXPIRED
+        // then the ROUTE must change to LOST_EXPIRED
+        checkAndTransitRouteStateToLostExpired(routeList);
+    }
+
+    /**
+     * Transits a route if his flight are gone
+     * @param flightList
+     */
+    private void transitRotationToLostExpiredIfFlightIsAreGone(List<Flight> flightList) {
+        for ( Flight flight : flightList){
             if(flight.getDepartureTime().isBefore(LocalDateTime.now())){
                 Route route = this.routeRepository.findById(flight.getRouteId())
                         .orElseThrow(
@@ -66,10 +66,44 @@ public class RouteCheckStatusScheduler {
                                         String.format("Something when wrong with the flight : %s can not retrieve the route information", flight.getId()))
                         );
                 route.setRouteState(RouteStates.LOST_EXPIRED);
-
-                this.routeRepository.save(route);
+                this.routeRepository.saveAndFlush(route);
             }
         }
+    }
+
+    /**
+     * This method transits a route to RouteStates.LOST_EXPIRED if all the rotations are in that state
+     * @param routeList
+     */
+    private void checkAndTransitRouteStateToLostExpired(List<Route> routeList) {
+        for (Route route : routeList){
+            if (null != route.getRotations() && !route.getRotations().isEmpty()){
+                boolean transitToLostExpired = true;
+                for (Route rotation : route.getRotations()){
+                    if ( !rotation.getRouteState().equals(RouteStates.LOST_EXPIRED)){
+                        transitToLostExpired = false;
+                    }
+                }
+                if (transitToLostExpired){
+                    route.setRouteState(RouteStates.LOST_EXPIRED);
+                    this.routeRepository.saveAndFlush(route);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method populates the SecurityContextHolder to keep the auditory based on spring working
+     */
+    private void populateSecurityContextForAuditorWithSystemUser() {
+        User user = this.userRepository.findByUsername("system")
+                .orElseThrow(
+                    () -> new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    String.format("Something when wrong retrieveing the System user. Check if exist on database"))
+                );
+
+        SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), null, new ArrayList<>()));
     }
 
 }
