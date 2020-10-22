@@ -176,6 +176,57 @@ public class ContributionServiceImpl implements IContributionService {
         }
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public void generateRouteContributionSaleLines(Long contributionId) {
+        Contribution contribution = contributionRepository.findById(contributionId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+        Set<LineContributionRoute> flightPurchaseLines = new HashSet<>();
+        Set<LineContributionRoute> flightSaleLines = new HashSet<>();
+        Set<LineContributionRoute> servicePurchaseLines = new HashSet<>();
+        Set<LineContributionRoute> serviceSaleLines = new HashSet<>();
+        contribution.getLineContributionRoute().forEach(line -> {
+            if (ServiceTypeEnum.FLIGHT.equals(line.getType())) {
+                if (LineContributionRouteType.PURCHASE.equals(line.getLineContributionRouteType())) {
+                    flightPurchaseLines.add(line);
+                } else {
+                    flightSaleLines.add(line);
+                }
+            } else {
+                if (LineContributionRouteType.PURCHASE.equals(line.getLineContributionRouteType())) {
+                    servicePurchaseLines.add(line);
+                } else {
+                    serviceSaleLines.add(line);
+                }
+            }
+        });
+
+        // Update flight lines
+        Set<LineContributionRoute> updatedFlightSaleLines = flightPurchaseLines.stream()
+                .map(purchaseLine -> {
+                    LineContributionRoute saleLine = flightSaleLines.stream()
+                            .filter(line -> purchaseLine.getRouteId().equals(line.getRouteId()))
+                            .findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                                    "No route contribution sale line found for rotation with id: " + purchaseLine.getRouteId()));
+                    // Update values
+                    saleLine.setPrice(purchaseLine.getPrice());
+                    return saleLine;
+                }).collect(Collectors.toSet());
+        lineContributionRouteRepository.saveAll(updatedFlightSaleLines);
+
+        // Remove service lines
+        lineContributionRouteRepository.deleteAll(serviceSaleLines);
+
+        // Create updated service lines
+        Set<LineContributionRoute> updatedServiceSaleLines = servicePurchaseLines.stream()
+                .map(line -> {
+                    LineContributionRoute saleLine = new LineContributionRoute(line);
+                    saleLine.setLineContributionRouteType(LineContributionRouteType.SALE);
+                    return saleLine;
+                }).collect(Collectors.toSet());
+        lineContributionRouteRepository.saveAll(updatedServiceSaleLines);
+    }
+
     private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {
         if (CollectionUtils.isEmpty(contributionRoute.getRotations())) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "NO rotations found for route with id: " + contributionRoute.getId());

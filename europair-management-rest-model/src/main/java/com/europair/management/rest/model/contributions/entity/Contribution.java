@@ -9,6 +9,7 @@ import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -31,6 +32,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "file_id")
     private Long fileId;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne
     @JoinColumn(name = "file_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private File file;
@@ -38,6 +40,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "route_id")
     private Long routeId;
 
+    @EqualsAndHashCode.Exclude
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private Route route;
@@ -49,6 +52,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "operator_id")
     private Long operatorId;
 
+    @EqualsAndHashCode.Exclude
     @NotAudited
     @ManyToOne
     @JoinColumn(name = "operator_id", insertable = false, updatable = false)
@@ -57,6 +61,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "aircraft_id")
     private Long aircraftId;
 
+    @EqualsAndHashCode.Exclude
     @NotAudited
     @ManyToOne
     @JoinColumn(name = "aircraft_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)

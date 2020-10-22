@@ -28,4 +28,6 @@ public interface IContributionService {
     void deleteContribution(Long id);
 
     void deleteLineContributionRoute(Long contributionId,Long lineContributionRouteId);
+
+    void generateRouteContributionSaleLines(Long contributionId);
 }
