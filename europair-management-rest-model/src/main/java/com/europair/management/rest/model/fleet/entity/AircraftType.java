@@ -48,7 +48,8 @@ public class AircraftType extends SoftRemovableBaseEntity implements Serializabl
     @JoinColumn(name = "category_id", nullable = false)
     private AircraftCategory category;
 
-    @ManyToOne(optional = false)
+    // this attribute is not required to register an aircraftType optional must be true
+    @ManyToOne()
     @JoinColumn(name = "subcategory_id")
     private AircraftCategory subcategory;
 
