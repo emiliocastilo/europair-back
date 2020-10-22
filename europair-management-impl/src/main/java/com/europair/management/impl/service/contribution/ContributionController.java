@@ -152,4 +152,10 @@ public class ContributionController implements IContributionController {
         return ResponseEntity.noContent().build();
     }
 
+
+    @Override
+    public ResponseEntity<?> generateRouteContributionSaleLines(@NotNull Long contributionId) {
+        contributionService.generateRouteContributionSaleLines(contributionId);
+        return ResponseEntity.noContent().build();
+    }
 }

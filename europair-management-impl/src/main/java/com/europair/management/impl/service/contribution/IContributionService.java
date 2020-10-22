@@ -27,7 +27,9 @@ public interface IContributionService {
 
     void deleteContribution(Long id);
 
-    void deleteLineContributionRoute(Long contributionId,Long lineContributionRouteId);
+    void deleteLineContributionRoute(Long contributionId, Long lineContributionRouteId);
 
     void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStatesEnum state);
+
+    void generateRouteContributionSaleLines(Long contributionId);
 }

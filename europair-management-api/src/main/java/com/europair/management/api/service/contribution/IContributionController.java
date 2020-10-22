@@ -95,7 +95,7 @@ public interface IContributionController {
      * Updated master contribution information
      * </p>
      *
-     * @param id         Unique identifier
+     * @param id              Unique identifier
      * @param contributionDTO Updated contribution data
      * @return The updated contribution
      */
@@ -107,9 +107,10 @@ public interface IContributionController {
 
     /**
      * <p>
-     *     Update amount of a LineContributionRoute
+     * Update amount of a LineContributionRoute
      * </p>
-     * @param contributionId Unique identifier
+     *
+     * @param contributionId          Unique identifier
      * @param lineContributionRouteId Unique identifier
      * @return
      */
@@ -156,4 +157,17 @@ public interface IContributionController {
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
             @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<ContributionStatesEnum> stateChangeDto);
+
+    /**
+     * <p>
+     * Creates route contribution sale lines with the values of the purchase lines
+     * </p>
+     *
+     * @param contributionId Unique identifier of the contribution.
+     * @return No content
+     */
+    @PostMapping("/{contributionId}/generate-sale-lines")
+    @Operation(description = "Creates or updates route sale lines for the contribution", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> generateRouteContributionSaleLines(@Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
+
 }

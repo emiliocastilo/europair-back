@@ -1,12 +1,22 @@
 package com.europair.management.rest.model.contributions.entity;
 
-import com.europair.management.api.enums.*;
+import com.europair.management.api.enums.LineContributionRouteType;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -65,4 +75,21 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @Enumerated(EnumType.STRING)
     private ServiceTypeEnum type;
 
+    public LineContributionRoute() {
+    }
+
+    /**
+     * Copy constructor to copy all properties but id, and object entities.
+     *
+     * @param lineContributionRoute Entity to copy params from
+     */
+    public LineContributionRoute(LineContributionRoute lineContributionRoute) {
+        this.contributionId = lineContributionRoute.getContributionId();
+        this.comments = lineContributionRoute.getComments();
+        this.routeId = lineContributionRoute.getRouteId();
+        this.price = lineContributionRoute.getPrice();
+        this.includedVAT = lineContributionRoute.getIncludedVAT();
+        this.lineContributionRouteType = lineContributionRoute.getLineContributionRouteType();
+        this.type = lineContributionRoute.getType();
+    }
 }
