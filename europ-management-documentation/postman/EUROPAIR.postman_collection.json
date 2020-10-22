@@ -3869,6 +3869,50 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "office365 - send confirmed operation url",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/integration/office/send/confirmation/1/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"integration",
+								"office",
+								"send",
+								"confirmation",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "office365 - get confirmed operation",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/integration/office/get/confirmation/1/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"integration",
+								"office",
+								"get",
+								"confirmation",
+								"1",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -4531,17 +4575,17 @@
 	],
 	"variable": [
 		{
-			"id": "934b7abf-dfc9-416d-a330-beafe242eb23",
+			"id": "8dc6ced2-1aba-4132-b69e-ec5c46fc032a",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "fed3ca45-6e33-4d38-b381-149929ffe2fa",
+			"id": "34dd96f1-b730-4219-87c1-318d8e0c5a0e",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "5044f38e-8064-44a6-93cf-8e7ce7060543",
+			"id": "162b286e-73d0-4c28-bc7b-9a105dfaf44c",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}

@@ -13,6 +13,9 @@ public interface Office365Client {
     @RequestMapping(method = RequestMethod.POST, value = "${europair.integration.office365.endpoints.confirm}")
     void sendConfirmedOperationData(@RequestBody ConfirmedOperationDto confirmedOperation);
 
+    @RequestMapping(method = RequestMethod.POST, value = "${europair.integration.office365.endpoints.confirm-uri}")
+    void sendConfirmedOperationUri(@RequestParam(name = "operationUri") String operationUri);
+
     @RequestMapping(method = RequestMethod.GET, value = "${europair.integration.office365.endpoints.flights}")
     void sendUriToEnabledFlightContributionInformation(@RequestParam(name = "fileUri") String fileUri);
 

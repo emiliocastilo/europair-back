@@ -2,6 +2,7 @@ package com.europair.management.impl.integrations.office365.service;
 
 import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
 import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
+import com.europair.management.api.integrations.office365.dto.ContributionDataDto;
 import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
 import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
 import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
@@ -74,18 +75,14 @@ public class Office365ServiceImpl implements IOffice365Service {
 
 
     @Override
-    public void confirmOperation(Long routeId, Long contributionId) {
-
+    public ConfirmedOperationDto getConfirmedOperationData(Long routeId, Long contributionId) {
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
 
         Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
-        ConfirmedOperationDto confirmedOperationDto = mapConfirmedOperation(route, contribution);
-
-        // Send data
-        office365Client.sendConfirmedOperationData(confirmedOperationDto);
+        return mapConfirmedOperation(route, contribution);
     }
 
     @Override
@@ -180,7 +177,15 @@ public class Office365ServiceImpl implements IOffice365Service {
         dto.setFileInfo(fileSharingInfo);
 
         dto.setFlightsInfo(mapFlightsWithServices(route, contribution, dsDataList));
-        dto.setContributionInfo(IOffice365Mapper.INSTANCE.mapContribution(contribution));
+
+        ContributionDataDto contributionData = IOffice365Mapper.INSTANCE.mapContribution(contribution);
+        if (!CollectionUtils.isEmpty(contribution.getLineContributionRoute())) {
+            contributionData.setLines(contribution.getLineContributionRoute().stream()
+                    .map(IOffice365Mapper.INSTANCE::mapContributionLine)
+                    .collect(Collectors.toList()));
+        }
+        dto.setContributionInfo(contributionData);
+
         dto.setObservations(route.getFile().getObservation());
 
         return dto;
