@@ -69,7 +69,6 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     private LocalDateTime quotedTime;
 
     // maximum load who must be the airborne to the destiny
-    // TODO: tiene sentido si agrupamos varias aeronaves ??
     @Column(name = "cargo_airborne")
     private Long cargoAirborne;
 
@@ -82,9 +81,11 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currencyOnSale;
 
+    // TODO: cambiar por purchase_comments y meter un nuevo campo salesComments
     @Column(name = "comments", length = 255)
     private String comments;
 
+    // TODO: eliminar tiene sentido almacenar el tipo de cambio entre monedas si es un dato volatil??
     @Column(name = "exchange_buy_type")
     @Enumerated(EnumType.STRING)
     private ExchangeBuyTypeEnum exchangeBuyType;
@@ -92,6 +93,10 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "purchase_price", precision = 12, scale = 4)
     private BigDecimal purchasePrice;
 
+    // TODO: está relacionado con la tasa de vuelo?? a comentar ver tabla flightTaxes y los servicios de vuelo en flightService
+    // una cotizacion puede tener muchas tasas de vuelo tantas como vuelos
+    // existen tantos vuelos como rotaciones al menos ya que una rotacion contiene 1 - N vuelos
+    // ¿que porcentaje deberemos almacenoar, aqui? ¿la media?
     @Column(name = "purchase_commission_percent")
     private Integer purchaseCommissionPercent;
 
@@ -101,6 +106,8 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "sales_price", precision = 12, scale = 4)
     private BigDecimal salesPrice;
 
+
+    // TODO: lo mismo pasa (que en el purchaseCommisionPercent) con el %de venta
     @Column(name = "sales_commission_percent")
     private Integer salesCommissionPercent;
 

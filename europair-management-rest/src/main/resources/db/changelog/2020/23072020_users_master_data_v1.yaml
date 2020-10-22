@@ -45,3 +45,33 @@ databaseChangeLog:
                   name: time_zone
                   value: "TWO"
             where: id=1
+  - changeSet:
+      id: 23072020_users_master_v1_users_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add user system to the database"
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: "system"
+              - column:
+                  name: password
+                  value: "$2a$10$YucGYnuMUhG/7rHilE3gVuEjcui7IqA0A.lhtmUh1BVK/ecvGD4/m"
+              - column:
+                  name: name
+                  value: "System"
+              - column:
+                  name: surname
+                  value: "System"
+              - column:
+                  name: time_zone
+                  value: "TWO"
+              - column:
+                  name: created_at
+                  value: "2020-10-20"
+              - column:
+                  name: created_by
+                  value: "Sistema"

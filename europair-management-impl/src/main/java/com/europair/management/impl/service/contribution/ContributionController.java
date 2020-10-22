@@ -7,14 +7,12 @@ import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.service.contribution.IContributionController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
-import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -114,9 +112,7 @@ public class ContributionController implements IContributionController {
             @NotNull Long lineContributionRouteId,
             @NotNull LineContributionRouteDTO lineContributionRouteDTO) {
 
-        if ( routeId.equals(lineContributionRouteDTO.getRouteId())
-                && contributionId.equals(lineContributionRouteDTO.getContributionId())
-                && lineContributionRouteId.equals(lineContributionRouteDTO.getId()) ) {
+        if (validateParametersOperationUpdate(routeId, contributionId, lineContributionRouteId, lineContributionRouteDTO)) {
 
             final Boolean res = contributionService.updateLineContributionRoute(contributionId, lineContributionRouteId, lineContributionRouteDTO);
             return (res ? ResponseEntity.ok().build() : ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build());
@@ -125,6 +121,13 @@ public class ContributionController implements IContributionController {
             return ResponseEntity.unprocessableEntity().build();
         }
     }
+
+    private boolean validateParametersOperationUpdate(Long routeId, Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
+        return routeId.equals(lineContributionRouteDTO.getRouteId())
+                && contributionId.equals(lineContributionRouteDTO.getContributionId())
+                && lineContributionRouteId.equals(lineContributionRouteDTO.getId());
+    }
+
 
     @Override
     public ResponseEntity<?> deleteContribution(@NotNull Long id) {

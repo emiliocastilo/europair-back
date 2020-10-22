@@ -1,0 +1,40 @@
+databaseChangeLog:
+  - changeSet:
+      id: shedlock_master_table_21102020_v1
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add shedlock master table to database"
+      changes:
+        - createTable:
+            tableName: shedlock
+            remarks: The shedlock table to schedule heavy or scheduled task
+            columns:
+              - column:
+                  name: name
+                  type: varchar(64)
+                  remarks: name of the scheduler runing
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: shedlock_name_pk
+              - column:
+                  name: locked_at
+                  type: timestamp
+                  remarks: time when the task starts
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: lock_until
+                  type: timestamp
+                  remarks: timestamp who remarks the time until the job blocks the execution
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: locked_by
+                  type: varchar(255)
+                  remarks: name of the task who blocks the task
+                  constraints:
+                    nullable: false
+
