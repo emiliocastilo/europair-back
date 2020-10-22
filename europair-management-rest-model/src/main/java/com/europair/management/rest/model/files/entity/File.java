@@ -64,7 +64,7 @@ public class File extends SoftRemovableBaseEntityHardAudited implements Serializ
   @JoinColumn(name = "contact_id", referencedColumnName = "id", nullable = true, insertable = false, updatable = false)
   private Contact contact;
 
-  @NotNull
+  // TODO: review - if this attribute must be required
   @Column(name = "provider_id",nullable = false)
   private Long providerId;
 

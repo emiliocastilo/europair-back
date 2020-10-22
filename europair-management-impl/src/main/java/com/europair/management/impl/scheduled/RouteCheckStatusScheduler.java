@@ -1,6 +1,6 @@
 package com.europair.management.impl.scheduled;
 
-import com.europair.management.api.enums.RouteStates;
+import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
@@ -13,12 +13,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -42,7 +45,7 @@ public class RouteCheckStatusScheduler {
         // Take a look at the state of a route, check the date of the flight associated with It
         // and if is before than the current date then transit the state to expired.
         List<Route> routeList = this.routeRepository.searchNotLostRoutesAndNotWon(
-                new HashSet<>(Arrays.asList(RouteStates.LOST_CANX_REQUEST, RouteStates.LOST_DECLINED, RouteStates.LOST_EXPIRED, RouteStates.LOST_LOST_TO_X, RouteStates.WON)));
+                new HashSet<>(Arrays.asList(RouteStatesEnum.LOST_CANX_REQUEST, RouteStatesEnum.LOST_DECLINED, RouteStatesEnum.LOST_EXPIRED, RouteStatesEnum.LOST_LOST_TO_X, RouteStatesEnum.WON)));
         List<Flight> flightList = routeList.stream().map(Route::getFlights).flatMap(Collection::stream).collect(Collectors.toList());
 
         transitRotationToLostExpiredIfFlightIsAreGone(flightList);
@@ -64,14 +67,14 @@ public class RouteCheckStatusScheduler {
                                         HttpStatus.INTERNAL_SERVER_ERROR,
                                         String.format("Something when wrong with the flight : %s can not retrieve the route information", flight.getId()))
                         );
-                route.setRouteState(RouteStates.LOST_EXPIRED);
+                route.setRouteState(RouteStatesEnum.LOST_EXPIRED);
                 this.routeRepository.saveAndFlush(route);
             }
         }
     }
 
     /**
-     * This method transits a route to RouteStates.LOST_EXPIRED if all the rotations are in that state
+     * This method transits a route to RouteStatesEnum.LOST_EXPIRED if all the rotations are in that state
      * @param routeList
      */
     private void checkAndTransitRouteStateToLostExpired(List<Route> routeList) {
@@ -79,12 +82,12 @@ public class RouteCheckStatusScheduler {
             if (null != route.getRotations() && !route.getRotations().isEmpty()){
                 boolean transitToLostExpired = true;
                 for (Route rotation : route.getRotations()){
-                    if ( !rotation.getRouteState().equals(RouteStates.LOST_EXPIRED)){
+                    if ( !rotation.getRouteState().equals(RouteStatesEnum.LOST_EXPIRED)){
                         transitToLostExpired = false;
                     }
                 }
                 if (transitToLostExpired){
-                    route.setRouteState(RouteStates.LOST_EXPIRED);
+                    route.setRouteState(RouteStatesEnum.LOST_EXPIRED);
                     this.routeRepository.saveAndFlush(route);
                 }
             }
