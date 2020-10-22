@@ -3,6 +3,7 @@ package com.europair.management.impl.integrations.office365.service;
 import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
+import com.europair.management.api.integrations.office365.dto.SimplePlaningFlightDTO;
 import com.europair.management.api.integrations.office365.service.IOffice365Controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,22 +51,16 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@NotNull Long routeId, @NotNull Long flightId, @NotNull Long contributionId ) {
-        ResponseContributionFlights responseContributionFlights = service.getEnabledFlightContributionInformation(routeId, contributionId, flightId);
+    public ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation( @NotNull Long flightId, @NotNull Long contributionId ) {
+        ResponseContributionFlights responseContributionFlights = service.getEnabledFlightContributionInformation( contributionId, flightId);
         return ResponseEntity.ok().body(responseContributionFlights);
     }
 
     @Override
-    public ResponseEntity<String> sendEnabledFlightContributionInformation() {
-        String dataUrl = baseUrl + "/send/flight/contribution/test/collecturi";
+    public ResponseEntity<String> sendEnabledFlightContributionInformation(Long contributionId, Long flightId) {
+        String dataUrl = baseUrl + String.format("/get/flight/contribution/%s/%s",contributionId,flightId);
         office365Client.sendUriToEnabledFlightContributionInformation(dataUrl);
         return ResponseEntity.ok(dataUrl);
-    }
-
-    @Override
-    public ResponseEntity<?> testOfSendEnabledFlightContributionInformation(String fileUri) {
-        System.out.println("Received URL : " + fileUri);
-        return ResponseEntity.ok().body(fileUri);
     }
 
     @Override
@@ -74,6 +69,34 @@ public class Office365Controller implements IOffice365Controller {
                                                                             String actionType) {
 
         final List<PlanningFlightsDTO> planningFlightsDTOList = service.getPlanningFlightsInfo(routeId, contributionId, actionType);
+
+        office365Client.sendPlaningFlightsDTOList(planningFlightsDTOList);
+        //sendOneByOnePlanningFlightDTOToOffice365(planningFlightsDTOList);
+
         return ResponseEntity.ok(planningFlightsDTOList);
+    }
+
+    /**
+     * Sends a list of PlanningFlightDTO element by element
+     * // TODO: if must implement a retry policy must be here.
+     *
+     * @param planningFlightsDTOList
+     */
+    private void sendOneByOnePlanningFlightDTOToOffice365(List<PlanningFlightsDTO> planningFlightsDTOList) {
+        for( PlanningFlightsDTO planningFlightsDTO : planningFlightsDTOList){
+
+            if ( null != planningFlightsDTO.getFileSharingInfoDTO() && null != planningFlightsDTO.getFlightSharingInfoDTO() ) {
+
+                SimplePlaningFlightDTO simplePlaningFlightDTO = new SimplePlaningFlightDTO();
+
+                simplePlaningFlightDTO.setTitle("PLANNING :" + planningFlightsDTO.getFileSharingInfoDTO().getCode());
+                simplePlaningFlightDTO.setClient(planningFlightsDTO.getFlightSharingInfoDTO().getClient());
+                simplePlaningFlightDTO.setDescription(planningFlightsDTO.getFileSharingInfoDTO().getDescription());
+                simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate());
+                simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate());
+
+                office365Client.sendPlaningFlightsDTO(planningFlightsDTO);
+            }
+        }
     }
 }
