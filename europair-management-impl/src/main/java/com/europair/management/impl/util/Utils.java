@@ -23,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.criteria.Predicate;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -179,21 +180,22 @@ public class Utils {
     }
 
 
-    private static double calculateDistance(final double origLat, final double origLon, final double destLat, final double destLon) {
+    private static double calculateDistance(final BigDecimal origLat, final BigDecimal origLon, final BigDecimal destLat, final BigDecimal destLon) {
         return Math.acos(
-                Math.cos(Math.toRadians(90 - origLat)) * Math.cos(Math.toRadians(90 - destLat))
-                        + Math.sin(Math.toRadians(90 - origLat))
-                        * Math.sin(Math.toRadians(90 - destLat))
-                        * Math.cos(Math.toRadians(origLon - destLon))
+                Math.cos(Math.toRadians(BigDecimal.valueOf(90).subtract(origLat).doubleValue()))
+                            * Math.cos(Math.toRadians(BigDecimal.valueOf(90).subtract(destLat).doubleValue()))
+                        + Math.sin(Math.toRadians(BigDecimal.valueOf(90).subtract(origLat).doubleValue()))
+                            * Math.sin(Math.toRadians(BigDecimal.valueOf(90).subtract(destLat).doubleValue()))
+                        * Math.cos(Math.toRadians(origLon.subtract(destLon).doubleValue()))
         );
     }
 
-    public static double getDistanceInKM(final double origLat, final double origLon, final double destLat, final double destLon) {
+    public static double getDistanceInKM(final BigDecimal origLat, final BigDecimal origLon, final BigDecimal destLat, final BigDecimal destLon) {
         double earthRadiusInKM = 6371;// Approximate radius of the earth in kilometers
         return calculateDistance(origLat, origLon, destLat, destLon) * earthRadiusInKM;
     }
 
-    public static double getDistanceInNM(final double origLat, final double origLon, final double destLat, final double destLon) {
+    public static double getDistanceInNM(final BigDecimal origLat, final BigDecimal origLon, final BigDecimal destLat, final BigDecimal destLon) {
         double earthRadiusInNM = 3440.065;// Approximate radius of the earth in nautical miles
         return calculateDistance(origLat, origLon, destLat, destLon) * earthRadiusInNM;
     }

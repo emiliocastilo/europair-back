@@ -25,6 +25,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -50,7 +51,7 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     private Country country;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "city_id")
     private City city;
 
     // ToDo: Set type for timezones
@@ -65,11 +66,11 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private Unit elevationUnit;
 
-    @Column(name = "latitude")
-    private Double latitude;
+    @Column(name = "latitude", precision = 10, scale = 8)
+    private BigDecimal latitude;
 
-    @Column(name = "longitude")
-    private Double longitude;
+    @Column(name = "longitude", precision = 11, scale = 8)
+    private BigDecimal longitude;
 
     @Column(name = "customs")
     @Enumerated(EnumType.STRING)

@@ -380,3 +380,31 @@ databaseChangeLog:
             constraintName: iata_code_uq
             tableName: airports
             uniqueColumns: iata_code
+
+  - changeSet:
+      id: 20201021_airports_master_v3_airports_table
+      context: dev or pre or pro
+      author: jose.mendezgonzalez
+      comment: "changes from origin database values"
+      changes:
+        # Airports
+        - dropNotNullConstraint:
+            columnName: iata_code
+            columnDataType: varchar(3)
+            tableName: airports
+        - dropNotNullConstraint:
+            columnName: country_id
+            columnDataType: int
+            tableName: airports
+        - dropNotNullConstraint:
+            columnName: city_id
+            columnDataType: int
+            tableName: airports
+        - modifyDataType:
+            columnName: latitude
+            newDataType: decimal(10,8)
+            tableName: airports
+        - modifyDataType:
+            columnName: longitude
+            newDataType: decimal(11,8)
+            tableName: airports

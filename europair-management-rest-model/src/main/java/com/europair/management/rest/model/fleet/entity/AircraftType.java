@@ -32,16 +32,16 @@ public class AircraftType extends SoftRemovableBaseEntity implements Serializabl
     @Column(name = "icao_code", unique = true, length = TextField.ICAO_CODE)
     private String icaoCode;
 
-    @Column(name = "iata_code", unique = true, nullable = true, length = TextField.IATA_CODE)
+    @Column(name = "iata_code", unique = true, length = TextField.IATA_CODE)
     private String iataCode;
 
-    @Column(name = "type_code", unique = true, nullable = true, length = TextField.TEXT_20)
+    @Column(name = "type_code", unique = true, length = TextField.TEXT_20)
     private String code;
 
     @Column(name = "description", length = TextField.TEXT_255, nullable = false)
     private String description;
 
-    @Column(name = "manufacturer", length = TextField.TEXT_120, nullable = false)
+    @Column(name = "manufacturer", length = TextField.TEXT_120)
     private String manufacturer;
 
     @ManyToOne(optional = false)
