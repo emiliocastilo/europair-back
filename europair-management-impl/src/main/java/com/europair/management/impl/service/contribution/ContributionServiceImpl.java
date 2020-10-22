@@ -2,6 +2,8 @@ package com.europair.management.impl.service.contribution;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
+import com.europair.management.api.enums.LineContributionRouteType;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.mappers.contributions.ILineContributionRouteMapper;
 import com.europair.management.impl.service.flights.IFlightTaxService;
@@ -19,11 +21,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -76,6 +85,9 @@ public class ContributionServiceImpl implements IContributionService {
 
         // Add flight taxes for the contribution
         List<FlightTax> flightTaxes = flightTaxService.saveFlightTaxes(contribution, route);
+
+        // Add route contribution lines
+        Set<LineContributionRoute> routeContributionLines = createRouteContributionLines(contribution.getId(), route);
 
         return IContributionMapper.INSTANCE.toDto(contribution);
     }
@@ -163,4 +175,37 @@ public class ContributionServiceImpl implements IContributionService {
                             , lineContributionRouteId));
         }
     }
+
+    private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {
+        if (CollectionUtils.isEmpty(contributionRoute.getRotations())) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "NO rotations found for route with id: " + contributionRoute.getId());
+        }
+        Set<LineContributionRoute> lines = contributionRoute.getRotations().stream().map(rotation -> {
+            List<LineContributionRoute> res = new ArrayList<>();
+
+            // Purchase
+            LineContributionRoute purchaseLine = new LineContributionRoute();
+            purchaseLine.setContributionId(contributionId);
+            purchaseLine.setRouteId(rotation.getId());
+            purchaseLine.setPrice(BigDecimal.ZERO);
+            purchaseLine.setType(ServiceTypeEnum.FLIGHT);
+            purchaseLine.setLineContributionRouteType(LineContributionRouteType.PURCHASE);
+            res.add(purchaseLine);
+
+            // Sale
+            LineContributionRoute saleLine = new LineContributionRoute();
+            saleLine.setContributionId(contributionId);
+            saleLine.setRouteId(rotation.getId());
+            saleLine.setPrice(BigDecimal.ZERO);
+            saleLine.setType(ServiceTypeEnum.FLIGHT);
+            saleLine.setLineContributionRouteType(LineContributionRouteType.SALE);
+            res.add(saleLine);
+
+            return res;
+        }).flatMap(Collection::stream).collect(Collectors.toSet());
+
+        lines = new HashSet<>(lineContributionRouteRepository.saveAll(lines));
+        return lines;
+    }
+
 }
