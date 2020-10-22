@@ -22,7 +22,6 @@ public class FileDTO extends AuditModificationBaseDTO {
   @JsonProperty("id")
   private Long id;
 
-  @NotNull
   @JsonProperty("code")
   private String code;
 
