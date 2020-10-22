@@ -50,7 +50,8 @@ public class Airport extends SoftRemovableBaseEntity implements Serializable {
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
-    @ManyToOne(optional = false)
+    // this attribute is not required to register an aircraftType optional must be true
+    @ManyToOne(optional = true)
     @JoinColumn(name = "city_id")
     private City city;
 
