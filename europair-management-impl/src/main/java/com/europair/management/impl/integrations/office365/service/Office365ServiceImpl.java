@@ -86,7 +86,7 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     @Override
-    public ResponseContributionFlights getEnabledFlightContributionInformation(Long routeId, Long contributionId, Long flightId) {
+    public ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId, Long flightId) {
 
         ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
 
@@ -97,8 +97,8 @@ public class Office365ServiceImpl implements IOffice365Service {
         Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + contribution.getAircraftId()));
 
-        Route route = this.routeRepository.findById(routeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+        Route route = this.routeRepository.findById(contribution.getRouteId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + contribution.getRouteId()));
 
         Flight flight = this.flightRepository.findById(flightId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId));

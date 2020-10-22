@@ -10,7 +10,7 @@ public interface IOffice365Service {
 
     ConfirmedOperationDto getConfirmedOperationData(Long routeId, Long contributionId);
 
-    ResponseContributionFlights getEnabledFlightContributionInformation(Long routeId, Long contributionId, Long flightId);
+    ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId, Long flightId);
 
     List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId, String actionType);
 }
