@@ -15,6 +15,6 @@ import java.util.Set;
 public interface RouteRepository extends JpaRepository<Route, Long>, IRouteRepositoryCustom {
 
     @Query("SELECT route FROM Route route " +
-            "WHERE route.routeState IN ( :statesToAvoid )")
-    List<Route> searchNotLostRoutesAndNotWon(@Param(value = "statesToAvoid") RouteStates stateToAvoid);
+            "WHERE route.routeState NOT IN ( :statesToAvoid )")
+    List<Route> searchNotLostRoutesAndNotWon(@Param(value = "statesToAvoid") Set<RouteStates> stateToAvoid);
 }

@@ -18,9 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -43,7 +41,8 @@ public class RouteCheckStatusScheduler {
         populateSecurityContextForAuditorWithSystemUser();
         // Take a look at the state of a route, check the date of the flight associated with It
         // and if is before than the current date then transit the state to expired.
-        List<Route> routeList = this.routeRepository.searchNotLostRoutesAndNotWon(RouteStates.SALES);
+        List<Route> routeList = this.routeRepository.searchNotLostRoutesAndNotWon(
+                new HashSet<>(Arrays.asList(RouteStates.LOST_CANX_REQUEST, RouteStates.LOST_DECLINED, RouteStates.LOST_EXPIRED, RouteStates.LOST_LOST_TO_X, RouteStates.WON)));
         List<Flight> flightList = routeList.stream().map(Route::getFlights).flatMap(Collection::stream).collect(Collectors.toList());
 
         transitRotationToLostExpiredIfFlightIsAreGone(flightList);
