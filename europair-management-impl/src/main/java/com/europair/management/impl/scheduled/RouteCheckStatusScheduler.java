@@ -35,10 +35,10 @@ public class RouteCheckStatusScheduler {
     private IUserRepository userRepository;
 
     /**
-     * Cron executed every 15 minutes
+     * Cron executed every night at 00:00 in production environments
      */
-    @Scheduled(cron = "0 0/1 * * * ?")
-    @SchedulerLock(name = "RouteCheckStatusScheduler_checkRouteStatus", lockAtLeastForString = "PT2M", lockAtMostForString = "PT14M")
+    @Scheduled(cron = "${europair.task.executor.routecheckstatusscheduler.checkRouteStatus}")
+    @SchedulerLock(name = "RouteCheckStatusScheduler_checkRouteStatus", lockAtLeastForString = "PT5M", lockAtMostForString = "PT14M")
     public void checkRouteStatus() {
         // first step is to populate the securedSession with the System user
         populateSecurityContextForAuditorWithSystemUser();

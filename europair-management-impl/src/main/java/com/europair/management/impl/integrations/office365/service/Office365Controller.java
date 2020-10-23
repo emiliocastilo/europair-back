@@ -28,6 +28,12 @@ public class Office365Controller implements IOffice365Controller {
     private String baseUrl;
 
 
+    private static final String API_VERSION = "2016-06-01";
+    private static final String SP = "%2Ftriggers%2Fmanual%2Frun";
+    private static final String SV = "1.0";
+    private static final String SIG = "2U-Uo5w2-zy2NNYCgxSgX1Wqoj_tvvWKnyhDJeEQtbM";
+
+
     @Override
     public ResponseEntity<?> confirmOperation(@NotNull Long routeId, @NotNull Long contributionId) {
         ConfirmedOperationDto confirmedOperationDto = service.getConfirmedOperationData(routeId, contributionId);
@@ -70,7 +76,7 @@ public class Office365Controller implements IOffice365Controller {
 
         final List<PlanningFlightsDTO> planningFlightsDTOList = service.getPlanningFlightsInfo(routeId, contributionId, actionType);
 
-        office365Client.sendPlaningFlightsDTOList(planningFlightsDTOList);
+        office365Client.sendPlaningFlightsDTOList(API_VERSION, SP, SV, SIG, planningFlightsDTOList);
         //sendOneByOnePlanningFlightDTOToOffice365(planningFlightsDTOList);
 
         return ResponseEntity.ok(planningFlightsDTOList);
@@ -95,7 +101,7 @@ public class Office365Controller implements IOffice365Controller {
                 simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate());
                 simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate());
 
-                office365Client.sendPlaningFlightsDTO(planningFlightsDTO);
+                office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, planningFlightsDTO);
             }
         }
     }
