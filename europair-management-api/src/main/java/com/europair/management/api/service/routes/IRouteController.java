@@ -1,6 +1,7 @@
 package com.europair.management.api.service.routes;
 
 import com.europair.management.api.dto.common.StateChangeDto;
+import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.enums.RouteStatesEnum;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping(value = {"/files/{fileId}/routes", "/external/files/{fileId}/routes"})
@@ -136,4 +138,7 @@ public interface IRouteController {
     ResponseEntity<?> changeState(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<RouteStatesEnum> stateChangeDto);
+
+    @GetMapping("/{routeId}/withcontribution")
+    ResponseEntity<List<ContributionDTO>> getRouteWithContributions(@Parameter(description = "Parent route identifier") @NotNull @PathVariable final Long routeId);
 }

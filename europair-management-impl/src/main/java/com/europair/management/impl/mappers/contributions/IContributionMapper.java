@@ -26,7 +26,6 @@ public interface IContributionMapper {
 
     @Mapping(target = "file", ignore = true)
     @Mapping(target = "route", ignore = true)
-    @Mapping(target = "operator", ignore = true)
     @Mapping(target = "aircraft", ignore = true)
     ContributionDTO toDto(final Contribution contribution);
 

@@ -1,10 +1,12 @@
 package com.europair.management.impl.service.routes;
 
+import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
+import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
 import com.europair.management.impl.mappers.routes.IRouteMapper;
 import com.europair.management.impl.util.Utils;
@@ -12,6 +14,7 @@ import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
+import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.repository.FlightRepository;
@@ -33,10 +36,7 @@ import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -358,6 +358,22 @@ public class RouteServiceImpl implements IRouteService {
         if (routeDto.getStartDate().isAfter(routeDto.getEndDate())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Route start date is after end date.");
         }
+    }
+
+    /**
+     * Route with Contributions
+     * @param idRoute
+     * @return
+     */
+    public List<ContributionDTO> getContributionUsingRouteId(Long idRoute){
+        List<ContributionDTO> res = null;
+
+        Route route = this.routeRepository.findById(idRoute).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + idRoute));
+        Set<Contribution> contributions = route.getContributions();
+
+        res = IContributionMapper.INSTANCE.toListDtos(contributions.stream().collect(Collectors.toList()));
+
+        return res;
     }
 
 }
