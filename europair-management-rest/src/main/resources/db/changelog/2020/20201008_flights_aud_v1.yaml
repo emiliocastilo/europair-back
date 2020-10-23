@@ -114,11 +114,11 @@ databaseChangeLog:
             columns:
               - column:
                   name: flight_number
-                  type: varchar(50)
+                  type: varchar(10)
               - column:
                   name: slot
-                  type: varchar(50)
+                  type: varchar(10)
               - column:
                   name: parking
-                  type: varchar(50)
+                  type: varchar(10)
 

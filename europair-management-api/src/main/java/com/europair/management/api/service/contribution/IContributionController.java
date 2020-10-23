@@ -60,6 +60,7 @@ public interface IContributionController {
      * </p>
      *
      * @param pageable pagination info
+     * @param contributionId
      * @param reqParam Map of filter params, values and operators. (pe: plateNumber=JKL,CONTAINS)
      * @return Paginated list of contribution
      */
@@ -67,6 +68,7 @@ public interface IContributionController {
     @Operation(description = "Paged result of contributions with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<Page<LineContributionRouteDTO>> getLineContributionRouteByFilter(
             @Parameter(description = "Pagination filter") final Pageable pageable,
+            @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
             @Parameter(description = "Map of properties to filter with value and operator, (pe: plateNumber=JKL,CONTAINS)") @RequestParam Map<String, String> reqParam);
 
 

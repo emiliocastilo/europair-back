@@ -1,8 +1,10 @@
 package com.europair.management.rest.model.flights.entity;
 
+import com.europair.management.api.enums.CommonStateEnum;
 import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
+import com.europair.management.rest.model.common.TextField;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import org.hibernate.envers.Audited;
@@ -90,14 +92,15 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @Column(name = "positional_flight")
   private Boolean positionalFlight;
 
-  @Column(name = "flight_number")
+  @Column(name = "flight_number", length = TextField.TEXT_10)
   private String flightNumber;
 
   @Column
-  private String slot;
+  @Enumerated(value = EnumType.STRING)
+  private CommonStateEnum slot;
 
   @Column
-  private String parking;
-
+  @Enumerated(value = EnumType.STRING)
+  private CommonStateEnum parking;
 
 }
