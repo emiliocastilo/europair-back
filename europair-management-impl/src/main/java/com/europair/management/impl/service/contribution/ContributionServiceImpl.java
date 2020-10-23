@@ -9,7 +9,9 @@ import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.mappers.contributions.ILineContributionRouteMapper;
 import com.europair.management.impl.service.flights.IFlightTaxService;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
+import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
@@ -40,6 +42,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class ContributionServiceImpl implements IContributionService {
 
+    private final String CONTRIBUTION_ID_FILTER = "contributionId";
+
     @Autowired
     private ContributionRepository contributionRepository;
 
@@ -61,7 +65,8 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
-    public Page<LineContributionRouteDTO> findAllPaginatedLineContributionRouteByFilter(Pageable pageable, CoreCriteria criteria) {
+    public Page<LineContributionRouteDTO> findAllPaginatedLineContributionRouteByFilter(Long contributionId, Pageable pageable, CoreCriteria criteria) {
+        Utils.addCriteriaIfNotExists(criteria, CONTRIBUTION_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(contributionId));
         return lineContributionRouteRepository.findLineContributionRouteByCriteria(criteria, pageable).map(ILineContributionRouteMapper.INSTANCE::toDto);
     }
 

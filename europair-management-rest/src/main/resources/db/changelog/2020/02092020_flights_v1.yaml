@@ -164,3 +164,23 @@ databaseChangeLog:
               - column:
                   name: flight_order
                   type: int
+
+  - changeSet:
+      id: 20201023_flights_v1_add_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add new columns"
+      changes:
+        - addColumn:
+            tableName: flights
+            columns:
+              - column:
+                  name: flight_number
+                  type: varchar(10)
+              - column:
+                  name: slot
+                  type: varchar(10)
+              - column:
+                  name: parking
+                  type: varchar(10)
+
