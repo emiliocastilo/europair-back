@@ -90,4 +90,14 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @Column(name = "positional_flight")
   private Boolean positionalFlight;
 
+  @Column(name = "flight_number")
+  private String flightNumber;
+
+  @Column
+  private String slot;
+
+  @Column
+  private String parking;
+
+
 }
