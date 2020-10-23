@@ -133,8 +133,14 @@ public class ContributionServiceImpl implements IContributionService {
 
     @Override
     @Transactional(readOnly = false)
-    public Boolean updateLineContributionRoute(Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
+    public Boolean updateLineContributionRoute(Long routeId, Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
         Boolean result = false;
+        Route route = routeRepository.findById(routeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+        if (!routeId.equals(lineContributionRouteDTO.getRouteId()) &&
+                route.getRotations().stream().noneMatch(rotation -> rotation.getId().equals(lineContributionRouteDTO.getRouteId()))) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Contribution lines doesn't match with route with id: " + routeId);
+        }
         LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Line Contribution Rotation not found : %s", lineContributionRouteId)));
 
