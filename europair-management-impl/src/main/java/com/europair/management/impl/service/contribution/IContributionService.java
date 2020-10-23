@@ -23,7 +23,7 @@ public interface IContributionService {
 
     ContributionDTO updateContribution(Long id, ContributionDTO contributionDTO);
 
-    Boolean updateLineContributionRoute(Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO);
+    Boolean updateLineContributionRoute(Long routeId, Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO);
 
     void deleteContribution(Long id);
 
