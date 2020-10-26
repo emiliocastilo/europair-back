@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 public class ContributionServiceImpl implements IContributionService {
 
     private final String CONTRIBUTION_ID_FILTER = "contributionId";
+    private final String ROUTE_ID_FILTER = "routeId";
 
     @Autowired
     private ContributionRepository contributionRepository;
@@ -60,7 +61,8 @@ public class ContributionServiceImpl implements IContributionService {
     private IStateChangeService stateChangeService;
 
     @Override
-    public Page<ContributionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
+    public Page<ContributionDTO> findAllPaginatedByFilter(Long routeId, Pageable pageable, CoreCriteria criteria) {
+        Utils.addCriteriaIfNotExists(criteria, ROUTE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(routeId));
         return contributionRepository.findContributionByCriteria(criteria, pageable).map(IContributionMapper.INSTANCE::toDto);
     }
 
