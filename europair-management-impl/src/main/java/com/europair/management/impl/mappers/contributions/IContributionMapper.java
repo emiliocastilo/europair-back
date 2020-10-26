@@ -26,8 +26,14 @@ public interface IContributionMapper {
 
     @Mapping(target = "file", ignore = true)
     @Mapping(target = "route", ignore = true)
-    @Mapping(target = "operator", ignore = true)
-    @Mapping(target = "aircraft", ignore = true)
+    @Mapping(target = "aircraft.operator", ignore = true)
+    @Mapping(target = "aircraft.bases", ignore = true)
+    @Mapping(target = "aircraft.observations", ignore = true)
+    @Mapping(target = "aircraft.contributionAircrafts", ignore = true)
+    @Mapping(target = "aircraft.aircraftType.averageSpeed", ignore = true)
+    @Mapping(target = "aircraft.aircraftType.observations", ignore = true)
+    @Mapping(target = "aircraft.aircraftType.category", ignore = true)
+    @Mapping(target = "aircraft.aircraftType.subcategory", ignore = true)
     ContributionDTO toDto(final Contribution contribution);
 
     List<ContributionDTO> toListDtos(final List<Contribution> listEntities);

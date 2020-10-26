@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -74,8 +75,11 @@ public class ContributionDTO {
     @JsonProperty("currencyOnSale")
     private CurrencyEnum currencyOnSale;
 
-    @JsonProperty("comments")
-    private String comments;
+    @JsonProperty("purchaseComments")
+    private String purchaseComments;
+
+    @JsonProperty("salesComments")
+    private String salesComments;
 
     @JsonProperty("exchangeBuyType")
     private ExchangeBuyTypeEnum exchangeBuyType;
@@ -97,5 +101,14 @@ public class ContributionDTO {
 
     @JsonProperty("salesPricewithoutIVA")
     private Boolean salesPricewithoutIVA;
+
+    @JsonProperty("seatingF")
+    private Integer seatingF;
+
+    @JsonProperty("seatingC")
+    private Integer seatingC;
+
+    @JsonProperty("seatingY")
+    private Integer seatingY;
 
 }
