@@ -107,3 +107,35 @@ databaseChangeLog:
                   name: currency_on_sale
                   type: varchar(20)
                   remarks: Currency on sale
+
+  - changeSet:
+      id: 20201023_contribution_master_v3_purchase_comment_and_sales_comment
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Rename comment to purchase_comment and add sales_comment"
+      changes:
+        - addColumn:
+            tableName: contributions_aud
+            columns:
+              - column:
+                  name: sales_comments
+                  type: varchar(255)
+                  remarks: Sales comments
+              - column:
+                  name: seating_f
+                  type: int
+                  remarks: Number of seats of type F
+              - column:
+                  name: seating_c
+                  type: int
+                  remarks: Number of seats of type c
+              - column:
+                  name: seating_y
+                  type: int
+                  remarks: Number of seats of type Y
+        - renameColumn:
+            columnDataType: varchar(255)
+            newColumnName: purchase_comments
+            oldColumnName: comments
+            remarks: Purchase comments
+            tableName: contributions_aud

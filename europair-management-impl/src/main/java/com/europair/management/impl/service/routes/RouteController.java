@@ -2,6 +2,7 @@ package com.europair.management.impl.service.routes;
 
 
 import com.europair.management.api.dto.common.StateChangeDto;
+import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.service.routes.IRouteController;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -82,5 +84,11 @@ public class RouteController implements IRouteController {
     public ResponseEntity<?> changeState(@NotNull Long fileId, @NotNull StateChangeDto<RouteStatesEnum> stateChangeDto) {
         routeService.updateStates(fileId, stateChangeDto.getIdList(), stateChangeDto.getState());
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<ContributionDTO>> getRouteWithContributions(Long routeId){
+        List<ContributionDTO> contributionDTOS = routeService.getContributionUsingRouteId(routeId);
+        return ResponseEntity.ok(contributionDTOS);
     }
 }

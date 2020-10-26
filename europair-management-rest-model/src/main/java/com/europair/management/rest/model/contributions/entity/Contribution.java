@@ -8,6 +8,7 @@ import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.envers.Audited;
@@ -86,9 +87,11 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Enumerated(EnumType.STRING)
     private CurrencyEnum currencyOnSale;
 
-    // TODO: cambiar por purchase_comments y meter un nuevo campo salesComments
-    @Column(name = "comments", length = 255)
-    private String comments;
+    @Column(name = "purchase_comments", length = 255)
+    private String purchaseComments;
+
+    @Column(name = "sales_comments", length = 255)
+    private String salesComments;
 
     // TODO: eliminar tiene sentido almacenar el tipo de cambio entre monedas si es un dato volatil??
     @Column(name = "exchange_buy_type")
@@ -122,5 +125,14 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @NotAudited
     @OneToMany(mappedBy = "contribution", orphanRemoval = true)
     private Set<LineContributionRoute> lineContributionRoute;
+
+    @Column(name = "seating_f")
+    private Integer seatingF;
+
+    @Column(name = "seating_c")
+    private Integer seatingC;
+
+    @Column(name = "seating_y")
+    private Integer seatingY;
 
 }
