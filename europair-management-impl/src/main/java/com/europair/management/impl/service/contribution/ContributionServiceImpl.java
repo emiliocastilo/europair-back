@@ -85,20 +85,20 @@ public class ContributionServiceImpl implements IContributionService {
         }
 
         Contribution contribution = IContributionMapper.INSTANCE.toEntity(contributionDTO);
-        contribution = contributionRepository.save(contribution);
+        contribution = contributionRepository.saveAndFlush(contribution);
 
         // must activate flag in route to indicate the route has a contribution
         final Long routeId = contribution.getRouteId();
         Route route = routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
         route.setHasContributions(true);
-        routeRepository.save(route);
+        Route updatedRoute = routeRepository.saveAndFlush(route);
 
         // Add flight taxes for the contribution
         List<FlightTax> flightTaxes = flightTaxService.saveFlightTaxes(contribution, route);
 
         // Add route contribution lines
-        Set<LineContributionRoute> routeContributionLines = createRouteContributionLines(contribution.getId(), route);
+        Set<LineContributionRoute> routeContributionLines = createRouteContributionLines(contribution.getId(), updatedRoute);
 
         return IContributionMapper.INSTANCE.toDto(contribution);
     }
