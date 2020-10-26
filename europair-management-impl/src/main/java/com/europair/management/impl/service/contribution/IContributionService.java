@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface IContributionService {
 
-    Page<ContributionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria);
+    Page<ContributionDTO> findAllPaginatedByFilter(Long routeId, Pageable pageable, CoreCriteria criteria);
 
     Page<LineContributionRouteDTO> findAllPaginatedLineContributionRouteByFilter(Long contributionId, Pageable pageable, CoreCriteria criteria);
 
