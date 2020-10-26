@@ -34,9 +34,9 @@ public class ContributionController implements IContributionController {
     }
 
     @Override
-    public ResponseEntity<Page<ContributionDTO>> getContributionByFilter(Pageable pageable, Map<String, String> reqParam) {
+    public ResponseEntity<Page<ContributionDTO>> getContributionByFilter(Long routeId, Pageable pageable, Map<String, String> reqParam) {
         CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
-        final Page<ContributionDTO> dtoPage = contributionService.findAllPaginatedByFilter(pageable, criteria);
+        final Page<ContributionDTO> dtoPage = contributionService.findAllPaginatedByFilter(routeId, pageable, criteria);
         return ResponseEntity.ok(dtoPage);
     }
 
