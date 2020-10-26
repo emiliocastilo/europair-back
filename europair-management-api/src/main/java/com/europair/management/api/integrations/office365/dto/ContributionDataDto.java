@@ -4,7 +4,6 @@ import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.ExchangeBuyTypeEnum;
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -41,9 +40,5 @@ public class ContributionDataDto implements Serializable {
     private String seller;
 
     private List<ContributionLineDataDto> lines;
-
-    private Integer seatingF;
-    private Integer seatingC;
-    private Integer seatingY;
 
 }

@@ -1,6 +1,7 @@
 package com.europair.management.rest.model.files.entity;
 
 import com.europair.management.api.enums.OperationTypeEnum;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntity;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
@@ -9,17 +10,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
@@ -109,37 +100,5 @@ public class File extends SoftRemovableBaseEntityHardAudited implements Serializ
 
   @Column
   private String observation;
-
-  // Additional Data
-
-  @Column(name = "flight_motive")
-  private String flightMotive;
-
-  @Column
-  private String connections;
-
-  @Column
-  private String limitations;
-
-  @Column(name = "fixed_variable_fuel")
-  private String fixedVariableFuel;
-
-  @Column
-  private String luggage;
-
-  @Column(name = "special_luggage")
-  private String specialLuggage;
-
-  @Column(name = "on_board_service")
-  private String onBoardService;
-
-  @Column(name = "special_requests")
-  private String specialRequests;
-
-  @Column(name = "other_charges")
-  private String otherCharges;
-
-  @Column(name = "operational_info")
-  private String operationalInfo;
 
 }

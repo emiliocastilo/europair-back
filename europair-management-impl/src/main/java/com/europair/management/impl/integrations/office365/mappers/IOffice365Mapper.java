@@ -2,13 +2,11 @@ package com.europair.management.impl.integrations.office365.mappers;
 
 import com.europair.management.api.integrations.office365.dto.ContributionDataDto;
 import com.europair.management.api.integrations.office365.dto.ContributionLineDataDto;
-import com.europair.management.api.integrations.office365.dto.FileSharingExtendedInfoDto;
 import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
 import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
-import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.routes.entity.Route;
@@ -31,8 +29,6 @@ public interface IOffice365Mapper {
     @Mapping(target = "code", source = "route.file.code")
     @Mapping(target = "description", source = "route.file.description")
     FileSharingInfoDTO mapFile(Route route);
-
-    FileSharingExtendedInfoDto mapFile(File file);
 
     @Named("mapFlightService")
     default FlightServiceDataDto mapFlightService(final FlightService flightService) {
@@ -90,10 +86,6 @@ public interface IOffice365Mapper {
         dto.setMarginAmount(dto.getSalePrice().subtract(dto.getPurchasePrice()));
 
         dto.setSeller(contribution.getFile().getSalePerson().getUsername());
-
-        dto.setSeatingF(contribution.getSeatingF());
-        dto.setSeatingC(contribution.getSeatingC());
-        dto.setSeatingY(contribution.getSeatingY());
 
         return dto;
     }

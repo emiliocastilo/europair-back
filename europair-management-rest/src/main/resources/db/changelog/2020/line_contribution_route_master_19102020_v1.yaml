@@ -91,15 +91,3 @@ databaseChangeLog:
             startWith: 1
             tableName: lines_contribution_route
 
-  - changeSet:
-      id: 20201026_line_contribution_route_master_v1
-      context: dev or pre or pro
-      author: axel.sanchezsalom
-      comment: "Add quantity column"
-      changes:
-        - addColumn:
-            tableName: lines_contribution_route
-            columns:
-              - column:
-                  name: quantity
-                  type: int

@@ -58,8 +58,9 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @Column(name = "price", precision = 12, scale = 4)
     private BigDecimal price;
 
+    /*meter una columna mas para ver cantidad p.ej botellas de champang
     @Column(name = "quantity")
-    private Integer quantity;
+    private BigDecimal quantity;*/
 
     @Column(name = "included_vat")
     private Boolean includedVAT;

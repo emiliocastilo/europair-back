@@ -18,8 +18,6 @@ public interface IFileMapper {
 
   @Mapping(target = "createdBy", ignore = true)
   @Mapping(target = "createdAt", ignore = true)
-  @Mapping(target = "code", ignore = true)
-  @Mapping(target = "statusId", ignore = true)
   void updateFromDto(final FileDTO fileDTO, @MappingTarget File file);
 
 }
