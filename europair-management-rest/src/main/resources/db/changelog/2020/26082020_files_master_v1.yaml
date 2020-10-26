@@ -164,32 +164,32 @@ databaseChangeLog:
             columns:
               - column:
                   name: flight_motive
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: connections
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: limitations
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: fixed_variable_fuel
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: luggage
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: special_luggage
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: on_board_service
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: special_requests
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: other_charges
-                  type: varchar(255)
+                  type: varchar(2000)
               - column:
                   name: operational_info
-                  type: varchar(255)
+                  type: varchar(2000)
 

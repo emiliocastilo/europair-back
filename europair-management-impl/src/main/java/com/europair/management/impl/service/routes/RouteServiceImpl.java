@@ -36,7 +36,11 @@ import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -371,7 +375,9 @@ public class RouteServiceImpl implements IRouteService {
         Route route = this.routeRepository.findById(idRoute).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + idRoute));
         Set<Contribution> contributions = route.getContributions();
 
-        res = IContributionMapper.INSTANCE.toListDtos(contributions.stream().collect(Collectors.toList()));
+        res = IContributionMapper.INSTANCE.toListDtos(contributions.stream()
+                .filter(contribution -> contribution.getRemovedAt() == null)
+                .collect(Collectors.toList()));
 
         return res;
     }
