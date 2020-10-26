@@ -152,3 +152,44 @@ databaseChangeLog:
             remarks: A String for user id
             tableName: files
 
+
+  - changeSet:
+      id: 20201026_files_master_v2_additional_data_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add additional data columns to File table"
+      changes:
+        - addColumn:
+            tableName: files
+            columns:
+              - column:
+                  name: flight_motive
+                  type: varchar(255)
+              - column:
+                  name: connections
+                  type: varchar(255)
+              - column:
+                  name: limitations
+                  type: varchar(255)
+              - column:
+                  name: fixed_variable_fuel
+                  type: varchar(255)
+              - column:
+                  name: luggage
+                  type: varchar(255)
+              - column:
+                  name: special_luggage
+                  type: varchar(255)
+              - column:
+                  name: on_board_service
+                  type: varchar(255)
+              - column:
+                  name: special_requests
+                  type: varchar(255)
+              - column:
+                  name: other_charges
+                  type: varchar(255)
+              - column:
+                  name: operational_info
+                  type: varchar(255)
+
