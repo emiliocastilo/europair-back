@@ -174,3 +174,44 @@ databaseChangeLog:
         - dropForeignKeyConstraint:
             baseTableName: files_aud
             constraintName: file_aud_sale_agent_fk
+
+  - changeSet:
+      id: 20201026_files_aud_master_v2_additional_data_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add additional data columns to File Aud table"
+      changes:
+        - addColumn:
+            tableName: files_aud
+            columns:
+              - column:
+                  name: flight_motive
+                  type: varchar(2000)
+              - column:
+                  name: connections
+                  type: varchar(2000)
+              - column:
+                  name: limitations
+                  type: varchar(2000)
+              - column:
+                  name: fixed_variable_fuel
+                  type: varchar(2000)
+              - column:
+                  name: luggage
+                  type: varchar(2000)
+              - column:
+                  name: special_luggage
+                  type: varchar(2000)
+              - column:
+                  name: on_board_service
+                  type: varchar(2000)
+              - column:
+                  name: special_requests
+                  type: varchar(2000)
+              - column:
+                  name: other_charges
+                  type: varchar(2000)
+              - column:
+                  name: operational_info
+                  type: varchar(2000)
+
