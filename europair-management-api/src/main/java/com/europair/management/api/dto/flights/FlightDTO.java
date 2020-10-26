@@ -2,17 +2,15 @@ package com.europair.management.api.dto.flights;
 
 import com.europair.management.api.dto.airport.AirportDto;
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
+import com.europair.management.api.dto.common.TextField;
+import com.europair.management.api.enums.CommonStateEnum;
 import com.europair.management.api.enums.UTCEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.envers.NotAudited;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -61,4 +59,13 @@ public class FlightDTO extends AuditModificationBaseDTO {
   @JsonProperty("stretchers")
   private Integer stretchers;
 
+  @JsonProperty("flightNumber")
+  @Size(max = TextField.TEXT_10)
+  private String flightNumber;
+
+  @JsonProperty("slot")
+  private CommonStateEnum slot;
+
+  @JsonProperty("parking")
+  private CommonStateEnum parking;
 }

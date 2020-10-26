@@ -216,11 +216,11 @@ public class CalculationServiceImpl implements ICalculationService {
     // Utils
 
     private boolean isCanaryIslandsRoute(Airport origin, Airport destination) {
-        return Boolean.TRUE.equals(origin.getCanaryIslands() || Boolean.TRUE.equals(destination.getCanaryIslands()));
+        return Boolean.TRUE.equals(origin.getCanaryIslands()) || Boolean.TRUE.equals(destination.getCanaryIslands());
     }
 
     private boolean isBalearicIslandsRoute(Airport origin, Airport destination) {
-        return Boolean.TRUE.equals(origin.getBalearics() || Boolean.TRUE.equals(destination.getBalearics()));
+        return Boolean.TRUE.equals(origin.getBalearics()) || Boolean.TRUE.equals(destination.getBalearics());
     }
 
     private boolean isSpainInternalRoute(Airport origin, Airport destination) {
