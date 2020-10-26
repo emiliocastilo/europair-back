@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class ConfirmedOperationDto implements Serializable {
 
-    private FileSharingExtendedInfoDto fileInfo;
+    private FileSharingInfoDTO fileInfo;
 
     private List<FlightExtendedInfoDto> flightsInfo;
 

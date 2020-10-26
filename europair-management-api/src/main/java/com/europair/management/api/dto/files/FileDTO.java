@@ -79,46 +79,4 @@ public class FileDTO extends AuditModificationBaseDTO {
   //This entity has his own endpoint to ask for a list of routes of a file, no needed
   //private List<Route> routes;
 
-
-  // Additional Data
-
-  @JsonProperty("flightMotive")
-  @Size(max = 5000)
-  private String flightMotive;
-
-  @JsonProperty("connections")
-  @Size(max = 5000)
-  private String connections;
-
-  @JsonProperty("limitations")
-  @Size(max = 5000)
-  private String limitations;
-
-  @JsonProperty("fixedVariableFuel")
-  @Size(max = 5000)
-  private String fixedVariableFuel;
-
-  @JsonProperty("luggage")
-  @Size(max = 5000)
-  private String luggage;
-
-  @JsonProperty("specialLuggage")
-  @Size(max = 5000)
-  private String specialLuggage;
-
-  @JsonProperty("onBoardService")
-  @Size(max = 5000)
-  private String onBoardService;
-
-  @JsonProperty("specialRequests")
-  @Size(max = 5000)
-  private String specialRequests;
-
-  @JsonProperty("otherCharges")
-  @Size(max = 5000)
-  private String otherCharges;
-
-  @JsonProperty("operationalInfo")
-  @Size(max = 5000)
-  private String operationalInfo;
 }

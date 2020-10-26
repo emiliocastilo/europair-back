@@ -22,8 +22,6 @@ public class ContributionLineDataDto {
 
     private BigDecimal price;
 
-    private Integer quantity;
-
     private Boolean includedVAT;
 
     private LineContributionRouteType lineContributionRouteType;
