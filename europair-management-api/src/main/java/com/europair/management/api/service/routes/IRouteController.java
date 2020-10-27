@@ -2,6 +2,7 @@ package com.europair.management.api.service.routes;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.dto.routes.RouteCreationDto;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.enums.RouteStatesEnum;
 import io.swagger.v3.oas.annotations.Operation;
@@ -73,7 +74,7 @@ public interface IRouteController {
     @Operation(description = "Save a new master route", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<RouteDto> saveRoute(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
-            @Parameter(description = "Master Route object") @NotNull @RequestBody final RouteDto routeDto);
+            @Parameter(description = "Master Route object") @NotNull @RequestBody final RouteCreationDto routeDto);
 
     /**
      * <p>

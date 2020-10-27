@@ -3,6 +3,7 @@ package com.europair.management.impl.service.routes;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.dto.routes.RouteCreationDto;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.service.routes.IRouteController;
@@ -42,7 +43,7 @@ public class RouteController implements IRouteController {
     }
 
     @Override
-    public ResponseEntity<RouteDto> saveRoute(@NotNull Long fileId, @NotNull RouteDto routeDto) {
+    public ResponseEntity<RouteDto> saveRoute(@NotNull Long fileId, @NotNull RouteCreationDto routeDto) {
         final RouteDto dtoSaved = routeService.saveRoute(fileId, routeDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
