@@ -1,0 +1,86 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201027_files_additional_data_master_v1
+      context: dev or pre or pro
+      author: axl.sanchezsalom
+      comment: "File Additional Data table"
+      changes:
+        - createTable:
+            tableName: files_additional_data
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: files_additional_data_id_pk
+              - column:
+                  name: file_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: files_additional_data_files_fk
+                    references: files(id)
+              - column:
+                  name: flight_motive
+                  type: varchar(2000)
+              - column:
+                  name: connections
+                  type: varchar(2000)
+              - column:
+                  name: limitations
+                  type: varchar(2000)
+              - column:
+                  name: fixed_variable_fuel
+                  type: varchar(2000)
+              - column:
+                  name: luggage
+                  type: varchar(2000)
+              - column:
+                  name: special_luggage
+                  type: varchar(2000)
+              - column:
+                  name: on_board_service
+                  type: varchar(2000)
+              - column:
+                  name: special_requests
+                  type: varchar(2000)
+              - column:
+                  name: other_charges
+                  type: varchar(2000)
+              - column:
+                  name: operational_info
+                  type: varchar(2000)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: files_additional_data
+

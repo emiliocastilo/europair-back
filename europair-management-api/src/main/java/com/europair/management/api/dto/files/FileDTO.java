@@ -8,11 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -70,7 +67,7 @@ public class FileDTO extends AuditModificationBaseDTO {
   @NotNull
   @JsonProperty("operationType")
   private OperationTypeEnum operationType;
-  
+
   @JsonProperty("observation")
   @Size(max = 5000)
   private String observation;
@@ -79,46 +76,4 @@ public class FileDTO extends AuditModificationBaseDTO {
   //This entity has his own endpoint to ask for a list of routes of a file, no needed
   //private List<Route> routes;
 
-
-  // Additional Data
-
-  @JsonProperty("flightMotive")
-  @Size(max = 5000)
-  private String flightMotive;
-
-  @JsonProperty("connections")
-  @Size(max = 5000)
-  private String connections;
-
-  @JsonProperty("limitations")
-  @Size(max = 5000)
-  private String limitations;
-
-  @JsonProperty("fixedVariableFuel")
-  @Size(max = 5000)
-  private String fixedVariableFuel;
-
-  @JsonProperty("luggage")
-  @Size(max = 5000)
-  private String luggage;
-
-  @JsonProperty("specialLuggage")
-  @Size(max = 5000)
-  private String specialLuggage;
-
-  @JsonProperty("onBoardService")
-  @Size(max = 5000)
-  private String onBoardService;
-
-  @JsonProperty("specialRequests")
-  @Size(max = 5000)
-  private String specialRequests;
-
-  @JsonProperty("otherCharges")
-  @Size(max = 5000)
-  private String otherCharges;
-
-  @JsonProperty("operationalInfo")
-  @Size(max = 5000)
-  private String operationalInfo;
 }
