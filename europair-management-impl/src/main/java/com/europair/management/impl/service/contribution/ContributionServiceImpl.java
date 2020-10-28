@@ -86,9 +86,6 @@ public class ContributionServiceImpl implements IContributionService {
 
         Contribution contribution = IContributionMapper.INSTANCE.toEntity(contributionDTO);
         contribution.setRequestTime(LocalDateTime.now());
-        contribution.setSeatingC(contribution.getRoute().getRotations().get(0).getFlights().get(0).getSeatsC());
-        contribution.setSeatingF(contribution.getRoute().getRotations().get(0).getFlights().get(0).getSeatsF());
-        contribution.setSeatingY(contribution.getRoute().getRotations().get(0).getFlights().get(0).getSeatsY());
         contribution = contributionRepository.saveAndFlush(contribution);
 
         // must activate flag in route to indicate the route has a contribution
@@ -97,6 +94,13 @@ public class ContributionServiceImpl implements IContributionService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
         route.setHasContributions(true);
         Route updatedRoute = routeRepository.saveAndFlush(route);
+
+        // Retrieve seatings info from first flight of first rotation
+        contribution.setSeatingC(route.getRotations().get(0).getFlights().get(0).getSeatsC());
+        contribution.setSeatingF(route.getRotations().get(0).getFlights().get(0).getSeatsF());
+        contribution.setSeatingY(route.getRotations().get(0).getFlights().get(0).getSeatsY());
+
+        contributionRepository.saveAndFlush(contribution);
 
         // Add flight taxes for the contribution
         List<FlightTax> flightTaxes = flightTaxService.saveFlightTaxes(contribution, route);
