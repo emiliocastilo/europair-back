@@ -85,6 +85,10 @@ public class ContributionServiceImpl implements IContributionService {
         }
 
         Contribution contribution = IContributionMapper.INSTANCE.toEntity(contributionDTO);
+        contribution.setRequestTime(LocalDateTime.now());
+        contribution.setSeatingC(contribution.getRoute().getRotations().get(0).getFlights().get(0).getSeatsC());
+        contribution.setSeatingF(contribution.getRoute().getRotations().get(0).getFlights().get(0).getSeatsF());
+        contribution.setSeatingY(contribution.getRoute().getRotations().get(0).getFlights().get(0).getSeatsY());
         contribution = contributionRepository.saveAndFlush(contribution);
 
         // must activate flag in route to indicate the route has a contribution

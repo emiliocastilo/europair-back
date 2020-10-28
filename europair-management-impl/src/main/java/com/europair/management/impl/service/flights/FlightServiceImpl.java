@@ -90,6 +90,8 @@ public class FlightServiceImpl implements IFlightService {
               .map(Flight::getOrder)
               .orElse(0) + 1);
 
+      flight.setArrivalTime(flight.getDepartureTime());
+
       flight = flightRepository.save(flight);
       updateRotationData(routeId);
 
