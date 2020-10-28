@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
@@ -69,7 +70,7 @@ public interface IFileAdditionalDataController {
     @Operation(description = "Save a new master fileAdditionalData", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<FileAdditionalDataDto> saveFileAdditionalData(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
-            @Parameter(description = "Master FileAdditionalData object") @NotNull @RequestBody final FileAdditionalDataDto fileAdditionalDataDto);
+            @Parameter(description = "Master FileAdditionalData object") @NotNull @Valid @RequestBody final FileAdditionalDataDto fileAdditionalDataDto);
 
     /**
      * <p>
@@ -86,7 +87,7 @@ public interface IFileAdditionalDataController {
     ResponseEntity<?> updateFileAdditionalData(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "FileAdditionalData identifier") @NotNull @PathVariable final Long id,
-            @Parameter(description = "Master FileAdditionalData updated data") @NotNull @RequestBody final FileAdditionalDataDto fileAdditionalDataDto);
+            @Parameter(description = "Master FileAdditionalData updated data") @NotNull @Valid @RequestBody final FileAdditionalDataDto fileAdditionalDataDto);
 
     /**
      * <p>

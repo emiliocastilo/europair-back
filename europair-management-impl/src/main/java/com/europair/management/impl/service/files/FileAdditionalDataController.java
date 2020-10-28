@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class FileAdditionalDataController implements IFileAdditionalDataControll
     }
 
     @Override
-    public ResponseEntity<FileAdditionalDataDto> saveFileAdditionalData(@NotNull Long fileId, @NotNull FileAdditionalDataDto fileAdditionalDataDto) {
+    public ResponseEntity<FileAdditionalDataDto> saveFileAdditionalData(@NotNull Long fileId, @NotNull @Valid FileAdditionalDataDto fileAdditionalDataDto) {
         final FileAdditionalDataDto dtoSaved = fileAdditionalDataService.saveFileAdditionalData(fileId, fileAdditionalDataDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
@@ -50,7 +51,8 @@ public class FileAdditionalDataController implements IFileAdditionalDataControll
     }
 
     @Override
-    public ResponseEntity<FileAdditionalDataDto> updateFileAdditionalData(@NotNull Long fileId, @NotNull Long id, @NotNull FileAdditionalDataDto fileAdditionalDataDto) {
+    public ResponseEntity<FileAdditionalDataDto> updateFileAdditionalData(@NotNull Long fileId, @NotNull Long id,
+                                                                          @NotNull @Valid FileAdditionalDataDto fileAdditionalDataDto) {
         fileAdditionalDataService.updateFileAdditionalData(fileId, id, fileAdditionalDataDto);
         return ResponseEntity.noContent().build();
     }
