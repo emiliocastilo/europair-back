@@ -19,6 +19,8 @@ import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.files.entity.FileAdditionalData;
+import com.europair.management.rest.model.files.repository.FileAdditionalDataRepository;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
@@ -67,6 +69,9 @@ public class Office365ServiceImpl implements IOffice365Service {
 
     @Autowired
     private AircraftRepository aircraftRepository;
+
+    @Autowired
+    private FileAdditionalDataRepository additionalDataRepository;
 
     @Autowired
     private Office365Client office365Client;
@@ -173,7 +178,14 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         ConfirmedOperationDto dto = new ConfirmedOperationDto();
 
-        FileSharingExtendedInfoDto fileInfoDto = IOffice365Mapper.INSTANCE.mapFile(route.getFile());
+        FileSharingExtendedInfoDto fileInfoDto;
+        FileAdditionalData additionalData = additionalDataRepository.findByFileId(route.getFileId()).stream()
+                .findAny().orElse(null);
+        if (additionalData == null) {
+            fileInfoDto = IOffice365Mapper.INSTANCE.mapFile(route.getFile());
+        } else {
+            fileInfoDto = IOffice365Mapper.INSTANCE.mapFile(additionalData);
+        }
         fileInfoDto.setFileUrl(fileUrl + route.getFile().getId());
         dto.setFileInfo(fileInfoDto);
 

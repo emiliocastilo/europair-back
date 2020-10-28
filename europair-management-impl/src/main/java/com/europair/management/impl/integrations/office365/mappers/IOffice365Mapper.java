@@ -9,6 +9,7 @@ import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperCon
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
 import com.europair.management.rest.model.files.entity.File;
+import com.europair.management.rest.model.files.entity.FileAdditionalData;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.routes.entity.Route;
@@ -33,6 +34,10 @@ public interface IOffice365Mapper {
     FileSharingInfoDTO mapFile(Route route);
 
     FileSharingExtendedInfoDto mapFile(File file);
+
+    @Mapping(target = "code", source = "file.code")
+    @Mapping(target = "description", source = "file.description")
+    FileSharingExtendedInfoDto mapFile(FileAdditionalData fileAdditionalData);
 
     @Named("mapFlightService")
     default FlightServiceDataDto mapFlightService(final FlightService flightService) {
