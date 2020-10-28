@@ -174,4 +174,3 @@ databaseChangeLog:
         - dropForeignKeyConstraint:
             baseTableName: files_aud
             constraintName: file_aud_sale_agent_fk
-

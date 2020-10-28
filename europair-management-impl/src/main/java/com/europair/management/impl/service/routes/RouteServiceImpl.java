@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.routes;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
+import com.europair.management.api.dto.routes.RouteCreationDto;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
@@ -86,7 +87,7 @@ public class RouteServiceImpl implements IRouteService {
     }
 
     @Override
-    public RouteDto saveRoute(final Long fileId, RouteDto routeDto) {
+    public RouteDto saveRoute(final Long fileId, RouteCreationDto routeDto) {
         checkIfFileExists(fileId);
         if (routeDto.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Route expected. Identifier %s got", routeDto.getId()));
@@ -142,7 +143,7 @@ public class RouteServiceImpl implements IRouteService {
         route = routeRepository.save(route);
 
         // Create rotations
-        List<Route> rotations = createRotations(route, routeAirports, rotationDates);
+        List<Route> rotations = createRotations(route, routeAirports, rotationDates, routeDto);
         route.setRotations(rotations);
 
         return IRouteMapper.INSTANCE.toDto(route);
@@ -196,7 +197,7 @@ public class RouteServiceImpl implements IRouteService {
     // Route Rotations
 
     private List<Route> createRotations(@NotNull final Route parentRoute, final Map<String, Airport> routeAirportMap,
-                                        final List<LocalDate> rotationDates) {
+                                        final List<LocalDate> rotationDates, final RouteCreationDto routeDto) {
         List<Route> rotations = rotationDates.stream().map(date -> {
             Route rotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
             // Set relationships
@@ -212,7 +213,7 @@ public class RouteServiceImpl implements IRouteService {
         if (rotations.size() > 0) {
             rotations = routeRepository.saveAll(rotations);
             // Add flights
-            rotations.forEach(rotation -> createFlights(rotation, routeAirportMap));
+            rotations.forEach(rotation -> createFlights(rotation, routeAirportMap, routeDto));
 
         } else {
             rotations = null;
@@ -338,7 +339,7 @@ public class RouteServiceImpl implements IRouteService {
     }
 
     // Flights
-    private void createFlights(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap) {
+    private void createFlights(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap, final RouteCreationDto routeDto) {
         List<Pair<String, String>> iataFlightInfo = Utils.getRotationAirportsFlights(rotation);
         int[] auxOrder = {1};
         flightRepository.saveAll(iataFlightInfo.stream()
@@ -350,6 +351,9 @@ public class RouteServiceImpl implements IRouteService {
                     flight.setTimeZone(origin.getTimeZone());
                     flight.setDepartureTime(rotation.getStartDate().atStartOfDay());
                     flight.setRouteId(rotation.getId());
+                    flight.setSeatsC(routeDto.getSeatsC());
+                    flight.setSeatsF(routeDto.getSeatsF());
+                    flight.setSeatsY(routeDto.getSeatsY());
                     flight.setOrder(auxOrder[0]);
                     auxOrder[0]++; // Increase order
                     return flight;
@@ -366,18 +370,17 @@ public class RouteServiceImpl implements IRouteService {
 
     /**
      * Route with Contributions
+     *
      * @param idRoute
      * @return
      */
-    public List<ContributionDTO> getContributionUsingRouteId(Long idRoute){
+    public List<ContributionDTO> getContributionUsingRouteId(Long idRoute) {
         List<ContributionDTO> res = null;
 
         Route route = this.routeRepository.findById(idRoute).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + idRoute));
         Set<Contribution> contributions = route.getContributions();
 
-        res = IContributionMapper.INSTANCE.toListDtos(contributions.stream()
-                .filter(contribution -> contribution.getRemovedAt() == null)
-                .collect(Collectors.toList()));
+        res = IContributionMapper.INSTANCE.toListDtos(contributions.stream().collect(Collectors.toList()));
 
         return res;
     }
