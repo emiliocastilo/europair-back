@@ -8,11 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -70,7 +67,7 @@ public class FileDTO extends AuditModificationBaseDTO {
   @NotNull
   @JsonProperty("operationType")
   private OperationTypeEnum operationType;
-  
+
   @JsonProperty("observation")
   @Size(max = 5000)
   private String observation;

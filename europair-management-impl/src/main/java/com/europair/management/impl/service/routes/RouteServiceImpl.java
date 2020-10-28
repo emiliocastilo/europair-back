@@ -380,7 +380,9 @@ public class RouteServiceImpl implements IRouteService {
         Route route = this.routeRepository.findById(idRoute).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + idRoute));
         Set<Contribution> contributions = route.getContributions();
 
-        res = IContributionMapper.INSTANCE.toListDtos(contributions.stream().collect(Collectors.toList()));
+        res = IContributionMapper.INSTANCE.toListDtos(contributions.stream()
+                .filter(contribution -> contribution.getRemovedAt() == null)
+                .collect(Collectors.toList()));
 
         return res;
     }

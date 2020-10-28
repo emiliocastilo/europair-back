@@ -41,4 +41,8 @@ public class ContributionDataDto implements Serializable {
 
     private List<ContributionLineDataDto> lines;
 
+    private Integer seatingF;
+    private Integer seatingC;
+    private Integer seatingY;
+
 }
