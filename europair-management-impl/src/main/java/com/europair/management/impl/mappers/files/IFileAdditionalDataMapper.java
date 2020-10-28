@@ -15,7 +15,7 @@ public interface IFileAdditionalDataMapper {
 
     IFileAdditionalDataMapper INSTANCE = Mappers.getMapper(IFileAdditionalDataMapper.class);
 
-    @Mapping(target = "file.additionalData", ignore = true)
+    @Mapping(target = "file", ignore = true)
     FileAdditionalDataDto toDto(final FileAdditionalData entity);
 
     @Mapping(target = "file", ignore = true)

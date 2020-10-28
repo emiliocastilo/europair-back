@@ -2634,6 +2634,41 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "lineContributionRoute - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"contributions",
+										"1",
+										"linecontributionroute"
+									],
+									"query": [
+										{
+											"key": "size",
+											"value": "10",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "0",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					],
 					"protocolProfileBehavior": {},
@@ -2979,6 +3014,59 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "contribution - generate lines",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"idList\": [1],\r\n   \"state\": \"SENDED\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/contributions/1/generate-sale-lines",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"contributions",
+								"1",
+								"generate-sale-lines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contribution - get route with contrib",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/1/withcontribution",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"1",
+								"withcontribution"
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -3082,6 +3170,129 @@
 			"name": "File",
 			"item": [
 				{
+					"name": "AdditionalData",
+					"item": [
+						{
+							"name": "additional data - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/additional-data",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"additional-data"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "additional data - find by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/additional-data/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"additional-data",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "additional data - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": null,\r\n    \"fileId\": null,\r\n    \"flightMotive\": \"flightMotive\",\r\n    \"connections\": \"connections\",\r\n    \"limitations\": \"limitations\",\r\n    \"fixedVariableFuel\": \"fixedVariableFuel\",\r\n    \"luggage\": \"luggage\",\r\n    \"specialLuggage\": \"specialLuggage\",\r\n    \"onBoardService\": \"onBoardService\",\r\n    \"specialRequests\": \"specialRequests\",\r\n    \"otherCharges\": \"otherCharges\",\r\n    \"operationalInfo\": \"operationalInfo\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/additional-data",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"additional-data"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "additional data - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"fileId\": 1,\r\n    \"flightMotive\": \"flightMotive2\",\r\n    \"connections\": \"connections2\",\r\n    \"limitations\": \"limitations2\",\r\n    \"fixedVariableFuel\": \"fixedVariableFuel2\",\r\n    \"luggage\": \"luggage2\",\r\n    \"specialLuggage\": \"specialLuggage2\",\r\n    \"onBoardService\": \"onBoardService2\",\r\n    \"specialRequests\": \"specialRequests2\",\r\n    \"otherCharges\": \"otherCharges2\",\r\n    \"operationalInfo\": \"operationalInfo2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/additional-data/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"additional-data",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "additional data - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/additional-data/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"additional-data",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
 					"name": "Route",
 					"item": [
 						{
@@ -3168,7 +3379,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-10\"\r\n}",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-10\",\r\n    \"seatsF\": 30,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 60 \r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3451,7 +3662,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 2,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1 upd8\",\r\n    \"statusId\": 1,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": null,\r\n    \"saleAgentId\": null,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null\r\n}",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1 upd8\",\r\n    \"statusId\": 1,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": 1,\r\n    \"saleAgentId\": 1,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null,\r\n    \"specialLuggage\": \"Tiger Cage\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3459,13 +3670,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{url}}/files/2",
+							"raw": "{{url}}/files/1",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"files",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -4575,17 +4786,17 @@
 	],
 	"variable": [
 		{
-			"id": "8dc6ced2-1aba-4132-b69e-ec5c46fc032a",
+			"id": "0f322b30-a85f-4b4f-b052-94aff8bcd706",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "34dd96f1-b730-4219-87c1-318d8e0c5a0e",
+			"id": "e8bd9283-997e-41a8-97d0-eab2f3b10d1a",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "162b286e-73d0-4c28-bc7b-9a105dfaf44c",
+			"id": "122e3a3e-dbbf-4e7e-9dfe-2552780a1660",
 			"key": "dev",
 			"value": "http://212.51.59.56/services"
 		}
