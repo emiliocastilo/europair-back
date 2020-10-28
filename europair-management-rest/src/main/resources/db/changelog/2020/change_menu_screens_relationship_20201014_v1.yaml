@@ -884,3 +884,59 @@ databaseChangeLog:
               - column:
                   name: task_id
                   value: 3
+
+  - changeSet:
+      id: 20201028_screens_menu_master_v4_screens_data
+      context: dev or pre or pro
+      author: pablo.alvessampaio / axel.sanchezsalom
+      comment: "Add new screen and menu option"
+      changes:
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 14
+              - column:
+                  name: name
+                  value: "Seguimiento"
+              - column:
+                  name: description
+                  value: "Seguimiento de vuelos"
+              - column:
+                  name: route
+                  value: "/files/tracking"
+              - column:
+                  name: created_at
+                  value: "2020-10-28"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 19
+              - column:
+                  name: weight
+                  value: 2
+              - column:
+                  name: name
+                  value: "FILES_FLIGHT_TRACKING"
+              - column:
+                  name: label
+                  value: "MENU.FILES.FLIGHT_TRACKING"
+              - column:
+                  name: screen_id
+                  value: 14
+              - column:
+                  name: parent_id
+                  value: 15
+              - column:
+                  name: created_at
+                  value: "2020-10-28"
+              - column:
+                  name: created_by
+                  value: "Sistema"
