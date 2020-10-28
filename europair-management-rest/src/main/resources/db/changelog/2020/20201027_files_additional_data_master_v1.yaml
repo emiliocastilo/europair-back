@@ -24,34 +24,34 @@ databaseChangeLog:
                     references: files(id)
               - column:
                   name: flight_motive
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: connections
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: limitations
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: fixed_variable_fuel
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: luggage
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: special_luggage
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: on_board_service
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: special_requests
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: other_charges
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: operational_info
-                  type: varchar(2000)
+                  type: varchar(1500)
               - column:
                   name: created_at
                   type: timestamp
