@@ -100,7 +100,7 @@ public class ContributionServiceImpl implements IContributionService {
         contribution.setSeatingF(route.getRotations().get(0).getFlights().get(0).getSeatsF());
         contribution.setSeatingY(route.getRotations().get(0).getFlights().get(0).getSeatsY());
 
-        contributionRepository.saveAndFlush(contribution);
+        contribution = contributionRepository.saveAndFlush(contribution);
 
         // Add flight taxes for the contribution
         List<FlightTax> flightTaxes = flightTaxService.saveFlightTaxes(contribution, route);
