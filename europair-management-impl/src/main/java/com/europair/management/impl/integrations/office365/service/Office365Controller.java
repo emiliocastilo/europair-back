@@ -65,7 +65,7 @@ public class Office365Controller implements IOffice365Controller {
     @Override
     public ResponseEntity<String> sendEnabledFlightContributionInformation(Long contributionId, Long flightId) {
         String dataUrl = baseUrl + String.format("/get/flight/contribution/%s/%s",contributionId,flightId);
-        office365Client.sendUriToEnabledFlightContributionInformation(dataUrl);
+//        office365Client.sendUriToEnabledFlightContributionInformation(dataUrl);
         return ResponseEntity.ok(dataUrl);
     }
 

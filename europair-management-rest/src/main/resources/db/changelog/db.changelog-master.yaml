@@ -163,6 +163,9 @@ databaseChangeLog:
   - include:
       file: 2020/shedlock_master_table_21102020_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/20201027_files_additional_data_master_v1.yaml
+      relativeToChangelogFile: true
 
 
 
