@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,7 @@ public class ResponseContributionFlights {
 
     // this wrapper contains information about: fileSharingInfoDTO and flightSharingInfoDTO
     @JsonProperty("planningFlightsDTO")
-    private PlanningFlightsDTO planningFlightsDTO;
+    private List<PlanningFlightsDTO> planningFlightsDTO;
 
     @JsonProperty("aircraftSharingDTO")
     private AircraftSharingDTO aircraftSharingDTO;

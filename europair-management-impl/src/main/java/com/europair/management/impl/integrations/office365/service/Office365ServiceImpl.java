@@ -92,7 +92,7 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     @Override
-    public ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId, Long flightId) {
+    public ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId) {
 
         ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
 
@@ -106,13 +106,11 @@ public class Office365ServiceImpl implements IOffice365Service {
         Route route = this.routeRepository.findById(contribution.getRouteId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + contribution.getRouteId()));
 
-        Flight flight = this.flightRepository.findById(flightId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId));
 
         List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
         // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
-        PlanningFlightsDTO planningFlightsDTO = this.mapPlanningFlight(route, contribution, dsDataList, flight);
+        List<PlanningFlightsDTO> planningFlightsDTOS = this.getPlanningFlightsInfo(route.getId(), contributionId, null);
 
 
         // second step: aircraftSharingDTO
@@ -151,7 +149,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         // union of data
         responseContributionFlights.setAircraftSharingDTO(aircraftSharingDTO);
         responseContributionFlights.setOperatorSharingDTO(operatorSharingDTO);
-        responseContributionFlights.setPlanningFlightsDTO(planningFlightsDTO);
+        responseContributionFlights.setPlanningFlightsDTO(planningFlightsDTOS);
 
         return responseContributionFlights;
     }
