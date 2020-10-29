@@ -149,7 +149,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         // union of data
         responseContributionFlights.setAircraftSharingDTO(aircraftSharingDTO);
         responseContributionFlights.setOperatorSharingDTO(operatorSharingDTO);
-        responseContributionFlights.setPlanningFlightsDTO(planningFlightsDTOS);
+        responseContributionFlights.setPlanningFlightsDTOS(planningFlightsDTOS);
 
         return responseContributionFlights;
     }

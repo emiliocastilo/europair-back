@@ -14,8 +14,8 @@ import java.util.List;
 public class ResponseContributionFlights {
 
     // this wrapper contains information about: fileSharingInfoDTO and flightSharingInfoDTO
-    @JsonProperty("planningFlightsDTO")
-    private List<PlanningFlightsDTO> planningFlightsDTO;
+    @JsonProperty("planningFlightsDTOS")
+    private List<PlanningFlightsDTO> planningFlightsDTOS;
 
     @JsonProperty("aircraftSharingDTO")
     private AircraftSharingDTO aircraftSharingDTO;
