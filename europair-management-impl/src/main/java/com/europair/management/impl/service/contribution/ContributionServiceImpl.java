@@ -93,7 +93,7 @@ public class ContributionServiceImpl implements IContributionService {
         Route route = routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
         route.setHasContributions(true);
-        Route updatedRoute = routeRepository.saveAndFlush(route); 
+        Route updatedRoute = routeRepository.saveAndFlush(route);
 
         // Retrieve seatings info from first flight of first rotation
         contribution.setSeatingC(route.getRotations().get(0).getFlights().get(0).getSeatsC());
@@ -113,7 +113,12 @@ public class ContributionServiceImpl implements IContributionService {
         String taxOnPurchaseMsg = null;
         List<Double> taxOnPurchase = flightTaxes.stream().map(FlightTax::getTaxOnPurchase).distinct().collect(Collectors.toList());
         if (taxOnPurchase.size() == 1) {
-            contribution.setPurchaseCommissionPercent(taxOnPurchase.get(0).intValue());
+            Double tax = taxOnPurchase.get(0);
+            if (Utils.Constants.TAX_ERROR_FOREIGN_TAX.equals(tax)) {
+                taxOnPurchaseMsg = "Must apply tax from a foreign country";
+                tax = null;
+            }
+            contribution.setPurchaseCommissionPercent(tax == null ? null : tax.intValue());
         } else {
             contribution.setPurchaseCommissionPercent(null);
             taxOnPurchaseMsg = "Route flights have different tax values";
@@ -121,8 +126,13 @@ public class ContributionServiceImpl implements IContributionService {
 
         String taxOnSaleMsg = null;
         List<Double> taxOnSale = flightTaxes.stream().map(FlightTax::getTaxOnSale).distinct().collect(Collectors.toList());
-        if (taxOnPurchase.size() == 1) {
-            contribution.setPurchaseCommissionPercent(taxOnSale.get(0).intValue());
+        if (taxOnSale.size() == 1) {
+            Double tax = taxOnSale.get(0);
+            if (Utils.Constants.TAX_ERROR_FOREIGN_TAX.equals(tax)) {
+                taxOnSaleMsg = "Must apply tax from a foreign country";
+                tax = null;
+            }
+            contribution.setSalesCommissionPercent(tax == null ? null : tax.intValue());
         } else {
             contribution.setSalesCommissionPercent(null);
             taxOnSaleMsg = "Route flights have different tax values";
