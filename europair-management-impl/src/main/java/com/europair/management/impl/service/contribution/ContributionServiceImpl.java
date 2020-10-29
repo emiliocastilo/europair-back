@@ -108,7 +108,33 @@ public class ContributionServiceImpl implements IContributionService {
         // Add route contribution lines
         Set<LineContributionRoute> routeContributionLines = createRouteContributionLines(contribution.getId(), updatedRoute);
 
-        return IContributionMapper.INSTANCE.toDto(contribution);
+        // Contribution taxes
+
+        String taxOnPurchaseMsg = null;
+        List<Double> taxOnPurchase = flightTaxes.stream().map(FlightTax::getTaxOnPurchase).distinct().collect(Collectors.toList());
+        if (taxOnPurchase.size() == 1) {
+            contribution.setPurchaseCommissionPercent(taxOnPurchase.get(0).intValue());
+        } else {
+            contribution.setPurchaseCommissionPercent(null);
+            taxOnPurchaseMsg = "Route flights have different tax values";
+        }
+
+        String taxOnSaleMsg = null;
+        List<Double> taxOnSale = flightTaxes.stream().map(FlightTax::getTaxOnSale).distinct().collect(Collectors.toList());
+        if (taxOnPurchase.size() == 1) {
+            contribution.setPurchaseCommissionPercent(taxOnSale.get(0).intValue());
+        } else {
+            contribution.setSalesCommissionPercent(null);
+            taxOnSaleMsg = "Route flights have different tax values";
+        }
+
+        contribution = contributionRepository.saveAndFlush(contribution);
+
+        ContributionDTO resultDto = IContributionMapper.INSTANCE.toDto(contribution);
+        resultDto.setPurchaseVATMsg(taxOnPurchaseMsg);
+        resultDto.setSaleVATMsg(taxOnSaleMsg);
+
+        return resultDto;
     }
 
     @Override

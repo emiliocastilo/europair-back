@@ -169,7 +169,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         final Airport destination = flight.getDestination();
 
         Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), true);
-        Double taxOnPurchase = calculationService.calculateServiceTaxToApply(fileId, origin, destination, serviceType.getType(), false);
+        Double taxOnPurchase = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), false);
 
         // Update dto values
         flightServiceDto.setTaxOnSale(taxOnSale);

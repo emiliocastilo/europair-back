@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -110,5 +109,13 @@ public class ContributionDTO {
 
     @JsonProperty("seatingY")
     private Integer seatingY;
+
+    // Properties for view only (not persisted)
+
+    @JsonProperty("purchaseVATMsg")
+    private String purchaseVATMsg;
+
+    @JsonProperty("saleVATMsg")
+    private String saleVATMsg;
 
 }
