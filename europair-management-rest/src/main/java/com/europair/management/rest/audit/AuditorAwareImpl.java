@@ -4,7 +4,6 @@
 
 package com.europair.management.rest.audit;
 
-import com.europair.management.rest.common.configuration.JWTAuthenticationFilter;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +12,6 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-import javax.swing.text.html.Option;
-import java.security.Principal;
 import java.util.Optional;
 
 public class AuditorAwareImpl implements AuditorAware<String> {
@@ -38,7 +35,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         res = userRepository.findByUsername(username).map(u -> u.getUsername());
 
         // Audit for Azure users
-        if ( res.isEmpty()) {
+        if (res.isEmpty()) {
 
             LOGGER.debug("AuditorAwareImpl intentando recuperar usuario de azure : ");
 
@@ -46,14 +43,23 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
             LOGGER.debug("AuditorAwareImpl intentando recuperar usuario de azure con email : " + emailAzure);
 
-            Optional <String> azureUserName = userRepository.findByEmail(emailAzure).map(u -> u.getUsername());
+            try {
 
-            if ( azureUserName.isEmpty()){
-                LOGGER.debug("AuditorAwareImpl NO RECUPERADO USER DE AZURE");
+
+                Optional<String> azureUserName = userRepository.findByEmail(emailAzure).map(u -> u.getUsername());
+
+
+                if (azureUserName.isEmpty()) {
+                    LOGGER.debug("AuditorAwareImpl NO RECUPERADO USER DE AZURE");
+                }
+                LOGGER.debug("tanto si encuentra como si no:" + azureUserName.get());
+
+
+                res = azureUserName;
+            } catch (Exception ex) {
+                LOGGER.debug("EXCEPTION + " + ex.getMessage());
+                LOGGER.debug("EXCEPTION + ", ex);
             }
-            LOGGER.debug("tanto si encuentra como si no:" + azureUserName.get());
-
-            res= azureUserName;
         }
 
         return res;
