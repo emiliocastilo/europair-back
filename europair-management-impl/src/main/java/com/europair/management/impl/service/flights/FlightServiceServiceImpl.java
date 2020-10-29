@@ -7,6 +7,7 @@ import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
+import com.europair.management.rest.model.common.exception.EuropairForeignTaxException;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightService;
@@ -168,12 +169,19 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         final Airport origin = flight.getOrigin();
         final Airport destination = flight.getDestination();
 
-        Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), true);
-        Double taxOnPurchase = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), false);
-
         // Update dto values
-        flightServiceDto.setTaxOnSale(taxOnSale);
-        flightServiceDto.setTaxOnPurchase(taxOnPurchase);
+        try {
+            Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), true);
+            flightServiceDto.setTaxOnSale(taxOnSale);
+        } catch (EuropairForeignTaxException e) {
+            flightServiceDto.setTaxOnSale(null);
+        }
+        try {
+            Double taxOnPurchase = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), false);
+            flightServiceDto.setTaxOnPurchase(taxOnPurchase);
+        } catch (EuropairForeignTaxException e) {
+            flightServiceDto.setTaxOnPurchase(null);
+        }
     }
 
 }
