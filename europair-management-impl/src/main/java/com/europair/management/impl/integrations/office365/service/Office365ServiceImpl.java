@@ -197,8 +197,6 @@ public class Office365ServiceImpl implements IOffice365Service {
         }
         dto.setContributionInfo(contributionData);
 
-        dto.setObservations(route.getFile().getObservation());
-
         return dto;
     }
 

@@ -115,13 +115,13 @@ public class ContributionServiceImpl implements IContributionService {
         if (taxOnPurchase.size() == 1) {
             Double tax = taxOnPurchase.get(0);
             if (Utils.Constants.TAX_ERROR_FOREIGN_TAX.equals(tax)) {
-                taxOnPurchaseMsg = "Must apply tax from a foreign country";
+                taxOnPurchaseMsg = "El IVA a aplicar corresponde a un pais extranjero.";
                 tax = null;
             }
             contribution.setPurchaseCommissionPercent(tax == null ? null : tax.intValue());
         } else {
             contribution.setPurchaseCommissionPercent(null);
-            taxOnPurchaseMsg = "Route flights have different tax values";
+            taxOnPurchaseMsg = "Los vuelos de la ruta tienen un IVA diferente.";
         }
 
         String taxOnSaleMsg = null;
@@ -129,13 +129,13 @@ public class ContributionServiceImpl implements IContributionService {
         if (taxOnSale.size() == 1) {
             Double tax = taxOnSale.get(0);
             if (Utils.Constants.TAX_ERROR_FOREIGN_TAX.equals(tax)) {
-                taxOnSaleMsg = "Must apply tax from a foreign country";
+                taxOnSaleMsg = "El IVA a aplicar corresponde a un pais extranjero.";
                 tax = null;
             }
             contribution.setSalesCommissionPercent(tax == null ? null : tax.intValue());
         } else {
             contribution.setSalesCommissionPercent(null);
-            taxOnSaleMsg = "Route flights have different tax values";
+            taxOnSaleMsg = "Los vuelos de la ruta tienen un IVA diferente.";
         }
 
         contribution = contributionRepository.saveAndFlush(contribution);

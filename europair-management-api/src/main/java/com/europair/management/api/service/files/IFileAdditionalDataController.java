@@ -66,7 +66,7 @@ public interface IFileAdditionalDataController {
      * @param fileAdditionalDataDto Data of the FileAdditionalData to create
      * @return Data of the created fileAdditionalData
      */
-    @PostMapping
+    @PostMapping("/add")
     @Operation(description = "Save a new master fileAdditionalData", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<FileAdditionalDataDto> saveFileAdditionalData(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -104,4 +104,18 @@ public interface IFileAdditionalDataController {
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "FileAdditionalData identifier") @PathVariable @NotNull final Long id);
 
+    /**
+     * <p>
+     * Creates or updates a FileAdditionalData entity
+     * </p>
+     *
+     * @param fileId                File identifier
+     * @param fileAdditionalDataDto Data of the FileAdditionalData
+     * @return No content / Created
+     */
+    @PostMapping
+    @Operation(description = "Creates or file additional data", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> createOrUpdateFileAdditionalData(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Master FileAdditionalData object") @NotNull @Valid @RequestBody final FileAdditionalDataDto fileAdditionalDataDto);
 }
