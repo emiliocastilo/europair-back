@@ -282,6 +282,10 @@ public class ContributionServiceImpl implements IContributionService {
                     return saleLine;
                 }).collect(Collectors.toSet());
         lineContributionRouteRepository.saveAll(updatedServiceSaleLines);
+
+        // Update contribution data
+        contribution.setSalesPrice(contribution.getPurchasePrice());
+        contribution.setCurrencyOnSale(contribution.getCurrency());
     }
 
     private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {
