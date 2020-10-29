@@ -84,3 +84,15 @@ databaseChangeLog:
             startWith: 1
             tableName: files_additional_data
 
+  - changeSet:
+      id: 20201029_files_additional_data_master_v1_add_observation
+      context: dev or pre or pro
+      author: axl.sanchezsalom
+      comment: "Add observations column"
+      changes:
+        - addColumn:
+            tableName: files_additional_data
+            columns:
+              - column:
+                  name: observation
+                  type: varchar(1300)

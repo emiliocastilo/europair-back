@@ -3,6 +3,8 @@ package com.europair.management.impl.service.flights;
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.service.calculation.ICalculationService;
+import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.common.exception.EuropairForeignTaxException;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.entity.FlightTax;
@@ -67,12 +69,20 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
 
             } else {
                 // Calculate flight taxes
-                Double taxOnSale = calculationService.calculateFinalTaxToApply(contribution.getFileId(), flight.getOrigin(),
-                        flight.getDestination(), serviceType, true);
-                ft.setTaxOnSale(taxOnSale);
-                Double taxOnPurchase = calculationService.calculateFinalTaxToApply(contribution.getFileId(), flight.getOrigin(),
-                        flight.getDestination(), serviceType, false);
-                ft.setTaxOnPurchase(taxOnPurchase);
+                try {
+                    Double taxOnSale = calculationService.calculateFinalTaxToApply(contribution.getFileId(), flight.getOrigin(),
+                            flight.getDestination(), serviceType, true);
+                    ft.setTaxOnSale(taxOnSale);
+                } catch (EuropairForeignTaxException e) {
+                    ft.setTaxOnSale(Utils.Constants.TAX_ERROR_FOREIGN_TAX);
+                }
+                try {
+                    Double taxOnPurchase = calculationService.calculateFinalTaxToApply(contribution.getFileId(), flight.getOrigin(),
+                            flight.getDestination(), serviceType, false);
+                    ft.setTaxOnPurchase(taxOnPurchase);
+                } catch (EuropairForeignTaxException e) {
+                    ft.setTaxOnPurchase(Utils.Constants.TAX_ERROR_FOREIGN_TAX);
+                }
             }
 
             flightTaxes.add(ft);

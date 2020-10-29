@@ -11,6 +11,7 @@ import com.europair.management.rest.model.files.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +76,27 @@ public class FileAdditionalDataServiceImpl implements IFileAdditionalDataService
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "FileAdditionalData not found with id: " + id);
         }
         fileAdditionalDataRepository.deleteById(id);
+    }
+
+    @Override
+    public Pair<Boolean, Long> createOrUpdateFileAdditionalData(Long fileId, FileAdditionalDataDto fileAdditionalDataDto) {
+        checkIfFileExists(fileId);
+        FileAdditionalData fileAdditionalData = fileAdditionalDataRepository.findByFileId(fileId).stream()
+                .findAny().orElse(null);
+        boolean created = fileAdditionalData == null;
+
+        if (fileAdditionalData == null) {
+            // Create
+            fileAdditionalData = IFileAdditionalDataMapper.INSTANCE.toEntity(fileAdditionalDataDto);
+            fileAdditionalData.setFileId(fileId);
+
+        } else {
+            // Update
+            IFileAdditionalDataMapper.INSTANCE.updateFromDto(fileAdditionalDataDto, fileAdditionalData);
+        }
+
+        fileAdditionalData = fileAdditionalDataRepository.save(fileAdditionalData);
+        return Pair.of(created, fileAdditionalData.getId());
     }
 
     private void checkIfFileExists(final Long fileId) {

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -61,5 +62,13 @@ public class FileAdditionalDataController implements IFileAdditionalDataControll
     public ResponseEntity<?> deleteFileAdditionalData(@NotNull Long fileId, @NotNull Long id) {
         fileAdditionalDataService.deleteFileAdditionalData(fileId, id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> createOrUpdateFileAdditionalData(@NotNull Long fileId, @NotNull @Valid FileAdditionalDataDto fileAdditionalDataDto) {
+        Pair<Boolean, Long> result = fileAdditionalDataService.createOrUpdateFileAdditionalData(fileId, fileAdditionalDataDto);
+        return Boolean.TRUE.equals(result.getFirst()) ? ResponseEntity.created(
+                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(fileId, result.getSecond()).toUri()).build()
+                : ResponseEntity.noContent().build();
     }
 }

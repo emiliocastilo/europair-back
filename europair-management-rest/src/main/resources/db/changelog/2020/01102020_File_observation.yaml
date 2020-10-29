@@ -17,3 +17,22 @@ databaseChangeLog:
               - column:
                     name: observation
                     type: varchar(5000)
+
+  - changeSet:
+      id: 20201029_File_observation_v1_remove
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Remove column from files table"
+      changes:
+        - dropColumn:
+            tableName: files
+            columns:
+              - column:
+                  name: observation
+                  type: varchar(5000)
+        - dropColumn:
+            tableName: files_aud
+            columns:
+              - column:
+                  name: observation
+                  type: varchar(5000)

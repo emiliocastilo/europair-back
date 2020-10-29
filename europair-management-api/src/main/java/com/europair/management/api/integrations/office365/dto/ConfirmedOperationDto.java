@@ -14,5 +14,4 @@ public class ConfirmedOperationDto implements Serializable {
 
     private ContributionDataDto contributionInfo;
 
-    private String observations;
 }

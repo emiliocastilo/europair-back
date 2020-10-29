@@ -67,4 +67,6 @@ public class FileAdditionalData extends AuditModificationBaseEntity implements S
     @Column(name = "operational_info")
     private String operationalInfo;
 
+    @Column
+    private String observation;
 }
