@@ -26,41 +26,10 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
 
         Optional res;
-
-        // Audit for External users
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        LOGGER.debug("AuditorAwareImpl :  username -> " + username);
+        LOGGER.debug("AuditorAwareImpl :  username retrieved from security context -> " + username);
 
         res = userRepository.findByUsername(username).map(u -> u.getUsername());
-
-        // Audit for Azure users
-        if (res.isEmpty()) {
-
-            LOGGER.debug("AuditorAwareImpl intentando recuperar usuario de azure : ");
-
-            String emailAzure = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("unique_name");
-
-            LOGGER.debug("AuditorAwareImpl intentando recuperar usuario de azure con email : " + emailAzure);
-
-            try {
-
-
-                Optional<String> azureUserName = userRepository.findByEmail(emailAzure).map(u -> u.getUsername());
-
-
-                if (azureUserName.isEmpty()) {
-                    LOGGER.debug("AuditorAwareImpl NO RECUPERADO USER DE AZURE");
-                }
-                LOGGER.debug("tanto si encuentra como si no:" + azureUserName.get());
-
-
-                res = azureUserName;
-            } catch (Exception ex) {
-                LOGGER.debug("EXCEPTION + " + ex.getMessage());
-                LOGGER.debug("EXCEPTION + ", ex);
-            }
-        }
 
         return res;
 
