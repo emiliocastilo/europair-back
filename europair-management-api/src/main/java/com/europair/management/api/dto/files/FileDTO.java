@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
@@ -67,11 +66,6 @@ public class FileDTO extends AuditModificationBaseDTO {
   @NotNull
   @JsonProperty("operationType")
   private OperationTypeEnum operationType;
-
-  @JsonProperty("observation")
-  @Size(max = 5000)
-  private String observation;
-
 
   //This entity has his own endpoint to ask for a list of routes of a file, no needed
   //private List<Route> routes;
