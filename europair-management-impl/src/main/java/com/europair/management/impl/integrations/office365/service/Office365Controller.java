@@ -57,8 +57,8 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation( @NotNull Long flightId, @NotNull Long contributionId ) {
-        ResponseContributionFlights responseContributionFlights = service.getEnabledFlightContributionInformation( contributionId, flightId);
+    public ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation( @NotNull Long contributionId ) {
+        ResponseContributionFlights responseContributionFlights = service.getEnabledFlightContributionInformation( contributionId);
         return ResponseEntity.ok().body(responseContributionFlights);
     }
 
