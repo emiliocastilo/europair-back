@@ -66,6 +66,6 @@ public class FileAdditionalDataDto extends AuditModificationBaseDTO {
     private String operationalInfo;
 
     @JsonProperty("observation")
-    @Size(max = 1500)
+    @Size(max = 1300)
     private String observation;
 }

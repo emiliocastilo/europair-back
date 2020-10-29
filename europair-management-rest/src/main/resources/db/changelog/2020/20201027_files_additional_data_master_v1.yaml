@@ -95,4 +95,4 @@ databaseChangeLog:
             columns:
               - column:
                   name: observation
-                  type: varchar(1500)
+                  type: varchar(1300)
