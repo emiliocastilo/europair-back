@@ -93,7 +93,7 @@ public class ContributionServiceImpl implements IContributionService {
         Route route = routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
         route.setHasContributions(true);
-        Route updatedRoute = routeRepository.saveAndFlush(route);
+        Route updatedRoute = routeRepository.saveAndFlush(route); 
 
         // Retrieve seatings info from first flight of first rotation
         contribution.setSeatingC(route.getRotations().get(0).getFlights().get(0).getSeatsC());
