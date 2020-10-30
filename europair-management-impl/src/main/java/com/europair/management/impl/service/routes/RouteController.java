@@ -3,8 +3,8 @@ package com.europair.management.impl.service.routes;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
-import com.europair.management.api.dto.routes.RouteCreationDto;
 import com.europair.management.api.dto.routes.RouteDto;
+import com.europair.management.api.dto.routes.RouteExtendedDto;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.service.routes.IRouteController;
 import com.europair.management.impl.util.Utils;
@@ -36,14 +36,14 @@ public class RouteController implements IRouteController {
     }
 
     @Override
-    public ResponseEntity<Page<RouteDto>> getRouteByFilter(@NotNull Long fileId, Pageable pageable, Map<String, String> reqParam) {
+    public ResponseEntity<Page<RouteExtendedDto>> getRouteByFilter(@NotNull Long fileId, Pageable pageable, Map<String, String> reqParam) {
         CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
-        final Page<RouteDto> dtoPage = routeService.findAllPaginatedByFilter(fileId, pageable, criteria);
+        final Page<RouteExtendedDto> dtoPage = routeService.findAllPaginatedByFilter(fileId, pageable, criteria);
         return ResponseEntity.ok(dtoPage);
     }
 
     @Override
-    public ResponseEntity<RouteDto> saveRoute(@NotNull Long fileId, @NotNull RouteCreationDto routeDto) {
+    public ResponseEntity<RouteDto> saveRoute(@NotNull Long fileId, @NotNull RouteExtendedDto routeDto) {
         final RouteDto dtoSaved = routeService.saveRoute(fileId, routeDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
