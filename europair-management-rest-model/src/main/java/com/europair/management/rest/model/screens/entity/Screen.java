@@ -23,8 +23,11 @@ public class Screen extends AuditModificationBaseEntity implements Serializable 
   @Column
   private String description;
 
+/*
+  Delete this relationship to avoid inheritance in hibernate and recursively
+
   @ManyToMany(mappedBy = "screens")
-  private List<Task> tasks;
+  private List<Task> tasks;*/
 
   @Column(name = "route")
   private String route;

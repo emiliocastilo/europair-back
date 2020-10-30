@@ -940,3 +940,59 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: "Sistema"
+
+  - changeSet:
+      id: 20201030_screens_menu_master_v5_screens_services
+      context: dev or pre or pro
+      author: emilio.castillogonza / ivan.fanjulcosent
+      comment: "Add new screen and menu option - services and menu option to screen"
+      changes:
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 15
+              - column:
+                  name: name
+                  value: "Servicios"
+              - column:
+                  name: description
+                  value: "Pantalla de servicios en maestros"
+              - column:
+                  name: route
+                  value: "/services"
+              - column:
+                  name: created_at
+                  value: "2020-10-30"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 20
+              - column:
+                  name: weight
+                  value: 14
+              - column:
+                  name: name
+                  value: "MASTERS_SERVICES"
+              - column:
+                  name: label
+                  value: "MENU.MASTERS.SERVICES"
+              - column:
+                  name: screen_id
+                  value: 15
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: created_at
+                  value: "2020-10-30"
+              - column:
+                  name: created_by
+                  value: "Sistema"

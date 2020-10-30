@@ -14,26 +14,26 @@ public class AircraftSharingDTO {
     /*Category*/
     @JsonProperty("flightInfo")
     private String categoryCode; // en cotizacion  (¿ solo confirmada ?)
-    @JsonProperty("flightInfo")
+    @JsonProperty("categoryName")
     private String categoryName; // en cotizacion
 
     /*Type*/
-    @JsonProperty("flightInfo")   //     private AircraftType aircraftType;
+    @JsonProperty("typeCode")   //     private AircraftType aircraftType;
     private String typeCode;
-    @JsonProperty("flightInfo")
+    @JsonProperty("typeName")
     private String typeName;    //      private AircraftType aircraftType;
 
     /*Subcategory*/
-    @JsonProperty("flightInfo")
+    @JsonProperty("subcategoryCode")
     private String subcategoryCode;   //     private AircraftType aircraftType;
-    @JsonProperty("flightInfo")
+    @JsonProperty("subcategoryName")
     private String subcategoryName; //     private AircraftType aircraftType;
 
 
     /* Base Info*/
-    @JsonProperty("flightInfo")
+    @JsonProperty("baseCode")
     private String baseCode;
-    @JsonProperty("flightInfo")
+    @JsonProperty("baseName")
     private String baseName;
 
 

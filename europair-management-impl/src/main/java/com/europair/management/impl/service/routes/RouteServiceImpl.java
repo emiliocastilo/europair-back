@@ -1,8 +1,8 @@
 package com.europair.management.impl.service.routes;
 
 import com.europair.management.api.dto.contribution.ContributionDTO;
-import com.europair.management.api.dto.routes.RouteCreationDto;
 import com.europair.management.api.dto.routes.RouteDto;
+import com.europair.management.api.dto.routes.RouteExtendedDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
@@ -31,6 +31,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
@@ -70,13 +71,34 @@ public class RouteServiceImpl implements IRouteService {
     private IStateChangeService stateChangeService;
 
     @Override
-    public Page<RouteDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
+    public Page<RouteExtendedDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
         checkIfFileExists(fileId);
         Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
         Utils.addCriteriaIfNotExists(criteria, PARENT_ROUTE_FILTER, OperatorEnum.IS_NULL, null);
 
         return routeRepository.findRouteByCriteria(criteria, pageable)
-                .map(IRouteMapper.INSTANCE::toDto);
+                .map(route -> {
+                    RouteExtendedDto dto = IRouteMapper.INSTANCE.toExtendedDto(route);
+                    // Map seating info from flights
+                    if (!CollectionUtils.isEmpty(dto.getRotations())) {
+                        dto.getRotationsExtended().forEach(rotation -> {
+                            Route routeRotation = route.getRotations().stream()
+                                    .filter(r -> r.getId().equals(rotation.getId())).findAny().orElse(null);
+                            if (routeRotation != null) {
+                                Flight flight = getAnyRotationFlight(routeRotation);
+                                rotation.setSeatsC(flight == null ? null : flight.getSeatsC());
+                                rotation.setSeatsF(flight == null ? null : flight.getSeatsF());
+                                rotation.setSeatsY(flight == null ? null : flight.getSeatsY());
+                            }
+                        });
+                        RouteExtendedDto firstRotation = dto.getRotationsExtended().get(0);
+                        dto.setSeatsF(firstRotation.getSeatsF());
+                        dto.setSeatsC(firstRotation.getSeatsC());
+                        dto.setSeatsY(firstRotation.getSeatsY());
+                    }
+
+                    return dto;
+                });
     }
 
     @Override
@@ -87,7 +109,7 @@ public class RouteServiceImpl implements IRouteService {
     }
 
     @Override
-    public RouteDto saveRoute(final Long fileId, RouteCreationDto routeDto) {
+    public RouteDto saveRoute(final Long fileId, RouteExtendedDto routeDto) {
         checkIfFileExists(fileId);
         if (routeDto.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Route expected. Identifier %s got", routeDto.getId()));
@@ -197,7 +219,7 @@ public class RouteServiceImpl implements IRouteService {
     // Route Rotations
 
     private List<Route> createRotations(@NotNull final Route parentRoute, final Map<String, Airport> routeAirportMap,
-                                        final List<LocalDate> rotationDates, final RouteCreationDto routeDto) {
+                                        final List<LocalDate> rotationDates, final RouteExtendedDto routeDto) {
         List<Route> rotations = rotationDates.stream().map(date -> {
             Route rotation = IRouteMapper.INSTANCE.mapRotation(parentRoute);
             // Set relationships
@@ -339,7 +361,7 @@ public class RouteServiceImpl implements IRouteService {
     }
 
     // Flights
-    private void createFlights(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap, final RouteCreationDto routeDto) {
+    private void createFlights(@NotNull final Route rotation, final Map<String, Airport> routeAirportMap, final RouteExtendedDto routeDto) {
         List<Pair<String, String>> iataFlightInfo = Utils.getRotationAirportsFlights(rotation);
         int[] auxOrder = {1};
         flightRepository.saveAll(iataFlightInfo.stream()
@@ -385,6 +407,14 @@ public class RouteServiceImpl implements IRouteService {
                 .collect(Collectors.toList()));
 
         return res;
+    }
+
+    private Flight getAnyRotationFlight(final Route route) {
+        if (!CollectionUtils.isEmpty(route.getFlights())) {
+            return route.getFlights().stream().findAny().orElse(null);
+        } else {
+            return null;
+        }
     }
 
 }
