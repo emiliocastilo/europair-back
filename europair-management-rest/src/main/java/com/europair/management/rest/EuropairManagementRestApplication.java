@@ -1,10 +1,12 @@
 package com.europair.management.rest;
 
+import feign.Logger;
 import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -22,6 +24,12 @@ public class EuropairManagementRestApplication extends SpringBootServletInitiali
 	public static void main(String[] args) {
 
 		SpringApplication.run(EuropairManagementRestApplication.class, args);
+	}
+
+	@Bean
+	Logger.Level feignLoggerLevel() {
+		// Change BASIC (request) to FULL (full info: request + headers) for testing purposes
+		return Logger.Level.BASIC;
 	}
 
 }
