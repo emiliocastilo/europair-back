@@ -36,9 +36,21 @@ public class FlightTax implements Serializable {
     @JoinColumn(name = "flight_id", nullable = false, insertable = false, updatable = false)
     private Flight flight;
 
+    /**
+     * Tax to apply on sale, can be:
+     * 0% tax
+     * null (tax free)
+     * -1 (error during calculation, must apply tax from another country)
+     */
     @Column(name = "sale_tax_percentage")
     private Double taxOnSale;
 
+    /**
+     * Tax to apply on purchase, can be:
+     * 0% tax
+     * null (tax free)
+     * -1 (error during calculation, must apply tax from another country)
+     */
     @Column(name = "purchase_tax_percentage")
     private Double taxOnPurchase;
 }

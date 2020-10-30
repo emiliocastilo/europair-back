@@ -93,7 +93,7 @@ public class ContributionServiceImpl implements IContributionService {
         Route route = routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
         route.setHasContributions(true);
-        Route updatedRoute = routeRepository.saveAndFlush(route); 
+        Route updatedRoute = routeRepository.saveAndFlush(route);
 
         // Retrieve seatings info from first flight of first rotation
         contribution.setSeatingC(route.getRotations().get(0).getFlights().get(0).getSeatsC());
@@ -108,7 +108,43 @@ public class ContributionServiceImpl implements IContributionService {
         // Add route contribution lines
         Set<LineContributionRoute> routeContributionLines = createRouteContributionLines(contribution.getId(), updatedRoute);
 
-        return IContributionMapper.INSTANCE.toDto(contribution);
+        // Contribution taxes
+
+        String taxOnPurchaseMsg = null;
+        List<Double> taxOnPurchase = flightTaxes.stream().map(FlightTax::getTaxOnPurchase).distinct().collect(Collectors.toList());
+        if (taxOnPurchase.size() == 1) {
+            Double tax = taxOnPurchase.get(0);
+            if (Utils.Constants.TAX_ERROR_FOREIGN_TAX.equals(tax)) {
+                taxOnPurchaseMsg = "El IVA a aplicar corresponde a un pais extranjero.";
+                tax = null;
+            }
+            contribution.setPurchaseCommissionPercent(tax == null ? null : tax.intValue());
+        } else {
+            contribution.setPurchaseCommissionPercent(null);
+            taxOnPurchaseMsg = "Los vuelos de la ruta tienen un IVA diferente.";
+        }
+
+        String taxOnSaleMsg = null;
+        List<Double> taxOnSale = flightTaxes.stream().map(FlightTax::getTaxOnSale).distinct().collect(Collectors.toList());
+        if (taxOnSale.size() == 1) {
+            Double tax = taxOnSale.get(0);
+            if (Utils.Constants.TAX_ERROR_FOREIGN_TAX.equals(tax)) {
+                taxOnSaleMsg = "El IVA a aplicar corresponde a un pais extranjero.";
+                tax = null;
+            }
+            contribution.setSalesCommissionPercent(tax == null ? null : tax.intValue());
+        } else {
+            contribution.setSalesCommissionPercent(null);
+            taxOnSaleMsg = "Los vuelos de la ruta tienen un IVA diferente.";
+        }
+
+        contribution = contributionRepository.saveAndFlush(contribution);
+
+        ContributionDTO resultDto = IContributionMapper.INSTANCE.toDto(contribution);
+        resultDto.setPurchaseVATMsg(taxOnPurchaseMsg);
+        resultDto.setSaleVATMsg(taxOnSaleMsg);
+
+        return resultDto;
     }
 
     @Override
@@ -256,6 +292,10 @@ public class ContributionServiceImpl implements IContributionService {
                     return saleLine;
                 }).collect(Collectors.toSet());
         lineContributionRouteRepository.saveAll(updatedServiceSaleLines);
+
+        // Update contribution data
+        contribution.setSalesPrice(contribution.getPurchasePrice());
+        contribution.setCurrencyOnSale(contribution.getCurrency());
     }
 
     private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {

@@ -18,5 +18,6 @@ public class FileSharingExtendedInfoDto extends FileSharingInfoDTO {
     private String specialRequests;
     private String otherCharges;
     private String operationalInfo;
+    private String observation;
 
 }

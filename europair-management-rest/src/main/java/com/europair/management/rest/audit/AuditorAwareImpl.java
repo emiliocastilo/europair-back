@@ -5,13 +5,13 @@
 package com.europair.management.rest.audit;
 
 import com.europair.management.rest.model.users.repository.IUserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 
-import javax.swing.text.html.Option;
-import java.security.Principal;
 import java.util.Optional;
 
 public class AuditorAwareImpl implements AuditorAware<String> {
@@ -19,22 +19,22 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     @Autowired
     private IUserRepository userRepository;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuditorAwareImpl.class);
+
 
     @Override
     public Optional<String> getCurrentAuditor() {
+        LOGGER.debug(String.format("Trying to retrieve userName form SecurityContextHolder for simple and hard audit (Srpign & Envers) : %s ",
+                AuditorAwareImpl.class.getCanonicalName()));
 
         Optional res;
-
-        // Audit for External users
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        res = userRepository.findByUsername(username).map(u -> u.getUsername());
+        LOGGER.debug(String.format("%s :  username retrieved from security context -> %s", AuditorAwareImpl.class.getCanonicalName(), username));
 
-        // Audit for Azure users
-        if ( res.isEmpty()) {
-            String emailAzure = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("unique_name");
-            Optional <String> azureUserName = userRepository.findByEmail(emailAzure).map(u -> u.getUsername());
-            res= azureUserName;
-        }
+        /* At this point we can retrieve de username from SecurityContextHolder,
+         this line only has sense if we need more information allocated in data base*/
+        //res = userRepository.findByUsername(username).map(u -> u.getUsername());
+        res = Optional.of(username);
 
         return res;
 

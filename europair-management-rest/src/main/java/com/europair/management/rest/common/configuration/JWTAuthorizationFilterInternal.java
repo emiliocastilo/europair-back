@@ -63,7 +63,7 @@ public class JWTAuthorizationFilterInternal extends BasicAuthenticationFilter {
       authorities = getAuthorities(listRoleUser);
 
       SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(
-              SecurityContextHolder.getContext().getAuthentication().getPrincipal(),
+              azureUserInDDBB.get().getUsername(),
               SecurityContextHolder.getContext().getAuthentication().getCredentials(),
               authorities
       ));

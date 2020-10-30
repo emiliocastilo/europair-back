@@ -344,6 +344,7 @@ public class Utils {
         public static final String TAX_ES_IGIC_CODE = "ES_IGIC";
         public static final Unit DEFAULT_SPEED_UNIT = Unit.KNOTS;
         public static final Unit DEFAULT_DISTANCE_UNIT = Unit.NAUTIC_MILE;
+        public static final Double TAX_ERROR_FOREIGN_TAX = -1D;
     }
 
     /**
