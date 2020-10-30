@@ -70,12 +70,10 @@ public interface IOffice365Controller {
     /**
      * This opperation allows to office_365 power app to retrieve all the information related with Flight&Contribution
      *
-     * @param routeId
      * @param contributionId
-     * @param flightId
      * @return
      */
-    @GetMapping("/get/flight/contribution/{contributionId}/{flightId}")
+    @GetMapping("/get/flight/contribution/{contributionId}")
     @Operation(description = "Send an url to the Office365 systems to indicate that the information is enabled, and can be retrieved from the url", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<ResponseContributionFlights> getEnabledFlightContributionInformation(@Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 
