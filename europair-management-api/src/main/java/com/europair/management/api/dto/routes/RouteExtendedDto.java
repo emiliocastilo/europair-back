@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RouteCreationDto extends RouteDto {
+public class RouteExtendedDto extends RouteDto {
 
     @JsonProperty("seatsF")
     private Integer seatsF;
@@ -20,4 +22,8 @@ public class RouteCreationDto extends RouteDto {
 
     @JsonProperty("seatsY")
     private Integer seatsY;
+
+    @JsonProperty("rotations")
+    private List<RouteExtendedDto> rotationsExtended;
+
 }

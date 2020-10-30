@@ -2,8 +2,8 @@ package com.europair.management.api.service.routes;
 
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contribution.ContributionDTO;
-import com.europair.management.api.dto.routes.RouteCreationDto;
 import com.europair.management.api.dto.routes.RouteDto;
+import com.europair.management.api.dto.routes.RouteExtendedDto;
 import com.europair.management.api.enums.RouteStatesEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,7 +56,7 @@ public interface IRouteController {
      */
     @GetMapping
     @Operation(description = "Paged result of master route with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<Page<RouteDto>> getRouteByFilter(
+    ResponseEntity<Page<RouteExtendedDto>> getRouteByFilter(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Pagination filter") final Pageable pageable,
             @Parameter(description = "Map of properties to filter with value and operator, (pe: plateNumber=JKL,CONTAINS)") @RequestParam Map<String, String> reqParam);
@@ -74,7 +74,7 @@ public interface IRouteController {
     @Operation(description = "Save a new master route", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<RouteDto> saveRoute(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
-            @Parameter(description = "Master Route object") @NotNull @RequestBody final RouteCreationDto routeDto);
+            @Parameter(description = "Master Route object") @NotNull @RequestBody final RouteExtendedDto routeDto);
 
     /**
      * <p>

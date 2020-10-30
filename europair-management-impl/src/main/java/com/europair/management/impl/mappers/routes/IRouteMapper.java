@@ -1,6 +1,7 @@
 package com.europair.management.impl.mappers.routes;
 
 import com.europair.management.api.dto.routes.RouteDto;
+import com.europair.management.api.dto.routes.RouteExtendedDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.rest.model.routes.entity.Route;
@@ -8,6 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = IContributionMapper.class, config = AuditModificationBaseMapperConfig.class,
@@ -18,6 +20,11 @@ public interface IRouteMapper {
 
 
     RouteDto toDto(final Route entity);
+
+
+    @Mapping(target = "rotationsExtended", source = "rotations", qualifiedByName = "toExtendedDto")
+    @Named("toExtendedDto")
+    RouteExtendedDto toExtendedDto(final Route entity);
 
     @Mapping(target = "file", ignore = true)
     @Mapping(target = "parentRoute", ignore = true)
