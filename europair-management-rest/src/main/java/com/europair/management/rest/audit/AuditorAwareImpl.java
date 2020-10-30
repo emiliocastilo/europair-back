@@ -24,12 +24,17 @@ public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
+        LOGGER.debug(String.format("Trying to retrieve userName form SecurityContextHolder for simple and hard audit (Srpign & Envers) : %s ",
+                AuditorAwareImpl.class.getCanonicalName()));
 
         Optional res;
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        LOGGER.debug("AuditorAwareImpl :  username retrieved from security context -> " + username);
+        LOGGER.debug(String.format("%s :  username retrieved from security context -> %s", AuditorAwareImpl.class.getCanonicalName(), username));
 
-        res = userRepository.findByUsername(username).map(u -> u.getUsername());
+        /* At this point we can retrieve de username from SecurityContextHolder,
+         this line only has sense if we need more information allocated in data base*/
+        //res = userRepository.findByUsername(username).map(u -> u.getUsername());
+        res = Optional.of(username);
 
         return res;
 
