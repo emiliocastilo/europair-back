@@ -3,6 +3,7 @@ package com.europair.management.rest.masters.menu.service;
 import com.europair.management.api.dto.menu.MenuOptionDto;
 import com.europair.management.impl.mappers.masters.menu.MenuOptionMapper;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.audit.AuditorAwareImpl;
 import com.europair.management.rest.masters.menu.repository.MenuOptionRepository;
 import com.europair.management.rest.model.masters.menu.entity.MenuOption;
 import com.europair.management.rest.model.roles.entity.Role;
@@ -10,6 +11,8 @@ import com.europair.management.rest.model.screens.entity.Screen;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MenuService.class);
+
     private final MenuOptionRepository menuOptionRepository;
     private final IUserRepository userRepository;
 
@@ -30,7 +35,7 @@ public class MenuService {
         this.userRepository = userRepository;
     }
 
-    public MenuOptionDto getMenu(final Long parentMenuOptionId){
+    public MenuOptionDto getMenu(final Long parentMenuOptionId) {
         MenuOption resultMenu = new MenuOption();
         resultMenu.setChilds(new ArrayList<>());
 
@@ -51,12 +56,26 @@ public class MenuService {
                 .flatMap(Collection::stream)
                 .map(Task::getScreens)
                 .flatMap(Collection::stream)
-                .collect(Collectors.toMap(Screen::getId, screen -> screen));
+                .collect(Collectors.toMap(
+                        Screen::getId,
+                        screen -> screen,
+                        (screen1, screen2) -> {
+                            LOGGER.debug("Duplicate screen take first occurrence");
+                            return screen1;
+                        }
+                ));
 
         Map<Long, Screen> screenMapFromTasks = taskList.stream()
                 .map(Task::getScreens)
                 .flatMap(Collection::stream)
-                .collect(Collectors.toMap(Screen::getId, screen -> screen));
+                .collect(Collectors.toMap(
+                        Screen::getId,
+                        screen -> screen,
+                        (screen1, screen2) -> {
+                            LOGGER.debug("Duplicate screen take first occurrence");
+                            return screen1;
+                        }
+                ));
 
         totalMapListScrens.putAll(screenMapFromRoles);
         totalMapListScrens.putAll(screenMapFromTasks);
@@ -64,26 +83,26 @@ public class MenuService {
         // NOTE: the menu only has 2 lvl of nodes
         // TODO: apply recursion
         // must iterate over the screens and see if someone is in the path of the menu list
-        if(queryResult.isPresent()){
+        if (queryResult.isPresent()) {
             // queryResult is de godfather of the menu, the first node of a tree
             resultMenu = copyMenuOption(queryResult.get(), totalMapListScrens);
 
             List<MenuOption> newChildsLvl1 = new ArrayList<>();
-            for ( MenuOption menuOptionLvl1 : queryResult.get().getChilds() ) {
+            for (MenuOption menuOptionLvl1 : queryResult.get().getChilds()) {
                 // now we are at the first lvl of nodes who group the different options of the menu
                 boolean keepAliveLvl1 = false;
                 List<MenuOption> newChildsLvl2 = new ArrayList<>();
-                for (MenuOption menuOptionLvl2 : menuOptionLvl1.getChilds()){
+                for (MenuOption menuOptionLvl2 : menuOptionLvl1.getChilds()) {
                     // now we are at the seccond lvl of nodes:
-                    if(totalMapListScrens.containsKey(menuOptionLvl2.getScreenId())){
+                    if (totalMapListScrens.containsKey(menuOptionLvl2.getScreenId())) {
                         keepAliveLvl1 = true;
-                        MenuOption newMenuOptionlvl2 = copyMenuOption(menuOptionLvl2,totalMapListScrens);
+                        MenuOption newMenuOptionlvl2 = copyMenuOption(menuOptionLvl2, totalMapListScrens);
                         newChildsLvl2.add(newMenuOptionlvl2);
                     }
                 }
 
-                if (keepAliveLvl1){
-                    MenuOption newMenuOptionlvl1 = copyMenuOption(menuOptionLvl1,totalMapListScrens);
+                if (keepAliveLvl1) {
+                    MenuOption newMenuOptionlvl1 = copyMenuOption(menuOptionLvl1, totalMapListScrens);
                     newMenuOptionlvl1.setChilds(newChildsLvl2);
                     newChildsLvl1.add(newMenuOptionlvl1);
                 }
@@ -92,7 +111,7 @@ public class MenuService {
 
 
             return MenuOptionMapper.INSTANCE.toDto(resultMenu);
-        } else{
+        } else {
             return null;
         }
     }
