@@ -70,10 +70,13 @@ public interface IOffice365Mapper {
         dto.setExchangeTypeOnPurchase(contribution.getExchangeBuyType());
 
         dto.setPurchasePrice(contribution.getPurchasePrice());
-        dto.setPurchaseCommissionPercentage(contribution.getPurchaseCommissionPercent().doubleValue());
-        dto.setPurchaseCommissionAmount(dto.getPurchasePrice().multiply(
-                BigDecimal.valueOf(dto.getPurchaseCommissionPercentage() / 100)));
-        dto.setPurchaseNetPrice(dto.getPurchasePrice().add(dto.getPurchaseCommissionAmount()));
+        dto.setPurchaseCommissionPercentage(contribution.getPurchaseCommissionPercent() == null ? null :
+                contribution.getPurchaseCommissionPercent().doubleValue());
+        dto.setPurchaseCommissionAmount(
+                (dto.getPurchasePrice() == null || dto.getPurchaseCommissionPercentage() == null) ? null :
+                        dto.getPurchasePrice().multiply(BigDecimal.valueOf(dto.getPurchaseCommissionPercentage() / 100)));
+        dto.setPurchaseNetPrice((dto.getPurchasePrice() == null || dto.getPurchaseCommissionAmount() == null) ? null :
+                dto.getPurchasePrice().add(dto.getPurchaseCommissionAmount()));
 
         dto.setIncludedVAT(Boolean.TRUE.equals(contribution.getIncludedVAT()));
 
@@ -85,14 +88,19 @@ public interface IOffice365Mapper {
                 contribution.getPurchasePrice() : null);
 
         dto.setSalePrice(contribution.getSalesPrice());
-        dto.setSaleCommissionPercentage(contribution.getSalesCommissionPercent().doubleValue());
-        dto.setSaleCommissionAmount(dto.getSalePrice().multiply(
-                BigDecimal.valueOf(dto.getSaleCommissionPercentage() / 100)));
-        dto.setSaleNetPrice(dto.getSalePrice().add(dto.getSaleCommissionAmount()));
+        dto.setSaleCommissionPercentage(contribution.getSalesCommissionPercent() == null ? null :
+                contribution.getSalesCommissionPercent().doubleValue());
+        dto.setSaleCommissionAmount(
+                (dto.getSalePrice() == null || dto.getSaleCommissionPercentage() == null) ? null :
+                        dto.getSalePrice().multiply(BigDecimal.valueOf(dto.getSaleCommissionPercentage() / 100)));
+        dto.setSaleNetPrice((dto.getSalePrice() == null || dto.getSaleCommissionAmount() == null) ? null :
+                dto.getSalePrice().add(dto.getSaleCommissionAmount()));
 
-        dto.setMarginPercentage(dto.getSalePrice().multiply(BigDecimal.valueOf(100d))
-                .divide(dto.getPurchasePrice(), RoundingMode.HALF_EVEN).doubleValue() - 100);
-        dto.setMarginAmount(dto.getSalePrice().subtract(dto.getPurchasePrice()));
+        dto.setMarginPercentage((dto.getSalePrice() == null || dto.getPurchasePrice() == null) ? null :
+                dto.getSalePrice().multiply(BigDecimal.valueOf(100d))
+                        .divide(dto.getPurchasePrice(), RoundingMode.HALF_EVEN).doubleValue() - 100);
+        dto.setMarginAmount((dto.getSalePrice() == null || dto.getPurchasePrice() == null) ? null :
+                dto.getSalePrice().subtract(dto.getPurchasePrice()));
 
         dto.setSeller(contribution.getFile().getSalePerson().getUsername());
 
