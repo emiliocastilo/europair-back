@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotEmpty;
@@ -73,6 +74,10 @@ public class StateChangeServiceImpl implements IStateChangeService {
             // Change states from other entities
             if (RouteStatesEnum.OPTIONED.equals(state)) {
                 changeState(Collections.singletonList(route.getFileId()), FileStatesEnum.OPTIONED);
+            }
+            if (RouteStatesEnum.WON.equals(state) && !CollectionUtils.isEmpty(route.getRotations())) {
+                List<Long> rotationIds = route.getRotations().stream().map(Route::getId).collect(Collectors.toList());
+                changeState(rotationIds, RouteStatesEnum.WON);
             }
             return route;
         } else {

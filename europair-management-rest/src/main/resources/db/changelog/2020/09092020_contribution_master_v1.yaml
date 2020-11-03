@@ -196,3 +196,19 @@ databaseChangeLog:
             oldColumnName: comments
             remarks: Purchase comments
             tableName: contributions
+
+  - changeSet:
+      id: 20201103_contribution_master_v2_vat_amount_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add columns for vat amounts"
+      changes:
+        - addColumn:
+            tableName: contributions
+            columns:
+              - column:
+                  name: vat_amount_sale
+                  type: decimal(12,4)
+              - column:
+                  name: vat_amount_purchase
+                  type: decimal(12,4)

@@ -92,7 +92,7 @@ public class AircraftFilterDto extends AuditModificationBaseDTO {
     private Double fromDistance;
 
     @Schema(description = "To search near airports to distance")
-    @JsonProperty("operators")
+    @JsonProperty("toDistance")
     private Double toDistance;
 
     @Schema(description = "To search near airports distance unit")

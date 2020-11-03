@@ -118,4 +118,9 @@ public class ContributionDTO {
     @JsonProperty("saleVATMsg")
     private String saleVATMsg;
 
+    @JsonProperty("vatAmountOnSale")
+    private BigDecimal vatAmountOnSale;
+
+    @JsonProperty("vatAmountOnPurchase")
+    private BigDecimal vatAmountOnPurchase;
 }

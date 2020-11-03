@@ -79,7 +79,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
-    public ContributionDTO saveContribution(ContributionDTO contributionDTO) {
+    public synchronized ContributionDTO saveContribution(ContributionDTO contributionDTO) {
         if (contributionDTO.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Contribution expected. Identifier %s got", contributionDTO.getId()));
         }
@@ -137,6 +137,16 @@ public class ContributionServiceImpl implements IContributionService {
             contribution.setSalesCommissionPercent(null);
             taxOnSaleMsg = "Los vuelos de la ruta tienen un IVA diferente.";
         }
+
+        // Set VAT amounts
+        contribution.setVatAmountOnPurchase(
+                (contribution.getPurchasePrice() == null || contribution.getPurchaseCommissionPercent() == null) ? null
+                        : contribution.getPurchasePrice().multiply(
+                                BigDecimal.valueOf(Double.valueOf(contribution.getPurchaseCommissionPercent()) / 100)));
+        contribution.setVatAmountOnSale(
+                (contribution.getSalesPrice() == null || contribution.getSalesCommissionPercent() == null) ? null
+                        : contribution.getSalesPrice().multiply(
+                                BigDecimal.valueOf(Double.valueOf(contribution.getSalesCommissionPercent()) / 100)));
 
         contribution = contributionRepository.saveAndFlush(contribution);
 
@@ -296,6 +306,7 @@ public class ContributionServiceImpl implements IContributionService {
         // Update contribution data
         contribution.setSalesPrice(contribution.getPurchasePrice());
         contribution.setCurrencyOnSale(contribution.getCurrency());
+        contribution = contributionRepository.save(contribution);
     }
 
     private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {

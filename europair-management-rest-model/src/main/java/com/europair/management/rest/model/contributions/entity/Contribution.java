@@ -145,4 +145,10 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "seating_y")
     private Integer seatingY;
 
+    @Column(name = "vat_amount_sale", precision = 12, scale = 4)
+    private BigDecimal vatAmountOnSale;
+
+    @Column(name = "vat_amount_purchase", precision = 12, scale = 4)
+    private BigDecimal vatAmountOnPurchase;
+
 }
