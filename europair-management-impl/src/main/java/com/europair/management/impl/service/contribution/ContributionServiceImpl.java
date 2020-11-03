@@ -79,7 +79,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     @Override
-    public ContributionDTO saveContribution(ContributionDTO contributionDTO) {
+    public synchronized ContributionDTO saveContribution(ContributionDTO contributionDTO) {
         if (contributionDTO.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Contribution expected. Identifier %s got", contributionDTO.getId()));
         }
