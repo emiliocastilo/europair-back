@@ -296,6 +296,7 @@ public class ContributionServiceImpl implements IContributionService {
         // Update contribution data
         contribution.setSalesPrice(contribution.getPurchasePrice());
         contribution.setCurrencyOnSale(contribution.getCurrency());
+        contribution = contributionRepository.save(contribution);
     }
 
     private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {
