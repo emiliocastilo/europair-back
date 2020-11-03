@@ -138,6 +138,16 @@ public class ContributionServiceImpl implements IContributionService {
             taxOnSaleMsg = "Los vuelos de la ruta tienen un IVA diferente.";
         }
 
+        // Set VAT amounts
+        contribution.setVatAmountOnPurchase(
+                (contribution.getPurchasePrice() == null || contribution.getPurchaseCommissionPercent() == null) ? null
+                        : contribution.getPurchasePrice().multiply(
+                                BigDecimal.valueOf(Double.valueOf(contribution.getPurchaseCommissionPercent()) / 100)));
+        contribution.setVatAmountOnSale(
+                (contribution.getSalesPrice() == null || contribution.getSalesCommissionPercent() == null) ? null
+                        : contribution.getSalesPrice().multiply(
+                                BigDecimal.valueOf(Double.valueOf(contribution.getSalesCommissionPercent()) / 100)));
+
         contribution = contributionRepository.saveAndFlush(contribution);
 
         ContributionDTO resultDto = IContributionMapper.INSTANCE.toDto(contribution);

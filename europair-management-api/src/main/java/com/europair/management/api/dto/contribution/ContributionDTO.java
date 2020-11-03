@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -118,4 +119,9 @@ public class ContributionDTO {
     @JsonProperty("saleVATMsg")
     private String saleVATMsg;
 
+    @JsonProperty("vatAmountOnSale")
+    private BigDecimal vatAmountOnSale;
+
+    @JsonProperty("vatAmountOnPurchase")
+    private BigDecimal vatAmountOnPurchase;
 }
