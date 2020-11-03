@@ -20,6 +20,10 @@ public class MenuOption extends AuditModificationBaseEntity {
     private String name;
     @Column
     private String label;
+
+    @Column
+    private Integer weight;
+
     @Column
     private String icon;
 
