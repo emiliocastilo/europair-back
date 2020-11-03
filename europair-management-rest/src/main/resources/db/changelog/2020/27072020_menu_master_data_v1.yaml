@@ -675,3 +675,36 @@ databaseChangeLog:
                   name: modified_by
                   value: "Sistema"
             where: name IN ('MASTERS_FLEET_AIRCRAFT', 'MASTERS_FLEET_CATEGORIES', 'MASTERS_FLEET_TYPES')
+
+  - changeSet:
+      id: 03112020_menu_v15_menu_option_data
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Update weight to chidls lvl 1 from parent"
+      changes:
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: weight
+                  value: 1
+              - column:
+                  name: modified_at
+                  value: "2020-11-03"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('FILES')
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: weight
+                  value: 2
+              - column:
+                  name: modified_at
+                  value: "2020-11-03"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: name IN ('MASTERS')
