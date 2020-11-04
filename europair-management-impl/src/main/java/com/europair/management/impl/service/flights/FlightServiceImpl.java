@@ -173,10 +173,10 @@ public class FlightServiceImpl implements IFlightService {
                 .max(Comparator.comparing(Flight::getDepartureTime))
                 .map(flight -> flight.getArrivalTime() != null ? flight.getArrivalTime() : flight.getDepartureTime())
                 .orElse(null);
-        if (minDate != null && minDate.isBefore(rotation.getStartDate().atStartOfDay())) {
+        if (minDate != null && !minDate.toLocalDate().equals(rotation.getStartDate())) {
             rotation.setStartDate(minDate.toLocalDate());
         }
-        if (maxDate != null && maxDate.isAfter(rotation.getEndDate().plusDays(1).atStartOfDay())) {
+        if (maxDate != null && !maxDate.toLocalDate().equals(rotation.getEndDate())) {
             rotation.setEndDate(maxDate.toLocalDate());
         }
     }
