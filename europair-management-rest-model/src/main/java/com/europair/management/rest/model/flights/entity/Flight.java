@@ -103,4 +103,7 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @Enumerated(value = EnumType.STRING)
   private CommonStateEnum parking;
 
+  @Column(name = "sent_planning")
+  private Boolean sentPlanning;
+
 }

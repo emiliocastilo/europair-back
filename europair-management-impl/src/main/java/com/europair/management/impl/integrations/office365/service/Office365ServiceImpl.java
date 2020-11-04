@@ -1,16 +1,8 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
-import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
-import com.europair.management.api.integrations.office365.dto.ContributionDataDto;
-import com.europair.management.api.integrations.office365.dto.FileSharingExtendedInfoDto;
-import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
-import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
-import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
-import com.europair.management.api.integrations.office365.dto.FlightSharingInfoDTO;
-import com.europair.management.api.integrations.office365.dto.OperatorSharingDTO;
-import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
-import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
+import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.api.integrations.office365.dto.*;
+import com.europair.management.api.integrations.office365.enums.Office365PlanningFlightActionType;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
@@ -19,8 +11,10 @@ import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.FileAdditionalData;
 import com.europair.management.rest.model.files.repository.FileAdditionalDataRepository;
+import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
@@ -39,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.cert.CollectionCertStoreParameters;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -74,6 +69,9 @@ public class Office365ServiceImpl implements IOffice365Service {
     private FileAdditionalDataRepository additionalDataRepository;
 
     @Autowired
+    private FileRepository fileRepository;
+
+    @Autowired
     private Office365Client office365Client;
 
     @Value("${europair.web.file.url}")
@@ -92,7 +90,7 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     @Override
-    public ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId) {
+    public ResponseContributionFlights getEnabledFlightContributionInformation(Long contributionId) {
 
         ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
 
@@ -165,6 +163,46 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         return mapPlanningFlightsInfo(route, contribution);
 
+    }
+
+    @Override
+    public List<MinimalRouteInfoToSendThePlanningFlightsDTO> getAllRoutesToSendPlanningFlights(Long fileId) {
+
+        Optional<File> optFile = this.fileRepository.findById(fileId);
+        List<MinimalRouteInfoToSendThePlanningFlightsDTO> flightListToSend = new ArrayList<>();
+
+        if (optFile.isPresent()) {
+            flightListToSend =
+                    optFile.get()
+                            .getRoutes().stream()
+                            .map(Route::getContributions)
+                            .flatMap(Collection::stream)
+                            .map(contribution -> {
+                                return contribution.getRoute().getRotations()
+                                        .stream()
+                                        .map(route -> {
+                                            return (route.getRouteState().equals(RouteStatesEnum.WON) ? route : null);
+                                        })
+                                        .collect(Collectors.toList())
+                                        .stream()
+                                        .map(Route::getFlights)
+                                        .flatMap(Collection::stream).map(flight -> {
+
+                                            MinimalRouteInfoToSendThePlanningFlightsDTO info = new MinimalRouteInfoToSendThePlanningFlightsDTO();
+                                            info.setRouteId(flight.getRouteId());
+                                            info.setContributionId(contribution.getId());
+                                            info.setActionType(Office365PlanningFlightActionType.CREATE);
+
+                                            if (flight.getSentPlanning()) {
+                                                info.setActionType(Office365PlanningFlightActionType.UPDATE);
+                                            }
+                                            return info;
+
+                                        }).collect(Collectors.toList());
+
+                            }).flatMap(Collection::stream).collect(Collectors.toList());
+        }
+        return flightListToSend;
     }
 
     ///////////////////////

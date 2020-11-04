@@ -2,6 +2,7 @@ package com.europair.management.impl.integrations.office365.service;
 
 import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
+import com.europair.management.api.integrations.office365.dto.SimplePlaningFlightDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,5 +39,5 @@ public interface Office365Client {
             @RequestParam(value="sp") String sp,
             @RequestParam(value="sv") String sv,
             @RequestParam(value="sig") String sig,
-            @RequestBody PlanningFlightsDTO planningFlightsDTO);
+            @RequestBody SimplePlaningFlightDTO planningFlightsDTO);
 }

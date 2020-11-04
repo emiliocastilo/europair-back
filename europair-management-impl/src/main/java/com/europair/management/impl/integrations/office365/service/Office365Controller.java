@@ -1,10 +1,8 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
-import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
-import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
-import com.europair.management.api.integrations.office365.dto.SimplePlaningFlightDTO;
+import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.api.integrations.office365.service.IOffice365Controller;
+import com.europair.management.rest.model.routes.entity.Route;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,16 +68,24 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(@NotNull Long routeId,
-                                                                            @NotNull Long contributionId,
-                                                                            String actionType) {
+    public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(@NotNull Long fileId) {
 
-        final List<PlanningFlightsDTO> planningFlightsDTOList = service.getPlanningFlightsInfo(routeId, contributionId, actionType);
+        // first step: retrieve all the routes on a file
+        List<MinimalRouteInfoToSendThePlanningFlightsDTO> routeListToSendPlaning = this.service.getAllRoutesToSendPlanningFlights(fileId);
 
-        office365Client.sendPlaningFlightsDTOList(API_VERSION, SP, SV, SIG, planningFlightsDTOList);
-        //sendOneByOnePlanningFlightDTOToOffice365(planningFlightsDTOList);
+        // esta logica la mantendremos pero antes vamos a recuperar todas las rutas y contribuciones que queremos mandar a planificar
 
-        return ResponseEntity.ok(planningFlightsDTOList);
+        for (MinimalRouteInfoToSendThePlanningFlightsDTO infoRouteToSendPlaning : routeListToSendPlaning){
+            final List<PlanningFlightsDTO> planningFlightsDTOList =
+                    service.getPlanningFlightsInfo( infoRouteToSendPlaning.getRouteId(),
+                            infoRouteToSendPlaning.getContributionId(),
+                            String.valueOf(infoRouteToSendPlaning.getActionType()));
+
+            //office365Client.sendPlaningFlightsDTOList(API_VERSION, SP, SV, SIG, planningFlightsDTOList);
+            sendOneByOnePlanningFlightDTOToOffice365(planningFlightsDTOList);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -96,12 +102,14 @@ public class Office365Controller implements IOffice365Controller {
                 SimplePlaningFlightDTO simplePlaningFlightDTO = new SimplePlaningFlightDTO();
 
                 simplePlaningFlightDTO.setTitle("PLANNING :" + planningFlightsDTO.getFileSharingInfoDTO().getCode());
-                simplePlaningFlightDTO.setClient(planningFlightsDTO.getFlightSharingInfoDTO().getClient());
+                // hardcoded client because patterson power app uses this default client
+                simplePlaningFlightDTO.setClient("adminbroker@europair.es");
+                /*simplePlaningFlightDTO.setClient(planningFlightsDTO.getFlightSharingInfoDTO().getClient());*/
                 simplePlaningFlightDTO.setDescription(planningFlightsDTO.getFileSharingInfoDTO().getDescription());
-                simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate());
-                simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate());
+                simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate().toLocalDate());
+                simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate().toLocalDate());
 
-                office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, planningFlightsDTO);
+                office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, simplePlaningFlightDTO);
             }
         }
     }
