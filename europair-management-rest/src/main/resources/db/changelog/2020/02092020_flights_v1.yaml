@@ -184,3 +184,18 @@ databaseChangeLog:
                   name: parking
                   type: varchar(10)
 
+  - changeSet:
+      id: 04112020_flights_vN_20201104_sent_planning
+      context: dev or pre or pro
+      author: ivan.fanjulcosent
+      comment: "Add new column sent_planning flag "
+      changes:
+        - addColumn:
+            tableName: flights
+            columns:
+              - column:
+                  name: sent_planning
+                  type: bool
+                  defaultValueBoolean:  false
+                  remarks: Flag to identify if the planning was sent
+
