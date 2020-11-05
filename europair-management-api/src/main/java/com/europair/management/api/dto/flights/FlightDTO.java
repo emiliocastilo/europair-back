@@ -68,4 +68,7 @@ public class FlightDTO extends AuditModificationBaseDTO {
 
   @JsonProperty("parking")
   private CommonStateEnum parking;
+
+  @JsonProperty("sentPlanning")
+  private String sentPlanning;
 }

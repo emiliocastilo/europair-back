@@ -88,8 +88,6 @@ public interface IOffice365Controller {
     @GetMapping("/planning")
     @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(
-            @Parameter(description = "route id") @RequestParam @NotNull final Long routeId,
-            @Parameter(description = "Contribution identifier") @RequestParam @NotNull final Long contributionId,
-            @Parameter(description = "action type") @RequestParam @NotNull final String actionType);
+            @Parameter(description = "file id") @RequestParam @NotNull final Long fileId);
 
 }
