@@ -324,6 +324,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         Operator operator = contribution.getAircraft().getOperator();
 
         FlightSharingInfoDTO dto = new FlightSharingInfoDTO();
+        dto.setFlightId(flight.getId());
         dto.setOperationType(route.getFile().getOperationType());
         dto.setPaxTotalNumber((flight.getSeatsC() == null ? 0 : flight.getSeatsC()) +
                 (flight.getSeatsF() == null ? 0 : flight.getSeatsF()) +
