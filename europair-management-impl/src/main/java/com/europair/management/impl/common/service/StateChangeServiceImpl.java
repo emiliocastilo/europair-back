@@ -97,6 +97,13 @@ public class StateChangeServiceImpl implements IStateChangeService {
     private File changeFileState(final File file, final FileStatesEnum state) {
         FileStatesEnum currentState = FileStatesEnum.valueOf(file.getStatus().getCode());
         if (fileRepository.canChangeState(currentState, state)) {
+            // Additional validations
+            if ((FileStatesEnum.BLUE_BOOKED.equals(state) || FileStatesEnum.GREEN_BOOKED.equals(state)) &&
+                    file.getRoutes().stream().noneMatch(route -> RouteStatesEnum.WON.equals(route.getRouteState()))) {
+                throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                        "File cannot change state to: " + state + " without Won Routes");
+            }
+
             FileStatus updatedStatus = fileStatusRepository.findFirstByCode(state.toString())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + state));
             file.setStatusId(updatedStatus.getId());
