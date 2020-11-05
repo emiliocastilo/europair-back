@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -215,6 +216,27 @@ public class FlightServiceImpl implements IFlightService {
         updateRotationDates(rotation, flights);
         updateRotationLabel(rotation, flights);
         rotation = routeRepository.save(rotation);
+        updateRouteData(rotation.getParentRouteId());
+    }
+
+    private void updateRouteData(final Long routeId) {
+        Route route = getRoute(routeId);
+        List<Route> updatedRotations = routeRepository.findByParentRouteId(routeId);
+        LocalDate minDate = updatedRotations.stream()
+                .min(Comparator.comparing(Route::getStartDate))
+                .map(Route::getStartDate)
+                .orElse(null);
+        LocalDate maxDate = updatedRotations.stream()
+                .max(Comparator.comparing(Route::getEndDate))
+                .map(Route::getEndDate)
+                .orElse(null);
+        if (minDate != null && !minDate.equals(route.getStartDate())) {
+            route.setStartDate(minDate);
+        }
+        if (maxDate != null && !maxDate.equals(route.getEndDate())) {
+            route.setEndDate(maxDate);
+        }
+        route = routeRepository.save(route);
     }
 
 }

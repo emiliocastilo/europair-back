@@ -15,6 +15,7 @@ public interface RouteRepository extends JpaRepository<Route, Long>, IRouteRepos
 
     List<Route> findAllByIdIn(List<Long> idList);
 
+    List<Route> findByParentRouteId(Long routeId);
 
     @Query("SELECT route FROM Route route " +
             "WHERE route.routeState NOT IN ( :statesToAvoid )")
