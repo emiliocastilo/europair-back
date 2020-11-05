@@ -103,6 +103,14 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @Enumerated(value = EnumType.STRING)
   private CommonStateEnum parking;
 
+  @NotAudited
+  @OneToMany(mappedBy = "flight", orphanRemoval = true)
+  private List<FlightTax> taxes;
+
+  @NotAudited
+  @OneToMany(mappedBy = "flight", orphanRemoval = true)
+  private List<FlightService> services;
+
   @Column(name = "sent_planning")
   private Boolean sentPlanning;
 

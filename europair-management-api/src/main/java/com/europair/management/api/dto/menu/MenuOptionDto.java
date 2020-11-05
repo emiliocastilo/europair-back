@@ -15,6 +15,7 @@ public class MenuOptionDto extends AuditModificationBaseDTO {
     private Long id;
     private String name;
     private String label;
+    private Integer weight;
     private String icon;
     private String route;
     private List<MenuOptionDto> childs;

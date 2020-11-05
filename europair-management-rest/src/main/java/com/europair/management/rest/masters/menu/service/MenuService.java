@@ -107,6 +107,9 @@ public class MenuService {
                     newChildsLvl1.add(newMenuOptionlvl1);
                 }
             }
+
+            applyOrderByWeightOnLvl1(newChildsLvl1);
+
             resultMenu.setChilds(newChildsLvl1);
 
 
@@ -116,11 +119,24 @@ public class MenuService {
         }
     }
 
+    /**
+     * This method applies natural order over a List<MenuOption>
+     * @param menuOptionList
+     */
+    private void applyOrderByWeightOnLvl1(List<MenuOption> menuOptionList) {
+
+        Collections.sort(menuOptionList, (child1,child2) -> {
+            return child1.getWeight() - child2.getWeight();
+        });
+
+    }
+
     private MenuOption copyMenuOption(MenuOption menuOptionOrigin, Map<Long, Screen> totalMapListScrens) {
         MenuOption resultMenu = new MenuOption();
 
         resultMenu.setId(menuOptionOrigin.getId());
         resultMenu.setLabel(menuOptionOrigin.getLabel());
+        resultMenu.setWeight(menuOptionOrigin.getWeight());
         resultMenu.setIcon(menuOptionOrigin.getIcon());
         resultMenu.setName(menuOptionOrigin.getName());
         resultMenu.setParent(menuOptionOrigin.getParent());

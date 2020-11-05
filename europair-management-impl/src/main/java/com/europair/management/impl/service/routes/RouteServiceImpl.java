@@ -38,6 +38,7 @@ import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -204,8 +205,10 @@ public class RouteServiceImpl implements IRouteService {
     @Override
     public void deleteRoute(final Long fileId, Long id) {
         checkIfFileExists(fileId);
-        if (!routeRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id);
+        Route route = routeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
+        if (!CollectionUtils.isEmpty(route.getContributions())) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cannot delete Route with contributions.");
         }
         routeRepository.deleteById(id);
     }
@@ -310,7 +313,6 @@ public class RouteServiceImpl implements IRouteService {
                     return rotationDate;
                 }
 
-
                 LocalDate nextMonthDate = rotationDate;
                 Integer nextMonthDay = dayOfMonthList.stream()
                         .filter(monthDay -> monthDay > rotationDate.getDayOfMonth())
@@ -330,9 +332,11 @@ public class RouteServiceImpl implements IRouteService {
                     }
 
                 } catch (DateTimeException e) {
-                    // ToDo: lanzar exception o seleccionar otro día??
-                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rotation date out of range (yyyy-MM-dd): " +
-                            nextMonthDate.getYear() + "-" + nextMonthDate.getMonth() + "-" + nextMonthDay);
+                    // Search again with the next valid date as last rotation date
+                    LocalDate nextValidDate = getNextValidDate(nextMonthDate.getYear(), nextMonthDate.getMonth(), nextMonthDay);
+                    return calculateRotationDate(nextValidDate, route, firstRotation);
+//                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Rotation date out of range (yyyy-MM-dd): " +
+//                            nextMonthDate.getYear() + "-" + nextMonthDate.getMonth() + "-" + nextMonthDay);
                 }
         }
 
@@ -416,6 +420,33 @@ public class RouteServiceImpl implements IRouteService {
         } else {
             return null;
         }
+    }
+
+    /**
+     * Return next valid date of the passed values
+     *
+     * @param year     Year value
+     * @param month    Month value
+     * @param monthDay Day of month value
+     * @return Valid date
+     */
+    private LocalDate getNextValidDate(int year, Month month, int monthDay) {
+        LocalDate validDate = null;
+        while (validDate == null) {
+            try {
+                validDate = LocalDate.of(year, month, monthDay);
+            } catch (DateTimeException e) {
+                if (monthDay >= 31) {
+                    // End of month: day 1 of next month
+                    month = month.plus(1);
+                    year = Month.JANUARY.equals(month) ? year + 1 : year;
+                    monthDay = 1;
+                } else {
+                    monthDay++;
+                }
+            }
+        }
+        return validDate;
     }
 
 }
