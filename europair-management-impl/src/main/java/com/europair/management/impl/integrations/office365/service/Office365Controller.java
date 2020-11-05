@@ -119,7 +119,7 @@ public class Office365Controller implements IOffice365Controller {
 
                     // TODO: cuando nos confirmen hay que marcar el vuelo como enviado
                     // marcar en bbdd los vuelos como que han sido enviados
-                    //planningFlightsDTO.getFlightSharingInfoDTO().getFlightNumber();
+                    /*planningFlightsDTO.getFlightSharingInfoDTO().getFlightId();*/
 
 
                 } catch (FeignException ex){
