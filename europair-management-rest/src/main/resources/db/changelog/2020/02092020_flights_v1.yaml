@@ -199,3 +199,18 @@ databaseChangeLog:
                   defaultValueBoolean:  false
                   remarks: Flag to identify if the planning was sent
 
+  - changeSet:
+      id: 20201105_flights_vN_add_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add new columns for real departure and arrival times"
+      changes:
+        - addColumn:
+            tableName: flights
+            columns:
+              - column:
+                  name: real_departure_time
+                  type: timestamp
+              - column:
+                  name: real_arrival_time
+                  type: timestamp
