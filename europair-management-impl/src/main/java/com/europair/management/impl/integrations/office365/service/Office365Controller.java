@@ -77,10 +77,8 @@ public class Office365Controller implements IOffice365Controller {
     @Override
     public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(@NotNull Long fileId) {
 
-        // first step: retrieve all the routes on a file
+        // first step: retrieve all the routes in state WON with his contribution
         List<MinimalRouteInfoToSendThePlanningFlightsDTO> routeListToSendPlaning = this.service.getAllRoutesToSendPlanningFlights(fileId);
-
-        // esta logica la mantendremos pero antes vamos a recuperar todas las rutas y contribuciones que queremos mandar a planificar
 
         for (MinimalRouteInfoToSendThePlanningFlightsDTO infoRouteToSendPlaning : routeListToSendPlaning){
             final List<PlanningFlightsDTO> planningFlightsDTOList =
@@ -106,7 +104,6 @@ public class Office365Controller implements IOffice365Controller {
             if ( null != planningFlightsDTO.getFileSharingInfoDTO() && null != planningFlightsDTO.getFlightSharingInfoDTO() ) {
 
                 SimplePlaningFlightDTO simplePlaningFlightDTO = new SimplePlaningFlightDTO();
-
                 simplePlaningFlightDTO.setTitle("PLANNING :" + planningFlightsDTO.getFileSharingInfoDTO().getCode());
                 // TODO: pening meeting to talk about this and what client must be here
                 // hardcoded client because patterson power app uses this default client
@@ -122,8 +119,6 @@ public class Office365Controller implements IOffice365Controller {
                 } catch (FeignException ex){
                     LOGGER.error("Propagate feign exception", ex);
                 }
-
-
             }
         }
     }
