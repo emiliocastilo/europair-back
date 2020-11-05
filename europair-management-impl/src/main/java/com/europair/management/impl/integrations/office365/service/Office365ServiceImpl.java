@@ -335,8 +335,8 @@ public class Office365ServiceImpl implements IOffice365Service {
         dto.setPlateNumber(contribution.getAircraft().getPlateNumber());
         dto.setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
         dto.setClient(route.getFile().getClient().getCode() + " | " + route.getFile().getClient().getName());
-        dto.setCharge("0"); // ToDo: de donde lo sacamos?
-        dto.setFlightNumber("");// ToDo: de donde lo sacamos?
+        dto.setCharge(contribution.getCargoAirborne()); // ToDo: de donde lo sacamos?
+        dto.setFlightNumber(flight.getFlightNumber());
 
         // Dates
         dto.setStartDate(flight.getDepartureTime());

@@ -116,6 +116,12 @@ public class Office365Controller implements IOffice365Controller {
                 try {
                     ResponseSendPlanningFlightsDTO responseSendPlanningFlightsDTO = office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, simplePlaningFlightDTO);
                     LOGGER.debug(responseSendPlanningFlightsDTO.toString());
+
+                    // TODO: cuando nos confirmen hay que marcar el vuelo como enviado
+                    // marcar en bbdd los vuelos como que han sido enviados
+                    //planningFlightsDTO.getFlightSharingInfoDTO().getFlightNumber();
+
+
                 } catch (FeignException ex){
                     LOGGER.error("Propagate feign exception", ex);
                 }
