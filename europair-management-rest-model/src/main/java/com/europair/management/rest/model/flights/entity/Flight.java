@@ -19,10 +19,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "flights")
@@ -103,4 +105,11 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @Enumerated(value = EnumType.STRING)
   private CommonStateEnum parking;
 
+  @NotAudited
+  @OneToMany(mappedBy = "flight", orphanRemoval = true)
+  private List<FlightTax> taxes;
+
+  @NotAudited
+  @OneToMany(mappedBy = "flight", orphanRemoval = true)
+  private List<FlightService> services;
 }

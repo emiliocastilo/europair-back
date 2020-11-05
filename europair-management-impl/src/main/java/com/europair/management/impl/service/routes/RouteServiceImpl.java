@@ -205,8 +205,10 @@ public class RouteServiceImpl implements IRouteService {
     @Override
     public void deleteRoute(final Long fileId, Long id) {
         checkIfFileExists(fileId);
-        if (!routeRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id);
+        Route route = routeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
+        if (!CollectionUtils.isEmpty(route.getContributions())) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cannot delete Route with contributions.");
         }
         routeRepository.deleteById(id);
     }
