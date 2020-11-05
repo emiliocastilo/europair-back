@@ -1,15 +1,18 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
-import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
-import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
-import com.europair.management.api.integrations.office365.dto.SimplePlaningFlightDTO;
+import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.api.integrations.office365.service.IOffice365Controller;
+import com.europair.management.rest.model.routes.entity.Route;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -17,6 +20,8 @@ import java.util.List;
 @RestController
 @Slf4j
 public class Office365Controller implements IOffice365Controller {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Office365Controller.class);
 
     @Autowired
     private IOffice365Service service;
@@ -70,16 +75,21 @@ public class Office365Controller implements IOffice365Controller {
     }
 
     @Override
-    public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(@NotNull Long routeId,
-                                                                            @NotNull Long contributionId,
-                                                                            String actionType) {
+    public ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(@NotNull Long fileId) {
 
-        final List<PlanningFlightsDTO> planningFlightsDTOList = service.getPlanningFlightsInfo(routeId, contributionId, actionType);
+        // first step: retrieve all the routes in state WON with his contribution
+        List<MinimalRouteInfoToSendThePlanningFlightsDTO> routeListToSendPlaning = this.service.getAllRoutesToSendPlanningFlights(fileId);
 
-        office365Client.sendPlaningFlightsDTOList(API_VERSION, SP, SV, SIG, planningFlightsDTOList);
-        //sendOneByOnePlanningFlightDTOToOffice365(planningFlightsDTOList);
+        for (MinimalRouteInfoToSendThePlanningFlightsDTO infoRouteToSendPlaning : routeListToSendPlaning){
+            final List<PlanningFlightsDTO> planningFlightsDTOList =
+                    service.getPlanningFlightsInfo( infoRouteToSendPlaning.getRouteId(),
+                            infoRouteToSendPlaning.getContributionId());
 
-        return ResponseEntity.ok(planningFlightsDTOList);
+            //office365Client.sendPlaningFlightsDTOList(API_VERSION, SP, SV, SIG, planningFlightsDTOList);
+            sendOneByOnePlanningFlightDTOToOffice365(planningFlightsDTOList);
+        }
+
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -94,14 +104,27 @@ public class Office365Controller implements IOffice365Controller {
             if ( null != planningFlightsDTO.getFileSharingInfoDTO() && null != planningFlightsDTO.getFlightSharingInfoDTO() ) {
 
                 SimplePlaningFlightDTO simplePlaningFlightDTO = new SimplePlaningFlightDTO();
-
                 simplePlaningFlightDTO.setTitle("PLANNING :" + planningFlightsDTO.getFileSharingInfoDTO().getCode());
-                simplePlaningFlightDTO.setClient(planningFlightsDTO.getFlightSharingInfoDTO().getClient());
+                // TODO: pening meeting to talk about this and what client must be here
+                // hardcoded client because patterson power app uses this default client
+                simplePlaningFlightDTO.setClient("adminbroker@europair.es");
+                /*simplePlaningFlightDTO.setClient(planningFlightsDTO.getFlightSharingInfoDTO().getClient());*/
                 simplePlaningFlightDTO.setDescription(planningFlightsDTO.getFileSharingInfoDTO().getDescription());
-                simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate());
-                simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate());
+                simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate().toLocalDate());
+                simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate().toLocalDate());
 
-                office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, planningFlightsDTO);
+                try {
+                    ResponseSendPlanningFlightsDTO responseSendPlanningFlightsDTO = office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, simplePlaningFlightDTO);
+                    LOGGER.debug(responseSendPlanningFlightsDTO.toString());
+
+                    // TODO: cuando nos confirmen hay que marcar el vuelo como enviado
+                    // marcar en bbdd los vuelos como que han sido enviados
+                    /*planningFlightsDTO.getFlightSharingInfoDTO().getFlightId();*/
+
+
+                } catch (FeignException ex){
+                    LOGGER.error("Propagate feign exception", ex);
+                }
             }
         }
     }

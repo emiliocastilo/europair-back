@@ -113,6 +113,10 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @OneToMany(mappedBy = "flight", orphanRemoval = true)
   private List<FlightService> services;
 
+  @Column(name = "sent_planning")
+  private Boolean sentPlanning;
+
+
   @Column(name = "real_departure_time")
   private LocalDateTime realDepartureTime;
 

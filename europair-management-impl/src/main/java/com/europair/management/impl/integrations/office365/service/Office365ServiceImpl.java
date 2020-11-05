@@ -1,26 +1,19 @@
 package com.europair.management.impl.integrations.office365.service;
 
-import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
-import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
-import com.europair.management.api.integrations.office365.dto.ContributionDataDto;
-import com.europair.management.api.integrations.office365.dto.FileSharingExtendedInfoDto;
-import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
-import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
-import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
-import com.europair.management.api.integrations.office365.dto.FlightSharingInfoDTO;
-import com.europair.management.api.integrations.office365.dto.OperatorSharingDTO;
-import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
-import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
+import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.api.integrations.office365.dto.*;
+import com.europair.management.api.integrations.office365.enums.Office365PlanningFlightActionType;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
-import com.europair.management.impl.integrations.office365.planning.IPlanningService;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
+import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.FileAdditionalData;
 import com.europair.management.rest.model.files.repository.FileAdditionalDataRepository;
+import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftBase;
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
@@ -61,8 +54,6 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Autowired
     private ConversionService conversionService;
 
-    @Autowired
-    private IPlanningService iPlanningService;
 
     @Autowired
     private FlightRepository flightRepository;
@@ -72,6 +63,9 @@ public class Office365ServiceImpl implements IOffice365Service {
 
     @Autowired
     private FileAdditionalDataRepository additionalDataRepository;
+
+    @Autowired
+    private FileRepository fileRepository;
 
     @Autowired
     private Office365Client office365Client;
@@ -92,7 +86,7 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     @Override
-    public ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId) {
+    public ResponseContributionFlights getEnabledFlightContributionInformation(Long contributionId) {
 
         ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
 
@@ -110,7 +104,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
 
         // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
-        List<PlanningFlightsDTO> planningFlightsDTOS = this.getPlanningFlightsInfo(route.getId(), contributionId, null);
+        List<PlanningFlightsDTO> planningFlightsDTOS = this.getPlanningFlightsInfo(route.getId(), contributionId);
 
 
         // second step: aircraftSharingDTO
@@ -155,7 +149,7 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     @Override
-    public List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId, String actionType) {
+    public List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId) {
 
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
@@ -165,6 +159,66 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         return mapPlanningFlightsInfo(route, contribution);
 
+    }
+
+    @Override
+    public List<MinimalRouteInfoToSendThePlanningFlightsDTO> getAllRoutesToSendPlanningFlights(Long fileId) {
+
+        Optional<File> optFile = this.fileRepository.findById(fileId);
+        List<MinimalRouteInfoToSendThePlanningFlightsDTO> flightListToSend = new ArrayList<>();
+
+        if (optFile.isPresent()) {
+            flightListToSend =
+                    optFile.get()
+                            .getRoutes().stream()
+                            .map(Route::getContributions)
+                            .flatMap(Collection::stream)
+                            .map(contribution -> {
+                                return contribution.getRoute().getRotations()
+                                        .stream()
+                                        .filter(route -> route.getRouteState().equals(RouteStatesEnum.WON))
+                                        .map(route -> {
+
+                                            MinimalRouteInfoToSendThePlanningFlightsDTO info = new MinimalRouteInfoToSendThePlanningFlightsDTO();
+                                            info.setRouteId(route.getId());
+                                            info.setContributionId(contribution.getId());
+
+                                            return info;
+
+                                        }).collect(Collectors.toList());
+
+                            }).flatMap(Collection::stream).collect(Collectors.toList());
+        }
+        return flightListToSend;
+    }
+
+
+    public List<MinimalRouteInfoToSendThePlanningFlightsDTO> getAllRoutesToSendPlanningFlights2(Long fileId) {
+
+        Optional<File> optFile = this.fileRepository.findById(fileId);
+        List<MinimalRouteInfoToSendThePlanningFlightsDTO> flightListToSend = new ArrayList<>();
+
+        if (optFile.isPresent()) {
+            flightListToSend =
+                    optFile.get()
+                            .getRoutes().stream()
+                            .map(Route::getContributions)
+                            .flatMap(Collection::stream)
+                            .map(Contribution::getRoute)
+                            .map(Route::getRotations)
+                            .flatMap(Collection::stream)
+                            .filter(route -> route.getRouteState().equals(RouteStatesEnum.WON))
+                            .map(Route::getParentRoute).map(Route::getContributions)
+                            .flatMap(Collection::stream)
+                            .map(contribution -> {
+                                MinimalRouteInfoToSendThePlanningFlightsDTO info = new MinimalRouteInfoToSendThePlanningFlightsDTO();
+                                info.setRouteId(contribution.getRoute().getId());
+                                info.setContributionId(contribution.getId());
+
+                                return info;
+                            }).collect(Collectors.toList());
+        }
+        return flightListToSend;
     }
 
     ///////////////////////
@@ -253,8 +307,11 @@ public class Office365ServiceImpl implements IOffice365Service {
         FileSharingInfoDTO fileSharingInfo = IOffice365Mapper.INSTANCE.mapFile(route);
         fileSharingInfo.setFileUrl(fileUrl + route.getFile().getId());
         dto.setFileSharingInfoDTO(fileSharingInfo);
-
         dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, dsDataList, flight));
+        dto.setActionType(Office365PlanningFlightActionType.CREATE);
+        if (flight.getSentPlanning()){
+            dto.setActionType(Office365PlanningFlightActionType.UPDATE);
+        }
 
         return dto;
     }
@@ -267,6 +324,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         Operator operator = contribution.getAircraft().getOperator();
 
         FlightSharingInfoDTO dto = new FlightSharingInfoDTO();
+        dto.setFlightId(flight.getId());
         dto.setOperationType(route.getFile().getOperationType());
         dto.setPaxTotalNumber((flight.getSeatsC() == null ? 0 : flight.getSeatsC()) +
                 (flight.getSeatsF() == null ? 0 : flight.getSeatsF()) +
@@ -278,8 +336,8 @@ public class Office365ServiceImpl implements IOffice365Service {
         dto.setPlateNumber(contribution.getAircraft().getPlateNumber());
         dto.setOperator(operator.getIataCode() + " | " + operator.getIcaoCode() + " | " + operator.getName());
         dto.setClient(route.getFile().getClient().getCode() + " | " + route.getFile().getClient().getName());
-        dto.setCharge("0"); // ToDo: de donde lo sacamos?
-        dto.setFlightNumber("");// ToDo: de donde lo sacamos?
+        dto.setCharge(contribution.getCargoAirborne()); // ToDo: de donde lo sacamos?
+        dto.setFlightNumber(flight.getFlightNumber());
 
         // Dates
         dto.setStartDate(flight.getDepartureTime());

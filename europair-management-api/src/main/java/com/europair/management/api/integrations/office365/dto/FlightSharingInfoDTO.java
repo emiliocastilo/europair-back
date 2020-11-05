@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FlightSharingInfoDTO {
 
+    private Long flightId;
+
     private OperationTypeEnum operationType;
     private String originAirport;
     private String destinationAirport;
@@ -26,7 +28,7 @@ public class FlightSharingInfoDTO {
     private Integer paxTotalNumber;
     private Integer bedsNumber;
     private Integer stretchersNumber;
-    private String charge; //TODO: ¿de dónde lo sacamos?
+    private Long charge; //TODO: ¿de dónde lo sacamos?
 
 
 }
