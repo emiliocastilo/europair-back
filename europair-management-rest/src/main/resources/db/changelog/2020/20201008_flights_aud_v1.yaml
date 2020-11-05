@@ -132,6 +132,9 @@ databaseChangeLog:
             tableName: flights_aud
             columns:
               - column:
+                  name: sent_planning
+                  type: bool
+              - column:
                   name: real_departure_time
                   type: timestamp
               - column:
