@@ -26,7 +26,7 @@ public class FlightSharingInfoDTO {
     private Integer paxTotalNumber;
     private Integer bedsNumber;
     private Integer stretchersNumber;
-    private String charge; //TODO: ¿de dónde lo sacamos?
+    private Long charge; //TODO: ¿de dónde lo sacamos?
 
 
 }
