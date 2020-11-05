@@ -12,7 +12,7 @@ public class FlightExtendedInfoDto extends FlightSharingInfoDTO {
     // Constructor to avoid down-casting
 
     public FlightExtendedInfoDto(FlightSharingInfoDTO baseDto) {
-        super(baseDto.getOperationType(), baseDto.getOriginAirport(), baseDto.getDestinationAirport(),
+        super(baseDto.getFlightId(), baseDto.getOperationType(), baseDto.getOriginAirport(), baseDto.getDestinationAirport(),
                 baseDto.getStartDate(), baseDto.getEndDate(), baseDto.getLocalStartDate(), baseDto.getLocalEndDate(),
                 baseDto.getFlightNumber(), baseDto.getOperator(), baseDto.getPlateNumber(), baseDto.getClient(),
                 baseDto.getPaxTotalNumber(), baseDto.getBedsNumber(), baseDto.getStretchersNumber(), baseDto.getCharge());
