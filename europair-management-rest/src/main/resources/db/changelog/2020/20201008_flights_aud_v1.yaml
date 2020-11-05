@@ -122,3 +122,18 @@ databaseChangeLog:
                   name: parking
                   type: varchar(10)
 
+  - changeSet:
+      id: 20201105_flights_aud_v1_add_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add new columns for real departure and arrival times"
+      changes:
+        - addColumn:
+            tableName: flights_aud
+            columns:
+              - column:
+                  name: real_departure_time
+                  type: timestamp
+              - column:
+                  name: real_arrival_time
+                  type: timestamp

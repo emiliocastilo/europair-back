@@ -68,4 +68,12 @@ public class FlightDTO extends AuditModificationBaseDTO {
 
   @JsonProperty("parking")
   private CommonStateEnum parking;
+
+  @JsonProperty("realDepartureTime")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+  private LocalDateTime realDepartureTime;
+
+  @JsonProperty("realArrivalTime")
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
+  private LocalDateTime realArrivalTime;
 }
