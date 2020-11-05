@@ -3,11 +3,16 @@ package com.europair.management.impl.integrations.office365.service;
 import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.api.integrations.office365.service.IOffice365Controller;
 import com.europair.management.rest.model.routes.entity.Route;
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -15,6 +20,8 @@ import java.util.List;
 @RestController
 @Slf4j
 public class Office365Controller implements IOffice365Controller {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Office365Controller.class);
 
     @Autowired
     private IOffice365Service service;
@@ -78,8 +85,7 @@ public class Office365Controller implements IOffice365Controller {
         for (MinimalRouteInfoToSendThePlanningFlightsDTO infoRouteToSendPlaning : routeListToSendPlaning){
             final List<PlanningFlightsDTO> planningFlightsDTOList =
                     service.getPlanningFlightsInfo( infoRouteToSendPlaning.getRouteId(),
-                            infoRouteToSendPlaning.getContributionId(),
-                            String.valueOf(infoRouteToSendPlaning.getActionType()));
+                            infoRouteToSendPlaning.getContributionId());
 
             //office365Client.sendPlaningFlightsDTOList(API_VERSION, SP, SV, SIG, planningFlightsDTOList);
             sendOneByOnePlanningFlightDTOToOffice365(planningFlightsDTOList);
@@ -109,7 +115,14 @@ public class Office365Controller implements IOffice365Controller {
                 simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate().toLocalDate());
                 simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate().toLocalDate());
 
-                office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, simplePlaningFlightDTO);
+                try {
+                    ResponseSendPlanningFlightsDTO responseSendPlanningFlightsDTO = office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, simplePlaningFlightDTO);
+                    LOGGER.debug(responseSendPlanningFlightsDTO.toString());
+                } catch (FeignException ex){
+                    LOGGER.error("Propagate feign exception", ex);
+                }
+
+
             }
         }
     }

@@ -10,6 +10,4 @@ public class MinimalRouteInfoToSendThePlanningFlightsDTO {
 
     private Long contributionId;
 
-    private Office365PlanningFlightActionType actionType;
-
 }

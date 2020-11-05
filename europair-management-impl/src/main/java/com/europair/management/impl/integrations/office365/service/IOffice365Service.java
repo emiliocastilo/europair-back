@@ -14,7 +14,7 @@ public interface IOffice365Service {
 
     ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId );
 
-    List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId, String actionType);
+    List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId);
 
     List<MinimalRouteInfoToSendThePlanningFlightsDTO> getAllRoutesToSendPlanningFlights(Long fileId);
 }
