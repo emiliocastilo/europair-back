@@ -108,6 +108,7 @@ public class Office365Controller implements IOffice365Controller {
                 SimplePlaningFlightDTO simplePlaningFlightDTO = new SimplePlaningFlightDTO();
 
                 simplePlaningFlightDTO.setTitle("PLANNING :" + planningFlightsDTO.getFileSharingInfoDTO().getCode());
+                // TODO: pening meeting to talk about this and what client must be here
                 // hardcoded client because patterson power app uses this default client
                 simplePlaningFlightDTO.setClient("adminbroker@europair.es");
                 /*simplePlaningFlightDTO.setClient(planningFlightsDTO.getFlightSharingInfoDTO().getClient());*/
