@@ -42,6 +42,8 @@ public interface IContributionMapper {
     @Mapping(target = "route", ignore = true)
     @Mapping(target = "operator", ignore = true)
     @Mapping(target = "aircraft", ignore = true)
+    @Mapping(target = "purchaseVATMsg", ignore = true)
+    @Mapping(target = "saleVATMsg", ignore = true)
     void updateFromDto(final ContributionDTO contributionDTO, @MappingTarget Contribution contribution);
 
 }
