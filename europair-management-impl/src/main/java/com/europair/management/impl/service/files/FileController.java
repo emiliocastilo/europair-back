@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -67,5 +68,11 @@ public class FileController implements IFileController {
     public ResponseEntity<?> changeState(@NotNull @Valid StateChangeDto<FileStatesEnum> stateChangeDto) {
         fileService.updateStates(stateChangeDto.getIdList(), stateChangeDto.getState());
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<List<String>> changeState(@NotNull Long id) {
+        List<String> res = fileService.getValidFileStatesToChange(id);
+        return ResponseEntity.ok(res);
     }
 }

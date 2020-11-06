@@ -109,4 +109,15 @@ public interface IFileController {
   @Operation(description = "Changes the state of a file")
   ResponseEntity<?> changeState(
           @Parameter(description = "State change data") @NotNull @Valid @RequestBody final StateChangeDto<FileStatesEnum> stateChangeDto);
+
+  /**
+   * <p>Gets a list of the states that the file can change</p>
+   *
+   * @param id File identifier
+   * @return No content
+   */
+  @GetMapping("/{id}/state")
+  @Operation(description = "Changes the state of a file")
+  ResponseEntity<?> changeState(
+          @Parameter(description = "File identifier") @PathVariable @NotNull final Long id);
 }

@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -134,5 +136,15 @@ public class FileServiceImpl implements IFileService {
   @Override
   public void updateStates(List<Long> fileIds, FileStatesEnum state) {
     stateChangeService.changeState(fileIds, state);
+  }
+
+  @Override
+  public List<String> getValidFileStatesToChange(Long id) {
+    File file = fileRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id));
+    return Stream.of(FileStatesEnum.values())
+            .filter(state -> stateChangeService.canChangeState(file, state))
+            .map(FileStatesEnum::name)
+            .collect(Collectors.toList());
   }
 }
