@@ -82,6 +82,30 @@ public class StateChangeServiceImpl implements IStateChangeService {
         return canChange;
     }
 
+    @Override
+    public boolean canChangeState(@NotNull Route route, RouteStatesEnum stateTo) {
+        RouteStatesEnum currentState = route.getRouteState();
+        // Validate state to change
+        return switch (currentState) {
+            case SALES -> true;
+            case OPTIONED -> !RouteStatesEnum.SALES.equals(stateTo);
+            case WON -> !RouteStatesEnum.SALES.equals(stateTo) && !RouteStatesEnum.OPTIONED.equals(stateTo);
+            default -> false;
+        };
+    }
+
+    @Override
+    public boolean canChangeState(@NotNull Contribution contribution, ContributionStatesEnum stateTo) {
+        ContributionStatesEnum currentState = contribution.getContributionState();
+        // Validate state to change
+        return switch (currentState) {
+            case PENDING -> ContributionStatesEnum.SENDED.equals(stateTo);
+            case SENDED -> ContributionStatesEnum.QUOTED.equals(stateTo);
+            case QUOTED -> ContributionStatesEnum.CONFIRMED.equals(stateTo);
+            default -> false;
+        };
+    }
+
     /**
      * Validates route state change, changes the value if valid, throws exception if not, and checks if has to trigger
      * state changes in other entities
@@ -91,7 +115,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
      * @return Route with updated state
      */
     private Route changeRouteState(final Route route, final RouteStatesEnum state) {
-        if (routeRepository.canChangeState(route.getRouteState(), state)) {
+        if (canChangeState(route, state)) {
             route.setRouteState(state);
             // Change states from other entities
             if (RouteStatesEnum.OPTIONED.equals(state)) {
@@ -144,7 +168,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
      * @return Contribution with updated state
      */
     private Contribution changeContributionState(final Contribution contribution, final ContributionStatesEnum state) {
-        if (contributionRepository.canChangeState(contribution.getContributionState(), state)) {
+        if (canChangeState(contribution, state)) {
             contribution.setContributionState(state);
             // Change states from other entities
             if (ContributionStatesEnum.CONFIRMED.equals(state)) {

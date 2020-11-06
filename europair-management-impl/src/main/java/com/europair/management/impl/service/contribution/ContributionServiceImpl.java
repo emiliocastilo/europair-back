@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -142,11 +143,11 @@ public class ContributionServiceImpl implements IContributionService {
         contribution.setVatAmountOnPurchase(
                 (contribution.getPurchasePrice() == null || contribution.getPurchaseCommissionPercent() == null) ? null
                         : contribution.getPurchasePrice().multiply(
-                                BigDecimal.valueOf(Double.valueOf(contribution.getPurchaseCommissionPercent()) / 100)));
+                        BigDecimal.valueOf(Double.valueOf(contribution.getPurchaseCommissionPercent()) / 100)));
         contribution.setVatAmountOnSale(
                 (contribution.getSalesPrice() == null || contribution.getSalesCommissionPercent() == null) ? null
                         : contribution.getSalesPrice().multiply(
-                                BigDecimal.valueOf(Double.valueOf(contribution.getSalesCommissionPercent()) / 100)));
+                        BigDecimal.valueOf(Double.valueOf(contribution.getSalesCommissionPercent()) / 100)));
 
         contribution = contributionRepository.saveAndFlush(contribution);
 
@@ -253,6 +254,15 @@ public class ContributionServiceImpl implements IContributionService {
         stateChangeService.changeState(contributionIds, state);
     }
 
+    @Override
+    public List<String> getValidContributionStatesToChange(Long id) {
+        Contribution contribution = contributionRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
+        return Stream.of(ContributionStatesEnum.values())
+                .filter(state -> stateChangeService.canChangeState(contribution, state))
+                .map(ContributionStatesEnum::name)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public void generateRouteContributionSaleLines(Long contributionId) {

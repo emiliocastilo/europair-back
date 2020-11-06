@@ -71,7 +71,7 @@ public class FileController implements IFileController {
     }
 
     @Override
-    public ResponseEntity<List<String>> changeState(@NotNull Long id) {
+    public ResponseEntity<List<String>> getValidFileStatesToChange(@NotNull Long id) {
         List<String> res = fileService.getValidFileStatesToChange(id);
         return ResponseEntity.ok(res);
     }

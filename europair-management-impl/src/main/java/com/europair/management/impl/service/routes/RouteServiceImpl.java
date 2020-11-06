@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -362,6 +363,16 @@ public class RouteServiceImpl implements IRouteService {
     public void updateStates(Long fileId, List<Long> routeIds, RouteStatesEnum state) {
         checkIfFileExists(fileId);
         stateChangeService.changeState(routeIds, state);
+    }
+
+    @Override
+    public List<String> getValidRouteStatesToChange(Long id) {
+        Route route = routeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
+        return Stream.of(RouteStatesEnum.values())
+                .filter(state -> stateChangeService.canChangeState(route, state))
+                .map(RouteStatesEnum::name)
+                .collect(Collectors.toList());
     }
 
     // Flights

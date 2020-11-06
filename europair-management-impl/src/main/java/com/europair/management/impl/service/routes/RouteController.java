@@ -88,6 +88,12 @@ public class RouteController implements IRouteController {
     }
 
     @Override
+    public ResponseEntity<List<String>> getValidRouteStatesToChange(@NotNull Long id) {
+        List<String> res = routeService.getValidRouteStatesToChange(id);
+        return ResponseEntity.ok(res);
+    }
+
+    @Override
     public ResponseEntity<List<ContributionDTO>> getRouteWithContributions(Long routeId){
         List<ContributionDTO> contributionDTOS = routeService.getContributionUsingRouteId(routeId);
         return ResponseEntity.ok(contributionDTOS);
