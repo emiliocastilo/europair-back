@@ -182,7 +182,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
                             .map(AircraftBase::getAirport)
                             .orElse(null);
                     dataDto.setMainBaseId(mainBase == null ? null : mainBase.getId());
-                    dataDto.setMainBaseName(mainBase == null ? null : mainBase.getName());
+                    dataDto.setMainBaseIataCode(mainBase == null ? null : mainBase.getIataCode());
 
                     dataDto.setConnectionFlights(
                             aircraftTypeConnectionsMap.getOrDefault(aircraft.getAircraftType().getId(), null));
