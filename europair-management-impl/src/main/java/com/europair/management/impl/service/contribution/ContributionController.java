@@ -153,8 +153,8 @@ public class ContributionController implements IContributionController {
     }
 
     @Override
-    public ResponseEntity<List<String>> getValidContributionStatesToChange(@NotNull Long id) {
-        List<String> res = contributionService.getValidContributionStatesToChange(id);
+    public ResponseEntity<List<String>> getValidContributionStatesToChange(@NotNull Long fileId, @NotNull Long routeId, @NotNull Long id) {
+        List<String> res = contributionService.getValidContributionStatesToChange(fileId, routeId, id);
         return ResponseEntity.ok(res);
     }
 

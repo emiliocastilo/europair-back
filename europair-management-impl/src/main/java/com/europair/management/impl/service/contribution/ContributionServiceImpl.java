@@ -16,6 +16,7 @@ import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
 import com.europair.management.rest.model.contributions.repository.LineContributionRouteRepository;
+import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.FlightTax;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
@@ -51,6 +52,9 @@ public class ContributionServiceImpl implements IContributionService {
 
     @Autowired
     private RouteRepository routeRepository;
+
+    @Autowired
+    private FileRepository fileRepository;
 
     @Autowired
     private IFlightTaxService flightTaxService;
@@ -248,14 +252,15 @@ public class ContributionServiceImpl implements IContributionService {
 
     @Override
     public void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStatesEnum state) {
-        if (!routeRepository.existsById(routeId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
-        }
+        checkIfFileExists(fileId);
+        checkIfRouteExists(routeId);
         stateChangeService.changeState(contributionIds, state);
     }
 
     @Override
-    public List<String> getValidContributionStatesToChange(Long id) {
+    public List<String> getValidContributionStatesToChange(Long fileId, Long routeId, Long id) {
+        checkIfFileExists(fileId);
+        checkIfRouteExists(routeId);
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
         return Stream.of(ContributionStatesEnum.values())
@@ -351,4 +356,15 @@ public class ContributionServiceImpl implements IContributionService {
         return lines;
     }
 
+    private void checkIfRouteExists(Long routeId) {
+        if (!routeRepository.existsById(routeId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
+        }
+    }
+
+    private void checkIfFileExists(Long fileId) {
+        if (!fileRepository.existsById(fileId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
+        }
+    }
 }

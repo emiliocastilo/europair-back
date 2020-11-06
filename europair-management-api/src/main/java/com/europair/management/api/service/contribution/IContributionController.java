@@ -62,9 +62,9 @@ public interface IContributionController {
      * Retrieves a paginated list of Contributions filtered by properties criteria.
      * </p>
      *
-     * @param pageable pagination info
+     * @param pageable       pagination info
      * @param contributionId
-     * @param reqParam Map of filter params, values and operators. (pe: plateNumber=JKL,CONTAINS)
+     * @param reqParam       Map of filter params, values and operators. (pe: plateNumber=JKL,CONTAINS)
      * @return Paginated list of contribution
      */
     @GetMapping("/{contributionId}/linecontributionroute")
@@ -166,12 +166,16 @@ public interface IContributionController {
     /**
      * <p>Gets a list of the states that the contribution can change</p>
      *
-     * @param id Contribution identifier
+     * @param fileId  File identifier
+     * @param routeId Route identifier
+     * @param id      Contribution identifier
      * @return No content
      */
     @GetMapping("/{id}/state")
     @Operation(description = "Get valid state changes of a contribution")
     ResponseEntity<List<String>> getValidContributionStatesToChange(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
             @Parameter(description = "Contribution identifier") @PathVariable @NotNull final Long id);
 
     /**

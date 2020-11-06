@@ -31,7 +31,7 @@ public interface IContributionService {
 
     void updateStates(Long fileId, Long routeId, List<Long> contributionIds, ContributionStatesEnum state);
 
-    List<String> getValidContributionStatesToChange(Long id);
+    List<String> getValidContributionStatesToChange(Long fileId, Long routeId, Long id);
 
     void generateRouteContributionSaleLines(Long contributionId);
 }
