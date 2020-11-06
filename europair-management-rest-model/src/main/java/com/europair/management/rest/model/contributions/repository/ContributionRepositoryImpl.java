@@ -21,7 +21,7 @@ public class ContributionRepositoryImpl extends BaseRepositoryImpl<Contribution>
         return switch (stateFrom) {
             case PENDING -> ContributionStatesEnum.SENDED.equals(stateTo);
             case SENDED -> ContributionStatesEnum.QUOTED.equals(stateTo);
-            case QUOTED -> ContributionStatesEnum.CONFIRMED.equals(stateTo);
+            case QUOTED -> ContributionStatesEnum.WON.equals(stateTo);
             default -> false;
         };
     }

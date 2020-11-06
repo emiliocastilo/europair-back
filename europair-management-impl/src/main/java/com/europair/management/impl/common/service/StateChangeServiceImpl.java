@@ -132,7 +132,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
         if (contributionRepository.canChangeState(contribution.getContributionState(), state)) {
             contribution.setContributionState(state);
             // Change states from other entities
-            if (ContributionStatesEnum.CONFIRMED.equals(state)) {
+            if (ContributionStatesEnum.WON.equals(state)) {
                 changeState(Collections.singletonList(contribution.getRouteId()), RouteStatesEnum.WON);
             }
             return contribution;

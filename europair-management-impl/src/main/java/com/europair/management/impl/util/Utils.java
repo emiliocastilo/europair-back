@@ -148,20 +148,23 @@ public class Utils {
          */
         public static LocalDateTime getLocalTimeInOtherUTC(UTCEnum fromUTCIndicator, LocalDateTime dateTime, UTCEnum toUTCIndicator) {
             LocalDateTime utcZeroTime;
-            // If fromUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
-            if (0 < fromUTCIndicator.getHours()) {
-                utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
-            } else {
-                utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
-            }
+            // initialize to dateTime to convert to avoid null pointer exceptions
+            LocalDateTime utcTime = dateTime;
+            if (null != fromUTCIndicator && null != toUTCIndicator) {
+                // If fromUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
+                if (0 < fromUTCIndicator.getHours()) {
+                    utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), fromUTCIndicator.getMinutes());
+                } else {
+                    utcZeroTime = addHoursMinutesToLocalTime(dateTime, (-fromUTCIndicator.getHours()), (-fromUTCIndicator.getMinutes()));
+                }
 
-            LocalDateTime utcTime = null;
-            //After that we have to add the hours from toUTCIndicator
-            // If toUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
-            if (0 < toUTCIndicator.getHours()) {
-                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), toUTCIndicator.getMinutes());
-            } else {
-                utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), (-toUTCIndicator.getMinutes()));
+                //After that we have to add the hours from toUTCIndicator
+                // If toUTCIndicator is < 0 to transform into UTC +0 we have to substract the minutes
+                if (0 < toUTCIndicator.getHours()) {
+                    utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), toUTCIndicator.getMinutes());
+                } else {
+                    utcTime = addHoursMinutesToLocalTime(utcZeroTime, toUTCIndicator.getHours(), (-toUTCIndicator.getMinutes()));
+                }
             }
             return utcTime;
         }

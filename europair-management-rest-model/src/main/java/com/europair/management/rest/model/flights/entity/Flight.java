@@ -114,7 +114,7 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   private List<FlightService> services;
 
   @Column(name = "sent_planning")
-  private Boolean sentPlanning;
+  private Boolean sentPlanning = Boolean.FALSE;
 
 
   @Column(name = "real_departure_time")

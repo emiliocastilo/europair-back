@@ -8,6 +8,6 @@ public enum ContributionStatesEnum {
 
     QUOTED,
 
-    CONFIRMED;
+    WON;
 
 }
