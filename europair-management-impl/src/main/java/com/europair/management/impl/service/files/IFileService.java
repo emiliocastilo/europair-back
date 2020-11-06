@@ -21,4 +21,6 @@ public interface IFileService {
   void deleteFile(Long id);
 
   void updateStates(List<Long> fileIds, FileStatesEnum state);
+
+  List<String> getValidFileStatesToChange(Long id);
 }

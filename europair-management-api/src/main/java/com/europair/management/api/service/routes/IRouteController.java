@@ -140,6 +140,17 @@ public interface IRouteController {
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<RouteStatesEnum> stateChangeDto);
 
+    /**
+     * <p>Gets a list of the states that the route can change</p>
+     *
+     * @param id Route identifier
+     * @return No content
+     */
+    @GetMapping("/{id}/state")
+    @Operation(description = "Get valid state changes of a route")
+    ResponseEntity<List<String>> getValidRouteStatesToChange(
+            @Parameter(description = "Route identifier") @PathVariable @NotNull final Long id);
+
     @GetMapping("/{routeId}/withcontribution")
     ResponseEntity<List<ContributionDTO>> getRouteWithContributions(@Parameter(description = "Parent route identifier") @NotNull @PathVariable final Long routeId);
 }

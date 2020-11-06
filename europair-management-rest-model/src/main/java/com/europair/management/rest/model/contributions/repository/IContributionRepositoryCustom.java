@@ -1,6 +1,5 @@
 package com.europair.management.rest.model.contributions.repository;
 
-import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import org.springframework.data.domain.Page;
@@ -12,5 +11,4 @@ public interface IContributionRepositoryCustom {
 
     Page<Contribution> findContributionByCriteria(CoreCriteria criteria, Pageable pageable);
 
-    boolean canChangeState(final ContributionStatesEnum stateFrom, final ContributionStatesEnum stateTo);
 }

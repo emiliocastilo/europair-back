@@ -19,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,6 +61,51 @@ public class StateChangeServiceImpl implements IStateChangeService {
         contributionRepository.saveAll(contributions);
     }
 
+    @Override
+    public boolean canChangeState(@NotNull File file, FileStatesEnum stateTo) {
+        FileStatesEnum currentState = FileStatesEnum.valueOf(file.getStatus().getCode());
+        // Validate state to change
+        boolean canChange = switch (currentState) {
+            case NEW_REQUEST -> FileStatesEnum.SALES.equals(stateTo);
+            case SALES -> FileStatesEnum.OPTIONED.equals(stateTo) || FileStatesEnum.BLUE_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+            case OPTIONED -> FileStatesEnum.BLUE_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+            case BLUE_BOOKED -> FileStatesEnum.GREEN_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+            case GREEN_BOOKED -> FileStatesEnum.PREFLIGHT.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+            default -> false;
+        };
+        // Additional validations
+        if ((FileStatesEnum.BLUE_BOOKED.equals(stateTo) || FileStatesEnum.GREEN_BOOKED.equals(stateTo)) &&
+                file.getRoutes().stream().noneMatch(route -> RouteStatesEnum.WON.equals(route.getRouteState()))) {
+            canChange = false;
+        }
+
+        return canChange;
+    }
+
+    @Override
+    public boolean canChangeState(@NotNull Route route, RouteStatesEnum stateTo) {
+        RouteStatesEnum currentState = route.getRouteState();
+        // Validate state to change
+        return switch (currentState) {
+            case SALES -> true;
+            case OPTIONED -> !RouteStatesEnum.SALES.equals(stateTo);
+            case WON -> !RouteStatesEnum.SALES.equals(stateTo) && !RouteStatesEnum.OPTIONED.equals(stateTo);
+            default -> false;
+        };
+    }
+
+    @Override
+    public boolean canChangeState(@NotNull Contribution contribution, ContributionStatesEnum stateTo) {
+        ContributionStatesEnum currentState = contribution.getContributionState();
+        // Validate state to change
+        return switch (currentState) {
+            case PENDING -> ContributionStatesEnum.SENDED.equals(stateTo);
+            case SENDED -> ContributionStatesEnum.QUOTED.equals(stateTo);
+            case QUOTED -> ContributionStatesEnum.WON.equals(stateTo);
+            default -> false;
+        };
+    }
+
     /**
      * Validates route state change, changes the value if valid, throws exception if not, and checks if has to trigger
      * state changes in other entities
@@ -69,7 +115,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
      * @return Route with updated state
      */
     private Route changeRouteState(final Route route, final RouteStatesEnum state) {
-        if (routeRepository.canChangeState(route.getRouteState(), state)) {
+        if (canChangeState(route, state)) {
             route.setRouteState(state);
             // Change states from other entities
             if (RouteStatesEnum.OPTIONED.equals(state)) {
@@ -96,14 +142,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
      */
     private File changeFileState(final File file, final FileStatesEnum state) {
         FileStatesEnum currentState = FileStatesEnum.valueOf(file.getStatus().getCode());
-        if (fileRepository.canChangeState(currentState, state)) {
-            // Additional validations
-            if ((FileStatesEnum.BLUE_BOOKED.equals(state) || FileStatesEnum.GREEN_BOOKED.equals(state)) &&
-                    file.getRoutes().stream().noneMatch(route -> RouteStatesEnum.WON.equals(route.getRouteState()))) {
-                throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                        "File cannot change state to: " + state + " without Won Routes");
-            }
-
+        if (canChangeState(file, state)) {
             FileStatus updatedStatus = fileStatusRepository.findFirstByCode(state.toString())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + state));
             file.setStatusId(updatedStatus.getId());
@@ -129,7 +168,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
      * @return Contribution with updated state
      */
     private Contribution changeContributionState(final Contribution contribution, final ContributionStatesEnum state) {
-        if (contributionRepository.canChangeState(contribution.getContributionState(), state)) {
+        if (canChangeState(contribution, state)) {
             contribution.setContributionState(state);
             // Change states from other entities
             if (ContributionStatesEnum.WON.equals(state)) {

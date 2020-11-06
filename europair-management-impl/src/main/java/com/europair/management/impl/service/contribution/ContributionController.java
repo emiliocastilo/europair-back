@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -151,6 +152,11 @@ public class ContributionController implements IContributionController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
+    public ResponseEntity<List<String>> getValidContributionStatesToChange(@NotNull Long fileId, @NotNull Long routeId, @NotNull Long id) {
+        List<String> res = contributionService.getValidContributionStatesToChange(fileId, routeId, id);
+        return ResponseEntity.ok(res);
+    }
 
     @Override
     public ResponseEntity<?> generateRouteContributionSaleLines(@NotNull Long contributionId) {

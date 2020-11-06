@@ -26,5 +26,7 @@ public interface IRouteService {
 
     void updateStates(Long fileId, List<Long> routeIds, RouteStatesEnum state);
 
+    List<String> getValidRouteStatesToChange(Long id);
+
     List<ContributionDTO> getContributionUsingRouteId(Long idRoute);
 }
