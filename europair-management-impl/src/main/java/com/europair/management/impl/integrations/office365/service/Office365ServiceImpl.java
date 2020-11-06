@@ -174,8 +174,8 @@ public class Office365ServiceImpl implements IOffice365Service {
                             .getRoutes().stream()
                             .map(Route::getContributions)
                             .flatMap(Collection::stream)
+                            .filter(contribution -> contribution.getContributionState().equals(ContributionStatesEnum.WON))
                             .map(contribution -> {
-                                    if(contribution.getContributionState().equals(ContributionStatesEnum.WON)) {
                                         return contribution.getRoute().getRotations()
                                                 .stream()
                                                 .filter(route -> route.getRouteState().equals(RouteStatesEnum.WON))
@@ -187,9 +187,7 @@ public class Office365ServiceImpl implements IOffice365Service {
 
                                                     return info;
                                                 }).collect(Collectors.toList());
-                                    } else {
-                                        return null;
-                                    }
+
                             }).flatMap(Collection::stream).collect(Collectors.toList());
         }
         return flightListToSend;
