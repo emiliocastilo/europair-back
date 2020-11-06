@@ -1,5 +1,6 @@
 package com.europair.management.impl.integrations.office365.service;
 
+import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.integrations.office365.dto.*;
 import com.europair.management.api.integrations.office365.enums.Office365PlanningFlightActionType;
@@ -174,19 +175,21 @@ public class Office365ServiceImpl implements IOffice365Service {
                             .map(Route::getContributions)
                             .flatMap(Collection::stream)
                             .map(contribution -> {
-                                return contribution.getRoute().getRotations()
-                                        .stream()
-                                        .filter(route -> route.getRouteState().equals(RouteStatesEnum.WON))
-                                        .map(route -> {
+                                    if(contribution.getContributionState().equals(ContributionStatesEnum.WON)) {
+                                        return contribution.getRoute().getRotations()
+                                                .stream()
+                                                .filter(route -> route.getRouteState().equals(RouteStatesEnum.WON))
+                                                .map(route -> {
 
-                                            MinimalRouteInfoToSendThePlanningFlightsDTO info = new MinimalRouteInfoToSendThePlanningFlightsDTO();
-                                            info.setRouteId(route.getId());
-                                            info.setContributionId(contribution.getId());
+                                                    MinimalRouteInfoToSendThePlanningFlightsDTO info = new MinimalRouteInfoToSendThePlanningFlightsDTO();
+                                                    info.setRouteId(route.getId());
+                                                    info.setContributionId(contribution.getId());
 
-                                            return info;
-
-                                        }).collect(Collectors.toList());
-
+                                                    return info;
+                                                }).collect(Collectors.toList());
+                                    } else {
+                                        return null;
+                                    }
                             }).flatMap(Collection::stream).collect(Collectors.toList());
         }
         return flightListToSend;
@@ -202,18 +205,21 @@ public class Office365ServiceImpl implements IOffice365Service {
             flightListToSend =
                     optFile.get()
                             .getRoutes().stream()
-                            .map(Route::getContributions)
-                            .flatMap(Collection::stream)
-                            .map(Contribution::getRoute)
                             .map(Route::getRotations)
                             .flatMap(Collection::stream)
                             .filter(route -> route.getRouteState().equals(RouteStatesEnum.WON))
-                            .map(Route::getParentRoute).map(Route::getContributions)
-                            .flatMap(Collection::stream)
-                            .map(contribution -> {
+                            .map(route -> {
                                 MinimalRouteInfoToSendThePlanningFlightsDTO info = new MinimalRouteInfoToSendThePlanningFlightsDTO();
-                                info.setRouteId(contribution.getRoute().getId());
-                                info.setContributionId(contribution.getId());
+                                info.setRouteId(route.getId());
+
+                                List<Long> listOfContributionIdInStateWON = route.getParentRoute()
+                                        .getContributions()
+                                        .stream()
+                                        .filter(contribution -> contribution.getContributionState().equals(ContributionStatesEnum.WON))
+                                        .map(contribution -> contribution.getId())
+                                        .collect(Collectors.toList());
+
+                                info.setContributionId(listOfContributionIdInStateWON.isEmpty() ? listOfContributionIdInStateWON.get(0) : null);
 
                                 return info;
                             }).collect(Collectors.toList());
@@ -309,7 +315,7 @@ public class Office365ServiceImpl implements IOffice365Service {
         dto.setFileSharingInfoDTO(fileSharingInfo);
         dto.setFlightSharingInfoDTO(getFlightSharingInfoDTO(route, contribution, dsDataList, flight));
         dto.setActionType(Office365PlanningFlightActionType.CREATE);
-        if (flight.getSentPlanning()){
+        if (Boolean.TRUE.equals(flight.getSentPlanning())){
             dto.setActionType(Office365PlanningFlightActionType.UPDATE);
         }
 

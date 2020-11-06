@@ -101,7 +101,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
         return switch (currentState) {
             case PENDING -> ContributionStatesEnum.SENDED.equals(stateTo);
             case SENDED -> ContributionStatesEnum.QUOTED.equals(stateTo);
-            case QUOTED -> ContributionStatesEnum.CONFIRMED.equals(stateTo);
+            case QUOTED -> ContributionStatesEnum.WON.equals(stateTo);
             default -> false;
         };
     }
@@ -171,7 +171,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
         if (canChangeState(contribution, state)) {
             contribution.setContributionState(state);
             // Change states from other entities
-            if (ContributionStatesEnum.CONFIRMED.equals(state)) {
+            if (ContributionStatesEnum.WON.equals(state)) {
                 changeState(Collections.singletonList(contribution.getRouteId()), RouteStatesEnum.WON);
             }
             return contribution;

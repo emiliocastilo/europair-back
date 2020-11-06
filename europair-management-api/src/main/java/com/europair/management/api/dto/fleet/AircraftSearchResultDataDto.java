@@ -58,9 +58,8 @@ public class AircraftSearchResultDataDto {
     @JsonProperty("mainBaseId")
     private Long mainBaseId;
 
-    @JsonProperty("mainBaseName")
-    private String mainBaseName;
-
+    @JsonProperty("mainBaseIataCode")
+    private String mainBaseIataCode;
 
     // Operator fields
 
