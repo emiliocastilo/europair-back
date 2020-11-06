@@ -111,7 +111,7 @@ public class Office365Controller implements IOffice365Controller {
                 /*simplePlaningFlightDTO.setClient(planningFlightsDTO.getFlightSharingInfoDTO().getClient());*/
                 simplePlaningFlightDTO.setDescription(planningFlightsDTO.getFileSharingInfoDTO().getDescription());
                 simplePlaningFlightDTO.setStartDate(planningFlightsDTO.getFlightSharingInfoDTO().getStartDate().toLocalDate());
-                simplePlaningFlightDTO.setEndDate(planningFlightsDTO.getFlightSharingInfoDTO().getEndDate().toLocalDate());
+                simplePlaningFlightDTO.setEndDate((null != planningFlightsDTO.getFlightSharingInfoDTO().getEndDate() ? planningFlightsDTO.getFlightSharingInfoDTO().getEndDate().toLocalDate() : planningFlightsDTO.getFlightSharingInfoDTO().getStartDate().toLocalDate()));
 
                 try {
                     ResponseSendPlanningFlightsDTO responseSendPlanningFlightsDTO = office365Client.sendPlaningFlightsDTO(API_VERSION, SP, SV, SIG, simplePlaningFlightDTO);
