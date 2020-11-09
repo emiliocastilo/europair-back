@@ -499,9 +499,7 @@ public abstract class BaseRepositoryImpl<T> {
         @SuppressWarnings("unchecked")
         List<T> result = query.getResultList();
 
-        return pageable.hasPrevious() ?
-                new PageImpl<>(result) :
-                new PageImpl<>(result, pageable, countByCriteria(rootClass, criteria));
+        return new PageImpl<>(result, pageable, countByCriteria(rootClass, criteria));
     }
 
     /**
