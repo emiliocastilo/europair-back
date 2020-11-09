@@ -224,3 +224,17 @@ databaseChangeLog:
                   value: "SALES"
                   constraints:
                     nullable: false
+
+  - changeSet:
+      id: 20201109_routes_master_v4_removed_at
+      context: dev or pre or pro
+      author: ivan.fanjul
+      comment: "Add column removed_at to table"
+      changes:
+        - addColumn:
+            tableName: routes
+            columns:
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp

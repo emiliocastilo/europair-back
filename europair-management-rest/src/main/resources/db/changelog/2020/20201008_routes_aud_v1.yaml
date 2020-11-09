@@ -80,7 +80,7 @@ databaseChangeLog:
   - changeSet:
       id: 20201109_routes_aud_master_v2_removed_at
       context: dev or pre or pro
-      author: axel.sanchezsalom
+      author: ivan.fanjul
       comment: "Add column removed_at to table"
       changes:
         - addColumn:
