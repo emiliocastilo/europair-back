@@ -49,7 +49,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
 
     @Override
     public void changeState(@NotEmpty List<Long> routeIds, RouteStatesEnum state) {
-        List<Route> routes = routeRepository.findAllByIdIn(routeIds);
+        List<Route> routes = routeRepository.findAllByIdInAndRemovedAtIsNull(routeIds);
         routes = routes.stream().map(route -> changeRouteState(route, state)).collect(Collectors.toList());
         routeRepository.saveAll(routes);
     }

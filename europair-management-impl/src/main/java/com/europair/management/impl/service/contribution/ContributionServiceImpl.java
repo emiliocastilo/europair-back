@@ -231,8 +231,18 @@ public class ContributionServiceImpl implements IContributionService {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
 
-        contribution.setRemovedAt(LocalDateTime.now());
+        //same delete time to keep trazability
+        LocalDateTime localDateTimeOfDelete = LocalDateTime.now();
+
+        // we must delete LineContributionRoutes asociated with the contribution
+        contribution.getLineContributionRoute().forEach(lineContributionRoute -> {
+            lineContributionRoute.setRemovedAt(localDateTimeOfDelete);
+            this.lineContributionRouteRepository.save(lineContributionRoute);
+        });
+
+        contribution.setRemovedAt(localDateTimeOfDelete);
         contributionRepository.save(contribution);
+
     }
 
     @Override
@@ -359,7 +369,7 @@ public class ContributionServiceImpl implements IContributionService {
     }
 
     private void checkIfRouteExists(Long routeId) {
-        if (!routeRepository.existsById(routeId)) {
+        if (!routeRepository.existsByIdAndRemovedAtIsNull(routeId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
         }
     }

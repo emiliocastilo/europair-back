@@ -16,6 +16,8 @@ import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.contributions.entity.Contribution;
+import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
+import com.europair.management.rest.model.contributions.repository.LineContributionRouteRepository;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.repository.FlightRepository;
@@ -35,10 +37,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
-import java.time.DateTimeException;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -61,6 +60,9 @@ public class RouteServiceImpl implements IRouteService {
     private RouteFrequencyDayRepository routeFrequencyDayRepository;
 
     @Autowired
+    private LineContributionRouteRepository lineContributionRouteRepository;
+
+    @Autowired
     private FileRepository fileRepository;
 
     @Autowired
@@ -80,7 +82,7 @@ public class RouteServiceImpl implements IRouteService {
 
         return routeRepository.findRouteByCriteria(criteria, pageable)
                 .map(route -> {
-                    RouteExtendedDto dto = IRouteMapper.INSTANCE.toExtendedDto(route);
+                    RouteExtendedDto dto = IRouteMapper.INSTANCE.toExtendedDtoWithoutContribution(route);
                     // Map seating info from flights
                     if (!CollectionUtils.isEmpty(dto.getRotations())) {
                         dto.getRotationsExtended().forEach(rotation -> {
@@ -211,7 +213,13 @@ public class RouteServiceImpl implements IRouteService {
         if (!CollectionUtils.isEmpty(route.getContributions())) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cannot delete Route with contributions.");
         }
-        routeRepository.deleteById(id);
+        List<LineContributionRoute> lineContributionRoutes = this.lineContributionRouteRepository.findByRouteIdAndRemovedAtIsNull(id);
+        if (!CollectionUtils.isEmpty(lineContributionRoutes)){
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cannot delete Route with lineContributionRoutes.");
+        }
+
+        route.setRemovedAt(LocalDateTime.now());
+        routeRepository.save(route);
     }
 
     private void checkIfFileExists(final Long fileId) {

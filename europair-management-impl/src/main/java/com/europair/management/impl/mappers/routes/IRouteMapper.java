@@ -26,6 +26,11 @@ public interface IRouteMapper {
     @Named("toExtendedDto")
     RouteExtendedDto toExtendedDto(final Route entity);
 
+    @Mapping(target = "rotationsExtended", source = "rotations", qualifiedByName = "toExtendedDtoWithoutContribution")
+    @Named("toExtendedDtoWithoutContribution")
+    @Mapping(target = "contributions", ignore = true)
+    RouteExtendedDto toExtendedDtoWithoutContribution(final Route entity);
+
     @Mapping(target = "file", ignore = true)
     @Mapping(target = "parentRoute", ignore = true)
     @Mapping(target = "rotations", ignore = true)

@@ -150,13 +150,13 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     private void checkIfRouteExists(final Long routeId) {
-      if (!routeRepository.existsById(routeId)) {
+      if (!routeRepository.existsByIdAndRemovedAtIsNull(routeId)) {
         throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
       }
     }
 
     private Route getRoute(final Long routeId) {
-        return routeRepository.findById(routeId).orElseThrow(() ->
+        return routeRepository.findByIdAndRemovedAtIsNull(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
     }
 
@@ -221,7 +221,7 @@ public class FlightServiceImpl implements IFlightService {
 
     private void updateRouteData(final Long routeId) {
         Route route = getRoute(routeId);
-        List<Route> updatedRotations = routeRepository.findByParentRouteId(routeId);
+        List<Route> updatedRotations = routeRepository.findByParentRouteIdAndRemovedAtIsNull(routeId);
         LocalDate minDate = updatedRotations.stream()
                 .min(Comparator.comparing(Route::getStartDate))
                 .map(Route::getStartDate)

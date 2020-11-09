@@ -136,7 +136,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
     private void validatePathIds(final Long fileId, final Long routeId, final Long flightId) {
         validatePathIds(fileId);
-        if (!routeRepository.existsById(routeId)) {
+        if (!routeRepository.existsByIdAndRemovedAtIsNull(routeId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
         }
         if (!flightRepository.existsById(flightId)) {
@@ -151,7 +151,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     }
 
     private Route getRoute(@NotNull Long routeId) {
-        return routeRepository.findById(routeId).orElseThrow(() ->
+        return routeRepository.findByIdAndRemovedAtIsNull(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No route found with id: " + routeId));
     }
 

@@ -3,6 +3,7 @@ package com.europair.management.rest.model.routes.entity;
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
+import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
@@ -37,7 +38,7 @@ import java.util.Set;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Route extends AuditModificationBaseEntityHardAudited implements Serializable {
+public class Route extends SoftRemovableBaseEntityHardAudited implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

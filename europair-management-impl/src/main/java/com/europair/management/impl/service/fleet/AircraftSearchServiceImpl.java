@@ -83,7 +83,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     @Override
     public List<AircraftSearchResultDataDto> searchAircraft(final AircraftFilterDto filterDto) {
 
-        Route route = routeRepository.findById(filterDto.getRouteId()).orElseThrow(() ->
+        Route route = routeRepository.findByIdAndRemovedAtIsNull(filterDto.getRouteId()).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + filterDto.getRouteId()));
 
         Route rotationSample = route.getParentRoute() == null ? route.getRotations().get(0) : route;
