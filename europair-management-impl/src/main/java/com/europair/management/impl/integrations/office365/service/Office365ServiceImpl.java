@@ -361,8 +361,9 @@ public class Office365ServiceImpl implements IOffice365Service {
             dsDataList.add(dsData);
         }
 
-        dto.setEndDate(dsData.getTimeInHours() != null ?
-                flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);
+        /*dto.setEndDate(dsData.getTimeInHours() != null ?
+                flight.getDepartureTime().plusHours(dsData.getTimeInHours().longValue()) : null);*/
+        dto.setEndDate(flight.getArrivalTime());
         if (null != dto.getEndDate()) {
             dto.setLocalEndDate(Utils.TimeConverter.getLocalTimeInOtherUTC(flight.getTimeZone(), dto.getEndDate(), destination.getTimeZone()));
         }
