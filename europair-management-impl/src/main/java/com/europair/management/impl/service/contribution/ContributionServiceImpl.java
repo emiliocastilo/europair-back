@@ -186,10 +186,12 @@ public class ContributionServiceImpl implements IContributionService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
 
         // Update VAT msg
-        if (!contributionDTO.getVatAmountOnPurchase().equals(contribution.getVatAmountOnPurchase())) {
+        if ((contributionDTO.getPurchaseCommissionPercent() != null && !contributionDTO.getPurchaseCommissionPercent().equals(contribution.getPurchaseCommissionPercent()))
+                || (contributionDTO.getVatAmountOnPurchase() != null && !contributionDTO.getVatAmountOnPurchase().equals(contribution.getVatAmountOnPurchase()))) {
             contribution.setPurchaseVATMsg(null);
         }
-        if (!contributionDTO.getVatAmountOnSale().equals(contribution.getVatAmountOnSale())) {
+        if ((contributionDTO.getSalesCommissionPercent() != null && !contributionDTO.getSalesCommissionPercent().equals(contribution.getSalesCommissionPercent()))
+                || (contributionDTO.getVatAmountOnSale() != null && !contributionDTO.getVatAmountOnSale().equals(contribution.getVatAmountOnSale()))) {
             contribution.setSaleVATMsg(null);
         }
 

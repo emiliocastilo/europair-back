@@ -123,4 +123,7 @@ public class ContributionDTO {
 
     @JsonProperty("vatAmountOnPurchase")
     private BigDecimal vatAmountOnPurchase;
+
+    @JsonProperty("removedAt")
+    private LocalDateTime removedAt;
 }
