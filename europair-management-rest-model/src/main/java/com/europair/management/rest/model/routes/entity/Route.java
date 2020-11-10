@@ -7,6 +7,7 @@ import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHa
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.flights.entity.Flight;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -31,6 +32,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "routes")
@@ -80,6 +82,7 @@ public class Route extends SoftRemovableBaseEntityHardAudited implements Seriali
     @JoinColumn(name = "parent_route_id", insertable = false, updatable = false)
     private Route parentRoute;
 
+    @Getter(AccessLevel.NONE)
     @NotAudited
     @OneToMany(mappedBy = "parentRoute", orphanRemoval = true)
     private List<Route> rotations;
@@ -102,5 +105,10 @@ public class Route extends SoftRemovableBaseEntityHardAudited implements Seriali
     @Column(name = "route_state")
     @Enumerated(EnumType.STRING)
     private RouteStatesEnum routeState;
+
+
+    public List<Route> getRotations() {
+        return rotations.stream().filter(route -> (null == route.getRemovedAt())).collect(Collectors.toList());
+    }
 
 }

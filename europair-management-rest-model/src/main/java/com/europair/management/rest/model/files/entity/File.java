@@ -4,7 +4,9 @@ import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -23,6 +25,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -103,8 +106,13 @@ public class File extends SoftRemovableBaseEntityHardAudited implements Serializ
   @Enumerated(EnumType.STRING)
   private OperationTypeEnum operationType;
 
+  @Getter(AccessLevel.NONE)
   @NotAudited
   @OneToMany(orphanRemoval = true, mappedBy = "file")
   private List<Route> routes;
 
+
+  public List<Route> getRoutes() {
+    return routes.stream().filter(route -> (null == route.getRemovedAt())).collect(Collectors.toList());
+  }
 }
