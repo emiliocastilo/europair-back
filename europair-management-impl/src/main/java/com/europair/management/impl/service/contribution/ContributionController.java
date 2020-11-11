@@ -193,4 +193,13 @@ public class ContributionController implements IContributionController {
         LOGGER.debug("[ContributionController] - Ending method [generateRouteContributionSaleLines] with no return.");
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<LineContributionRouteDTO> getLineContributionRouteById(@NotNull Long fileId, @NotNull Long routeId, @NotNull Long contributionId, @NotNull Long lineId) {
+        LOGGER.debug("[ContributionController] - Starting method [getLineContributionRouteById] with input: fileId={}, routeId={}, contributionId={}, lineId={}",
+                fileId, routeId, contributionId, lineId);
+        LineContributionRouteDTO dto = contributionService.findLineById(fileId, routeId, contributionId, lineId);
+        LOGGER.debug("[ContributionController] - Ending method [getLineContributionRouteById] with return: {}", dto);
+        return ResponseEntity.ok(dto);
+    }
 }
