@@ -6,6 +6,7 @@ import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
 import com.europair.management.api.integrations.office365.dto.ResponseSendPlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.SimplePlaningFlightDTO;
+import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
 import com.europair.management.api.integrations.office365.service.IOffice365Controller;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -108,6 +110,22 @@ public class Office365Controller implements IOffice365Controller {
         return ResponseEntity.ok().build();
     }
 
+    @Override
+    public ResponseEntity<List<SimplePlanningDTO>> getPlanningData(@NotNull Long fileId) {
+        LOGGER.info("[Office365Controller] - Starting method [getPlanningData] with input: fileId={}", fileId);
+
+        // first step: retrieve all the routes in state WON with his contribution
+        List<MinimalRouteInfoToSendThePlanningFlightsDTO> routeListToSendPlaning = this.service.getAllRoutesToSendPlanningFlights(fileId);
+
+        List<SimplePlanningDTO> planningData = routeListToSendPlaning.stream()
+                .map(minimalDto -> service.getPlanningInfo(minimalDto.getRouteId(), minimalDto.getContributionId()))
+                .collect(Collectors.toList());
+        sendOneByOnePlanningDataToOffice365(planningData);
+
+        LOGGER.info("[Office365Controller] - Ending method [getPlanningData] with no return.");
+        return ResponseEntity.ok().build();
+    }
+
     /**
      * Sends a list of PlanningFlightDTO element by element
      * // TODO: if must implement a retry policy must be here.
@@ -141,6 +159,28 @@ public class Office365Controller implements IOffice365Controller {
                 } catch (FeignException ex) {
                     LOGGER.error("Propagate feign exception", ex);
                 }
+            }
+        }
+    }
+
+    /**
+     * Sends a list of SimplePlanningDTO element by element
+     * // TODO: if must implement a retry policy must be here.
+     *
+     * @param simplePlanningList List of simple planning data
+     */
+    private void sendOneByOnePlanningDataToOffice365(List<SimplePlanningDTO> simplePlanningList) {
+        for (SimplePlanningDTO simplePlanningDTO : simplePlanningList) {
+            try {
+                ResponseSendPlanningFlightsDTO responseSendPlanningFlightsDTO = office365Client.sendPlanning(API_VERSION, SP, SV, SIG, simplePlanningDTO);
+                LOGGER.debug(responseSendPlanningFlightsDTO.toString());
+
+                // TODO: cuando nos confirmen hay que marcar el vuelo como enviado
+                // marcar en bbdd los vuelos como que han sido enviados
+                /*planningFlightsDTO.getFlightSharingInfoDTO().getFlightId();*/
+
+            } catch (FeignException ex) {
+                LOGGER.error("Propagate feign exception", ex);
             }
         }
     }

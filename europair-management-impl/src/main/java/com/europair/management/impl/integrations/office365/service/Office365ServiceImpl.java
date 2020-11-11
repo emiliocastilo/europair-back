@@ -163,6 +163,28 @@ public class Office365ServiceImpl implements IOffice365Service {
     }
 
     @Override
+    public SimplePlanningDTO getPlanningInfo(Long routeId, Long contributionId) {
+
+        Route route = routeRepository.findById(routeId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+
+        // ToDo: to send the full data
+//        Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
+//                new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+
+        SimplePlanningDTO dto = new SimplePlanningDTO();
+        dto.setTitle(route.getLabel());
+        dto.setDescription(fileUrl + route.getFile().getId()); // File Url
+        dto.setStartDate(route.getStartDate());
+        dto.setEndDate(route.getEndDate());
+
+        // hardcoded client because patterson power app uses this default client
+        dto.setClient("adminbroker@europair.es");
+
+        return dto;
+    }
+
+    @Override
     public List<MinimalRouteInfoToSendThePlanningFlightsDTO> getAllRoutesToSendPlanningFlights(Long fileId) {
 
         Optional<File> optFile = this.fileRepository.findById(fileId);
@@ -189,38 +211,6 @@ public class Office365ServiceImpl implements IOffice365Service {
                                                 }).collect(Collectors.toList());
 
                             }).flatMap(Collection::stream).collect(Collectors.toList());
-        }
-        return flightListToSend;
-    }
-
-
-    public List<MinimalRouteInfoToSendThePlanningFlightsDTO> getAllRoutesToSendPlanningFlights2(Long fileId) {
-
-        Optional<File> optFile = this.fileRepository.findById(fileId);
-        List<MinimalRouteInfoToSendThePlanningFlightsDTO> flightListToSend = new ArrayList<>();
-
-        if (optFile.isPresent()) {
-            flightListToSend =
-                    optFile.get()
-                            .getRoutes().stream()
-                            .map(Route::getRotations)
-                            .flatMap(Collection::stream)
-                            .filter(route -> route.getRouteState().equals(RouteStatesEnum.WON))
-                            .map(route -> {
-                                MinimalRouteInfoToSendThePlanningFlightsDTO info = new MinimalRouteInfoToSendThePlanningFlightsDTO();
-                                info.setRouteId(route.getId());
-
-                                List<Long> listOfContributionIdInStateWON = route.getParentRoute()
-                                        .getContributions()
-                                        .stream()
-                                        .filter(contribution -> contribution.getContributionState().equals(ContributionStatesEnum.WON))
-                                        .map(contribution -> contribution.getId())
-                                        .collect(Collectors.toList());
-
-                                info.setContributionId(listOfContributionIdInStateWON.isEmpty() ? listOfContributionIdInStateWON.get(0) : null);
-
-                                return info;
-                            }).collect(Collectors.toList());
         }
         return flightListToSend;
     }

@@ -3,6 +3,7 @@ package com.europair.management.api.integrations.office365.service;
 import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
+import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -88,6 +89,11 @@ public interface IOffice365Controller {
     @GetMapping("/planning")
     @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(
+            @Parameter(description = "file id") @RequestParam @NotNull final Long fileId);
+
+    @GetMapping("/planning2")
+    @Operation(description = "Info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<List<SimplePlanningDTO>> getPlanningData(
             @Parameter(description = "file id") @RequestParam @NotNull final Long fileId);
 
 }

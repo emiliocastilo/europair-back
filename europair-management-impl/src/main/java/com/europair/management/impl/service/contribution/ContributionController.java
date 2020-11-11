@@ -82,7 +82,7 @@ public class ContributionController implements IContributionController {
         LOGGER.debug("[ContributionController] - Starting method [saveLineContributionRoute] with input: fileId={}, routeId={}, contributionId={}, lineContributionRouteDTO={}",
                 fileId, routeId, contributionId, lineContributionRouteDTO);
 
-        if (routeId.equals(lineContributionRouteDTO.getRouteId()) && contributionId.equals(lineContributionRouteDTO.getContributionId())) {
+        if (contributionId.equals(lineContributionRouteDTO.getContributionId())) {
 
             final Long lineContributionRouteSavedId = this.contributionService.saveLineContributionRoute(lineContributionRouteDTO);
 

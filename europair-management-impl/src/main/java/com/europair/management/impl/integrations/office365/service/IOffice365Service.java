@@ -4,7 +4,7 @@ import com.europair.management.api.integrations.office365.dto.ConfirmedOperation
 import com.europair.management.api.integrations.office365.dto.MinimalRouteInfoToSendThePlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
-import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
 
 import java.util.List;
 
@@ -12,9 +12,11 @@ public interface IOffice365Service {
 
     ConfirmedOperationDto getConfirmedOperationData(Long routeId, Long contributionId);
 
-    ResponseContributionFlights getEnabledFlightContributionInformation( Long contributionId );
+    ResponseContributionFlights getEnabledFlightContributionInformation(Long contributionId);
 
     List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId);
+
+    SimplePlanningDTO getPlanningInfo(Long routeId, Long contributionId);
 
     List<MinimalRouteInfoToSendThePlanningFlightsDTO> getAllRoutesToSendPlanningFlights(Long fileId);
 }
