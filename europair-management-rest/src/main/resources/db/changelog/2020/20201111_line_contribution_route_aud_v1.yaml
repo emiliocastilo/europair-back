@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201111_line_contribution_route_aud_v1_add_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add lines_contribution_route_aud table to database"
+      changes:
+        - createTable:
+            tableName: lines_contribution_route_aud
+            remarks: The contribution lines audit table
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lines_contribution_route_aud_id_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: lines_contribution_route_aud_id_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+              - column:
+                  name: contribution_id
+                  type: int
+              - column:
+                  name: route_id
+                  type: int
+              - column:
+                  name: comments
+                  type: varchar(255)
+              - column:
+                  name: price
+                  type: decimal(12,4)
+              - column:
+                  name: included_vat
+                  type: boolean
+              - column:
+                  name: line_contribution_route_type
+                  type: varchar(20)
+              - column:
+                  name: service_type
+                  type: varchar(20)
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+              - column:
+                  name: removed_at
+                  type: timestamp
+              - column:
+                  name: quantity
+                  type: int
+              - column:
+                  name: flight_id
+                  type: int
+
