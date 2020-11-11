@@ -103,3 +103,22 @@ databaseChangeLog:
               - column:
                   name: quantity
                   type: int
+
+  - changeSet:
+      id: 20201110_line_contribution_route_master_v1_add_flight_fk
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add flight id column"
+      changes:
+        - addColumn:
+            tableName: lines_contribution_route
+            columns:
+              - column:
+                  name: flight_id
+                  type: int
+                  remarks: Flight id
+                  constraints:
+                    nullable: true
+                    foreignKeyName: lines_contribution_route_flight_fk
+                    references: flights(id)
+                    validateForeignKey: true

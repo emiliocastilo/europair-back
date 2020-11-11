@@ -3,9 +3,12 @@ package com.europair.management.rest.model.contributions.entity;
 import com.europair.management.api.enums.LineContributionRouteType;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
+import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,14 +26,15 @@ import java.math.BigDecimal;
 /**
  * This entity only relates contributions with rotations and aditional services with route
  * note: rotation == route without parentRoute
- *
+ * <p>
  * Las lineasCotizacionRuta de servicios adicionales que se añadan van a ir asociadas a la ruta como primera instancia
  * En el caso de que se deseen asociar a una ruta tendrán que modificarse.
  */
 @Entity
 @Table(name = "lines_contribution_route")
+@Audited
 @Data
-public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited implements Serializable{
+public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +43,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @Column(name = "contribution_id")
     private Long contributionId;
 
+    @NotAudited
     @ManyToOne
     @JoinColumn(name = "contribution_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
@@ -47,10 +52,20 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @Column(name = "route_id")
     private Long routeId;
 
+    @NotAudited
     @ManyToOne
-    @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "route_id", referencedColumnName = "id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
     private Route route;
+
+    @Column(name = "flight_id")
+    private Long flightId;
+
+    @NotAudited
+    @ManyToOne
+    @JoinColumn(name = "flight_id", insertable = false, updatable = false)
+    @EqualsAndHashCode.Exclude
+    private Flight flight;
 
     @Column(name = "comments", length = 255)
     private String comments;

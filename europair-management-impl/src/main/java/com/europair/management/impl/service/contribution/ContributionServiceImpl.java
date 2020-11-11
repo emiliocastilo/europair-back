@@ -233,8 +233,20 @@ public class ContributionServiceImpl implements IContributionService {
         Contribution contribution = contributionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
 
-        contribution.setRemovedAt(LocalDateTime.now());
-        contributionRepository.save(contribution);
+        final LocalDateTime removedDateTime = LocalDateTime.now();
+        contribution.setRemovedAt(removedDateTime);
+        contribution = contributionRepository.save(contribution);
+
+        // Delete active contribution lines
+        if (!CollectionUtils.isEmpty(contribution.getLineContributionRoute())) {
+            lineContributionRouteRepository.saveAll(contribution.getLineContributionRoute().stream()
+                    .map(line -> {
+                        if (line.getRemovedAt() == null) {
+                            line.setRemovedAt(removedDateTime);
+                        }
+                        return line;
+                    }).collect(Collectors.toList()));
+        }
     }
 
     @Override

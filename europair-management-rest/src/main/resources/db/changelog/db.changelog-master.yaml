@@ -161,6 +161,9 @@ databaseChangeLog:
       file: 2020/line_contribution_route_master_19102020_v1.yaml
       relativeToChangelogFile: true
   - include:
+      file: 2020/20201111_line_contribution_route_aud_v1.yaml
+      relativeToChangelogFile: true
+  - include:
       file: 2020/shedlock_master_table_21102020_v1.yaml
       relativeToChangelogFile: true
   - include:
