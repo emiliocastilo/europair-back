@@ -190,4 +190,22 @@ public interface IContributionController {
     @Operation(description = "Creates or updates route sale lines for the contribution", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> generateRouteContributionSaleLines(@Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId);
 
+    /**
+     * <p>
+     * Retrieves a contribution line with the specified identifier
+     * </p>
+     *
+     * @param fileId         File identifier
+     * @param routeId        Route identifier
+     * @param contributionId Contribution identifier
+     * @param lineId         Contribution Line identifier
+     * @return contribution line data
+     */
+    @GetMapping("/{contributionId}/linecontributionroute/{lineId}")
+    @Operation(description = "Retrieve contribution line data by id", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<LineContributionRouteDTO> getLineContributionRouteById(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
+            @Parameter(description = "Contribution identifier") @NotNull @PathVariable final Long contributionId,
+            @Parameter(description = "Contribution line identifier") @NotNull @PathVariable final Long lineId);
 }

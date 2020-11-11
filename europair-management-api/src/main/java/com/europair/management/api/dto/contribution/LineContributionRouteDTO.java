@@ -1,7 +1,9 @@
 package com.europair.management.api.dto.contribution;
 
+import com.europair.management.api.dto.flights.FlightDTO;
 import com.europair.management.api.dto.routes.RouteDto;
-import com.europair.management.api.enums.*;
+import com.europair.management.api.enums.LineContributionRouteType;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +33,12 @@ public class LineContributionRouteDTO {
 
     @JsonProperty("route")
     private RouteDto route;
+
+    @JsonProperty("flightId")
+    private Long flightId;
+
+    @JsonProperty("flight")
+    private FlightDTO flight;
 
     @JsonProperty("comments")
     private String comments;

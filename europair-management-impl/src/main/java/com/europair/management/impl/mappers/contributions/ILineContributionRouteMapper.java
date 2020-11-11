@@ -1,9 +1,7 @@
 package com.europair.management.impl.mappers.contributions;
 
-import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
-import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,16 +18,19 @@ public interface ILineContributionRouteMapper {
 
     @Mapping(target = "contribution", ignore = true)
     @Mapping(target = "route", ignore = true)
-    LineContributionRoute toEntity (final LineContributionRouteDTO lineContributionRouteDTO);
+    @Mapping(target = "flight", ignore = true)
+    LineContributionRoute toEntity(final LineContributionRouteDTO lineContributionRouteDTO);
 
     @Mapping(target = "contribution", ignore = true)
     @Mapping(target = "route", ignore = true)
+    @Mapping(target = "flight", ignore = true)
     LineContributionRouteDTO toDto(final LineContributionRoute lineContributionRoute);
 
     List<LineContributionRouteDTO> toListDtos(final List<LineContributionRoute> listEntities);
 
     @Mapping(target = "contribution", ignore = true)
     @Mapping(target = "route", ignore = true)
+    @Mapping(target = "flight", ignore = true)
     void updateFromDto(final LineContributionRouteDTO contributionDTO, @MappingTarget LineContributionRoute contribution);
 
 }

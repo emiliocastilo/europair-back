@@ -34,4 +34,6 @@ public interface IContributionService {
     List<String> getValidContributionStatesToChange(Long fileId, Long routeId, Long id);
 
     void generateRouteContributionSaleLines(Long contributionId);
+
+    LineContributionRouteDTO findLineById(Long fileId, Long routeId, Long contributionId, Long lineId);
 }

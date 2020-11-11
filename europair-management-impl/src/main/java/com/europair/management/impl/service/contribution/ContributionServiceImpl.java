@@ -340,6 +340,19 @@ public class ContributionServiceImpl implements IContributionService {
         contribution = contributionRepository.save(contribution);
     }
 
+    @Override
+    public LineContributionRouteDTO findLineById(Long fileId, Long routeId, Long contributionId, Long lineId) {
+        checkIfFileExists(fileId);
+        checkIfRouteExists(routeId);
+        if (!contributionRepository.existsById(contributionId)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId);
+        }
+        LineContributionRoute lineContributionRoute = lineContributionRouteRepository.findById(lineId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution Line not found with id: " + lineId));
+
+        return ILineContributionRouteMapper.INSTANCE.toDto(lineContributionRoute);
+    }
+
     private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {
         if (CollectionUtils.isEmpty(contributionRoute.getRotations())) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "NO rotations found for route with id: " + contributionRoute.getId());
