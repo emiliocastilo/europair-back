@@ -1,5 +1,6 @@
 package com.europair.management.api.integrations.office365.dto;
 
+import com.europair.management.api.integrations.office365.enums.Office365PlanningOperationTypeEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -30,6 +31,9 @@ public class SimplePlanningDTO {
 
     @JsonProperty("assigned_to")
     private String client;
+
+    @JsonProperty("operation_type")
+    private Office365PlanningOperationTypeEnum operationType;
 
 
 }

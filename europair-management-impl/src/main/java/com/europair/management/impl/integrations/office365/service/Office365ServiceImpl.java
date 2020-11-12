@@ -1,9 +1,25 @@
 package com.europair.management.impl.integrations.office365.service;
 
 import com.europair.management.api.enums.ContributionStatesEnum;
+import com.europair.management.api.enums.FileStatesEnum;
+import com.europair.management.api.enums.FrequencyEnum;
+import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
-import com.europair.management.api.integrations.office365.dto.*;
+import com.europair.management.api.integrations.office365.dto.AircraftSharingDTO;
+import com.europair.management.api.integrations.office365.dto.ConfirmedOperationDto;
+import com.europair.management.api.integrations.office365.dto.ContributionDataDto;
+import com.europair.management.api.integrations.office365.dto.FileSharingExtendedInfoDto;
+import com.europair.management.api.integrations.office365.dto.FileSharingInfoDTO;
+import com.europair.management.api.integrations.office365.dto.FlightExtendedInfoDto;
+import com.europair.management.api.integrations.office365.dto.FlightServiceDataDto;
+import com.europair.management.api.integrations.office365.dto.FlightSharingInfoDTO;
+import com.europair.management.api.integrations.office365.dto.MinimalRouteInfoToSendThePlanningFlightsDTO;
+import com.europair.management.api.integrations.office365.dto.OperatorSharingDTO;
+import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
+import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
+import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
 import com.europair.management.api.integrations.office365.enums.Office365PlanningFlightActionType;
+import com.europair.management.api.integrations.office365.enums.Office365PlanningOperationTypeEnum;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
@@ -167,16 +183,26 @@ public class Office365ServiceImpl implements IOffice365Service {
 
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
-
+        File file = route.getFile();
         // ToDo: to send the full data
 //        Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
 //                new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
 
         SimplePlanningDTO dto = new SimplePlanningDTO();
         dto.setTitle(route.getLabel());
-        dto.setDescription(fileUrl + route.getFile().getId()); // File Url
+        dto.setDescription(fileUrl + file.getId()); // File Url
         dto.setStartDate(route.getStartDate());
         dto.setEndDate(route.getEndDate());
+
+        // Operation Type
+        if (FileStatesEnum.OPTIONED.equals(FileStatesEnum.valueOf(file.getStatus().getCode()))) {
+            dto.setOperationType(Office365PlanningOperationTypeEnum.OPTIONED);
+        } else if (OperationTypeEnum.COMMERCIAL.equals(file.getOperationType())) {
+            dto.setOperationType(FrequencyEnum.ADHOC.equals(route.getFrequency()) ?
+                    Office365PlanningOperationTypeEnum.ADHOC : Office365PlanningOperationTypeEnum.COMMERCIAL);
+        } else if (OperationTypeEnum.EXECUTIVE.equals(file.getOperationType())) {
+            dto.setOperationType(Office365PlanningOperationTypeEnum.EXECUTIVE);
+        }
 
         // hardcoded client because patterson power app uses this default client
         dto.setClient("adminbroker@europair.es");

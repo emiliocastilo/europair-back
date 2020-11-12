@@ -86,12 +86,12 @@ public interface IOffice365Controller {
     ResponseEntity<String> sendEnabledFlightContributionInformation(final Long contributionId, final Long flightId);
 
 
-    @GetMapping("/planning")
+    @GetMapping("/planning-old")
     @Operation(description = "Flight info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<PlanningFlightsDTO>> getFlightsInfo4Planning(
             @Parameter(description = "file id") @RequestParam @NotNull final Long fileId);
 
-    @GetMapping("/planning2")
+    @GetMapping("/planning")
     @Operation(description = "Info list for planning", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<List<SimplePlanningDTO>> getPlanningData(
             @Parameter(description = "file id") @RequestParam @NotNull final Long fileId);

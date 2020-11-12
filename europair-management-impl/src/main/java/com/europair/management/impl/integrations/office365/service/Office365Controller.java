@@ -172,8 +172,9 @@ public class Office365Controller implements IOffice365Controller {
     private void sendOneByOnePlanningDataToOffice365(List<SimplePlanningDTO> simplePlanningList) {
         for (SimplePlanningDTO simplePlanningDTO : simplePlanningList) {
             try {
+                LOGGER.info("[Office365Controller] - Sending simple planning to office365 with body: {}", simplePlanningDTO);
                 ResponseSendPlanningFlightsDTO responseSendPlanningFlightsDTO = office365Client.sendPlanning(API_VERSION, SP, SV, SIG, simplePlanningDTO);
-                LOGGER.debug(responseSendPlanningFlightsDTO.toString());
+                LOGGER.info("[Office365Controller] - Simple planning integration response: {}", responseSendPlanningFlightsDTO);
 
                 // TODO: cuando nos confirmen hay que marcar el vuelo como enviado
                 // marcar en bbdd los vuelos como que han sido enviados
