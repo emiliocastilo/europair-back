@@ -121,7 +121,7 @@ public class ContributionServiceImpl implements IContributionService {
                 contribution.setPurchaseVATMsg("El IVA a aplicar corresponde a un pais extranjero.");
                 tax = null;
             }
-            contribution.setPurchaseCommissionPercent(tax == null ? null : tax.intValue());
+            contribution.setPurchaseCommissionPercent(tax);
         } else {
             contribution.setPurchaseCommissionPercent(null);
             contribution.setPurchaseVATMsg("Los vuelos de la ruta tienen un IVA diferente.");
@@ -134,7 +134,7 @@ public class ContributionServiceImpl implements IContributionService {
                 contribution.setSaleVATMsg("El IVA a aplicar corresponde a un pais extranjero.");
                 tax = null;
             }
-            contribution.setSalesCommissionPercent(tax == null ? null : tax.intValue());
+            contribution.setSalesCommissionPercent(tax);
         } else {
             contribution.setSalesCommissionPercent(null);
             contribution.setSaleVATMsg("Los vuelos de la ruta tienen un IVA diferente.");
@@ -164,14 +164,20 @@ public class ContributionServiceImpl implements IContributionService {
         Optional<Contribution> contribution = this.contributionRepository.findById(lineContributionRouteDTO.getContributionId());
         if (contribution.isPresent()) {
 
-            Long contributionRouteId = contribution.get().getRouteId();
-            if (lineContributionRouteDTO.getRouteId().equals(contributionRouteId)) {
+            List<Long> contributionRouteIds = new ArrayList<>();
+            contributionRouteIds.add(contribution.get().getRouteId());
+            if (!CollectionUtils.isEmpty(contribution.get().getRoute().getRotations())) {
+                contributionRouteIds.addAll(contribution.get().getRoute().getRotations().stream()
+                        .map(Route::getId)
+                        .collect(Collectors.toList()));
 
+            }
+            if (contributionRouteIds.contains(lineContributionRouteDTO.getRouteId())) {
                 LineContributionRoute lineContributionRoute = ILineContributionRouteMapper.INSTANCE.toEntity(lineContributionRouteDTO);
                 response = this.lineContributionRouteRepository.save(lineContributionRoute).getId();
 
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Route not found with id: %s", lineContributionRouteDTO.getRouteId()));
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Not found in contribution route with id: %s", lineContributionRouteDTO.getRouteId()));
             }
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Contribution not found with id: %s", lineContributionRouteDTO.getContributionId()));
@@ -204,7 +210,7 @@ public class ContributionServiceImpl implements IContributionService {
     @Override
     @Transactional(readOnly = false)
     public Boolean updateLineContributionRoute(Long routeId, Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
-        Boolean result = false;
+        boolean result = false;
         Route route = routeRepository.findById(routeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
         if (!routeId.equals(lineContributionRouteDTO.getRouteId()) &&

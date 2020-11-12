@@ -2,6 +2,7 @@ package com.europair.management.impl.service.fleet;
 
 
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
+import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
 import com.europair.management.impl.mappers.fleet.IAircraftSearchMapper;
@@ -241,8 +242,9 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
         return remainingAirports.stream().filter(airport -> searchedAirports.stream()
                 .anyMatch(origAirport -> {
-                    double distance = Utils.getDistanceInKM(origAirport.getLatitude(), origAirport.getLongitude(),
-                            airport.getLatitude(), airport.getLongitude());
+                    double distance = Unit.NAUTIC_MILE.equals(Utils.Constants.DEFAULT_DISTANCE_UNIT) ?
+                            Utils.getDistanceInNM(origAirport.getLatitude(), origAirport.getLongitude(), airport.getLatitude(), airport.getLongitude()) :
+                            Utils.getDistanceInKM(origAirport.getLatitude(), origAirport.getLongitude(), airport.getLatitude(), airport.getLongitude());
                     return distance >= fromDistance && distance <= toDistance;
                 }))
                 .map(Airport::getId)
