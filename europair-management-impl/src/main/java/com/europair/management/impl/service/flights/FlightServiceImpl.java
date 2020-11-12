@@ -110,16 +110,21 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
-    public void updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
-
-      checkIfFileExists(fileId);
-      checkIfRouteExists(routeId);
-
+    public void updateFlight(final Long id, final FlightDTO flightDTO) {
       Flight flight = flightRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id));
 
       IFlightMapper.INSTANCE.updateFromDto(flightDTO, flight);
       flight = flightRepository.save(flight);
+    }
+
+    @Override
+    public void updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
+
+      checkIfFileExists(fileId);
+      checkIfRouteExists(routeId);
+
+      updateFlight(id, flightDTO);
       updateRotationData(routeId);
     }
 

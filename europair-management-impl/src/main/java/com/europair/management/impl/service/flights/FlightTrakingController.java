@@ -34,4 +34,11 @@ public class FlightTrakingController implements IFlightTrakingController {
       final FlightDTO flightDTO = flightService.findById(id);
       return ResponseEntity.ok(flightDTO);
     }
+
+    
+    public ResponseEntity<?> updateFlight(@NotNull final Long id, @NotNull final FlightDTO flightDTO) {
+      flightService.updateFlight(id, flightDTO);
+      return ResponseEntity.noContent().build();
+
+    }
 }

@@ -21,6 +21,8 @@ public interface IFlightService {
 
     void updateFlight(Long fileId, Long routeId, Long id, FlightDTO flightDTO);
 
+    void updateFlight(Long id, FlightDTO flightDTO);
+
     void deleteFlight(Long fileId, Long routeId, Long id);
 
     void updateFlightsOrder(Long fileId, Long routeId, List<FlightDTO> flights);

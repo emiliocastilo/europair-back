@@ -44,4 +44,20 @@ public interface IFlightTrakingController {
     @Operation(description = "Retrieve flight data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<FlightDTO> getFlightById(@Parameter(description = "Flight identifier") @NotNull @PathVariable final Long id);
 
+
+    /**
+     * <p>
+     * Updates flight information
+     * </p>
+     *
+     * @param id        Unique identifier
+     * @param flightDTO Updated flight data
+     * @return No content
+     */
+    @PutMapping("/{id}")
+    @Operation(description = "Updates existing flight", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> updateFlight(
+      @Parameter(description = "Flight identifier") @NotNull @PathVariable final Long id,
+      @Parameter(description = "Flight updated data") @NotNull @RequestBody final FlightDTO flightDTO);
+
 }
