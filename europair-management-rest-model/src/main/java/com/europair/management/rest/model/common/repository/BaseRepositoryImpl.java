@@ -261,7 +261,7 @@ public abstract class BaseRepositoryImpl<T> {
     protected CriteriaQuery<?> buildCriteria(CoreCriteria criteria, Class rootClass, Pageable pageable) {
 
         CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Object> crit = builder.createQuery(rootClass);
+        CriteriaQuery<Object> crit = builder.createQuery(rootClass).distinct(true);
         Root<?> root = crit.from(rootClass);
         crit.select(root);
 
@@ -297,7 +297,7 @@ public abstract class BaseRepositoryImpl<T> {
     protected CriteriaQuery<Long> buildCountCriteria(CoreCriteria criteria, Class rootClass) {
 
         CriteriaBuilder builder = getCriteriaBuilder();
-        CriteriaQuery<Long> critCount = builder.createQuery(Long.class);
+        CriteriaQuery<Long> critCount = builder.createQuery(Long.class).distinct(true);
 
 
         Root<?> root = critCount.from(rootClass);
