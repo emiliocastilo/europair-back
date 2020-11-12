@@ -4,6 +4,7 @@ import com.europair.management.api.integrations.office365.dto.ConfirmedOperation
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseSendPlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.SimplePlaningFlightDTO;
+import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
 import feign.FeignException;
 import feign.hystrix.FallbackFactory;
 import org.slf4j.Logger;
@@ -48,4 +49,13 @@ public interface Office365Client {
             @RequestParam(value="sv") String sv,
             @RequestParam(value="sig") String sig,
             @RequestBody SimplePlaningFlightDTO planningFlightsDTO);
+
+    //?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=2U-Uo5w2-zy2NNYCgxSgX1Wqoj_tvvWKnyhDJeEQtbM
+    @RequestMapping(method = RequestMethod.POST, value = "${europair.integration.office365.endpoints.planning}")
+    ResponseSendPlanningFlightsDTO sendPlanning(
+            @RequestParam(value="api-version") String apiVersion,
+            @RequestParam(value="sp") String sp,
+            @RequestParam(value="sv") String sv,
+            @RequestParam(value="sig") String sig,
+            @RequestBody SimplePlanningDTO simplePlanningDTO);
 }
