@@ -116,7 +116,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     // existen tantos vuelos como rotaciones al menos ya que una rotacion contiene 1 - N vuelos
     // ¿que porcentaje deberemos almacenoar, aqui? ¿la media?
     @Column(name = "purchase_commission_percent")
-    private Integer purchaseCommissionPercent;
+    private Double purchaseCommissionPercent;
 
     @Column(name = "included_vat")
     private Boolean includedVAT;
@@ -127,7 +127,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
 
     // TODO: lo mismo pasa (que en el purchaseCommisionPercent) con el %de venta
     @Column(name = "sales_commission_percent")
-    private Integer salesCommissionPercent;
+    private Double salesCommissionPercent;
 
     @Column(name = "sales_price_without_vat", precision = 12, scale = 4)
     private BigDecimal salesPricewithoutVAT;
