@@ -50,19 +50,30 @@ public class FlightServiceImpl implements IFlightService {
 
 
     @Override
+    public Page<FlightDTO> findAllPaginated(Pageable pageable, CoreCriteria criteria) {
+      return flightRepository.findFlightByCriteria(criteria, pageable).map(IFlightMapper.INSTANCE::toDto);
+    }
+
+    @Override
+    public FlightDTO findById(final Long id) {
+      return IFlightMapper.INSTANCE.toDto(flightRepository.findById(id)
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id)));
+    }
+
+    @Override
     public Page<FlightDTO> findAllPaginated(final Long fileId, final Long routeId, Pageable pageable, CoreCriteria criteria) {
       checkIfFileExists(fileId);
       Route route = getRoute(routeId);
 
-        Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
+      Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
 
-        if (route.getParentRoute() == null) {
-            Utils.addCriteriaIfNotExists(criteria, PARENT_ROUTE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(routeId));
-        } else {
-            Utils.addCriteriaIfNotExists(criteria, ROUTE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(routeId));
-        }
+      if (route.getParentRoute() == null) {
+          Utils.addCriteriaIfNotExists(criteria, PARENT_ROUTE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(routeId));
+      } else {
+          Utils.addCriteriaIfNotExists(criteria, ROUTE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(routeId));
+      }
 
-      return flightRepository.findFlightByCriteria(criteria, pageable).map(IFlightMapper.INSTANCE::toDto);
+      return findAllPaginated(pageable, criteria);
     }
 
     @Override
@@ -70,8 +81,7 @@ public class FlightServiceImpl implements IFlightService {
       checkIfFileExists(fileId);
       checkIfRouteExists(routeId);
 
-      return IFlightMapper.INSTANCE.toDto(flightRepository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id)));
+      return findById(id);
     }
 
     @Override
@@ -100,16 +110,21 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
-    public void updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
-
-      checkIfFileExists(fileId);
-      checkIfRouteExists(routeId);
-
+    public void updateFlight(final Long id, final FlightDTO flightDTO) {
       Flight flight = flightRepository.findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + id));
 
       IFlightMapper.INSTANCE.updateFromDto(flightDTO, flight);
       flight = flightRepository.save(flight);
+    }
+
+    @Override
+    public void updateFlight(final Long fileId, final Long routeId, final Long id, final FlightDTO flightDTO) {
+
+      checkIfFileExists(fileId);
+      checkIfRouteExists(routeId);
+
+      updateFlight(id, flightDTO);
       updateRotationData(routeId);
     }
 
