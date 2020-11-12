@@ -102,6 +102,12 @@ public class FlightServiceImpl implements IFlightService {
               .orElse(0) + 1);
 
       flight.setArrivalTime(flight.getDepartureTime());
+        if (flight.getRealDepartureTime() == null) {
+            flight.setRealDepartureTime(flight.getDepartureTime());
+        }
+        if (flight.getRealArrivalTime() == null) {
+            flight.setRealArrivalTime(flight.getArrivalTime());
+        }
 
       flight = flightRepository.save(flight);
       updateRotationData(routeId);

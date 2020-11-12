@@ -388,6 +388,8 @@ public class RouteServiceImpl implements IRouteService {
                     flight.setTimeZone(origin.getTimeZone());
                     flight.setDepartureTime((null != rotation.getStartDate() ? rotation.getStartDate().atStartOfDay(): null));
                     flight.setArrivalTime((null != rotation.getStartDate() ? rotation.getStartDate().atStartOfDay(): null));
+                    flight.setRealDepartureTime(flight.getDepartureTime());
+                    flight.setRealArrivalTime(flight.getArrivalTime());
                     flight.setRouteId(rotation.getId());
                     flight.setSeatsC(routeDto.getSeatsC());
                     flight.setSeatsF(routeDto.getSeatsF());
