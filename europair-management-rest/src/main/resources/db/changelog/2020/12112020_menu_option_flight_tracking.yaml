@@ -1,0 +1,87 @@
+databaseChangeLog:
+ - changeSet:
+      id: 12112020_menu_option_flight_tracking
+      context: dev or pre or pro
+      author: emilio.castillogonza
+      comment: "Add Flight tracking to the menu_option table"
+      changes:
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 16
+              - column:
+                  name: name
+                  value: "Seguimiento vuelos"
+              - column:
+                  name: description
+                  value: "Seguimiento de vuelos"
+              - column:
+                  name: route
+                  value: "/files/flight-tracking"
+              - column:
+                  name: created_at
+                  value: "2020-11-12"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - update:
+            tableName: screens
+            columns:
+              - column:
+                  name: name
+                  value: "Seguimiento rutas"
+              - column:
+                  name: description
+                  value: "Seguimiento de rutas"
+              - column:
+                  name: modified_at
+                  value: "2020-11-12"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: id=14
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 21
+              - column:
+                  name: name
+                  value: "FLIGHT_TRACKING"
+              - column:
+                  name: label
+                  value: "MENU.FILES.FLIGHT_TRACKING"
+              - column:
+                  name: weight
+                  value: 3
+              - column:
+                  name: parent_id
+                  value: 15
+              - column:
+                  name: screen_id
+                  value: 16
+              - column:
+                  name: created_at
+                  value: "2020-11-12"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - update:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: name
+                  value: "ROUTES_TRACKING"
+              - column:
+                  name: label
+                  value: "MENU.FILES.ROUTES_TRACKING"
+              - column:
+                  name: modified_at
+                  value: "2020-11-12"
+              - column:
+                  name: modified_by
+                  value: "Sistema"
+            where: id=19

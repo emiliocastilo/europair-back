@@ -169,6 +169,9 @@ databaseChangeLog:
   - include:
       file: 2020/20201027_files_additional_data_master_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/12112020_menu_option_flight_tracking.yaml
+      relativeToChangelogFile: true
 
 
 
