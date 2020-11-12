@@ -11,6 +11,10 @@ public interface IFlightService {
 
     Page<FlightDTO> findAllPaginated(Long fileId, Long routeId, Pageable pageable, CoreCriteria criteria);
 
+    FlightDTO findById(Long id);
+
+    Page<FlightDTO> findAllPaginated(Pageable pageable, CoreCriteria criteria);
+
     FlightDTO findById(Long fileId, Long routeId, Long id);
 
     FlightDTO saveFlight(Long fileId, Long routeId, FlightDTO flightDTO);
