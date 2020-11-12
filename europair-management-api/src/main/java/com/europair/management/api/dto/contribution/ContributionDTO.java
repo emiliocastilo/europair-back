@@ -87,7 +87,7 @@ public class ContributionDTO {
     private BigDecimal purchasePrice;
 
     @JsonProperty("purchaseCommissionPercent")
-    private Integer purchaseCommissionPercent;
+    private Double purchaseCommissionPercent;
 
     @JsonProperty("includedIva")
     private Boolean includedIva;
@@ -96,7 +96,7 @@ public class ContributionDTO {
     private BigDecimal salesPrice;
 
     @JsonProperty("salesCommissionPercent")
-    private Integer salesCommissionPercent;
+    private Double salesCommissionPercent;
 
     @JsonProperty("salesPricewithoutIVA")
     private Boolean salesPricewithoutIVA;
