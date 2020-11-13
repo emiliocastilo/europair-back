@@ -289,7 +289,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
             aircraftTypeConnectionsMap.put(aircraft.getAircraftType().getId(), connections);
         }
 
-        return connections == null || connections >= maxConnections;
+        return connections == null || connections <= maxConnections;
     }
 
 }
