@@ -13,6 +13,7 @@ import com.europair.management.rest.model.files.entity.Provider;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.taxes.repository.TaxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,11 +34,11 @@ public class CalculationServiceImpl implements ICalculationService {
     private IRouteBalearicsPctVatService balearicsPctVatService;
 
     @Override
-    public Double calculateFinalTaxToApply(Long fileId, Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
+    public Pair<Double, Double> calculateTaxToApplyAndPercentage(Long fileId, Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
         Double taxToApply = calculateServiceTaxToApply(fileId, origin, destination, serviceType, isSale);
-        Double taxPercentage = calculateTaxPercentageOnRoute(origin, destination, serviceType, isSale);
+        Double taxPercentage = calculatePercentageOfTaxToApply(origin, destination, serviceType, isSale);
 
-        return taxToApply != null ? taxToApply * (taxPercentage / 100D) : null;
+        return Pair.of(taxToApply, taxPercentage);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class CalculationServiceImpl implements ICalculationService {
     }
 
     @Override
-    public Double calculateTaxPercentageOnRoute(Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
+    public Double calculatePercentageOfTaxToApply(Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
         Double taxPercentage = 100D;
         if ((Boolean.TRUE.equals(origin.getBalearics()) || Boolean.TRUE.equals(destination.getBalearics())) &&
                 checkBalearicIslandsSpecialConditions(isSale, serviceType)) {

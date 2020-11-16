@@ -21,6 +21,7 @@ import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -171,16 +172,24 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
 
         // Update dto values
         try {
-            Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), true);
-            flightServiceDto.setTaxOnSale(taxOnSale);
+            Pair<Double, Double> saleTaxData = calculationService.calculateTaxToApplyAndPercentage(
+                    fileId, origin, destination, serviceType.getType(), true);
+            flightServiceDto.setTaxOnSale(saleTaxData.getFirst());
+            flightServiceDto.setPercentageAppliedOnSaleTax(saleTaxData.getSecond());
         } catch (EuropairForeignTaxException e) {
             flightServiceDto.setTaxOnSale(null);
+            flightServiceDto.setPercentageAppliedOnSaleTax(calculationService.calculatePercentageOfTaxToApply(
+                    origin, destination, serviceType.getType(), true));
         }
         try {
-            Double taxOnPurchase = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), false);
-            flightServiceDto.setTaxOnPurchase(taxOnPurchase);
+            Pair<Double, Double> purchaseTaxData = calculationService.calculateTaxToApplyAndPercentage(
+                    fileId, origin, destination, serviceType.getType(), false);
+            flightServiceDto.setTaxOnPurchase(purchaseTaxData.getFirst());
+            flightServiceDto.setPercentageAppliedOnPurchaseTax(purchaseTaxData.getSecond());
         } catch (EuropairForeignTaxException e) {
             flightServiceDto.setTaxOnPurchase(null);
+            flightServiceDto.setPercentageAppliedOnPurchaseTax(calculationService.calculatePercentageOfTaxToApply(
+                    origin, destination, serviceType.getType(), false));
         }
     }
 

@@ -144,11 +144,11 @@ public class ContributionServiceImpl implements IContributionService {
         contribution.setVatAmountOnPurchase(
                 (contribution.getPurchasePrice() == null || contribution.getPurchaseCommissionPercent() == null) ? null
                         : contribution.getPurchasePrice().multiply(
-                        BigDecimal.valueOf(Double.valueOf(contribution.getPurchaseCommissionPercent()) / 100)));
+                        BigDecimal.valueOf(contribution.getPurchaseCommissionPercent() / 100)));
         contribution.setVatAmountOnSale(
                 (contribution.getSalesPrice() == null || contribution.getSalesCommissionPercent() == null) ? null
                         : contribution.getSalesPrice().multiply(
-                        BigDecimal.valueOf(Double.valueOf(contribution.getSalesCommissionPercent()) / 100)));
+                        BigDecimal.valueOf(contribution.getSalesCommissionPercent() / 100)));
 
         contribution = contributionRepository.saveAndFlush(contribution);
 

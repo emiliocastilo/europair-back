@@ -159,3 +159,19 @@ databaseChangeLog:
                     foreignKeyName: flight_services_service_fk
                     references: services(id)
 
+  - changeSet:
+      id: 20201116_flight_services_v1_add_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add columns for tax percentage to apply on route"
+      changes:
+        - addColumn:
+            tableName: flight_services
+            columns:
+              - column:
+                  name: percentage_applied_on_sale_tax
+                  type: double
+              - column:
+                  name: percentage_applied_on_purchase_tax
+                  type: double
+

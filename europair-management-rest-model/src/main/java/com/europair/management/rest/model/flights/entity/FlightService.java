@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 /**
  * Esto son servicios adicionales de expediente. En esta entidad solo se verán persistidos aquellos servicios adicionales
  * confirmados y se almacenan contra el expediente.
- *
+ * <p>
  * P.ej: LineContributionRoute esta entidad aloja también servicios adicionales pero no confirmados, correspondientes a
  * una rotacion y/o ruta.
  */
@@ -79,6 +79,12 @@ public class FlightService extends AuditModificationBaseEntityHardAudited implem
 
     @Column(name = "purchase_tax_percentage")
     private Double taxOnPurchase;
+
+    @Column(name = "percentage_applied_on_sale_tax")
+    private Double percentageAppliedOnSaleTax;
+
+    @Column(name = "percentage_applied_on_purchase_tax")
+    private Double percentageAppliedOnPurchaseTax;
 
     @Column(name = "commission_percentage")
     private Double commission;
