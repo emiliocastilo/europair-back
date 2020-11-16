@@ -113,7 +113,7 @@ public class ContributionServiceImpl implements IContributionService {
         // Add route contribution lines
         Set<LineContributionRoute> routeContributionLines = createRouteContributionLines(contribution.getId(), updatedRoute);
 
-        // Contribution taxes
+        // Contribution purchase taxes
         List<Double> taxOnPurchase = flightTaxes.stream().map(FlightTax::getTaxOnPurchase).distinct().collect(Collectors.toList());
         if (taxOnPurchase.size() == 1) {
             Double tax = taxOnPurchase.get(0);
@@ -127,6 +127,17 @@ public class ContributionServiceImpl implements IContributionService {
             contribution.setPurchaseVATMsg("Los vuelos de la ruta tienen un IVA diferente.");
         }
 
+        List<Double> taxPercentToApplyOnPurchase = flightTaxes.stream()
+                .map(FlightTax::getPercentageAppliedOnPurchaseTax).distinct().collect(Collectors.toList());
+        if (taxPercentToApplyOnPurchase.size() == 1) {
+            contribution.setPercentageAppliedOnPurchaseTax(taxPercentToApplyOnPurchase.get(0));
+        } else {
+            contribution.setPercentageAppliedOnPurchaseTax(null);
+            contribution.setPurchaseVATMsg((contribution.getPurchaseVATMsg() == null ? "" : contribution.getPurchaseVATMsg())
+                    + " No se ha podido calcular el importe del IVA correspondiente al tramo de Baleares.");
+        }
+
+        // Contribution sale taxes
         List<Double> taxOnSale = flightTaxes.stream().map(FlightTax::getTaxOnSale).distinct().collect(Collectors.toList());
         if (taxOnSale.size() == 1) {
             Double tax = taxOnSale.get(0);
@@ -140,15 +151,27 @@ public class ContributionServiceImpl implements IContributionService {
             contribution.setSaleVATMsg("Los vuelos de la ruta tienen un IVA diferente.");
         }
 
+        List<Double> taxPercentToApplyOnSale = flightTaxes.stream()
+                .map(FlightTax::getPercentageAppliedOnSaleTax).distinct().collect(Collectors.toList());
+        if (taxPercentToApplyOnSale.size() == 1) {
+            contribution.setPercentageAppliedOnSaleTax(taxPercentToApplyOnSale.get(0));
+        } else {
+            contribution.setPercentageAppliedOnSaleTax(null);
+            contribution.setSaleVATMsg((contribution.getSaleVATMsg() == null ? "" : contribution.getSaleVATMsg())
+                    + " No se ha podido calcular el importe del IVA correspondiente al tramo de Baleares.");
+        }
+
         // Set VAT amounts
         contribution.setVatAmountOnPurchase(
                 (contribution.getPurchasePrice() == null || contribution.getPurchaseCommissionPercent() == null) ? null
-                        : contribution.getPurchasePrice().multiply(
-                        BigDecimal.valueOf(contribution.getPurchaseCommissionPercent() / 100)));
+                        : contribution.getPurchasePrice().multiply(BigDecimal.valueOf(
+                        contribution.getPercentageAppliedOnPurchaseTax() == null ? 1 : contribution.getPercentageAppliedOnPurchaseTax() / 100))
+                        .multiply(BigDecimal.valueOf(contribution.getPurchaseCommissionPercent() / 100)));
         contribution.setVatAmountOnSale(
                 (contribution.getSalesPrice() == null || contribution.getSalesCommissionPercent() == null) ? null
-                        : contribution.getSalesPrice().multiply(
-                        BigDecimal.valueOf(contribution.getSalesCommissionPercent() / 100)));
+                        : contribution.getSalesPrice().multiply(BigDecimal.valueOf(
+                        contribution.getPercentageAppliedOnSaleTax() == null ? 1 : contribution.getPercentageAppliedOnSaleTax() / 100))
+                        .multiply(BigDecimal.valueOf(contribution.getSalesCommissionPercent() / 100)));
 
         contribution = contributionRepository.saveAndFlush(contribution);
 

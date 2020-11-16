@@ -99,7 +99,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
                     FlightService flightService = IFlightServiceMapper.INSTANCE.toEntity(flightServiceDto);
                     flightService.setFlightId(flightId);
                     // Calculate VAT
-                    calculateVat(fileId, serviceType, flight, flightServiceDto);
+                    calculateVat(fileId, serviceType, flight, flightService);
                     return flightService;
                 }).collect(Collectors.toList());
 
@@ -117,10 +117,10 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         FlightService flightService = flightServiceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id));
 
-        // Recalculate vat
-        calculateVat(fileId, serviceType, flight, flightServiceDto);
-
         IFlightServiceMapper.INSTANCE.updateFromDto(flightServiceDto, flightService);
+        // Recalculate vat
+        calculateVat(fileId, serviceType, flight, flightService);
+
         flightService = flightServiceRepository.save(flightService);
         // ToDo: Log result ok??
     }
@@ -166,7 +166,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No service type found with id: " + serviceTypeId));
     }
 
-    private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightServiceDto flightServiceDto) {
+    private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightService flightService) {
         final Airport origin = flight.getOrigin();
         final Airport destination = flight.getDestination();
 
@@ -174,21 +174,21 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         try {
             Pair<Double, Double> saleTaxData = calculationService.calculateTaxToApplyAndPercentage(
                     fileId, origin, destination, serviceType.getType(), true);
-            flightServiceDto.setTaxOnSale(saleTaxData.getFirst());
-            flightServiceDto.setPercentageAppliedOnSaleTax(saleTaxData.getSecond());
+            flightService.setTaxOnSale(saleTaxData.getFirst());
+            flightService.setPercentageAppliedOnSaleTax(saleTaxData.getSecond());
         } catch (EuropairForeignTaxException e) {
-            flightServiceDto.setTaxOnSale(null);
-            flightServiceDto.setPercentageAppliedOnSaleTax(calculationService.calculatePercentageOfTaxToApply(
+            flightService.setTaxOnSale(null);
+            flightService.setPercentageAppliedOnSaleTax(calculationService.calculatePercentageOfTaxToApply(
                     origin, destination, serviceType.getType(), true));
         }
         try {
             Pair<Double, Double> purchaseTaxData = calculationService.calculateTaxToApplyAndPercentage(
                     fileId, origin, destination, serviceType.getType(), false);
-            flightServiceDto.setTaxOnPurchase(purchaseTaxData.getFirst());
-            flightServiceDto.setPercentageAppliedOnPurchaseTax(purchaseTaxData.getSecond());
+            flightService.setTaxOnPurchase(purchaseTaxData.getFirst());
+            flightService.setPercentageAppliedOnPurchaseTax(purchaseTaxData.getSecond());
         } catch (EuropairForeignTaxException e) {
-            flightServiceDto.setTaxOnPurchase(null);
-            flightServiceDto.setPercentageAppliedOnPurchaseTax(calculationService.calculatePercentageOfTaxToApply(
+            flightService.setTaxOnPurchase(null);
+            flightService.setPercentageAppliedOnPurchaseTax(calculationService.calculatePercentageOfTaxToApply(
                     origin, destination, serviceType.getType(), false));
         }
     }
