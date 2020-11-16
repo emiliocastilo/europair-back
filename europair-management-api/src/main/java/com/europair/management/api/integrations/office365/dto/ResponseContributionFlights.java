@@ -1,6 +1,5 @@
 package com.europair.management.api.integrations.office365.dto;
 
-import com.europair.management.api.dto.fleet.AircraftDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +21,7 @@ public class ResponseContributionFlights {
 
     @JsonProperty("operatorSharingDTO")
     private OperatorSharingDTO operatorSharingDTO;
+
+    @JsonProperty("routeSharingDTO")
+    private RouteSharingDTO routeSharingDTO;
 }
