@@ -62,6 +62,12 @@ public class FlightServiceDto extends AuditModificationBaseDTO {
     @JsonProperty("taxOnPurchase")
     private Double taxOnPurchase;
 
+    @JsonProperty("percentageAppliedOnSaleTax")
+    private Double percentageAppliedOnSaleTax;
+
+    @JsonProperty("percentageAppliedOnPurchaseTax")
+    private Double percentageAppliedOnPurchaseTax;
+
     @JsonProperty("commission")
     private Double commission;
 

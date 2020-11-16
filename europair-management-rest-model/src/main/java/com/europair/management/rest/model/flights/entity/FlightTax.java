@@ -53,4 +53,10 @@ public class FlightTax implements Serializable {
      */
     @Column(name = "purchase_tax_percentage")
     private Double taxOnPurchase;
+
+    @Column(name = "percentage_applied_on_sale_tax")
+    private Double percentageAppliedOnSaleTax;
+
+    @Column(name = "percentage_applied_on_purchase_tax")
+    private Double percentageAppliedOnPurchaseTax;
 }

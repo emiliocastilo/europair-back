@@ -17,6 +17,7 @@ import com.europair.management.api.integrations.office365.dto.MinimalRouteInfoTo
 import com.europair.management.api.integrations.office365.dto.OperatorSharingDTO;
 import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.ResponseContributionFlights;
+import com.europair.management.api.integrations.office365.dto.RouteSharingDTO;
 import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
 import com.europair.management.api.integrations.office365.enums.Office365PlanningFlightActionType;
 import com.europair.management.api.integrations.office365.enums.Office365PlanningOperationTypeEnum;
@@ -40,6 +41,7 @@ import com.europair.management.rest.model.flights.repository.FlightRepository;
 import com.europair.management.rest.model.flights.repository.FlightServiceRepository;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
+import com.europair.management.rest.model.routes.entity.RouteFrequencyDay;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -123,7 +125,6 @@ public class Office365ServiceImpl implements IOffice365Service {
         // first step: planningFlightsDTO -> fileSharingInfoDTO, flightSharingInfoDTO
         List<PlanningFlightsDTO> planningFlightsDTOS = this.getPlanningFlightsInfo(route.getId(), contributionId);
 
-
         // second step: aircraftSharingDTO
         AircraftSharingDTO aircraftSharingDTO = new AircraftSharingDTO();
 
@@ -157,10 +158,26 @@ public class Office365ServiceImpl implements IOffice365Service {
             operatorSharingDTO.setName(contribution.getOperator().getName());
         }
 
+        // forth step: routeSharingDTO
+        RouteSharingDTO routeSharingDTO = new RouteSharingDTO();
+        routeSharingDTO.setLabel(route.getLabel());
+        routeSharingDTO.setFrequency(route.getFrequency());
+        if (!CollectionUtils.isEmpty(route.getFrequencyDays())) {
+            routeSharingDTO.setWeekDays(route.getFrequencyDays().stream()
+                    .filter(rfd -> rfd.getWeekday() != null)
+                    .map(RouteFrequencyDay::getWeekday)
+                    .collect(Collectors.toList()));
+            routeSharingDTO.setMonthDays(route.getFrequencyDays().stream()
+                    .filter(rfd -> rfd.getMonthDay() != null)
+                    .map(RouteFrequencyDay::getMonthDay)
+                    .collect(Collectors.toList()));
+        }
+
         // union of data
         responseContributionFlights.setAircraftSharingDTO(aircraftSharingDTO);
         responseContributionFlights.setOperatorSharingDTO(operatorSharingDTO);
         responseContributionFlights.setPlanningFlightsDTOS(planningFlightsDTOS);
+        responseContributionFlights.setRouteSharingDTO(routeSharingDTO);
 
         return responseContributionFlights;
     }

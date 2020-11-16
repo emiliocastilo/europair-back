@@ -51,3 +51,18 @@ databaseChangeLog:
             tableName: flight_taxes
 
 
+  - changeSet:
+      id: 20201113_flight_taxes_v1_add_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add tax percentages to apply columns"
+      changes:
+        - addColumn:
+            tableName: flight_taxes
+            columns:
+              - column:
+                  name: percentage_applied_on_sale_tax
+                  type: double
+              - column:
+                  name: percentage_applied_on_purchase_tax
+                  type: double

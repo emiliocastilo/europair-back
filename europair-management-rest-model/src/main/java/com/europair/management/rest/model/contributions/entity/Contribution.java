@@ -157,4 +157,9 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     @Column(name = "sale_vat_msg")
     private String saleVATMsg;
 
+    @Column(name = "percentage_applied_on_sale_tax")
+    private Double percentageAppliedOnSaleTax;
+
+    @Column(name = "percentage_applied_on_purchase_tax")
+    private Double percentageAppliedOnPurchaseTax;
 }

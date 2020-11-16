@@ -126,4 +126,10 @@ public class ContributionDTO {
 
     @JsonProperty("removedAt")
     private LocalDateTime removedAt;
+
+    @JsonProperty("percentage_applied_on_sale_tax")
+    private Double percentageAppliedOnSaleTax;
+
+    @JsonProperty("percentage_applied_on_purchase_tax")
+    private Double percentageAppliedOnPurchaseTax;
 }

@@ -228,3 +228,20 @@ databaseChangeLog:
               - column:
                   name: sale_vat_msg
                   type: varchar(255)
+
+  - changeSet:
+      id: 20201116_contribution_master_v2_add_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add columns for tax percentage to apply on route"
+      changes:
+        - addColumn:
+            tableName: contributions
+            columns:
+              - column:
+                  name: percentage_applied_on_sale_tax
+                  type: double
+              - column:
+                  name: percentage_applied_on_purchase_tax
+                  type: double
+

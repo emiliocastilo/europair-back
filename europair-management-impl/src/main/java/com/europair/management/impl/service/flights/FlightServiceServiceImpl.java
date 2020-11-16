@@ -21,6 +21,7 @@ import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -98,7 +99,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
                     FlightService flightService = IFlightServiceMapper.INSTANCE.toEntity(flightServiceDto);
                     flightService.setFlightId(flightId);
                     // Calculate VAT
-                    calculateVat(fileId, serviceType, flight, flightServiceDto);
+                    calculateVat(fileId, serviceType, flight, flightService);
                     return flightService;
                 }).collect(Collectors.toList());
 
@@ -116,10 +117,10 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         FlightService flightService = flightServiceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id));
 
-        // Recalculate vat
-        calculateVat(fileId, serviceType, flight, flightServiceDto);
-
         IFlightServiceMapper.INSTANCE.updateFromDto(flightServiceDto, flightService);
+        // Recalculate vat
+        calculateVat(fileId, serviceType, flight, flightService);
+
         flightService = flightServiceRepository.save(flightService);
         // ToDo: Log result ok??
     }
@@ -165,22 +166,30 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "No service type found with id: " + serviceTypeId));
     }
 
-    private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightServiceDto flightServiceDto) {
+    private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightService flightService) {
         final Airport origin = flight.getOrigin();
         final Airport destination = flight.getDestination();
 
         // Update dto values
         try {
-            Double taxOnSale = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), true);
-            flightServiceDto.setTaxOnSale(taxOnSale);
+            Pair<Double, Double> saleTaxData = calculationService.calculateTaxToApplyAndPercentage(
+                    fileId, origin, destination, serviceType.getType(), true);
+            flightService.setTaxOnSale(saleTaxData.getFirst());
+            flightService.setPercentageAppliedOnSaleTax(saleTaxData.getSecond());
         } catch (EuropairForeignTaxException e) {
-            flightServiceDto.setTaxOnSale(null);
+            flightService.setTaxOnSale(null);
+            flightService.setPercentageAppliedOnSaleTax(calculationService.calculatePercentageOfTaxToApply(
+                    origin, destination, serviceType.getType(), true));
         }
         try {
-            Double taxOnPurchase = calculationService.calculateFinalTaxToApply(fileId, origin, destination, serviceType.getType(), false);
-            flightServiceDto.setTaxOnPurchase(taxOnPurchase);
+            Pair<Double, Double> purchaseTaxData = calculationService.calculateTaxToApplyAndPercentage(
+                    fileId, origin, destination, serviceType.getType(), false);
+            flightService.setTaxOnPurchase(purchaseTaxData.getFirst());
+            flightService.setPercentageAppliedOnPurchaseTax(purchaseTaxData.getSecond());
         } catch (EuropairForeignTaxException e) {
-            flightServiceDto.setTaxOnPurchase(null);
+            flightService.setTaxOnPurchase(null);
+            flightService.setPercentageAppliedOnPurchaseTax(calculationService.calculatePercentageOfTaxToApply(
+                    origin, destination, serviceType.getType(), false));
         }
     }
 
