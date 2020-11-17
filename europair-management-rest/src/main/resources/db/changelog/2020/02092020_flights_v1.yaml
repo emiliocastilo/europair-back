@@ -214,3 +214,25 @@ databaseChangeLog:
               - column:
                   name: real_arrival_time
                   type: timestamp
+
+  - changeSet:
+      id: 20201117_flights_vN_add_columns
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add new columns for pax types"
+      changes:
+        - addColumn:
+            tableName: flights
+            columns:
+              - column:
+                  name: pax_ad
+                  type: int
+                  remarks: Pax number of type Adult
+              - column:
+                  name: pax_chd
+                  type: int
+                  remarks: Pax number of type Children
+              - column:
+                  name: pax_infants
+                  type: int
+                  remarks: Pax number of type Infant
