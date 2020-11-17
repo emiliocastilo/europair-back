@@ -18,10 +18,10 @@ import com.europair.management.rest.model.routes.repository.RouteRepository;
 import com.europair.management.rest.model.services.entity.Service;
 import com.europair.management.rest.model.services.repository.ServiceRepository;
 import com.europair.management.rest.model.users.repository.IUserRepository;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -174,8 +174,8 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         try {
             Pair<Double, Double> saleTaxData = calculationService.calculateTaxToApplyAndPercentage(
                     fileId, origin, destination, serviceType.getType(), true);
-            flightService.setTaxOnSale(saleTaxData.getFirst());
-            flightService.setPercentageAppliedOnSaleTax(saleTaxData.getSecond());
+            flightService.setTaxOnSale(saleTaxData.getLeft());
+            flightService.setPercentageAppliedOnSaleTax(saleTaxData.getRight());
         } catch (EuropairForeignTaxException e) {
             flightService.setTaxOnSale(null);
             flightService.setPercentageAppliedOnSaleTax(calculationService.calculatePercentageOfTaxToApply(
@@ -184,8 +184,8 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         try {
             Pair<Double, Double> purchaseTaxData = calculationService.calculateTaxToApplyAndPercentage(
                     fileId, origin, destination, serviceType.getType(), false);
-            flightService.setTaxOnPurchase(purchaseTaxData.getFirst());
-            flightService.setPercentageAppliedOnPurchaseTax(purchaseTaxData.getSecond());
+            flightService.setTaxOnPurchase(purchaseTaxData.getLeft());
+            flightService.setPercentageAppliedOnPurchaseTax(purchaseTaxData.getRight());
         } catch (EuropairForeignTaxException e) {
             flightService.setTaxOnPurchase(null);
             flightService.setPercentageAppliedOnPurchaseTax(calculationService.calculatePercentageOfTaxToApply(

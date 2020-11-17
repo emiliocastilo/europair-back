@@ -2,7 +2,7 @@ package com.europair.management.impl.service.calculation;
 
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.rest.model.airport.entity.Airport;
-import org.springframework.data.util.Pair;
+import org.apache.commons.lang3.tuple.Pair;
 
 public interface ICalculationService {
 
