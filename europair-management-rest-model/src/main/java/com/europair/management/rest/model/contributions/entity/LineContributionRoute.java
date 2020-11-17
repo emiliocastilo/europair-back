@@ -1,6 +1,6 @@
 package com.europair.management.rest.model.contributions.entity;
 
-import com.europair.management.api.enums.LineContributionRouteType;
+import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
 import com.europair.management.rest.model.flights.entity.Flight;
@@ -82,7 +82,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     //Poner TIPO : compra o venta
     @Column(name = "line_contribution_route_type", nullable = false)
     @Enumerated(EnumType.STRING)
-    private LineContributionRouteType lineContributionRouteType;
+    private PurchaseSaleEnum lineContributionRouteType;
 
     // poner TIPO_SERVICIO : vuelo, catering, son los tipos que ya tenemos creados
     @Column(name = "service_type", nullable = false)

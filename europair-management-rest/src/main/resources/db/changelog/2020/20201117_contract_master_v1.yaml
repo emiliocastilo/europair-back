@@ -1,0 +1,99 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201117_contract_master_v1_create_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contract table to database"
+      changes:
+        - createTable:
+            tableName: contracts
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_id_pk
+              - column:
+                  name: code
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: contract_code_uq
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: contract_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: file_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: contract_file_fk
+                    references: files(id)
+                    validateForeignKey: true
+              - column:
+                  name: client_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contract_client_fk
+                    references: clients(id)
+                    validateForeignKey: true
+              - column:
+                  name: provider_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contract_provider_fk
+                    references: providers(id)
+                    validateForeignKey: true
+              - column:
+                  name: contract_state
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: contracts
+
+

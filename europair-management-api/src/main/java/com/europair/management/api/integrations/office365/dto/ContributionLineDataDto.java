@@ -1,6 +1,6 @@
 package com.europair.management.api.integrations.office365.dto;
 
-import com.europair.management.api.enums.LineContributionRouteType;
+import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class ContributionLineDataDto {
 
     private Boolean includedVAT;
 
-    private LineContributionRouteType lineContributionRouteType;
+    private PurchaseSaleEnum lineContributionRouteType;
 
     private ServiceTypeEnum type;
 }
