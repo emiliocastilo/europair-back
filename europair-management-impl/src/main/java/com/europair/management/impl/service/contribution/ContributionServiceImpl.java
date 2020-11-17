@@ -3,6 +3,7 @@ package com.europair.management.impl.service.contribution;
 import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
 import com.europair.management.api.enums.ContributionStatesEnum;
+import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.LineContributionRouteType;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
@@ -104,6 +105,14 @@ public class ContributionServiceImpl implements IContributionService {
         contribution.setSeatingC(route.getRotations().get(0).getFlights().get(0).getSeatsC());
         contribution.setSeatingF(route.getRotations().get(0).getFlights().get(0).getSeatsF());
         contribution.setSeatingY(route.getRotations().get(0).getFlights().get(0).getSeatsY());
+
+        // set default currencies
+        if (contribution.getCurrency() == null) {
+            contribution.setCurrency(CurrencyEnum.EUR);
+        }
+        if (contribution.getCurrencyOnSale() == null) {
+            contribution.setCurrencyOnSale(CurrencyEnum.EUR);
+        }
 
         contribution = contributionRepository.saveAndFlush(contribution);
 

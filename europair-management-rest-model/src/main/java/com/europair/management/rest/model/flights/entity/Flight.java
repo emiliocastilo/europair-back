@@ -123,4 +123,12 @@ public class Flight extends AuditModificationBaseEntityHardAudited implements Se
   @Column(name = "real_arrival_time")
   private LocalDateTime realArrivalTime;
 
+  @Column(name = "pax_ad")
+  private Integer paxAD;
+
+  @Column(name = "pax_chd")
+  private Integer paxCHD;
+
+  @Column(name = "pax_infants")
+  private Integer paxInfants;
 }
