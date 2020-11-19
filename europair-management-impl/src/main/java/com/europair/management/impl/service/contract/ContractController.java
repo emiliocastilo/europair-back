@@ -74,4 +74,13 @@ public class ContractController implements IContractController {
         LOGGER.debug("[ContractController] - Ending method [deleteContract] with no return.");
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<?> generateContracts(@NotNull Long fileId, @NotNull Long routeId) {
+        LOGGER.debug("[ContractController] - Starting method [generateContracts] with input: fileId={}, routeId={}",
+                fileId, routeId);
+        contractService.generateContracts(fileId, routeId);
+        LOGGER.debug("[ContractController] - Ending method [generateContracts] with no return.");
+        return ResponseEntity.noContent().build();
+    }
 }

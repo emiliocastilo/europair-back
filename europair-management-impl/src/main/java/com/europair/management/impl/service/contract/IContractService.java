@@ -16,4 +16,6 @@ public interface IContractService {
     ContractDto updateContract(Long fileId, Long id, ContractDto contractDto);
 
     void deleteContract(Long fileId, Long id);
+
+    void generateContracts(Long fileId, Long routeId);
 }

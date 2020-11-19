@@ -3,10 +3,10 @@ databaseChangeLog:
       id: 20201008_contribution_aud_v1_table
       context: dev or pre or pro
       author: axel.sanchezsalom
-      comment: "Add contribution audit table to database"
+      comment: "Add contract audit table to database"
       changes:
         - createTable:
-            tableName: contributions_aud
+            tableName: contracts_aud
             columns:
               - column:
                   name: id
@@ -14,176 +14,17 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: contributions_aud_pk
+                    primaryKeyName: contracts_aud_pk
               - column:
                   name: rev
                   type: int
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: contributions_aud_pk
+                    primaryKeyName: contracts_aud_pk
               - column:
                   name: revtype
                   type: tinyint
-              - column:
-                  name: file_id
-                  type: int
-              - column:
-                  name: route_id
-                  type: int
-              - column:
-                  name: contribution_state
-                  type: varchar(20)
-              - column:
-                  name: operator_id
-                  type: int
-              - column:
-                  name: aircraft_id
-                  type: int
-              - column:
-                  name: request_time
-                  type: timestamp
-              - column:
-                  name: quoted_time
-                  type: timestamp
-              - column:
-                  name: cargo_airborne
-                  type: double
-              - column:
-                  name: currency
-                  type: varchar(20)
-              - column:
-                  name: comments
-                  type: varchar(255)
-              - column:
-                  name: exchange_buy_type
-                  type: varchar(20)
-              - column:
-                  name: purchase_price
-                  type: decimal(12,4)
-              - column:
-                  name: purchase_commission_percent
-                  type: decimal(12,4)
-              - column:
-                  name: included_vat
-                  type: boolean
-              - column:
-                  name: sales_price
-                  type: decimal(12,4)
-              - column:
-                  name: sales_commission_percent
-                  type: int
-              - column:
-                  name: sales_price_without_vat
-                  type: decimal(12,4)
-              - column:
-                  name: created_at
-                  type: timestamp
-                  constraints:
-                    nullable: false
-              - column:
-                  name: created_by
-                  type: varchar(30)
-              - column:
-                  name: modified_at
-                  type: timestamp
-              - column:
-                  name: modified_by
-                  type: varchar(30)
-              - column:
-                  name: removed_at
-                  type: timestamp
 
-  - changeSet:
-      id: 20201020_contribution_aud_v1_table
-      context: dev or pre or pro
-      author: axel.sanchezsalom
-      comment: "Add currency on sale column in audit table contributions_aud"
-      changes:
-        - addColumn:
-            tableName: contributions_aud
-            columns:
-              - column:
-                  name: currency_on_sale
-                  type: varchar(20)
-                  remarks: Currency on sale
 
-  - changeSet:
-      id: 20201023_contribution_master_v3_purchase_comment_and_sales_comment
-      context: dev or pre or pro
-      author: ivan.fanjulcosent
-      comment: "Rename comment to purchase_comment and add sales_comment"
-      changes:
-        - addColumn:
-            tableName: contributions_aud
-            columns:
-              - column:
-                  name: sales_comments
-                  type: varchar(255)
-                  remarks: Sales comments
-              - column:
-                  name: seating_f
-                  type: int
-                  remarks: Number of seats of type F
-              - column:
-                  name: seating_c
-                  type: int
-                  remarks: Number of seats of type c
-              - column:
-                  name: seating_y
-                  type: int
-                  remarks: Number of seats of type Y
-        - renameColumn:
-            columnDataType: varchar(255)
-            newColumnName: purchase_comments
-            oldColumnName: comments
-            remarks: Purchase comments
-            tableName: contributions_aud
-
-  - changeSet:
-      id: 20201103_contribution_aud_master_v2_vat_amount_columns
-      context: dev or pre or pro
-      author: axel.sanchezsalom
-      comment: "Add columns for vat amounts"
-      changes:
-        - addColumn:
-            tableName: contributions_aud
-            columns:
-              - column:
-                  name: vat_amount_sale
-                  type: decimal(12,4)
-              - column:
-                  name: vat_amount_purchase
-                  type: decimal(12,4)
-
-  - changeSet:
-      id: 20201106_contribution_aud_master_v2_add_columns
-      context: dev or pre or pro
-      author: axel.sanchezsalom
-      comment: "Add columns for vat error messages"
-      changes:
-        - addColumn:
-            tableName: contributions_aud
-            columns:
-              - column:
-                  name: purchase_vat_msg
-                  type: varchar(255)
-              - column:
-                  name: sale_vat_msg
-                  type: varchar(255)
-
-  - changeSet:
-      id: 20201116_contribution_aud_master_v2_add_columns
-      context: dev or pre or pro
-      author: axel.sanchezsalom
-      comment: "Add columns for tax percentage to apply on route"
-      changes:
-        - addColumn:
-            tableName: contributions_aud
-            columns:
-              - column:
-                  name: percentage_applied_on_sale_tax
-                  type: double
-              - column:
-                  name: percentage_applied_on_purchase_tax
-                  type: double
+# ToDo: completar tabla aud

@@ -103,4 +103,18 @@ public interface IContractController {
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Contract identifier") @PathVariable @NotNull final Long id);
 
+    /**
+     * <p>
+     * Generates contracts for selected route
+     * </p>
+     *
+     * @param fileId  File identifier
+     * @param routeId Route identifier
+     * @return No data
+     */
+    @PostMapping("/{routeId}")
+    @Operation(description = "Generates contracts for the selected route", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> generateContracts(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId);
 }

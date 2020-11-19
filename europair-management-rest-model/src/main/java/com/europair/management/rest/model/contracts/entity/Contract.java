@@ -2,8 +2,10 @@ package com.europair.management.rest.model.contracts.entity;
 
 import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.enums.ContractStatesEnum;
+import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
+import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.Client;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.Provider;
@@ -24,6 +26,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "contracts")
@@ -56,6 +59,16 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     @NotAudited
     private File file;
 
+    @NotNull
+    @Column(name = "contribution_id", nullable = false)
+    private Long contributionId;
+
+    @EqualsAndHashCode.Exclude
+    @ManyToOne
+    @JoinColumn(name = "contribution_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @NotAudited
+    private Contribution contribution;
+
     @Column(name = "client_id")
     private Long clientId;
 
@@ -84,4 +97,36 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
 1 contrato - n lineas de contrato
 lienas de contrato = lineas de cotización
  */
+//    @NotAudited
+//    @OneToMany(mappedBy = "contribution", orphanRemoval = true)
+//    private Set<LineContributionRoute> lineContributionRoute;
+
+
+    @Column(name = "currency")
+    @Enumerated(EnumType.STRING)
+    private CurrencyEnum currency;
+
+    @Column(name = "price", precision = 12, scale = 4)
+    private BigDecimal price;
+
+    @Column(name = "vat_percentage")
+    private Double vatPercentage;
+
+    @Column(name = "vat_amount", precision = 12, scale = 4)
+    private BigDecimal vatAmount;
+
+//    @Column(name = "included_vat")
+//    private Boolean includedVAT;
+
+//    @Column(name = "purchase_vat_msg")
+//    private String purchaseVATMsg;
+
+//    @Column(name = "sale_vat_msg")
+//    private String saleVATMsg;
+
+//    @Column(name = "percentage_applied_on_sale_tax")
+//    private Double percentageAppliedOnSaleTax;
+
+//    @Column(name = "percentage_applied_on_purchase_tax")
+//    private Double percentageAppliedOnPurchaseTax;
 }
