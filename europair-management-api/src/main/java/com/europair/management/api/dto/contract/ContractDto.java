@@ -5,12 +5,16 @@ import com.europair.management.api.dto.files.ClientDto;
 import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.dto.files.ProviderDto;
 import com.europair.management.api.enums.ContractStatesEnum;
+import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -53,4 +57,18 @@ public class ContractDto extends AuditModificationBaseDTO {
     @JsonProperty("contractState")
     private ContractStatesEnum contractState;
 
+    @JsonProperty("contractLines")
+    private Set<ContractLineDto> contractLines;
+
+    @JsonProperty("currency")
+    private CurrencyEnum currency;
+
+    @JsonProperty("price")
+    private BigDecimal price;
+
+    @JsonProperty("vatPercentage")
+    private Double vatPercentage;
+
+    @JsonProperty("vatAmount")
+    private BigDecimal vatAmount;
 }

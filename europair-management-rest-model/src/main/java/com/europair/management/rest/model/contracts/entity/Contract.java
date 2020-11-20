@@ -23,10 +23,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Entity
 @Table(name = "contracts")
@@ -92,15 +94,9 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     @Enumerated(EnumType.STRING)
     private ContractStatesEnum contractState;
 
-    // ToDo
-/*
-1 contrato - n lineas de contrato
-lienas de contrato = lineas de cotización
- */
-//    @NotAudited
-//    @OneToMany(mappedBy = "contribution", orphanRemoval = true)
-//    private Set<LineContributionRoute> lineContributionRoute;
-
+    @NotAudited
+    @OneToMany(mappedBy = "contract", orphanRemoval = true)
+    private Set<ContractLine> contractLines;
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)

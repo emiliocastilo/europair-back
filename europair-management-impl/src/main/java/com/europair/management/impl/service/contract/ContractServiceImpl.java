@@ -6,18 +6,24 @@ import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contract.IContractMapper;
+import com.europair.management.impl.service.flights.IFlightServiceService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.contracts.entity.Contract;
 import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
+import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.repository.FileRepository;
+import com.europair.management.rest.model.flights.entity.Flight;
+import com.europair.management.rest.model.flights.entity.FlightService;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +32,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -46,6 +57,9 @@ public class ContractServiceImpl implements IContractService {
 
     @Autowired
     private IStateChangeService stateChangeService;
+
+    @Autowired
+    private IFlightServiceService flightServiceService;
 
     @Override
     public Page<ContractDto> findAllPaginatedByFilter(final Long fileId, Pageable pageable, CoreCriteria criteria) {
@@ -148,7 +162,6 @@ public class ContractServiceImpl implements IContractService {
 
         // Change file state
         stateChangeService.changeState(Collections.singletonList(fileId), FileStatesEnum.BLUE_BOOKED);
-
     }
 
     private void checkIfFileExists(final Long fileId) {
@@ -161,6 +174,66 @@ public class ContractServiceImpl implements IContractService {
         // ToDo: como generamos el codigo??
         Random random = new Random();
         return "TEST-" + random.nextInt(999999);
+    }
+
+    private void generateFlightServices(Contribution contribution) {
+        // Key = service type, Left = purchase line, Right = sale line
+        Map<ServiceTypeEnum, Pair<LineContributionRoute, LineContributionRoute>> additionalServicesMap = new HashMap<>();
+        contribution.getLineContributionRoute().stream()
+                .filter(line -> !ServiceTypeEnum.FLIGHT.equals(line.getType()))
+                .forEach(line -> {
+                    if (additionalServicesMap.containsKey(line.getType())) {
+                        if (PurchaseSaleEnum.PURCHASE.equals(line.getLineContributionRouteType())) {
+                            additionalServicesMap.put(line.getType(),
+                                    Pair.of(line, additionalServicesMap.get(line.getType()).getRight()));
+                        } else {
+                            additionalServicesMap.put(line.getType(),
+                                    Pair.of(additionalServicesMap.get(line.getType()).getLeft(), line));
+                        }
+                    } else {
+                        additionalServicesMap.put(line.getType(), Pair.of(
+                                PurchaseSaleEnum.PURCHASE.equals(line.getLineContributionRouteType()) ? line : null,
+                                PurchaseSaleEnum.SALE.equals(line.getLineContributionRouteType()) ? line : null
+                        ));
+                    }
+                });
+
+        // ToDo - WIP
+        /*
+        additionalServicesMap.values().stream()
+                .map(pair -> {
+                    LineContributionRoute purchaseLine = pair.getLeft();
+                    LineContributionRoute saleLine = pair.getRight();
+                    Route selectedRoute = purchaseLine != null ? purchaseLine.getRoute() : saleLine.getRoute();
+                    List<Long> flightIds = selectedRoute.getParentRouteId() == null ?
+                            selectedRoute.getRotations().stream()
+                                    .map(Route::getFlights).flatMap(Collection::stream).map(Flight::getId).collect(Collectors.toList()) :
+                            selectedRoute.getFlights().stream().map(Flight::getId).collect(Collectors.toList());
+
+                });
+
+        List<FlightService> flightServiceList = contribution.getLineContributionRoute().stream()
+                .filter(line -> !ServiceTypeEnum.FLIGHT.equals(line.getType()))
+
+                .map(line -> {
+                    FlightService fs = new FlightService();
+                    fs.setFlightId(line.getFlightId());
+                    fs.setComments(line.getComments());
+                    fs.setCommission(line.get);
+//                    fs.setDescription();
+                    fs.setPercentageAppliedOnPurchaseTax();
+                    fs.setPercentageAppliedOnSaleTax();
+//                    fs.setProviderId();
+                    fs.setPurchasePrice(line.getg);
+                    fs.setQuantity();
+                    fs.setSalePrice();
+                    fs.setSellerId();
+                    fs.setServiceId();
+                    fs.setTaxOnPurchase();
+                    fs.setTaxOnSale(line.get);
+                });
+
+         */
     }
 
 }

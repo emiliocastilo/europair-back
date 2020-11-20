@@ -1,12 +1,12 @@
 databaseChangeLog:
   - changeSet:
-      id: 20201008_contribution_aud_v1_table
+      id: 20201120_contract_lines_aud_v1_create_table
       context: dev or pre or pro
       author: axel.sanchezsalom
-      comment: "Add contract audit table to database"
+      comment: "Add contract_lines_aud table to database"
       changes:
         - createTable:
-            tableName: contracts_aud
+            tableName: contract_lines_aud
             columns:
               - column:
                   name: id
@@ -14,54 +14,45 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: contracts_aud_pk
+                    primaryKeyName: contract_lines_aud_pk
               - column:
                   name: rev
                   type: int
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: contracts_aud_pk
+                    primaryKeyName: contract_lines_aud_pk
               - column:
                   name: revtype
                   type: tinyint
+
               - column:
-                  name: code
-                  type: varchar(20)
+                  name: contract_id
+                  type: int
               - column:
-                  name: description
+                  name: route_id
+                  type: int
+              - column:
+                  name: flight_id
+                  type: int
+              - column:
+                  name: comments
                   type: varchar(255)
-              - column:
-                  name: contract_type
-                  type: varchar(20)
-              - column:
-                  name: file_id
-                  type: int
-              - column:
-                  name: contribution_id
-                  type: int
-              - column:
-                  name: client_id
-                  type: int
-              - column:
-                  name: provider_id
-                  type: int
-              - column:
-                  name: contract_state
-                  type: varchar(20)
-              - column:
-                  name: currency
-                  type: varchar(20)
               - column:
                   name: price
                   type: decimal(12,4)
               - column:
-                  name: vat_percentage
-                  type: decimal(12,4)
+                  name: included_vat
+                  type: boolean
               - column:
-                  name: vat_amount
-                  type: decimal(12,4)
-
+                  name: contract_line_type
+                  type: varchar(20)
+              #              - column:
+              #                  name: service_type
+              #                  type: varchar(20)
+              - column:
+                  name: quantity
+                  type: int
               - column:
                   name: created_at
                   type: timestamp

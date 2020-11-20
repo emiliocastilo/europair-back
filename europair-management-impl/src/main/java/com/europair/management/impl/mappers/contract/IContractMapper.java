@@ -10,7 +10,9 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
-        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
+        mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
+        uses = {IContractLineMapper.class}
+)
 public interface IContractMapper {
 
     IContractMapper INSTANCE = Mappers.getMapper(IContractMapper.class);
