@@ -1,7 +1,8 @@
 package com.europair.management.api.dto.contract;
 
-import com.europair.management.api.dto.flights.FlightDTO;
+import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
 import com.europair.management.api.dto.routes.RouteDto;
+import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -36,19 +37,28 @@ public class ContractLineDto {
     @EqualsAndHashCode.Exclude
     private RouteDto route;
 
-    @JsonProperty("flightId")
-    private Long flightId;
+    @JsonProperty("contributionLineId")
+    private Long contributionLineId;
 
-    @JsonProperty("flight")
+    @JsonProperty("contributionLine")
     @EqualsAndHashCode.Exclude
-    private FlightDTO flight;
+    private LineContributionRouteDTO contributionLine;
 
     @JsonProperty("comments")
     private String comments;
 
+    @JsonProperty("currency")
+    private CurrencyEnum currency;
+
     @NotNull
     @JsonProperty("price")
     private BigDecimal price;
+
+    @JsonProperty("vatPercentage")
+    private Double vatPercentage;
+
+    @JsonProperty("vatAmount")
+    private BigDecimal vatAmount;
 
     @JsonProperty("quantity")
     private Integer quantity;

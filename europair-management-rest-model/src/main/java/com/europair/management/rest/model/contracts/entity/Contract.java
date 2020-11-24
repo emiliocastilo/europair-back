@@ -2,10 +2,8 @@ package com.europair.management.rest.model.contracts.entity;
 
 import com.europair.management.api.dto.common.TextField;
 import com.europair.management.api.enums.ContractStatesEnum;
-import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
-import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.files.entity.Client;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.Provider;
@@ -27,7 +25,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -61,16 +59,6 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     @NotAudited
     private File file;
 
-    @NotNull
-    @Column(name = "contribution_id", nullable = false)
-    private Long contributionId;
-
-    @EqualsAndHashCode.Exclude
-    @ManyToOne
-    @JoinColumn(name = "contribution_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    @NotAudited
-    private Contribution contribution;
-
     @Column(name = "client_id")
     private Long clientId;
 
@@ -98,18 +86,14 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     @OneToMany(mappedBy = "contract", orphanRemoval = true)
     private Set<ContractLine> contractLines;
 
-    @Column(name = "currency")
-    @Enumerated(EnumType.STRING)
-    private CurrencyEnum currency;
+    @Column(name = "contract_date")
+    private LocalDateTime contractDate;
 
-    @Column(name = "price", precision = 12, scale = 4)
-    private BigDecimal price;
+    @Column(name = "signature_date")
+    private LocalDateTime signatureDate;
 
-    @Column(name = "vat_percentage")
-    private Double vatPercentage;
-
-    @Column(name = "vat_amount", precision = 12, scale = 4)
-    private BigDecimal vatAmount;
+//    @Column(name = "cancellation_price", precision = 12, scale = 4)
+//    private BigDecimal cancellationPrice;
 
 //    @Column(name = "included_vat")
 //    private Boolean includedVAT;

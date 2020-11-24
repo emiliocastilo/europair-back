@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Map;
 
 @RestController
@@ -79,7 +81,7 @@ public class ContractController implements IContractController {
     public ResponseEntity<?> generateContracts(@NotNull Long fileId, @NotNull Long routeId) {
         LOGGER.debug("[ContractController] - Starting method [generateContracts] with input: fileId={}, routeId={}",
                 fileId, routeId);
-        contractService.generateContracts(fileId, routeId);
+        contractService.generateContracts(fileId, Arrays.asList(routeId));
         LOGGER.debug("[ContractController] - Ending method [generateContracts] with no return.");
         return ResponseEntity.noContent().build();
     }

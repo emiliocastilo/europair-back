@@ -1,10 +1,9 @@
 package com.europair.management.rest.model.contracts.entity;
 
+import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
-import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHardAudited;
-import com.europair.management.rest.model.contributions.entity.Contribution;
-import com.europair.management.rest.model.flights.entity.Flight;
+import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +19,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -34,7 +35,8 @@ public class ContractLine extends SoftRemovableBaseEntityHardAudited implements 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "contract_id")
+    @NotNull
+    @Column(name = "contract_id", nullable = false)
     private Long contractId;
 
     @NotAudited
@@ -52,20 +54,30 @@ public class ContractLine extends SoftRemovableBaseEntityHardAudited implements 
     @EqualsAndHashCode.Exclude
     private Route route;
 
-    @Column(name = "flight_id")
-    private Long flightId;
+    @Column(name = "contribution_line_id")
+    private Long contributionLineId;
 
     @NotAudited
-    @ManyToOne
-    @JoinColumn(name = "flight_id", insertable = false, updatable = false)
+    @OneToOne
+    @JoinColumn(name = "contribution_line_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
-    private Flight flight;
+    private LineContributionRoute contributionLine;
 
     @Column(name = "comments", length = 255)
     private String comments;
 
+    @Column(name = "currency")
+    @Enumerated(EnumType.STRING)
+    private CurrencyEnum currency;
+
     @Column(name = "price", precision = 12, scale = 4)
     private BigDecimal price;
+
+    @Column(name = "vat_percentage")
+    private Double vatPercentage;
+
+    @Column(name = "vat_amount", precision = 12, scale = 4)
+    private BigDecimal vatAmount;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -85,18 +97,4 @@ public class ContractLine extends SoftRemovableBaseEntityHardAudited implements 
     public ContractLine() {
     }
 
-    /**
-     * Copy constructor to copy all properties but id, and object entities.
-     *
-     * @param lineContributionRoute Entity to copy params from
-     */
-//    public ContractLine(ContractLine lineContributionRoute) {
-//        this.contributionId = lineContributionRoute.getContributionId();
-//        this.comments = lineContributionRoute.getComments();
-//        this.routeId = lineContributionRoute.getRouteId();
-//        this.price = lineContributionRoute.getPrice();
-//        this.includedVAT = lineContributionRoute.getIncludedVAT();
-//        this.lineContributionRouteType = lineContributionRoute.getLineContributionRouteType();
-//        this.type = lineContributionRoute.getType();
-//    }
 }

@@ -33,13 +33,22 @@ databaseChangeLog:
                   name: route_id
                   type: int
               - column:
-                  name: flight_id
+                  name: contribution_line_id
                   type: int
               - column:
                   name: comments
                   type: varchar(255)
               - column:
+                  name: currency
+                  type: varchar(20)
+              - column:
                   name: price
+                  type: decimal(12,4)
+              - column:
+                  name: vat_percentage
+                  type: decimal(12,4)
+              - column:
+                  name: vat_amount
                   type: decimal(12,4)
               - column:
                   name: included_vat
@@ -47,12 +56,10 @@ databaseChangeLog:
               - column:
                   name: contract_line_type
                   type: varchar(20)
-              #              - column:
-              #                  name: service_type
-              #                  type: varchar(20)
               - column:
                   name: quantity
                   type: int
+
               - column:
                   name: created_at
                   type: timestamp

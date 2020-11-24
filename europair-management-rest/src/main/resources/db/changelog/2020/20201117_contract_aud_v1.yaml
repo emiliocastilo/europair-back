@@ -38,9 +38,6 @@ databaseChangeLog:
                   name: file_id
                   type: int
               - column:
-                  name: contribution_id
-                  type: int
-              - column:
                   name: client_id
                   type: int
               - column:
@@ -50,17 +47,11 @@ databaseChangeLog:
                   name: contract_state
                   type: varchar(20)
               - column:
-                  name: currency
-                  type: varchar(20)
+                  name: contract_date
+                  type: timestamp
               - column:
-                  name: price
-                  type: decimal(12,4)
-              - column:
-                  name: vat_percentage
-                  type: decimal(12,4)
-              - column:
-                  name: vat_amount
-                  type: decimal(12,4)
+                  name: signature_date
+                  type: timestamp
 
               - column:
                   name: created_at

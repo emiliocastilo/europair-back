@@ -18,21 +18,23 @@ public interface IContractLineMapper {
     IContractLineMapper INSTANCE = Mappers.getMapper(IContractLineMapper.class);
 
     @Mapping(target = "contract.contractLines", ignore = true)
+    @Mapping(target = "route", ignore = true)
+    @Mapping(target = "contributionLine", ignore = true)
     ContractLineDto toDto(final ContractLine entity);
 
     @Mapping(target = "contract", ignore = true)
     @Mapping(target = "route", ignore = true)
-    @Mapping(target = "flight", ignore = true)
+    @Mapping(target = "contributionLine", ignore = true)
     ContractLine toEntity(final ContractLineDto dto);
 
     @Mapping(target = "contractId", ignore = true)
     @Mapping(target = "contract", ignore = true)
     @Mapping(target = "routeId", ignore = true)
     @Mapping(target = "route", ignore = true)
-    @Mapping(target = "flightId", ignore = true)
-    @Mapping(target = "flight", ignore = true)
     void updateFromDto(final ContractDto dto, @MappingTarget ContractLine entity);
 
+    @Mapping(target = "contributionLineId", source = "id")
     @Mapping(target = "contractLineType", source = "lineContributionRouteType")
     ContractLine toContractLineFromContributionLine(final LineContributionRoute contributionLine);
+
 }
