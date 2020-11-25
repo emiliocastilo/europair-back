@@ -47,6 +47,7 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
 
     @NotNull
     @Column(name = "contract_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PurchaseSaleEnum contractType;
 
     @NotNull

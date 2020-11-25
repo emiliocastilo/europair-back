@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
-@RequestMapping(value = {"/contracts", "/external/contracts"})
+@RequestMapping(value = {"/files/{fileId}/contracts", "/external/files/{fileId}/contracts"})
 public interface IContractController {
 
 
@@ -108,13 +110,13 @@ public interface IContractController {
      * Generates contracts for selected route
      * </p>
      *
-     * @param fileId  File identifier
-     * @param routeId Route identifier
+     * @param fileId   File identifier
+     * @param routeIds Route identifier
      * @return No data
      */
-    @PostMapping("/{routeId}")
+    @PostMapping("/generate")
     @Operation(description = "Generates contracts for the selected route", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> generateContracts(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
-            @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId);
+            @Parameter(description = "List of Route identifiers") @NotEmpty @RequestBody final List<Long> routeIds);
 }

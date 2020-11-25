@@ -118,10 +118,10 @@ public class ContractServiceImpl implements IContractService {
     @Override
     public void deleteContract(final Long fileId, Long id) {
         checkIfFileExists(fileId);
-        if (!contractRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found with id: " + id);
-        }
-        contractRepository.deleteById(id);
+        Contract contract = contractRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found with id: " + id));
+        contract.setRemovedAt(LocalDateTime.now());
+        contract = contractRepository.save(contract);
     }
 
     @Override
@@ -156,11 +156,13 @@ public class ContractServiceImpl implements IContractService {
             purchaseContract.setContractDate(contractDate);
 
             // Save contract to persist id and code
-            purchaseContract = contractRepository.saveAndFlush(purchaseContract);
+            purchaseContract = contractRepository.save(purchaseContract);
+//            purchaseContract = contractRepository.saveAndFlush(purchaseContract);
 
             // Create and persist purchase contract lines
-            purchaseContract.setContractLines(
-                    new HashSet<>(generatePurchaseContractLines(purchaseContract.getId(), list)));
+            List<ContractLine> purchaseLines = generatePurchaseContractLines(purchaseContract.getId(), list);
+            purchaseLines = contractLineRepository.saveAll(purchaseLines);
+            purchaseContract.setContractLines(new HashSet<>(purchaseLines));
 
             // Create sale contract lines
             saleContractLines.addAll(generateSaleContractLines(list));
@@ -177,7 +179,8 @@ public class ContractServiceImpl implements IContractService {
         saleContract.setClientId(file.getClientId());
         saleContract.setContractDate(contractDate);
 
-        saleContract = contractRepository.saveAndFlush(saleContract);
+        saleContract = contractRepository.save(saleContract);
+//        saleContract = contractRepository.saveAndFlush(saleContract);
         final Long saleContractId = saleContract.getId();
         final List<ContractLine> saleContractLinesSaved = contractLineRepository.saveAll(saleContractLines.stream()
                 .map(line -> {
@@ -236,8 +239,6 @@ public class ContractServiceImpl implements IContractService {
                                         contractLine.getPrice().multiply(BigDecimal.valueOf(contractLine.getVatPercentage() / 100)));
                         return contractLine;
                     }).collect(Collectors.toList());
-
-            contractLines = contractLineRepository.saveAll(contractLines);
         }
 
         return contractLines;

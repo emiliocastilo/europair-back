@@ -172,6 +172,18 @@ databaseChangeLog:
   - include:
       file: 2020/12112020_menu_option_flight_tracking.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/20201117_contract_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20201117_contract_aud_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20201120_contract_lines_master_v1.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 2020/20201120_contract_lines_aud_v1.yaml
+      relativeToChangelogFile: true
 
 
 
