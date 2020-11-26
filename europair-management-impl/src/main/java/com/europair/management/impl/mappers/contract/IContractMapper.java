@@ -17,7 +17,16 @@ public interface IContractMapper {
 
     IContractMapper INSTANCE = Mappers.getMapper(IContractMapper.class);
 
+    @Mapping(target = "file", ignore = true)
+    @Mapping(target = "provider.country", ignore = true)
+    @Mapping(target = "client.country", ignore = true)
     ContractDto toDto(final Contract entity);
+
+    @Mapping(target = "file", ignore = true)
+    @Mapping(target = "provider.country", ignore = true)
+    @Mapping(target = "client.country", ignore = true)
+    @Mapping(target = "contractLines", ignore = true)
+    ContractDto toDtoNoLines(final Contract entity);
 
     @Mapping(target = "file", ignore = true)
     @Mapping(target = "client", ignore = true)

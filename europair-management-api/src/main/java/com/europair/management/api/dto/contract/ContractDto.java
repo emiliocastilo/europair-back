@@ -5,7 +5,6 @@ import com.europair.management.api.dto.files.ClientDto;
 import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.dto.files.ProviderDto;
 import com.europair.management.api.enums.ContractStatesEnum;
-import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -17,7 +16,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -65,18 +63,6 @@ public class ContractDto extends AuditModificationBaseDTO {
     @JsonProperty("contractLines")
     private Set<ContractLineDto> contractLines;
 
-    @JsonProperty("currency")
-    private CurrencyEnum currency;
-
-    @JsonProperty("price")
-    private BigDecimal price;
-
-    @JsonProperty("vatPercentage")
-    private Double vatPercentage;
-
-    @JsonProperty("vatAmount")
-    private BigDecimal vatAmount;
-
     @JsonProperty("contractDate")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
@@ -87,6 +73,6 @@ public class ContractDto extends AuditModificationBaseDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime signatureDate;
 
-    @JsonProperty("cancellationPrice")
-    private BigDecimal cancellationPrice;
+//    @JsonProperty("cancellationPrice")
+//    private BigDecimal cancellationPrice;
 }

@@ -45,7 +45,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -80,7 +79,7 @@ public class ContractServiceImpl implements IContractService {
         Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
 
         return contractRepository.findContractByCriteria(criteria, pageable)
-                .map(IContractMapper.INSTANCE::toDto);
+                .map(IContractMapper.INSTANCE::toDtoNoLines);
     }
 
     @Override
@@ -143,9 +142,9 @@ public class ContractServiceImpl implements IContractService {
 
         final LocalDateTime contractDate = LocalDateTime.now();
 
-        List<Contract> purchaseContracts = new ArrayList<>();
-        final List<ContractLine> saleContractLines = new ArrayList<>();
-        operatorIdContributionsMap.values().forEach(list -> {
+        List<ContractLine> purchaseContractLines = new ArrayList<>();
+        List<ContractLine> saleContractLines = new ArrayList<>();
+        for (List<Contribution> list : operatorIdContributionsMap.values()) {
             // Purchase contract
             Contract purchaseContract = new Contract();
             purchaseContract.setFileId(fileId);
@@ -157,18 +156,13 @@ public class ContractServiceImpl implements IContractService {
 
             // Save contract to persist id and code
             purchaseContract = contractRepository.save(purchaseContract);
-//            purchaseContract = contractRepository.saveAndFlush(purchaseContract);
 
             // Create and persist purchase contract lines
-            List<ContractLine> purchaseLines = generatePurchaseContractLines(purchaseContract.getId(), list);
-            purchaseLines = contractLineRepository.saveAll(purchaseLines);
-            purchaseContract.setContractLines(new HashSet<>(purchaseLines));
+            purchaseContractLines.addAll(generatePurchaseContractLines(purchaseContract.getId(), list));
 
             // Create sale contract lines
             saleContractLines.addAll(generateSaleContractLines(list));
-
-            purchaseContracts.add(purchaseContract);
-        });
+        }
 
         // Sale contract
         Contract saleContract = new Contract();
@@ -180,14 +174,14 @@ public class ContractServiceImpl implements IContractService {
         saleContract.setContractDate(contractDate);
 
         saleContract = contractRepository.save(saleContract);
-//        saleContract = contractRepository.saveAndFlush(saleContract);
         final Long saleContractId = saleContract.getId();
-        final List<ContractLine> saleContractLinesSaved = contractLineRepository.saveAll(saleContractLines.stream()
+        saleContractLines = saleContractLines.stream()
                 .map(line -> {
                     line.setContractId(saleContractId);
                     return line;
-                }).collect(Collectors.toList()));
-        saleContract.setContractLines(new HashSet<>(saleContractLinesSaved));
+                }).collect(Collectors.toList());
+        saleContractLines.addAll(purchaseContractLines);
+        List<ContractLine> contractLinesSaved = contractLineRepository.saveAll(saleContractLines);
 
         // ToDo: generar servicios adicionales
 
@@ -228,7 +222,8 @@ public class ContractServiceImpl implements IContractService {
         if (!CollectionUtils.isEmpty(contributions)) {
             contractLines = contributions.stream()
                     .flatMap(contribution -> contribution.getLineContributionRoute().stream())
-                    .filter(line -> ServiceTypeEnum.FLIGHT.equals(line.getType()) && line.getFlightId() == null)
+                    .filter(line -> ServiceTypeEnum.FLIGHT.equals(line.getType()) && line.getFlightId() == null
+                            && PurchaseSaleEnum.PURCHASE.equals(line.getLineContributionRouteType()))
                     .map(line -> {
                         ContractLine contractLine = IContractLineMapper.INSTANCE.toContractLineFromContributionLine(line);
                         contractLine.setContractId(contractId);
@@ -249,7 +244,8 @@ public class ContractServiceImpl implements IContractService {
         if (!CollectionUtils.isEmpty(contributions)) {
             contractLines = contributions.stream()
                     .flatMap(contribution -> contribution.getLineContributionRoute().stream())
-                    .filter(line -> ServiceTypeEnum.FLIGHT.equals(line.getType()) && line.getFlightId() == null)
+                    .filter(line -> ServiceTypeEnum.FLIGHT.equals(line.getType()) && line.getFlightId() == null
+                            && PurchaseSaleEnum.SALE.equals(line.getLineContributionRouteType()))
                     .map(line -> {
                         ContractLine contractLine = IContractLineMapper.INSTANCE.toContractLineFromContributionLine(line);
                         contractLine.setCurrency(line.getContribution().getCurrencyOnSale());
