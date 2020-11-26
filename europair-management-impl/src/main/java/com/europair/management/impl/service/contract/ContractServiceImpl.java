@@ -41,8 +41,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -135,10 +133,9 @@ public class ContractServiceImpl implements IContractService {
         }
 
         Map<Long, List<Contribution>> operatorIdContributionsMap = routes.stream()
-                .map(Route::getContributions)
-                .flatMap(Collection::stream)
+                .flatMap(route -> route.getContributions().stream())
                 .filter(contribution -> ContributionStatesEnum.WON.equals(contribution.getContributionState()))
-                .collect(Collectors.toMap(Contribution::getOperatorId, Arrays::asList));
+                .collect(Collectors.groupingBy(Contribution::getOperatorId, Collectors.mapping(o -> o, Collectors.toList())));
 
         final LocalDateTime contractDate = LocalDateTime.now();
 
