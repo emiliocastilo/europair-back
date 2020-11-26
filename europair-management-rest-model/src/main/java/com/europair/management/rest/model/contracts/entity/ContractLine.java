@@ -7,6 +7,7 @@ import com.europair.management.rest.model.contributions.entity.LineContributionR
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -43,6 +44,7 @@ public class ContractLine extends SoftRemovableBaseEntityHardAudited implements 
     @ManyToOne
     @JoinColumn(name = "contract_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Contract contract;
 
     @Column(name = "route_id")
@@ -52,6 +54,7 @@ public class ContractLine extends SoftRemovableBaseEntityHardAudited implements 
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Route route;
 
     @Column(name = "contribution_line_id")
@@ -61,6 +64,7 @@ public class ContractLine extends SoftRemovableBaseEntityHardAudited implements 
     @OneToOne
     @JoinColumn(name = "contribution_line_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private LineContributionRoute contributionLine;
 
     @Column(name = "comments", length = 255)

@@ -7,6 +7,7 @@ import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -47,6 +48,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @ManyToOne
     @JoinColumn(name = "contribution_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Contribution contribution;
 
     @Column(name = "route_id")
@@ -56,6 +58,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Route route;
 
     @Column(name = "flight_id")
@@ -65,6 +68,7 @@ public class LineContributionRoute extends SoftRemovableBaseEntityHardAudited im
     @ManyToOne
     @JoinColumn(name = "flight_id", insertable = false, updatable = false)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Flight flight;
 
     @Column(name = "comments", length = 255)

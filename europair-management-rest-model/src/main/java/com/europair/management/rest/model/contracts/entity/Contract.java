@@ -9,6 +9,7 @@ import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.entity.Provider;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -55,6 +56,7 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     private Long fileId;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "file_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @NotAudited
@@ -64,6 +66,7 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     private Long clientId;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "client_id", referencedColumnName = "id", insertable = false, updatable = false)
     @NotAudited
@@ -73,6 +76,7 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     private Long providerId;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "provider_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     @NotAudited
