@@ -177,6 +177,8 @@ public class ContractServiceImpl implements IContractService {
                     line.setContractId(saleContractId);
                     return line;
                 }).collect(Collectors.toList());
+
+        // Persist all contract lines
         saleContractLines.addAll(purchaseContractLines);
         List<ContractLine> contractLinesSaved = contractLineRepository.saveAll(saleContractLines);
 

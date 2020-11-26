@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -75,4 +76,8 @@ public class ContractDto extends AuditModificationBaseDTO {
 
 //    @JsonProperty("cancellationPrice")
 //    private BigDecimal cancellationPrice;
+
+    // Properties for view
+    @JsonProperty("totalAmount")
+    private BigDecimal totalAmount;
 }
