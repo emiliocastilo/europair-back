@@ -23,6 +23,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -78,7 +79,7 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "provider_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "provider_id", referencedColumnName = "id", insertable = false, updatable = false)
     @NotAudited
     private Provider provider;
 
@@ -97,21 +98,7 @@ public class Contract extends SoftRemovableBaseEntityHardAudited implements Seri
     @Column(name = "signature_date")
     private LocalDateTime signatureDate;
 
-//    @Column(name = "cancellation_price", precision = 12, scale = 4)
-//    private BigDecimal cancellationPrice;
-
-//    @Column(name = "included_vat")
-//    private Boolean includedVAT;
-
-//    @Column(name = "purchase_vat_msg")
-//    private String purchaseVATMsg;
-
-//    @Column(name = "sale_vat_msg")
-//    private String saleVATMsg;
-
-//    @Column(name = "percentage_applied_on_sale_tax")
-//    private Double percentageAppliedOnSaleTax;
-
-//    @Column(name = "percentage_applied_on_purchase_tax")
-//    private Double percentageAppliedOnPurchaseTax;
+    // ToDo: one to one or one to many?
+    @OneToOne(mappedBy = "contract", orphanRemoval = true)
+    private ContractConfiguration contractConfiguration;
 }

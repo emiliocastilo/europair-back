@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,6 +43,7 @@ public class ContractDto extends AuditModificationBaseDTO {
 
     @JsonProperty("file")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private FileDTO file;
 
     @JsonProperty("clientId")
@@ -49,6 +51,7 @@ public class ContractDto extends AuditModificationBaseDTO {
 
     @JsonProperty("client")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private ClientDto client;
 
     @JsonProperty("providerId")
@@ -56,6 +59,7 @@ public class ContractDto extends AuditModificationBaseDTO {
 
     @JsonProperty("provider")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private ProviderDto provider;
 
     @JsonProperty("contractState")
@@ -74,10 +78,8 @@ public class ContractDto extends AuditModificationBaseDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime signatureDate;
 
-//    @JsonProperty("cancellationPrice")
-//    private BigDecimal cancellationPrice;
-
     // Properties for view
+
     @JsonProperty("totalAmount")
     private BigDecimal totalAmount;
 }

@@ -1,0 +1,66 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201126_contract_configurations_aud_v1_create_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contract_configurations_aud table to database"
+      changes:
+        - createTable:
+            tableName: contract_configurations_aud
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_configurations_aud_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_configurations_aud_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+
+              - column:
+                  name: contract_id
+                  type: int
+              - column:
+                  name: language
+                  type: varchar(20)
+              - column:
+                  name: timezone
+                  type: varchar(20)
+              - column:
+                  name: contract_payment_conditions_id
+                  type: int
+              - column:
+                  name: contract_payment_conditions_observation
+                  type: varchar(255)
+              - column:
+                  name: currency
+                  type: varchar(20)
+              - column:
+                  name: deposit
+                  type: decimal(12,4)
+              - column:
+                  name: deposit_expiration_date
+                  type: timestamp
+
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+

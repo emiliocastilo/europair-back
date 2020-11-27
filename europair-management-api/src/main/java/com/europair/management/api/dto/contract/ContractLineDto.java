@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class ContractLineDto {
 
     @JsonProperty("contract")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private ContractDto contract;
 
     @NotNull
@@ -35,6 +37,7 @@ public class ContractLineDto {
 
     @JsonProperty("route")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private RouteDto route;
 
     @JsonProperty("contributionLineId")
@@ -42,6 +45,7 @@ public class ContractLineDto {
 
     @JsonProperty("contributionLine")
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private LineContributionRouteDTO contributionLine;
 
     @JsonProperty("comments")
@@ -69,9 +73,5 @@ public class ContractLineDto {
     @NotNull
     @JsonProperty("contractLineType")
     private PurchaseSaleEnum contractLineType;
-
-//    @NotNull
-//    @JsonProperty("type")
-//    private ServiceTypeEnum type;
 
 }
