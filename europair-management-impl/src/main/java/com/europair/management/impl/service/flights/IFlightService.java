@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface IFlightService {
 
+    Page<FlightDTO> findAllPaginated(Long fileId, Pageable pageable, CoreCriteria criteria);
+
     Page<FlightDTO> findAllPaginated(Long fileId, Long routeId, Pageable pageable, CoreCriteria criteria);
 
     FlightDTO findById(Long id);

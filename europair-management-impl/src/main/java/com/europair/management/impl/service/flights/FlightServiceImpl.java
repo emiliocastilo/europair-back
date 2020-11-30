@@ -61,6 +61,13 @@ public class FlightServiceImpl implements IFlightService {
     }
 
     @Override
+    public Page<FlightDTO> findAllPaginated(final Long fileId, Pageable pageable, CoreCriteria criteria) {
+      checkIfFileExists(fileId);
+      Utils.addCriteriaIfNotExists(criteria, FILE_ID_FILTER, OperatorEnum.EQUALS, String.valueOf(fileId));
+      return findAllPaginated(pageable, criteria);
+    }
+
+    @Override
     public Page<FlightDTO> findAllPaginated(final Long fileId, final Long routeId, Pageable pageable, CoreCriteria criteria) {
       checkIfFileExists(fileId);
       Route route = getRoute(routeId);
