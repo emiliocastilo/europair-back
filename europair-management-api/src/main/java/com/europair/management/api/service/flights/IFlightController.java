@@ -13,8 +13,26 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
-@RequestMapping(value = {"/files/{fileId}/routes/{routeId}/flights", "/external/files/{fileId}/routes/{routeId}/flights"})
+@RequestMapping(value = {"/files/{fileId}", "/external/files/{fileId}"})
 public interface IFlightController {
+
+    /**
+     * <p>
+     * Retrieves a paginated list of Flight filtered by properties criteria.
+     * </p>
+     *
+     * @param fileId   File identifier
+     * @param pageable pagination info
+     * @param reqParam Map of filter params, values and operators. (pe: filter_description=asd,CONTAINS)
+     * @return Paginated list of flights
+     */
+    @GetMapping("/flights")
+    @Operation(description = "Paged result of flights with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<Page<FlightDTO>> getAllFlightsPaginated(
+      @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+      @Parameter(description = "Pagination filter") final Pageable pageable,
+      @Parameter(description = "Map of properties to filter with value and operator, (pe: filter_description=asd,CONTAINS)") @RequestParam
+    Map<String, String> reqParam);
 
     /**
      * <p>
@@ -27,9 +45,9 @@ public interface IFlightController {
      * @param reqParam Map of filter params, values and operators. (pe: filter_description=asd,CONTAINS)
      * @return Paginated list of flights
      */
-    @GetMapping
+    @GetMapping("/routes/{routeId}/flights")
     @Operation(description = "Paged result of flights with advanced filter by property", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<Page<FlightDTO>> getAllFlightsPaginated(
+    ResponseEntity<Page<FlightDTO>> getAllFlightsByRoutePaginated(
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
       @Parameter(description = "Route identifier") @NotNull @PathVariable final Long routeId,
       @Parameter(description = "Pagination filter") final Pageable pageable,
@@ -45,7 +63,7 @@ public interface IFlightController {
      * @param id Unique identifier by id.
      * @return Flight data
      */
-    @GetMapping("/{id}")
+    @GetMapping("/routes/{routeId}/flights/{id}")
     @Operation(description = "Retrieve flight data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<FlightDTO> getFlightById(
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -60,7 +78,7 @@ public interface IFlightController {
      * @param flightDTO Data of the Flight to create
      * @return Data of the created flight
      */
-    @PostMapping
+    @PostMapping("/routes/{routeId}/flights")
     @Operation(description = "Save a new flight", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<FlightDTO> saveFlight(
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -76,7 +94,7 @@ public interface IFlightController {
      * @param flightDTO Updated flight data
      * @return No content
      */
-    @PutMapping("/{id}")
+    @PutMapping("/routes/{routeId}/flights/{id}")
     @Operation(description = "Updates existing flight", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> updateFlight(
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -92,7 +110,7 @@ public interface IFlightController {
      * @param id Unique identifier
      * @return No content
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/routes/{routeId}/flights/{id}")
     @Operation(description = "Deletes existing flight by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteFlight(
       @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -109,7 +127,7 @@ public interface IFlightController {
      * @param flights Updated flight data
      * @return No content
      */
-    @PutMapping("/reorder")
+    @PutMapping("/routes/{routeId}/flights/reorder")
     @Operation(description = "Updates rotation flights order", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> updateFlightsOrder(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,

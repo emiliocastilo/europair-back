@@ -28,13 +28,23 @@ public class FlightController implements IFlightController {
     @Autowired
     private IFlightService flightService;
 
-    public ResponseEntity<Page<FlightDTO>> getAllFlightsPaginated(@NotNull Long fileId, @NotNull Long routeId, final Pageable pageable,
+    public ResponseEntity<Page<FlightDTO>> getAllFlightsPaginated(@NotNull Long fileId, final Pageable pageable,
                                                                   Map<String, String> reqParam) {
-        LOGGER.debug("[FlightController] - Starting method [getAllFlightsPaginated] with input: fileId={}, routeId={}, pageable={}, reqParam={}",
+        LOGGER.debug("[FlightController] - Starting method [getAllFlightsPaginated] with input: fileId={}, pageable={}, reqParam={}",
+                fileId, pageable, reqParam);
+        CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
+        final Page<FlightDTO> pageFlightsDTO = flightService.findAllPaginated(fileId, pageable, criteria);
+        LOGGER.debug("[FlightController] - Ending method [getAllFlightsPaginated] with return: {}", pageFlightsDTO);
+        return ResponseEntity.ok().body(pageFlightsDTO);
+    }
+
+    public ResponseEntity<Page<FlightDTO>> getAllFlightsByRoutePaginated(@NotNull Long fileId, @NotNull Long routeId, final Pageable pageable,
+                                                                  Map<String, String> reqParam) {
+        LOGGER.debug("[FlightController] - Starting method [getAllFlightsByRoutePaginated] with input: fileId={}, routeId={}, pageable={}, reqParam={}",
                 fileId, routeId, pageable, reqParam);
         CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
         final Page<FlightDTO> pageFlightsDTO = flightService.findAllPaginated(fileId, routeId, pageable, criteria);
-        LOGGER.debug("[FlightController] - Ending method [getAllFlightsPaginated] with return: {}", pageFlightsDTO);
+        LOGGER.debug("[FlightController] - Ending method [getAllFlightsByRoutePaginated] with return: {}", pageFlightsDTO);
         return ResponseEntity.ok().body(pageFlightsDTO);
     }
 
