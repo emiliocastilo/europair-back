@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-@RequestMapping(value = {"/contractPaymentCondition-payment-conditions", "/external/contractPaymentCondition-payment-conditions"})
+@RequestMapping(value = {"/contract-payment-conditions", "/external/contract-payment-conditions"})
 public interface IContractPaymentConditionController {
 
     /**
@@ -56,11 +56,11 @@ public interface IContractPaymentConditionController {
      * </p>
      *
      * @param contractPaymentConditionDto Data of the ContractPaymentCondition to create
-     * @return Data of the created contractPaymentCondition
+     * @return No data
      */
     @PostMapping
     @Operation(description = "Save a new master contractPaymentCondition", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractPaymentConditionDto> saveContractPaymentCondition(
+    ResponseEntity<?> saveContractPaymentCondition(
             @Parameter(description = "Master ContractPaymentCondition object") @NotNull @RequestBody final ContractPaymentConditionDto contractPaymentConditionDto);
 
     /**
@@ -70,11 +70,11 @@ public interface IContractPaymentConditionController {
      *
      * @param id                          Unique identifier
      * @param contractPaymentConditionDto Updated contractPaymentCondition data
-     * @return The updated master contractPaymentCondition
+     * @return No content
      */
     @PutMapping("/{id}")
     @Operation(description = "Updates existing master contractPaymentCondition", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractPaymentConditionDto> updateContractPaymentCondition(
+    ResponseEntity<?> updateContractPaymentCondition(
             @Parameter(description = "ContractPaymentCondition identifier") @NotNull @PathVariable final Long id,
             @Parameter(description = "Master ContractPaymentCondition updated data") @NotNull @RequestBody final ContractPaymentConditionDto contractPaymentConditionDto);
 

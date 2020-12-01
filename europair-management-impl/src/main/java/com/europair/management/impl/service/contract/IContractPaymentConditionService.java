@@ -11,9 +11,9 @@ public interface IContractPaymentConditionService {
 
     ContractPaymentConditionDto findById(Long id);
 
-    ContractPaymentConditionDto saveContractPaymentCondition(ContractPaymentConditionDto contractPaymentConditionDto);
+    Long saveContractPaymentCondition(ContractPaymentConditionDto contractPaymentConditionDto);
 
-    ContractPaymentConditionDto updateContractPaymentCondition(Long id, ContractPaymentConditionDto contractPaymentConditionDto);
+    void updateContractPaymentCondition(Long id, ContractPaymentConditionDto contractPaymentConditionDto);
 
     void deleteContractPaymentCondition(Long id);
 }

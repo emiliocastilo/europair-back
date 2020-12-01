@@ -33,7 +33,7 @@ public class ContractPaymentConditionServiceImpl implements IContractPaymentCond
     }
 
     @Override
-    public ContractPaymentConditionDto saveContractPaymentCondition(ContractPaymentConditionDto contractPaymentConditionDto) {
+    public Long saveContractPaymentCondition(ContractPaymentConditionDto contractPaymentConditionDto) {
         if (contractPaymentConditionDto.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New ContractPaymentCondition expected. Identifier %s got", contractPaymentConditionDto.getId()));
         }
@@ -41,17 +41,15 @@ public class ContractPaymentConditionServiceImpl implements IContractPaymentCond
         ContractPaymentCondition contractPaymentCondition = IContractPaymentConditionMapper.INSTANCE.toEntity(contractPaymentConditionDto);
         contractPaymentCondition = contractPaymentConditionRepository.save(contractPaymentCondition);
 
-        return IContractPaymentConditionMapper.INSTANCE.toDto(contractPaymentCondition);
+        return contractPaymentCondition.getId();
     }
 
     @Override
-    public ContractPaymentConditionDto updateContractPaymentCondition(Long id, ContractPaymentConditionDto contractPaymentConditionDto) {
+    public void updateContractPaymentCondition(Long id, ContractPaymentConditionDto contractPaymentConditionDto) {
         ContractPaymentCondition contractPaymentCondition = contractPaymentConditionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ContractPaymentCondition not found with id: " + id));
         IContractPaymentConditionMapper.INSTANCE.updateFromDto(contractPaymentConditionDto, contractPaymentCondition);
         contractPaymentCondition = contractPaymentConditionRepository.save(contractPaymentCondition);
-
-        return IContractPaymentConditionMapper.INSTANCE.toDto(contractPaymentCondition);
     }
 
     @Override

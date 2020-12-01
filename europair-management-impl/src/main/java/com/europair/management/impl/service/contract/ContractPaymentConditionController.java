@@ -48,23 +48,23 @@ public class ContractPaymentConditionController implements IContractPaymentCondi
     @Override
     public ResponseEntity<ContractPaymentConditionDto> saveContractPaymentCondition(@NotNull ContractPaymentConditionDto contractPaymentConditionDto) {
         LOGGER.debug("[ContractPaymentConditionController] - Starting method [saveContractPaymentCondition] with input: contractPaymentConditionDto={}", contractPaymentConditionDto);
-        final ContractPaymentConditionDto dtoSaved = contractPaymentConditionService.saveContractPaymentCondition(contractPaymentConditionDto);
+        final Long entityId = contractPaymentConditionService.saveContractPaymentCondition(contractPaymentConditionDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(dtoSaved.getId())
+                .buildAndExpand(entityId)
                 .toUri();
 
-        LOGGER.debug("[ContractPaymentConditionController] - Ending method [saveContractPaymentCondition] with return: {}", dtoSaved);
-        return ResponseEntity.created(location).body(dtoSaved);
+        LOGGER.debug("[ContractPaymentConditionController] - Ending method [saveContractPaymentCondition] with no return.");
+        return ResponseEntity.created(location).build();
     }
 
     @Override
-    public ResponseEntity<ContractPaymentConditionDto> updateContractPaymentCondition(@NotNull Long id, @NotNull ContractPaymentConditionDto contractPaymentConditionDto) {
+    public ResponseEntity<?> updateContractPaymentCondition(@NotNull Long id, @NotNull ContractPaymentConditionDto contractPaymentConditionDto) {
         LOGGER.debug("[ContractPaymentConditionController] - Starting method [updateContractPaymentCondition] with input: contractPaymentConditionDto={}", contractPaymentConditionDto);
-        final ContractPaymentConditionDto dtoSaved = contractPaymentConditionService.updateContractPaymentCondition(id, contractPaymentConditionDto);
-        LOGGER.debug("[ContractPaymentConditionController] - Ending method [updateContractPaymentCondition] with return: {}", dtoSaved);
-        return ResponseEntity.ok(dtoSaved);
+        contractPaymentConditionService.updateContractPaymentCondition(id, contractPaymentConditionDto);
+        LOGGER.debug("[ContractPaymentConditionController] - Ending method [updateContractPaymentCondition] with no return");
+        return ResponseEntity.noContent().build();
     }
 
     @Override
