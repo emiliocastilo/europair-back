@@ -40,6 +40,9 @@ public class ContractCondition extends AuditModificationBaseEntityHardAudited im
     @Column(name = "condition_order")
     private Integer conditionOrder;
 
+    @Column(name = "code")
+    private String code;
+
     @Column(name = "title")
     private String title;
 

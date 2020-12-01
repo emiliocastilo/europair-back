@@ -1,12 +1,12 @@
 databaseChangeLog:
   - changeSet:
-      id: 20201126_contract_conditions_master_v1_create_table
+      id: 20201126_contract_cancel_fees_master_v1_create_table
       context: dev or pre or pro
       author: axel.sanchezsalom
-      comment: "Add contract_conditions table to database"
+      comment: "Add contract_cancel_fees table to database"
       changes:
         - createTable:
-            tableName: contract_conditions
+            tableName: contract_cancel_fees
             columns:
               - column:
                   name: id
@@ -14,27 +14,16 @@ databaseChangeLog:
                   constraints:
                     nullable: false
                     primaryKey: true
-                    primaryKeyName: contract_conditions_id_pk
+                    primaryKeyName: contract_cancel_fees_id_pk
               - column:
-                  name: contract_id
-                  type: int
-                  constraints:
-                    nullable: true
-                    foreignKeyName: contract_conditions_contract_fk
-                    references: contracts(id)
-                    validateForeignKey: true
+                  name: from_value
+                  type: decimal(12,4)
               - column:
-                  name: condition_order
-                  type: int
+                  name: from_unit
+                  type: varchar(40)
               - column:
-                  name: code
-                  type: varchar(50)
-              - column:
-                  name: title
-                  type: varchar(255)
-              - column:
-                  name: description
-                  type: varchar(1000)
+                  name: fee_percentage
+                  type: decimal(12,4)
 
               - column:
                   name: created_at
@@ -66,5 +55,5 @@ databaseChangeLog:
             generationType: ALWAYS
             incrementBy: 1
             startWith: 1
-            tableName: contract_conditions
+            tableName: contract_cancel_fees
 

@@ -1,6 +1,5 @@
 package com.europair.management.impl.mappers.contract;
 
-import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractPaymentConditionDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.contracts.entity.ContractPaymentCondition;
@@ -21,6 +20,6 @@ public interface IContractPaymentConditionMapper {
     ContractPaymentCondition toEntity(final ContractPaymentConditionDto dto);
 
     @Mapping(target = "id", ignore = true)
-    void updateFromDto(final ContractDto dto, @MappingTarget ContractPaymentCondition entity);
+    void updateFromDto(final ContractPaymentConditionDto dto, @MappingTarget ContractPaymentCondition entity);
 
 }
