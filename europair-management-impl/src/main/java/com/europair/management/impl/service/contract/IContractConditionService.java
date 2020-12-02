@@ -11,9 +11,9 @@ public interface IContractConditionService {
 
     ContractConditionDto findById(Long id);
 
-    ContractConditionDto saveContractCondition(ContractConditionDto contractConditionDto);
+    Long saveContractCondition(ContractConditionDto contractConditionDto);
 
-    ContractConditionDto updateContractCondition(Long id, ContractConditionDto contractConditionDto);
+    void updateContractCondition(Long id, ContractConditionDto contractConditionDto);
 
     void deleteContractCondition(Long id);
 }

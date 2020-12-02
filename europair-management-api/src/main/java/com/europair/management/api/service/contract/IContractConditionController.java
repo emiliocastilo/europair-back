@@ -56,11 +56,11 @@ public interface IContractConditionController {
      * </p>
      *
      * @param contractConditionDto Data of the ContractCondition to create
-     * @return Data of the created contractCondition
+     * @return Created
      */
     @PostMapping
     @Operation(description = "Save a new master contractCondition", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractConditionDto> saveContractCondition(
+    ResponseEntity<?> saveContractCondition(
             @Parameter(description = "Master ContractCondition object") @NotNull @RequestBody final ContractConditionDto contractConditionDto);
 
     /**
@@ -70,11 +70,11 @@ public interface IContractConditionController {
      *
      * @param id                   Unique identifier
      * @param contractConditionDto Updated contractCondition data
-     * @return The updated master contractCondition
+     * @return No content
      */
     @PutMapping("/{id}")
     @Operation(description = "Updates existing master contractCondition", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractConditionDto> updateContractCondition(
+    ResponseEntity<?> updateContractCondition(
             @Parameter(description = "ContractCondition identifier") @NotNull @PathVariable final Long id,
             @Parameter(description = "Master ContractCondition updated data") @NotNull @RequestBody final ContractConditionDto contractConditionDto);
 

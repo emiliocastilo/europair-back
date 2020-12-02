@@ -56,7 +56,7 @@ public interface IContractPaymentConditionController {
      * </p>
      *
      * @param contractPaymentConditionDto Data of the ContractPaymentCondition to create
-     * @return No data
+     * @return Created
      */
     @PostMapping
     @Operation(description = "Save a new master contractPaymentCondition", security = {@SecurityRequirement(name = "bearerAuth")})

@@ -33,7 +33,7 @@ public class ContractConditionServiceImpl implements IContractConditionService {
     }
 
     @Override
-    public ContractConditionDto saveContractCondition(ContractConditionDto contractConditionDto) {
+    public Long saveContractCondition(ContractConditionDto contractConditionDto) {
         if (contractConditionDto.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New ContractCondition expected. Identifier %s got", contractConditionDto.getId()));
         }
@@ -41,17 +41,15 @@ public class ContractConditionServiceImpl implements IContractConditionService {
         ContractCondition contractCondition = IContractConditionMapper.INSTANCE.toEntity(contractConditionDto);
         contractCondition = contractConditionRepository.save(contractCondition);
 
-        return IContractConditionMapper.INSTANCE.toDto(contractCondition);
+        return contractCondition.getId();
     }
 
     @Override
-    public ContractConditionDto updateContractCondition(Long id, ContractConditionDto contractConditionDto) {
+    public void updateContractCondition(Long id, ContractConditionDto contractConditionDto) {
         ContractCondition contractCondition = contractConditionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ContractCondition not found with id: " + id));
         IContractConditionMapper.INSTANCE.updateFromDto(contractConditionDto, contractCondition);
         contractCondition = contractConditionRepository.save(contractCondition);
-
-        return IContractConditionMapper.INSTANCE.toDto(contractCondition);
     }
 
     @Override
