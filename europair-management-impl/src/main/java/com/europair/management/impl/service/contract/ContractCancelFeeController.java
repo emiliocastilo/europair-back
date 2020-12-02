@@ -46,25 +46,25 @@ public class ContractCancelFeeController implements IContractCancelFeeController
     }
 
     @Override
-    public ResponseEntity<ContractCancelFeeDto> saveContractCancelFee(@NotNull ContractCancelFeeDto contractCancelFeeDto) {
+    public ResponseEntity<?> saveContractCancelFee(@NotNull ContractCancelFeeDto contractCancelFeeDto) {
         LOGGER.debug("[ContractCancelFeeController] - Starting method [saveContractCancelFee] with input: contractCancelFeeDto={}", contractCancelFeeDto);
-        final ContractCancelFeeDto dtoSaved = contractCancelFeeService.saveContractCancelFee(contractCancelFeeDto);
+        final Long entityId = contractCancelFeeService.saveContractCancelFee(contractCancelFeeDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(dtoSaved.getId())
+                .buildAndExpand(entityId)
                 .toUri();
 
-        LOGGER.debug("[ContractCancelFeeController] - Ending method [saveContractCancelFee] with return: {}", dtoSaved);
-        return ResponseEntity.created(location).body(dtoSaved);
+        LOGGER.debug("[ContractCancelFeeController] - Ending method [saveContractCancelFee] with no return");
+        return ResponseEntity.created(location).build();
     }
 
     @Override
-    public ResponseEntity<ContractCancelFeeDto> updateContractCancelFee(@NotNull Long id, @NotNull ContractCancelFeeDto contractCancelFeeDto) {
+    public ResponseEntity<?> updateContractCancelFee(@NotNull Long id, @NotNull ContractCancelFeeDto contractCancelFeeDto) {
         LOGGER.debug("[ContractCancelFeeController] - Starting method [updateContractCancelFee] with input: contractCancelFeeDto={}", contractCancelFeeDto);
-        final ContractCancelFeeDto dtoSaved = contractCancelFeeService.updateContractCancelFee(id, contractCancelFeeDto);
-        LOGGER.debug("[ContractCancelFeeController] - Ending method [updateContractCancelFee] with return: {}", dtoSaved);
-        return ResponseEntity.ok(dtoSaved);
+        contractCancelFeeService.updateContractCancelFee(id, contractCancelFeeDto);
+        LOGGER.debug("[ContractCancelFeeController] - Ending method [updateContractCancelFee] with no return");
+        return ResponseEntity.noContent().build();
     }
 
     @Override

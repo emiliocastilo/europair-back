@@ -56,11 +56,11 @@ public interface IContractCancelFeeController {
      * </p>
      *
      * @param contractCancelFeeDto Data of the ContractCancelFee to create
-     * @return Data of the created contractCancelFee
+     * @return Created
      */
     @PostMapping
     @Operation(description = "Save a new master contractCancelFee", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractCancelFeeDto> saveContractCancelFee(
+    ResponseEntity<?> saveContractCancelFee(
             @Parameter(description = "Master ContractCancelFee object") @NotNull @RequestBody final ContractCancelFeeDto contractCancelFeeDto);
 
     /**
@@ -70,11 +70,11 @@ public interface IContractCancelFeeController {
      *
      * @param id                   Unique identifier
      * @param contractCancelFeeDto Updated contractCancelFee data
-     * @return The updated master contractCancelFee
+     * @return No content
      */
     @PutMapping("/{id}")
     @Operation(description = "Updates existing master contractCancelFee", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractCancelFeeDto> updateContractCancelFee(
+    ResponseEntity<?> updateContractCancelFee(
             @Parameter(description = "ContractCancelFee identifier") @NotNull @PathVariable final Long id,
             @Parameter(description = "Master ContractCancelFee updated data") @NotNull @RequestBody final ContractCancelFeeDto contractCancelFeeDto);
 

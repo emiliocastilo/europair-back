@@ -11,9 +11,9 @@ public interface IContractCancelFeeService {
 
     ContractCancelFeeDto findById(Long id);
 
-    ContractCancelFeeDto saveContractCancelFee(ContractCancelFeeDto contractCancelFeeDto);
+    Long saveContractCancelFee(ContractCancelFeeDto contractCancelFeeDto);
 
-    ContractCancelFeeDto updateContractCancelFee(Long id, ContractCancelFeeDto contractCancelFeeDto);
+    void updateContractCancelFee(Long id, ContractCancelFeeDto contractCancelFeeDto);
 
     void deleteContractCancelFee(Long id);
 }

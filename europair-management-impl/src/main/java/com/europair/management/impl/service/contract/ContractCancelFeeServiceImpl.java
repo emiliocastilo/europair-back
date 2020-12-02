@@ -33,7 +33,7 @@ public class ContractCancelFeeServiceImpl implements IContractCancelFeeService {
     }
 
     @Override
-    public ContractCancelFeeDto saveContractCancelFee(ContractCancelFeeDto contractCancelFeeDto) {
+    public Long saveContractCancelFee(ContractCancelFeeDto contractCancelFeeDto) {
         if (contractCancelFeeDto.getId() != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New ContractCancelFee expected. Identifier %s got", contractCancelFeeDto.getId()));
         }
@@ -41,17 +41,15 @@ public class ContractCancelFeeServiceImpl implements IContractCancelFeeService {
         ContractCancelFee contractCancelFee = IContractCancelFeeMapper.INSTANCE.toEntity(contractCancelFeeDto);
         contractCancelFee = contractCancelFeeRepository.save(contractCancelFee);
 
-        return IContractCancelFeeMapper.INSTANCE.toDto(contractCancelFee);
+        return contractCancelFee.getId();
     }
 
     @Override
-    public ContractCancelFeeDto updateContractCancelFee(Long id, ContractCancelFeeDto contractCancelFeeDto) {
+    public void updateContractCancelFee(Long id, ContractCancelFeeDto contractCancelFeeDto) {
         ContractCancelFee contractCancelFee = contractCancelFeeRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ContractCancelFee not found with id: " + id));
         IContractCancelFeeMapper.INSTANCE.updateFromDto(contractCancelFeeDto, contractCancelFee);
         contractCancelFee = contractCancelFeeRepository.save(contractCancelFee);
-
-        return IContractCancelFeeMapper.INSTANCE.toDto(contractCancelFee);
     }
 
     @Override
