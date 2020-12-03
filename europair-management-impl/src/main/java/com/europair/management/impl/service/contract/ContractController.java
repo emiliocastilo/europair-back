@@ -49,25 +49,25 @@ public class ContractController implements IContractController {
     }
 
     @Override
-    public ResponseEntity<ContractDto> saveContract(@NotNull Long fileId, @NotNull ContractDto contractDto) {
+    public ResponseEntity<?> saveContract(@NotNull Long fileId, @NotNull ContractDto contractDto) {
         LOGGER.debug("[ContractController] - Starting method [saveContract] with input: fileId={}, contractDto={}", fileId, contractDto);
-        final ContractDto dtoSaved = contractService.saveContract(fileId, contractDto);
+        final Long entityId = contractService.saveContract(fileId, contractDto);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(fileId, dtoSaved.getId())
+                .buildAndExpand(fileId, entityId)
                 .toUri();
 
-        LOGGER.debug("[ContractController] - Ending method [saveContract] with return: {}", dtoSaved);
-        return ResponseEntity.created(location).body(dtoSaved);
+        LOGGER.debug("[ContractController] - Ending method [saveContract] with no return.");
+        return ResponseEntity.created(location).build();
     }
 
     @Override
-    public ResponseEntity<ContractDto> updateContract(@NotNull Long fileId, @NotNull Long id, @NotNull ContractDto contractDto) {
+    public ResponseEntity<?> updateContract(@NotNull Long fileId, @NotNull Long id, @NotNull ContractDto contractDto) {
         LOGGER.debug("[ContractController] - Starting method [updateContract] with input: fileId={}, contractDto={}", fileId, contractDto);
-        final ContractDto dtoSaved = contractService.updateContract(fileId, id, contractDto);
-        LOGGER.debug("[ContractController] - Ending method [updateContract] with return: {}", dtoSaved);
-        return ResponseEntity.ok(dtoSaved);
+        contractService.updateContract(fileId, id, contractDto);
+        LOGGER.debug("[ContractController] - Ending method [updateContract] with no return.");
+        return ResponseEntity.noContent().build();
     }
 
     @Override

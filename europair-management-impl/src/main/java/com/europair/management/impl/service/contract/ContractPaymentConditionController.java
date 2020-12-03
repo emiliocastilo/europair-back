@@ -46,7 +46,7 @@ public class ContractPaymentConditionController implements IContractPaymentCondi
     }
 
     @Override
-    public ResponseEntity<ContractPaymentConditionDto> saveContractPaymentCondition(@NotNull ContractPaymentConditionDto contractPaymentConditionDto) {
+    public ResponseEntity<?> saveContractPaymentCondition(@NotNull ContractPaymentConditionDto contractPaymentConditionDto) {
         LOGGER.debug("[ContractPaymentConditionController] - Starting method [saveContractPaymentCondition] with input: contractPaymentConditionDto={}", contractPaymentConditionDto);
         final Long entityId = contractPaymentConditionService.saveContractPaymentCondition(contractPaymentConditionDto);
 

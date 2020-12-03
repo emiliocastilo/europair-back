@@ -1,5 +1,6 @@
 package com.europair.management.impl.service.contract;
 
+import com.europair.management.api.dto.contract.ContractConditionCopyDto;
 import com.europair.management.api.dto.contract.ContractConditionDto;
 import com.europair.management.rest.model.common.CoreCriteria;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,6 @@ public interface IContractConditionService {
     void updateContractCondition(Long id, ContractConditionDto contractConditionDto);
 
     void deleteContractCondition(Long id);
+
+    void copyContractConditions(ContractConditionCopyDto contractConditionCopyDto);
 }

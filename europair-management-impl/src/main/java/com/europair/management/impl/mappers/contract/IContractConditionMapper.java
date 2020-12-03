@@ -26,4 +26,9 @@ public interface IContractConditionMapper {
     @Mapping(target = "contract", ignore = true)
     void updateFromDto(final ContractConditionDto dto, @MappingTarget ContractCondition entity);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "contractId", ignore = true)
+    @Mapping(target = "contract", ignore = true)
+    void copyFromEntity(final ContractCondition entityToCopy, @MappingTarget ContractCondition entity);
+
 }

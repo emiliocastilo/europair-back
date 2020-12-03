@@ -16,6 +16,14 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: contract_cancel_fees_id_pk
               - column:
+                  name: contract_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contract_cancel_fees_contract_fk
+                    references: contracts(id)
+                    validateForeignKey: true
+              - column:
                   name: from_value
                   type: decimal(12,4)
               - column:

@@ -1,10 +1,12 @@
 package com.europair.management.impl.service.contract;
 
+import com.europair.management.api.dto.contract.ContractConditionCopyDto;
 import com.europair.management.api.dto.contract.ContractConditionDto;
 import com.europair.management.impl.mappers.contract.IContractConditionMapper;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.contracts.entity.ContractCondition;
 import com.europair.management.rest.model.contracts.repository.ContractConditionRepository;
+import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,12 +15,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional
 public class ContractConditionServiceImpl implements IContractConditionService {
 
     @Autowired
     private ContractConditionRepository contractConditionRepository;
+
+    @Autowired
+    private ContractRepository contractRepository;
 
     @Override
     public Page<ContractConditionDto> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
@@ -60,4 +69,34 @@ public class ContractConditionServiceImpl implements IContractConditionService {
         contractConditionRepository.deleteById(id);
     }
 
+    @Override
+    public void copyContractConditions(ContractConditionCopyDto contractConditionCopyDto) {
+        if (!contractRepository.existsById(contractConditionCopyDto.getContractId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Contract not found with id: " + contractConditionCopyDto.getContractId());
+        }
+
+        Set<ContractCondition> conditions = contractConditionRepository.findByIdIn(contractConditionCopyDto.getConditions());
+
+        if (contractConditionCopyDto.getConditions().size() != conditions.size()) {
+            Set<Long> conditionsFound = conditions.stream()
+                    .map(ContractCondition::getId)
+                    .collect(Collectors.toSet());
+            String conditionsNotFound = contractConditionCopyDto.getConditions().stream()
+                    .filter(id -> !conditionsFound.contains(id))
+                    .map(Object::toString)
+                    .collect(Collectors.joining(", "));
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Not found conditions with ids: " + conditionsNotFound);
+        }
+
+        List<ContractCondition> copiedConditions = conditions.stream()
+                .map(condition -> {
+                    ContractCondition c = new ContractCondition();
+                    IContractConditionMapper.INSTANCE.copyFromEntity(condition, c);
+                    c.setContractId(contractConditionCopyDto.getContractId());
+                    return c;
+                }).collect(Collectors.toList());
+
+        copiedConditions = contractConditionRepository.saveAll(copiedConditions);
+    }
 }

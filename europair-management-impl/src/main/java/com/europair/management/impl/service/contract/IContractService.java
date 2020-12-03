@@ -15,9 +15,9 @@ public interface IContractService {
 
     ContractDto findById(Long fileId, Long id);
 
-    ContractDto saveContract(Long fileId, ContractDto contractDto);
+    Long saveContract(Long fileId, ContractDto contractDto);
 
-    ContractDto updateContract(Long fileId, Long id, ContractDto contractDto);
+    void updateContract(Long fileId, Long id, ContractDto contractDto);
 
     void deleteContract(Long fileId, Long id);
 

@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.contract;
 
 
+import com.europair.management.api.dto.contract.ContractConditionCopyDto;
 import com.europair.management.api.dto.contract.ContractConditionDto;
 import com.europair.management.api.service.contract.IContractConditionController;
 import com.europair.management.impl.util.Utils;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
@@ -75,4 +77,11 @@ public class ContractConditionController implements IContractConditionController
         return ResponseEntity.noContent().build();
     }
 
+    @Override
+    public ResponseEntity<?> copyContractConditions(@NotNull @Valid ContractConditionCopyDto contractConditionCopyDto) {
+        LOGGER.debug("[ContractConditionController] - Starting method [copyContractConditions] with input: contractConditionCopyDto={}", contractConditionCopyDto);
+        contractConditionService.copyContractConditions(contractConditionCopyDto);
+        LOGGER.debug("[ContractConditionController] - Ending method [copyContractConditions] with no return.");
+        return ResponseEntity.noContent().build();
+    }
 }

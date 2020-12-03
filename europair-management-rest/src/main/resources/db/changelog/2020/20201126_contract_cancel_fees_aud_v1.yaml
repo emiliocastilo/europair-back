@@ -27,6 +27,9 @@ databaseChangeLog:
                   type: tinyint
 
               - column:
+                  name: contract_id
+                  type: int
+              - column:
                   name: from_value
                   type: decimal(12,4)
               - column:

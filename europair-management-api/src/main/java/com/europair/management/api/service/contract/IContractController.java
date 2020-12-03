@@ -65,27 +65,27 @@ public interface IContractController {
      *
      * @param fileId      File identifier
      * @param contractDto Data of the Contract to create
-     * @return Data of the created contract
+     * @return Created
      */
     @PostMapping
     @Operation(description = "Save a new master contract", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractDto> saveContract(
+    ResponseEntity<?> saveContract(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Master Contract object") @NotNull @RequestBody final ContractDto contractDto);
 
     /**
      * <p>
-     * Updated master contract information
+     * Updates master contract information
      * </p>
      *
      * @param fileId      File identifier
      * @param id          Unique identifier
      * @param contractDto Updated contract data
-     * @return The updated master contract
+     * @return No content
      */
     @PutMapping("/{id}")
     @Operation(description = "Updates existing master contract", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<ContractDto> updateContract(
+    ResponseEntity<?> updateContract(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long id,
             @Parameter(description = "Master Contract updated data") @NotNull @RequestBody final ContractDto contractDto);

@@ -1,6 +1,5 @@
 package com.europair.management.impl.mappers.contract;
 
-import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.contracts.entity.ContractLine;
@@ -18,7 +17,7 @@ public interface IContractLineMapper {
     IContractLineMapper INSTANCE = Mappers.getMapper(IContractLineMapper.class);
 
     @Mapping(target = "contract", ignore = true)
-    @Mapping(target = "route", ignore = true)
+    @Mapping(target = "route.contributions", ignore = true)
     @Mapping(target = "contributionLine", ignore = true)
     ContractLineDto toDto(final ContractLine entity);
 
@@ -31,7 +30,9 @@ public interface IContractLineMapper {
     @Mapping(target = "contract", ignore = true)
     @Mapping(target = "routeId", ignore = true)
     @Mapping(target = "route", ignore = true)
-    void updateFromDto(final ContractDto dto, @MappingTarget ContractLine entity);
+    @Mapping(target = "contributionLineId", ignore = true)
+    @Mapping(target = "contributionLine", ignore = true)
+    void updateFromDto(final ContractLineDto dto, @MappingTarget ContractLine entity);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "contributionLineId", source = "id")

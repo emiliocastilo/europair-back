@@ -1,5 +1,6 @@
 package com.europair.management.api.service.contract;
 
+import com.europair.management.api.dto.contract.ContractConditionCopyDto;
 import com.europair.management.api.dto.contract.ContractConditionDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
@@ -91,4 +93,17 @@ public interface IContractConditionController {
     ResponseEntity<?> deleteContractCondition(
             @Parameter(description = "ContractCondition identifier") @PathVariable @NotNull final Long id);
 
+
+    /**
+     * <p>
+     * Creates new ContractCondition as a copy from existent ones
+     * </p>
+     *
+     * @param contractConditionCopyDto Data with the contract Id and the condition ids to copy
+     * @return No content
+     */
+    @PostMapping
+    @Operation(description = "Copy contractConditions to a contract from existent ones", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> copyContractConditions(
+            @Parameter(description = "ContractConditionCopyDto object") @NotNull @Valid @RequestBody final ContractConditionCopyDto contractConditionCopyDto);
 }

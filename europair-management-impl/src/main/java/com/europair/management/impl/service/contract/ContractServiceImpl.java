@@ -88,7 +88,7 @@ public class ContractServiceImpl implements IContractService {
     }
 
     @Override
-    public ContractDto saveContract(final Long fileId, ContractDto contractDto) {
+    public Long saveContract(final Long fileId, ContractDto contractDto) {
         checkIfFileExists(fileId);
         contractDto.setFileId(fileId);
         if (contractDto.getId() != null) {
@@ -98,18 +98,16 @@ public class ContractServiceImpl implements IContractService {
         Contract contract = IContractMapper.INSTANCE.toEntity(contractDto);
         contract = contractRepository.save(contract);
 
-        return IContractMapper.INSTANCE.toDto(contract);
+        return contract.getId();
     }
 
     @Override
-    public ContractDto updateContract(final Long fileId, Long id, ContractDto contractDto) {
+    public void updateContract(final Long fileId, Long id, ContractDto contractDto) {
         checkIfFileExists(fileId);
         Contract contract = contractRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found with id: " + id));
         IContractMapper.INSTANCE.updateFromDto(contractDto, contract);
         contract = contractRepository.save(contract);
-
-        return IContractMapper.INSTANCE.toDto(contract);
     }
 
     @Override
