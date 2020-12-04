@@ -12,4 +12,10 @@ public interface ICalculationService {
 
     Double calculatePercentageOfTaxToApply(Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale);
 
+    Pair<Double, Double> calculateTaxToApplyAndPercentage(Long fileId, Long originAirportId, Long destinationAirportId, ServiceTypeEnum serviceType, boolean isSale);
+
+    Double calculateServiceTaxToApply(Long fileId, Long originAirportId, Long destinationAirportId, ServiceTypeEnum serviceType, boolean isSale);
+
+    Double calculatePercentageOfTaxToApply(Long originAirportId, Long destinationAirportId, ServiceTypeEnum serviceType, boolean isSale);
+
 }
