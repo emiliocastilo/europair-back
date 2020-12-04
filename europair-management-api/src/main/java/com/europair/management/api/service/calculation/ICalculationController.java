@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
@@ -29,7 +27,7 @@ public interface ICalculationController {
     @GetMapping("/vat")
     @Operation(description = "Calculates the vat amount and percentage of the route where applies", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<VatCalculationResponseDto> calculateVat(
-            @Parameter(description = "Request data to make the calculations") @NotNull @Valid @RequestBody final VatCalculationRequestDto vatCalculationRequestDto);
+            @Parameter(description = "Request data to make the calculations") @NotNull @Valid final VatCalculationRequestDto vatCalculationRequestDto);
 
     /**
      * <p>
@@ -42,7 +40,7 @@ public interface ICalculationController {
     @GetMapping("/vat/percentage")
     @Operation(description = "Calculates the vat percentage", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<Double> calculateVatPercentage(
-            @Parameter(description = "Request data to make the calculations") @NotNull @Valid @RequestBody final VatCalculationRequestDto vatCalculationRequestDto);
+            @Parameter(description = "Request data to make the calculations") @NotNull @Valid final VatCalculationRequestDto vatCalculationRequestDto);
 
 
     /**
@@ -57,5 +55,5 @@ public interface ICalculationController {
     @GetMapping("/vat/route-percentage")
     @Operation(description = "Calculates the percentage of the route where applies", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<Double> calculateVatRoutePercentage(
-            @Parameter(description = "Request data to make the calculations") @NotNull @Valid @RequestBody final VatCalculationRequestDto vatCalculationRequestDto);
+            @Parameter(description = "Request data to make the calculations") @NotNull @Valid final VatCalculationRequestDto vatCalculationRequestDto);
 }
