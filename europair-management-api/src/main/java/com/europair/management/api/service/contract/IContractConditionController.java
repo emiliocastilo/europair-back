@@ -102,7 +102,7 @@ public interface IContractConditionController {
      * @param contractConditionCopyDto Data with the contract Id and the condition ids to copy
      * @return No content
      */
-    @PostMapping
+    @PostMapping("/copy")
     @Operation(description = "Copy contractConditions to a contract from existent ones", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> copyContractConditions(
             @Parameter(description = "ContractConditionCopyDto object") @NotNull @Valid @RequestBody final ContractConditionCopyDto contractConditionCopyDto);
