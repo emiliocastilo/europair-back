@@ -79,4 +79,13 @@ public class FlightDTO extends AuditModificationBaseDTO {
   @JsonProperty("realArrivalTime")
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime realArrivalTime;
+
+  @JsonProperty("paxAD")
+  private Integer paxAD;
+
+  @JsonProperty("paxCHD")
+  private Integer paxCHD;
+
+  @JsonProperty("paxInfants")
+  private Integer paxInfants;
 }
