@@ -1,6 +1,7 @@
 package com.europair.management.api.service.contract;
 
 import com.europair.management.api.dto.contract.ContractDto;
+import com.europair.management.api.dto.contract.ContractLineDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -119,4 +120,40 @@ public interface IContractController {
     ResponseEntity<?> generateContracts(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "List of Route identifiers") @NotEmpty @RequestBody final List<Long> routeIds);
+
+    /**
+     * <p>
+     * Updates a contract line if the contract is not signed
+     * </p>
+     *
+     * @param fileId          File identifier
+     * @param contractId      Contract identifier
+     * @param contractLineId  Contract line identifier
+     * @param contractLineDto Data of the Contract line to update
+     * @return No content
+     */
+    @PostMapping
+    @Operation(description = "Updates a contract line", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> updateContractLine(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId,
+            @Parameter(description = "Contract line identifier") @NotNull @PathVariable final Long contractLineId,
+            @Parameter(description = "Updated contract line object") @NotNull @RequestBody final ContractLineDto contractLineDto);
+
+    /**
+     * <p>
+     * Deletes (soft) a contract line if the contract is not signed
+     * </p>
+     *
+     * @param fileId         File identifier
+     * @param contractId     Contract identifier
+     * @param contractLineId Contract line identifier
+     * @return No content
+     */
+    @PostMapping
+    @Operation(description = "Delete (soft) a contract line", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> deleteContractLine(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId,
+            @Parameter(description = "Contract line identifier") @NotNull @PathVariable final Long contractLineId);
 }

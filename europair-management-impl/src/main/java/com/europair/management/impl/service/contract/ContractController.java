@@ -2,6 +2,7 @@ package com.europair.management.impl.service.contract;
 
 
 import com.europair.management.api.dto.contract.ContractDto;
+import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.service.contract.IContractController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -84,6 +85,24 @@ public class ContractController implements IContractController {
                 fileId, routeIds);
         contractService.generateContracts(fileId, routeIds);
         LOGGER.debug("[ContractController] - Ending method [generateContracts] with no return.");
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> updateContractLine(@NotNull Long fileId, @NotNull Long contractId, @NotNull Long contractLineId, @NotNull ContractLineDto contractLineDto) {
+        LOGGER.debug("[ContractController] - Starting method [updateContractLine] with input: fileId={}, contractId={}, contractLineId={}, contractLineDto={}",
+                fileId, contractId, contractLineId, contractLineDto);
+        contractService.updateContractLine(fileId, contractId, contractLineId, contractLineDto);
+        LOGGER.debug("[ContractController] - Ending method [updateContractLine] with no return.");
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> deleteContractLine(@NotNull Long fileId, @NotNull Long contractId, @NotNull Long contractLineId) {
+        LOGGER.debug("[ContractController] - Starting method [deleteContractLine] with input: fileId={}, contractId={}, contractLineId={}",
+                fileId, contractId, contractLineId);
+        contractService.deleteContractLine(fileId, contractId, contractLineId);
+        LOGGER.debug("[ContractController] - Ending method [deleteContractLine] with no return.");
         return ResponseEntity.noContent().build();
     }
 }

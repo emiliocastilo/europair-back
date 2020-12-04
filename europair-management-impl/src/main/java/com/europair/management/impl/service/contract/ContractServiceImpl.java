@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.contract;
 
 import com.europair.management.api.dto.contract.ContractDto;
+import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
 import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.FileStatesEnum;
@@ -20,6 +21,7 @@ import com.europair.management.rest.model.contracts.repository.ContractLineRepos
 import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.entity.LineContributionRoute;
+import com.europair.management.rest.model.contributions.repository.LineContributionRouteRepository;
 import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.routes.entity.Route;
@@ -66,6 +68,9 @@ public class ContractServiceImpl implements IContractService {
     private RouteRepository routeRepository;
 
     @Autowired
+    private LineContributionRouteRepository contributionLineRepository;
+
+    @Autowired
     private IStateChangeService stateChangeService;
 
     @Autowired
@@ -106,6 +111,10 @@ public class ContractServiceImpl implements IContractService {
         checkIfFileExists(fileId);
         Contract contract = contractRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found with id: " + id));
+        // ToDo: allow modifications of signed contract?
+//        if (ContractStatesEnum.SIGNED.equals(contractLine.getContract().getContractState())) {
+//            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The contract is signed and can't be modified");
+//        }
         IContractMapper.INSTANCE.updateFromDto(contractDto, contract);
         contract = contractRepository.save(contract);
     }
@@ -184,6 +193,49 @@ public class ContractServiceImpl implements IContractService {
 
         // Change file state
         stateChangeService.changeState(Collections.singletonList(fileId), FileStatesEnum.BLUE_BOOKED);
+    }
+
+    @Override
+    public void updateContractLine(@NotNull Long fileId, @NotNull Long contractId, @NotNull Long contractLineId,
+                                   @NotNull ContractLineDto contractLineDto) {
+        checkIfFileExists(fileId);
+        ContractLine contractLine = contractLineRepository.findById(contractLineId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No contract line found with id: " + contractLineId));
+        if (!contractLine.getContractId().equals(contractId)) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Selected contract line doesn't match for the contract with id: " + contractId);
+        }
+
+        if (ContractStatesEnum.SIGNED.equals(contractLine.getContract().getContractState())) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The contract is signed and can't be modified");
+        }
+
+        IContractLineMapper.INSTANCE.updateFromDto(contractLineDto, contractLine);
+        contractLine = contractLineRepository.save(contractLine);
+
+        // Update contribution line
+        LineContributionRoute contributionLine = contractLine.getContributionLine();
+        contributionLine.setIncludedVAT(contractLine.getIncludedVAT());
+        contributionLine.setPrice(contractLine.getPrice());
+        contributionLine.setQuantity(contractLine.getQuantity());
+
+        contributionLine = contributionLineRepository.save(contributionLine);
+    }
+
+    @Override
+    public void deleteContractLine(@NotNull Long fileId, @NotNull Long contractId, @NotNull Long contractLineId) {
+        checkIfFileExists(fileId);
+        ContractLine contractLine = contractLineRepository.findById(contractLineId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No contract line found with id: " + contractLineId));
+        if (!contractLine.getContractId().equals(contractId)) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Selected contract line doesn't match for the contract with id: " + contractId);
+        }
+
+        if (ContractStatesEnum.SIGNED.equals(contractLine.getContract().getContractState())) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The contract is signed and can't be modified");
+        }
+
+        contractLine.setRemovedAt(LocalDateTime.now());
+        contractLine = contractLineRepository.save(contractLine);
     }
 
     private void checkIfFileExists(final Long fileId) {
