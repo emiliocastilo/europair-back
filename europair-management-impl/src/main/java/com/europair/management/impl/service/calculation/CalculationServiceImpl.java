@@ -5,6 +5,7 @@ import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.service.taxes.IRouteBalearicsPctVatService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
+import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.exception.EuropairForeignTaxException;
 import com.europair.management.rest.model.countries.entity.Country;
 import com.europair.management.rest.model.files.entity.Client;
@@ -29,6 +30,9 @@ public class CalculationServiceImpl implements ICalculationService {
 
     @Autowired
     private TaxRepository taxRepository;
+
+    @Autowired
+    private AirportRepository airportRepository;
 
     @Autowired
     private IRouteBalearicsPctVatService balearicsPctVatService;
@@ -89,6 +93,26 @@ public class CalculationServiceImpl implements ICalculationService {
         }
 
         return taxPercentage;
+    }
+
+    @Override
+    public Pair<Double, Double> calculateTaxToApplyAndPercentage(Long fileId, Long originAirportId, Long destinationAirportId, ServiceTypeEnum serviceType, boolean isSale) {
+        return calculateTaxToApplyAndPercentage(fileId, getAirport(originAirportId), getAirport(destinationAirportId), serviceType, isSale);
+    }
+
+    @Override
+    public Double calculateServiceTaxToApply(Long fileId, Long originAirportId, Long destinationAirportId, ServiceTypeEnum serviceType, boolean isSale) {
+        return calculateServiceTaxToApply(fileId, getAirport(originAirportId), getAirport(destinationAirportId), serviceType, isSale);
+    }
+
+    @Override
+    public Double calculatePercentageOfTaxToApply(Long originAirportId, Long destinationAirportId, ServiceTypeEnum serviceType, boolean isSale) {
+        return calculatePercentageOfTaxToApply(getAirport(originAirportId), getAirport(destinationAirportId), serviceType, isSale);
+    }
+
+    private Airport getAirport(final Long airportId) {
+        return airportRepository.findById(airportId).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "No airport found with id: " + airportId));
     }
 
     // Tax on sale (IVA devengado)
