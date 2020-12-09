@@ -132,7 +132,7 @@ public interface IContractController {
      * @param contractLineDto Data of the Contract line to update
      * @return No content
      */
-    @PostMapping
+    @PutMapping("/{contractId}/lines/{contractLineId}")
     @Operation(description = "Updates a contract line", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> updateContractLine(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
@@ -150,7 +150,7 @@ public interface IContractController {
      * @param contractLineId Contract line identifier
      * @return No content
      */
-    @PostMapping
+    @DeleteMapping("/{contractId}/lines/{contractLineId}")
     @Operation(description = "Delete (soft) a contract line", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteContractLine(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
