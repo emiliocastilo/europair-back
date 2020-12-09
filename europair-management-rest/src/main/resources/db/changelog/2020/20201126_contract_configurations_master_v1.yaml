@@ -1,0 +1,84 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201126_contract_configurations_master_v1_create_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contract_configurations table to database"
+      changes:
+        - createTable:
+            tableName: contract_configurations
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_configurations_id_pk
+              - column:
+                  name: contract_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: contract_configurations_contract_fk
+                    references: contracts(id)
+                    validateForeignKey: true
+              - column:
+                  name: language
+                  type: varchar(20)
+              - column:
+                  name: timezone
+                  type: varchar(20)
+              - column:
+                  name: contract_payment_conditions_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contract_configurations_contract_payment_conditions_fk
+                    references: contract_payment_conditions(id)
+                    validateForeignKey: true
+              - column:
+                  name: contract_payment_conditions_observation
+                  type: varchar(255)
+              - column:
+                  name: currency
+                  type: varchar(20)
+              - column:
+                  name: deposit
+                  type: decimal(12,4)
+              - column:
+                  name: deposit_expiration_date
+                  type: timestamp
+
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: contract_configurations
+

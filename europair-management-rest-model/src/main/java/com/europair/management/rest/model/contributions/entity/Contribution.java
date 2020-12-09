@@ -10,6 +10,7 @@ import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.routes.entity.Route;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 
@@ -44,6 +45,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     private Long fileId;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @OneToOne
     @JoinColumn(name = "file_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private File file;
@@ -52,6 +54,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     private Long routeId;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "route_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private Route route;
@@ -64,6 +67,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     private Long operatorId;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @NotAudited
     @ManyToOne
     @JoinColumn(name = "operator_id", insertable = false, updatable = false)
@@ -73,6 +77,7 @@ public class Contribution extends SoftRemovableBaseEntityHardAudited implements 
     private Long aircraftId;
 
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     @NotAudited
     @ManyToOne
     @JoinColumn(name = "aircraft_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)

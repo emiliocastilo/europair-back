@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201126_contract_conditions_aud_v1_create_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contract_conditions_aud table to database"
+      changes:
+        - createTable:
+            tableName: contract_conditions_aud
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_conditions_aud_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_conditions_aud_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+
+              - column:
+                  name: contract_id
+                  type: int
+              - column:
+                  name: condition_order
+                  type: int
+              - column:
+                  name: code
+                  type: varchar(50)
+              - column:
+                  name: title
+                  type: varchar(255)
+              - column:
+                  name: description
+                  type: varchar(1000)
+
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+

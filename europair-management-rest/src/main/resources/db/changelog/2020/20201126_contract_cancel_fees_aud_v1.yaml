@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201126_contract_cancel_fees_aud_v1_create_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contract_cancel_fees_aud table to database"
+      changes:
+        - createTable:
+            tableName: contract_cancel_fees_aud
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_cancel_fees_aud_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_cancel_fees_aud_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+
+              - column:
+                  name: contract_id
+                  type: int
+              - column:
+                  name: from_value
+                  type: decimal(12,4)
+              - column:
+                  name: from_unit
+                  type: varchar(40)
+              - column:
+                  name: fee_percentage
+                  type: decimal(12,4)
+
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+

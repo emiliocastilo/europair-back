@@ -2,7 +2,7 @@ package com.europair.management.api.dto.contribution;
 
 import com.europair.management.api.dto.flights.FlightDTO;
 import com.europair.management.api.dto.routes.RouteDto;
-import com.europair.management.api.enums.LineContributionRouteType;
+import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -55,7 +55,7 @@ public class LineContributionRouteDTO {
 
     @NotNull
     @JsonProperty("lineContributionRouteType")
-    private LineContributionRouteType lineContributionRouteType;
+    private PurchaseSaleEnum lineContributionRouteType;
 
     @NotNull
     @JsonProperty("type")

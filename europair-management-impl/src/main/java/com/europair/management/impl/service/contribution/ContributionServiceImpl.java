@@ -4,7 +4,7 @@ import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.contribution.LineContributionRouteDTO;
 import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.CurrencyEnum;
-import com.europair.management.api.enums.LineContributionRouteType;
+import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
@@ -333,13 +333,13 @@ public class ContributionServiceImpl implements IContributionService {
         Set<LineContributionRoute> serviceSaleLines = new HashSet<>();
         contribution.getLineContributionRoute().forEach(line -> {
             if (ServiceTypeEnum.FLIGHT.equals(line.getType())) {
-                if (LineContributionRouteType.PURCHASE.equals(line.getLineContributionRouteType())) {
+                if (PurchaseSaleEnum.PURCHASE.equals(line.getLineContributionRouteType())) {
                     flightPurchaseLines.add(line);
                 } else {
                     flightSaleLines.add(line);
                 }
             } else {
-                if (LineContributionRouteType.PURCHASE.equals(line.getLineContributionRouteType())) {
+                if (PurchaseSaleEnum.PURCHASE.equals(line.getLineContributionRouteType())) {
                     servicePurchaseLines.add(line);
                 } else {
                     serviceSaleLines.add(line);
@@ -367,7 +367,7 @@ public class ContributionServiceImpl implements IContributionService {
         Set<LineContributionRoute> updatedServiceSaleLines = servicePurchaseLines.stream()
                 .map(line -> {
                     LineContributionRoute saleLine = new LineContributionRoute(line);
-                    saleLine.setLineContributionRouteType(LineContributionRouteType.SALE);
+                    saleLine.setLineContributionRouteType(PurchaseSaleEnum.SALE);
                     return saleLine;
                 }).collect(Collectors.toSet());
         lineContributionRouteRepository.saveAll(updatedServiceSaleLines);
@@ -404,7 +404,7 @@ public class ContributionServiceImpl implements IContributionService {
             purchaseLine.setRouteId(rotation.getId());
             purchaseLine.setPrice(BigDecimal.ZERO);
             purchaseLine.setType(ServiceTypeEnum.FLIGHT);
-            purchaseLine.setLineContributionRouteType(LineContributionRouteType.PURCHASE);
+            purchaseLine.setLineContributionRouteType(PurchaseSaleEnum.PURCHASE);
             res.add(purchaseLine);
 
             // Sale
@@ -413,7 +413,7 @@ public class ContributionServiceImpl implements IContributionService {
             saleLine.setRouteId(rotation.getId());
             saleLine.setPrice(BigDecimal.ZERO);
             saleLine.setType(ServiceTypeEnum.FLIGHT);
-            saleLine.setLineContributionRouteType(LineContributionRouteType.SALE);
+            saleLine.setLineContributionRouteType(PurchaseSaleEnum.SALE);
             res.add(saleLine);
 
             return res;

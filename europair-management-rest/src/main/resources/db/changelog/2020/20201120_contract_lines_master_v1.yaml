@@ -1,0 +1,101 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201120_contract_lines_master_v1_create_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contract_lines table to database"
+      changes:
+        - createTable:
+            tableName: contract_lines
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_lines_id_pk
+              - column:
+                  name: contract_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: contract_lines_contract_fk
+                    references: contracts(id)
+                    validateForeignKey: true
+              - column:
+                  name: route_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contract_lines_route_fk
+                    references: routes(id)
+                    validateForeignKey: true
+              - column:
+                  name: contribution_line_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    foreignKeyName: contract_lines_lines_contribution_route_fk
+                    references: lines_contribution_route(id)
+                    validateForeignKey: true
+              - column:
+                  name: comments
+                  type: varchar(255)
+              - column:
+                  name: currency
+                  type: varchar(20)
+              - column:
+                  name: price
+                  type: decimal(12,4)
+              - column:
+                  name: vat_percentage
+                  type: decimal(12,4)
+              - column:
+                  name: vat_amount
+                  type: decimal(12,4)
+              - column:
+                  name: included_vat
+                  type: boolean
+              - column:
+                  name: contract_line_type
+                  type: varchar(20)
+              - column:
+                  name: quantity
+                  type: int
+              - column:
+                  name: created_at
+                  type: timestamp
+                  remarks: creation timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(30)
+                  remarks: creation author
+                  constraints:
+                    nullable: false
+              - column:
+                  name: modified_at
+                  type: timestamp
+                  remarks: last modification timestamp
+                  constraints:
+                    nullable: true
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+                  remarks: last modification author
+                  constraints:
+                    nullable: true
+              - column:
+                  name: removed_at
+                  type: timestamp
+                  remarks: soft removal timestamp
+        - addAutoIncrement:
+            columnDataType: int
+            columnName: id
+            generationType: ALWAYS
+            incrementBy: 1
+            startWith: 1
+            tableName: contract_lines
+

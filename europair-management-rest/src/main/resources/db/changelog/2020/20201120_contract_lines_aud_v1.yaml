@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20201120_contract_lines_aud_v1_create_table
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      comment: "Add contract_lines_aud table to database"
+      changes:
+        - createTable:
+            tableName: contract_lines_aud
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_lines_aud_pk
+              - column:
+                  name: rev
+                  type: int
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: contract_lines_aud_pk
+              - column:
+                  name: revtype
+                  type: tinyint
+
+              - column:
+                  name: contract_id
+                  type: int
+              - column:
+                  name: route_id
+                  type: int
+              - column:
+                  name: contribution_line_id
+                  type: int
+              - column:
+                  name: comments
+                  type: varchar(255)
+              - column:
+                  name: currency
+                  type: varchar(20)
+              - column:
+                  name: price
+                  type: decimal(12,4)
+              - column:
+                  name: vat_percentage
+                  type: decimal(12,4)
+              - column:
+                  name: vat_amount
+                  type: decimal(12,4)
+              - column:
+                  name: included_vat
+                  type: boolean
+              - column:
+                  name: contract_line_type
+                  type: varchar(20)
+              - column:
+                  name: quantity
+                  type: int
+
+              - column:
+                  name: created_at
+                  type: timestamp
+              - column:
+                  name: created_by
+                  type: varchar(30)
+              - column:
+                  name: modified_at
+                  type: timestamp
+              - column:
+                  name: modified_by
+                  type: varchar(30)
+              - column:
+                  name: removed_at
+                  type: timestamp
+
