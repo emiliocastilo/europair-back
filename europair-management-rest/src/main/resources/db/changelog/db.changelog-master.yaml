@@ -208,5 +208,8 @@ databaseChangeLog:
   - include:
       file: 2020/20201126_contract_cancel_fees_aud_v1.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 2020/09122020_menu_option_conditions_master.yaml
+      relativeToChangelogFile: true
 
 
