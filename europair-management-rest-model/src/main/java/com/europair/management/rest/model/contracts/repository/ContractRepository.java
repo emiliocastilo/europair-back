@@ -11,4 +11,6 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, ICont
 
     List<Contract> findByCodeStartsWith(String codeStart);
 
+    List<Contract> findAllByIdIn(List<Long> idList);
+
 }

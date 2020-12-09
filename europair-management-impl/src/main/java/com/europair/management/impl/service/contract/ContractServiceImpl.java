@@ -196,6 +196,12 @@ public class ContractServiceImpl implements IContractService {
     }
 
     @Override
+    public void updateStates(@NotNull Long fileId, @NotEmpty List<Long> contractIds, ContractStatesEnum state) {
+        checkIfFileExists(fileId);
+        stateChangeService.changeState(contractIds, state);
+    }
+
+    @Override
     public void updateContractLine(@NotNull Long fileId, @NotNull Long contractId, @NotNull Long contractLineId,
                                    @NotNull ContractLineDto contractLineDto) {
         checkIfFileExists(fileId);
