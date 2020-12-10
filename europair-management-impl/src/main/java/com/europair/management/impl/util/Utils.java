@@ -3,6 +3,7 @@ package com.europair.management.impl.util;
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.enums.UTCEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -22,17 +23,11 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.criteria.Predicate;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -384,5 +379,35 @@ public class Utils {
         }
 
         return airportFLightList;
+    }
+
+    /**
+     * Utils class for error handling
+     */
+    public static class ErrorHandlingUtils {
+
+        /**
+         * Creates a new ResponseStatusException with the error code and description as a cause with extended details as a param
+         *
+         * @param error Error data, httpStatus, code and description
+         * @param cause Extended data of the error to append after de enum description (pe. identifier of not found entity)
+         * @return new ResponseStatusException created
+         */
+        public static ResponseStatusException getException(@NotNull ErrorCodesEnum error, @NotEmpty String cause) {
+            String exceptionMsg = "[" + error.getCode() + "]:" + error.getDescription() + " " + cause;
+            return new ResponseStatusException(error.getHttpStatus(), exceptionMsg);
+        }
+
+        /**
+         * Creates a new ResponseStatusException with the error code and description as a cause
+         *
+         * @param error Error data, httpStatus, code and description
+         * @return new ResponseStatusException created
+         */
+        public static ResponseStatusException getException(@NotNull ErrorCodesEnum error) {
+            String exceptionMsg = "[" + error.getCode() + "]:" + error.getDescription();
+            return new ResponseStatusException(error.getHttpStatus(), exceptionMsg);
+        }
+
     }
 }
