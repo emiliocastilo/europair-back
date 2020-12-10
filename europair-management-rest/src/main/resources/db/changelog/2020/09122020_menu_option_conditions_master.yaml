@@ -1,0 +1,55 @@
+databaseChangeLog:
+ - changeSet:
+      id: 09122020_menu_option_conditions_master
+      context: dev or pre or pro
+      author: emilio.castillogonza
+      comment: "Add Flight tracking to the menu_option table"
+      changes:
+        - insert:
+            tableName: screens
+            columns:
+              - column:
+                  name: id
+                  value: 17
+              - column:
+                  name: name
+                  value: "Condiciones"
+              - column:
+                  name: description
+                  value: "Maestro de condiciones"
+              - column:
+                  name: route
+                  value: "/conditions"
+              - column:
+                  name: created_at
+                  value: "2020-12-09"
+              - column:
+                  name: created_by
+                  value: "Sistema"
+        - insert:
+            tableName: menu_option
+            columns:
+              - column:
+                  name: id
+                  value: 22
+              - column:
+                  name: name
+                  value: "MASTERS_CONDITIONS"
+              - column:
+                  name: label
+                  value: "MENU.MASTERS.CONDITIONS"
+              - column:
+                  name: weight
+                  value: 10
+              - column:
+                  name: parent_id
+                  value: 2
+              - column:
+                  name: screen_id
+                  value: 17
+              - column:
+                  name: created_at
+                  value: "2020-12-09"
+              - column:
+                  name: created_by
+                  value: "Sistema"
