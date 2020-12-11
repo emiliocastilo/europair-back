@@ -19,7 +19,7 @@ import com.europair.management.rest.model.fleet.repository.AircraftCategoryRepos
 import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.regions.entity.Region;
-import com.europair.management.rest.model.regionscountries.repository.IRegionRepository;
+import com.europair.management.rest.model.regions.repository.RegionRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.apache.logging.log4j.util.Strings;
@@ -73,7 +73,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     private AirportRepository airportRepository;
 
     @Autowired
-    private IRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
     private RouteRepository routeRepository;
