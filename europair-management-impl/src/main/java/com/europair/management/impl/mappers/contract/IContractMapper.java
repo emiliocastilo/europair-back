@@ -25,6 +25,7 @@ public interface IContractMapper {
     @Mapping(target = "provider.country", ignore = true)
     @Mapping(target = "client.country", ignore = true)
     @Mapping(target = "totalAmount", source = "entity", qualifiedByName = "mapTotalAmount")
+    @Mapping(target = "contractConfiguration.contract", ignore = true)
     ContractDto toDto(final Contract entity);
 
     @Mapping(target = "file", ignore = true)
@@ -32,15 +33,18 @@ public interface IContractMapper {
     @Mapping(target = "client.country", ignore = true)
     @Mapping(target = "contractLines", ignore = true)
     @Mapping(target = "totalAmount", source = "entity", qualifiedByName = "mapTotalAmount")
+    @Mapping(target = "contractConfiguration.contract", ignore = true)
     ContractDto toDtoNoLines(final Contract entity);
 
     @Mapping(target = "file", ignore = true)
     @Mapping(target = "client", ignore = true)
     @Mapping(target = "provider", ignore = true)
     @Mapping(target = "contractState", ignore = true)
+    @Mapping(target = "contractConfiguration", ignore = true)
     Contract toEntity(final ContractDto dto);
 
     @Mapping(target = "contractState", ignore = true)
+    @Mapping(target = "contractConfiguration", ignore = true)
     void updateFromDto(final ContractDto dto, @MappingTarget Contract entity);
 
     @Named("mapTotalAmount")

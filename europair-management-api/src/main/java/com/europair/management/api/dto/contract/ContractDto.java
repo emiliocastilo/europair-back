@@ -78,6 +78,9 @@ public class ContractDto extends AuditModificationBaseDTO {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime signatureDate;
 
+    @JsonProperty("contractConfiguration")
+    private ContractConfigurationDto contractConfiguration;
+
     // Properties for view
 
     @JsonProperty("totalAmount")

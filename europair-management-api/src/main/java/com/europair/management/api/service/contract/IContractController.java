@@ -1,7 +1,9 @@
 package com.europair.management.api.service.contract;
 
+import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
+import com.europair.management.api.enums.ContractStatesEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -120,6 +122,19 @@ public interface IContractController {
     ResponseEntity<?> generateContracts(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "List of Route identifiers") @NotEmpty @RequestBody final List<Long> routeIds);
+
+    /**
+     * <p>Changes contract state</p>
+     *
+     * @param fileId         File identifier
+     * @param stateChangeDto State change data
+     * @return No content
+     */
+    @PutMapping("/state")
+    @Operation(description = "Changes the state of contracts")
+    ResponseEntity<?> changeState(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<ContractStatesEnum> stateChangeDto);
 
     /**
      * <p>
