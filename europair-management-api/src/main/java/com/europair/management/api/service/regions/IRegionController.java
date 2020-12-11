@@ -1,7 +1,6 @@
 package com.europair.management.api.service.regions;
 
 import com.europair.management.api.dto.regions.RegionDTO;
-import com.europair.management.api.dto.roles.RoleDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -11,14 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Map;
 
 @RequestMapping(value = {"/regions", "/external/regions"})
 public interface IRegionController {
 
-  @GetMapping("")
-  @Operation(description = "Paged result of master regions", security = { @SecurityRequirement(name = "bearerAuth") })
-  public ResponseEntity<Page<RegionDTO>> getAllRegionsPaginated(
-    @Parameter(description = "Pagination filter")final Pageable pageable) ;
+  @GetMapping
+  @Operation(description = "Paged result of master regions with advanced filters by property", security = {@SecurityRequirement(name = "bearerAuth")})
+  ResponseEntity<Page<RegionDTO>> getAllRegionsByFilter(
+          @Parameter(description = "Pagination filter") final Pageable pageable,
+          @Parameter(description = "Map of properties to filter with value and operator, (pe: plateNumber=JKL,CONTAINS)") @RequestParam Map<String, String> reqParam);
 
   @GetMapping("/{id}")
   @Operation(description = "Retrieve master region by identifier", security = { @SecurityRequirement(name = "bearerAuth") })

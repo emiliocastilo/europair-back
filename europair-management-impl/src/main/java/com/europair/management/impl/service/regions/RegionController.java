@@ -2,6 +2,8 @@ package com.europair.management.impl.service.regions;
 
 import com.europair.management.api.dto.regions.RegionDTO;
 import com.europair.management.api.service.regions.IRegionController;
+import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.common.CoreCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,9 +31,11 @@ public class RegionController implements IRegionController {
     private final IRegionService regionService;
 
     @Override
-    public ResponseEntity<Page<RegionDTO>> getAllRegionsPaginated(Pageable pageable) {
-        LOGGER.debug("[RegionController] - Starting method [getAllRegionsPaginated] with input: pageable={}", pageable);
-        final Page<RegionDTO> pageRegionsDTO = regionService.findAllPaginated(pageable);
+    public ResponseEntity<Page<RegionDTO>> getAllRegionsByFilter(Pageable pageable, Map<String, String> reqParam) {
+        LOGGER.debug("[RegionController] - Starting method [getAllRegionsPaginated] with input: pageable={}, reqParam={}",
+                pageable, reqParam);
+        CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
+        final Page<RegionDTO> pageRegionsDTO = regionService.findAllPaginatedByFilter(pageable, criteria);
         LOGGER.debug("[RegionController] - Ending method [getAllRegionsPaginated] with return: {}", pageRegionsDTO);
         return ResponseEntity.ok().body(pageRegionsDTO);
     }
