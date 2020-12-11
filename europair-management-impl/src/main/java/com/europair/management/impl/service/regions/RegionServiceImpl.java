@@ -3,11 +3,12 @@ package com.europair.management.impl.service.regions;
 import com.europair.management.api.dto.regions.RegionDTO;
 import com.europair.management.impl.mappers.regions.IRegionMapper;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
+import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.countries.repository.CountryRepository;
 import com.europair.management.rest.model.regions.entity.Region;
 import com.europair.management.rest.model.regionsairports.repository.IRegionAirportRepository;
 import com.europair.management.rest.model.regionscountries.repository.IRegionCountryRepository;
-import com.europair.management.rest.model.regionscountries.repository.IRegionRepository;
+import com.europair.management.rest.model.regions.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,16 +24,15 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 public class RegionServiceImpl implements IRegionService {
 
-  private final IRegionRepository regionRepository;
+  private final RegionRepository regionRepository;
   private final CountryRepository countryRepository;
   private final IRegionCountryRepository regionCountryRepository;
   private final AirportRepository airportRepository;
   private final IRegionAirportRepository regionAirportRepository;
 
   @Override
-  public Page<RegionDTO> findAllPaginated(Pageable pageable) {
-    return regionRepository.findAll(pageable)
-      .map(region -> IRegionMapper.INSTANCE.toDto(region));
+  public Page<RegionDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
+    return regionRepository.findRegionByCriteria(criteria, pageable).map(IRegionMapper.INSTANCE::toDto);
   }
 
   @Override

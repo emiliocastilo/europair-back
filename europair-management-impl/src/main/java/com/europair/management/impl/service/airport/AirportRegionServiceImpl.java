@@ -8,7 +8,7 @@ import com.europair.management.rest.model.regions.entity.Region;
 import com.europair.management.rest.model.regionsairports.entity.RegionAirport;
 import com.europair.management.rest.model.regionsairports.entity.RegionAirportPK;
 import com.europair.management.rest.model.regionsairports.repository.IRegionAirportRepository;
-import com.europair.management.rest.model.regionscountries.repository.IRegionRepository;
+import com.europair.management.rest.model.regions.repository.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ public class AirportRegionServiceImpl implements IAirportRegionService {
     private AirportRepository airportRepository;
 
     @Autowired
-    private IRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Override
     public Page<RegionDTO> findAllPaginatedByFilter(final Long airportId, Pageable pageable) {
