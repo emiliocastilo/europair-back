@@ -1,8 +1,11 @@
 package com.europair.management.impl.common.service;
 
+import com.europair.management.api.enums.ContractStatesEnum;
 import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.rest.model.contracts.entity.Contract;
+import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
 import com.europair.management.rest.model.contributions.repository.ContributionRepository;
 import com.europair.management.rest.model.files.entity.File;
@@ -40,6 +43,9 @@ public class StateChangeServiceImpl implements IStateChangeService {
     @Autowired
     private FileStatusRepository fileStatusRepository;
 
+    @Autowired
+    private ContractRepository contractRepository;
+
     @Override
     public void changeState(@NotEmpty List<Long> fileIds, FileStatesEnum state) {
         List<File> files = fileRepository.findAllByIdIn(fileIds);
@@ -59,6 +65,13 @@ public class StateChangeServiceImpl implements IStateChangeService {
         List<Contribution> contributions = contributionRepository.findAllByIdIn(contributionIds);
         contributions = contributions.stream().map(contribution -> changeContributionState(contribution, state)).collect(Collectors.toList());
         contributionRepository.saveAll(contributions);
+    }
+
+    @Override
+    public void changeState(@NotEmpty List<Long> contractIds, ContractStatesEnum state) {
+        List<Contract> contracts = contractRepository.findAllByIdIn(contractIds);
+        contracts = contracts.stream().map(contract -> changeContractState(contract, state)).collect(Collectors.toList());
+        contractRepository.saveAll(contracts);
     }
 
     @Override
@@ -102,6 +115,17 @@ public class StateChangeServiceImpl implements IStateChangeService {
             case PENDING -> ContributionStatesEnum.SENDED.equals(stateTo);
             case SENDED -> ContributionStatesEnum.QUOTED.equals(stateTo);
             case QUOTED -> ContributionStatesEnum.WON.equals(stateTo);
+            default -> false;
+        };
+    }
+
+    @Override
+    public boolean canChangeState(@NotNull Contract contract, ContractStatesEnum stateTo) {
+        ContractStatesEnum currentState = contract.getContractState();
+        // Validate state to change
+        return switch (currentState) {
+            case PENDING -> true;
+            case SIGNED -> ContractStatesEnum.CANCELED.equals(stateTo);
             default -> false;
         };
     }
@@ -178,6 +202,25 @@ public class StateChangeServiceImpl implements IStateChangeService {
         } else {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
                     "Contribution cannot change from state: " + contribution.getContributionState() + " to: " + state);
+        }
+    }
+
+    /**
+     * Validates contract state change, changes the value if valid, throws exception if not, and checks if has to trigger
+     * state changes in other entities
+     *
+     * @param contract Contract entity
+     * @param state    State to set to the contract
+     * @return Contract with updated state
+     */
+    private Contract changeContractState(final Contract contract, final ContractStatesEnum state) {
+        if (canChangeState(contract, state)) {
+            contract.setContractState(state);
+            // Change states from other entities
+            return contract;
+        } else {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                    "Contract cannot change from state: " + contract.getContractState() + " to: " + state);
         }
     }
 
