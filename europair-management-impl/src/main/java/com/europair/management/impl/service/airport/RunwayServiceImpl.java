@@ -3,6 +3,7 @@ package com.europair.management.impl.service.airport;
 import com.europair.management.api.dto.airport.RunwayDto;
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.airport.IRunwayMapper;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.Utils;
@@ -15,11 +16,9 @@ import com.europair.management.rest.model.common.OperatorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,14 +54,14 @@ public class RunwayServiceImpl implements IRunwayService {
     public RunwayDto findById(final Long airportId, Long id) {
         checkIfAirportExists(airportId);
         return IRunwayMapper.INSTANCE.toDto(runwayRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Runway not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.RUNWAY_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
     public RunwayDto saveRunway(final Long airportId, RunwayDto runwayDto) {
         checkIfAirportExists(airportId);
         if (runwayDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Runway expected. Identifier %s got", runwayDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.RUNWAY_NEW_WITH_ID, String.valueOf(runwayDto.getId()));
         }
 
         Runway runway = IRunwayMapper.INSTANCE.toEntity(runwayDto);
@@ -77,27 +76,27 @@ public class RunwayServiceImpl implements IRunwayService {
 
         Long runwayId = runway.getId();
         return IRunwayMapper.INSTANCE.toDto(runwayRepository.findById(runway.getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Runway not found with id: " + runwayId)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.RUNWAY_NOT_FOUND, String.valueOf(runwayId))));
     }
 
     @Override
     public RunwayDto updateRunway(final Long airportId, Long id, RunwayDto runwayDto) {
         checkIfAirportExists(airportId);
         Runway runway = runwayRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Runway not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.RUNWAY_NOT_FOUND, String.valueOf(id)));
         IRunwayMapper.INSTANCE.updateFromDto(runwayDto, runway);
         runway = runwayRepository.save(runway);
         updateMainRunway(airportId);
 
         return IRunwayMapper.INSTANCE.toDto(runwayRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Runway not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.RUNWAY_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
     public void deleteRunway(final Long airportId, Long id) {
         checkIfAirportExists(airportId);
         if (!runwayRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Runway not found with id: " + id);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.RUNWAY_NOT_FOUND, String.valueOf(id));
         }
         runwayRepository.deleteById(id);
         updateMainRunway(airportId);
@@ -105,7 +104,7 @@ public class RunwayServiceImpl implements IRunwayService {
 
     private void checkIfAirportExists(final Long airportId) {
         if (!airportRepository.existsById(airportId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NOT_FOUND, String.valueOf(airportId));
         }
     }
 

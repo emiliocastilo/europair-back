@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.airport;
 
 import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -13,10 +14,8 @@ import com.europair.management.rest.model.operatorsairports.repository.Operators
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -43,14 +42,14 @@ public class AirportOperatorServiceImpl implements IAirportOperatorService {
     public OperatorsAirportsDTO findById(final Long airportId, Long id) {
         checkIfAirportExists(airportId);
         return IOperatorsAirportsMapper.INSTANCE.toDtoFromAirport(operatorsAirportsRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operators Certificated not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OPERATOR_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
     public OperatorsAirportsDTO saveOperatorsAirports(final Long airportId, OperatorsAirportsDTO operatorsAirportsDto) {
         checkIfAirportExists(airportId);
         if (operatorsAirportsDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Operators Certificated expected. Identifier %s got", operatorsAirportsDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OPERATOR_NEW_WITH_ID, String.valueOf(operatorsAirportsDto.getId()));
         }
 
         OperatorsAirports operatorsAirports = IOperatorsAirportsMapper.INSTANCE.toEntityFromAirport(operatorsAirportsDto);
@@ -72,7 +71,7 @@ public class AirportOperatorServiceImpl implements IAirportOperatorService {
     public OperatorsAirportsDTO updateOperatorsAirports(final Long airportId, Long id, OperatorsAirportsDTO operatorsAirportsDto) {
         checkIfAirportExists(airportId);
         OperatorsAirports operatorsAirports = operatorsAirportsRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operators Certificated not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OPERATOR_NOT_FOUND, String.valueOf(id)));
         IOperatorsAirportsMapper.INSTANCE.updateFromDtoFromAirport(operatorsAirportsDto, operatorsAirports);
 
         // Set relationships
@@ -91,14 +90,14 @@ public class AirportOperatorServiceImpl implements IAirportOperatorService {
     public void deleteOperatorsAirports(final Long airportId, Long id) {
         checkIfAirportExists(airportId);
         if (!operatorsAirportsRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "OperatorsAirports not found with id: " + id);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OPERATOR_NOT_FOUND, String.valueOf(id));
         }
         operatorsAirportsRepository.deleteById(id);
     }
 
     private void checkIfAirportExists(final Long airportId) {
         if (!airportRepository.existsById(airportId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NOT_FOUND, String.valueOf(airportId));
         }
     }
 
