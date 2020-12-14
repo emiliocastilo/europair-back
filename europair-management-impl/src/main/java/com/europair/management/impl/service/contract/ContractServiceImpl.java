@@ -8,6 +8,7 @@ import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contract.IContractLineMapper;
 import com.europair.management.impl.mappers.contract.IContractMapper;
@@ -31,11 +32,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -89,7 +88,7 @@ public class ContractServiceImpl implements IContractService {
     public ContractDto findById(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         return IContractMapper.INSTANCE.toDto(contractRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
@@ -97,7 +96,7 @@ public class ContractServiceImpl implements IContractService {
         checkIfFileExists(fileId);
         contractDto.setFileId(fileId);
         if (contractDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Contract expected. Identifier %s got", contractDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NEW_WITH_ID, String.valueOf(contractDto.getId()));
         }
 
         Contract contract = IContractMapper.INSTANCE.toEntity(contractDto);
@@ -110,7 +109,7 @@ public class ContractServiceImpl implements IContractService {
     public void updateContract(final Long fileId, Long id, ContractDto contractDto) {
         checkIfFileExists(fileId);
         Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NOT_FOUND, String.valueOf(id)));
         // ToDo: allow modifications of signed contract?
 //        if (ContractStatesEnum.SIGNED.equals(contractLine.getContract().getContractState())) {
 //            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The contract is signed and can't be modified");
@@ -123,7 +122,7 @@ public class ContractServiceImpl implements IContractService {
     public void deleteContract(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         Contract contract = contractRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contract not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NOT_FOUND, String.valueOf(id)));
         contract.setRemovedAt(LocalDateTime.now());
         contract = contractRepository.save(contract);
     }
@@ -131,12 +130,12 @@ public class ContractServiceImpl implements IContractService {
     @Override
     public void generateContracts(@NotNull Long fileId, @NotEmpty List<Long> routeIds) {
         File file = fileRepository.findById(fileId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId)));
         List<Route> routes = routeRepository.findAllByIdIn(routeIds);
 
         // Validate routes
         if (!routes.stream().allMatch(route -> fileId.equals(route.getFileId()) && RouteStatesEnum.WON.equals(route.getRouteState()))) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cannot generate contracts. All the routes have to be in state WON.");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_GENERATION_FAIL);
         }
 
         Map<Long, List<Contribution>> operatorIdContributionsMap = routes.stream()
@@ -206,13 +205,13 @@ public class ContractServiceImpl implements IContractService {
                                    @NotNull ContractLineDto contractLineDto) {
         checkIfFileExists(fileId);
         ContractLine contractLine = contractLineRepository.findById(contractLineId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No contract line found with id: " + contractLineId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_LINE_NOT_FOUND, String.valueOf(contractLineId)));
         if (!contractLine.getContractId().equals(contractId)) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Selected contract line doesn't match for the contract with id: " + contractId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_LINE_CONTRACT_MISMATCH, String.valueOf(contractId));
         }
 
         if (ContractStatesEnum.SIGNED.equals(contractLine.getContract().getContractState())) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The contract is signed and can't be modified");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_SIGNED_MODIFICATION);
         }
 
         IContractLineMapper.INSTANCE.updateFromDto(contractLineDto, contractLine);
@@ -231,13 +230,13 @@ public class ContractServiceImpl implements IContractService {
     public void deleteContractLine(@NotNull Long fileId, @NotNull Long contractId, @NotNull Long contractLineId) {
         checkIfFileExists(fileId);
         ContractLine contractLine = contractLineRepository.findById(contractLineId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No contract line found with id: " + contractLineId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_LINE_NOT_FOUND, String.valueOf(contractLineId)));
         if (!contractLine.getContractId().equals(contractId)) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Selected contract line doesn't match for the contract with id: " + contractId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_LINE_CONTRACT_MISMATCH, String.valueOf(contractId));
         }
 
         if (ContractStatesEnum.SIGNED.equals(contractLine.getContract().getContractState())) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "The contract is signed and can't be modified");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_SIGNED_MODIFICATION);
         }
 
         contractLine.setRemovedAt(LocalDateTime.now());
@@ -246,7 +245,7 @@ public class ContractServiceImpl implements IContractService {
 
     private void checkIfFileExists(final Long fileId) {
         if (!fileRepository.existsById(fileId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId));
         }
     }
 

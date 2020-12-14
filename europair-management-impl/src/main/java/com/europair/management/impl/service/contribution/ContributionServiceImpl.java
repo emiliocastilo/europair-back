@@ -6,6 +6,7 @@ import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.CurrencyEnum;
 import com.europair.management.api.enums.PurchaseSaleEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.mappers.contributions.ILineContributionRouteMapper;
@@ -24,11 +25,9 @@ import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -81,13 +80,13 @@ public class ContributionServiceImpl implements IContributionService {
     @Override
     public ContributionDTO findById(Long id) {
         return IContributionMapper.INSTANCE.toDto(contributionRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
     public synchronized ContributionDTO saveContribution(ContributionDTO contributionDTO) {
         if (contributionDTO.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Contribution expected. Identifier %s got", contributionDTO.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NEW_WITH_ID, String.valueOf(contributionDTO.getId()));
         }
 
         Contribution contribution = IContributionMapper.INSTANCE.toEntity(contributionDTO);
@@ -97,7 +96,7 @@ public class ContributionServiceImpl implements IContributionService {
         // must activate flag in route to indicate the route has a contribution
         final Long routeId = contribution.getRouteId();
         Route route = routeRepository.findById(routeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId)));
         route.setHasContributions(true);
         Route updatedRoute = routeRepository.saveAndFlush(route);
 
@@ -209,10 +208,10 @@ public class ContributionServiceImpl implements IContributionService {
                 response = this.lineContributionRouteRepository.save(lineContributionRoute).getId();
 
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Not found in contribution route with id: %s", lineContributionRouteDTO.getRouteId()));
+                throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_ROUTE_NOT_FOUND, String.valueOf(lineContributionRouteDTO.getRouteId()));
             }
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Contribution not found with id: %s", lineContributionRouteDTO.getContributionId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(lineContributionRouteDTO.getContributionId()));
         }
 
         return response;
@@ -221,7 +220,7 @@ public class ContributionServiceImpl implements IContributionService {
     @Override
     public ContributionDTO updateContribution(Long id, ContributionDTO contributionDTO) {
         Contribution contribution = contributionRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(id)));
 
         // Update VAT msg
         if ((contributionDTO.getPurchaseCommissionPercent() != null && !contributionDTO.getPurchaseCommissionPercent().equals(contribution.getPurchaseCommissionPercent()))
@@ -244,23 +243,22 @@ public class ContributionServiceImpl implements IContributionService {
     public Boolean updateLineContributionRoute(Long routeId, Long contributionId, Long lineContributionRouteId, LineContributionRouteDTO lineContributionRouteDTO) {
         boolean result = false;
         Route route = routeRepository.findById(routeId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId)));
         if (!routeId.equals(lineContributionRouteDTO.getRouteId()) &&
                 route.getRotations().stream().noneMatch(rotation -> rotation.getId().equals(lineContributionRouteDTO.getRouteId()))) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Contribution lines doesn't match with route with id: " + routeId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_LINE_ROUTE_MISMATCH, String.valueOf(routeId));
         }
         LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("Line Contribution Rotation not found : %s", lineContributionRouteId)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_LINE_NOT_FOUND,
+                        String.valueOf(lineContributionRouteId)));
 
         if (lineContributionRoute.getContributionId().equals(contributionId)) {
             ILineContributionRouteMapper.INSTANCE.updateFromDto(lineContributionRouteDTO, lineContributionRoute);
             this.lineContributionRouteRepository.save(lineContributionRoute);
             result = true;
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("The given contribution id %s do not match with the related contribution id in the Line Contribution Rotation provided : %s"
-                            , contributionId
-                            , lineContributionRouteId));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_LINE_CONTRIBUTION_MISMATCH,
+                    String.format("[contributionId:%s], [contributionLineId:%s]", contributionId, lineContributionRouteId));
         }
 
         return result;
@@ -269,7 +267,7 @@ public class ContributionServiceImpl implements IContributionService {
     @Override
     public void deleteContribution(Long id) {
         Contribution contribution = contributionRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(id)));
 
         final LocalDateTime removedDateTime = LocalDateTime.now();
         contribution.setRemovedAt(removedDateTime);
@@ -291,16 +289,14 @@ public class ContributionServiceImpl implements IContributionService {
     @Transactional(readOnly = false)
     public void deleteLineContributionRoute(Long contributionId, Long lineContributionRouteId) {
         LineContributionRoute lineContributionRoute = this.lineContributionRouteRepository.findById(lineContributionRouteId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Line Contribution Rotation not found with id : %s", lineContributionRouteId)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_LINE_NOT_FOUND, String.valueOf(lineContributionRouteId)));
 
         if (lineContributionRoute.getContributionId().equals(contributionId)) {
             lineContributionRoute.setRemovedAt(LocalDateTime.now());
             this.lineContributionRouteRepository.save(lineContributionRoute);
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format("The given contribution id %s do not match with the related contribution id in the Line Contribution Rotation provided : %s"
-                            , contributionId
-                            , lineContributionRouteId));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_LINE_CONTRIBUTION_MISMATCH,
+                    String.format("[contributionId:%s], [contributionLineId:%s]", contributionId, lineContributionRouteId));
         }
     }
 
@@ -316,7 +312,7 @@ public class ContributionServiceImpl implements IContributionService {
         checkIfFileExists(fileId);
         checkIfRouteExists(routeId);
         Contribution contribution = contributionRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(id)));
         return Stream.of(ContributionStatesEnum.values())
                 .filter(state -> stateChangeService.canChangeState(contribution, state))
                 .map(ContributionStatesEnum::name)
@@ -326,7 +322,7 @@ public class ContributionServiceImpl implements IContributionService {
     @Override
     public void generateRouteContributionSaleLines(Long contributionId) {
         Contribution contribution = contributionRepository.findById(contributionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(contributionId)));
         Set<LineContributionRoute> flightPurchaseLines = new HashSet<>();
         Set<LineContributionRoute> flightSaleLines = new HashSet<>();
         Set<LineContributionRoute> servicePurchaseLines = new HashSet<>();
@@ -352,8 +348,8 @@ public class ContributionServiceImpl implements IContributionService {
                 .map(purchaseLine -> {
                     LineContributionRoute saleLine = flightSaleLines.stream()
                             .filter(line -> purchaseLine.getRouteId().equals(line.getRouteId()))
-                            .findAny().orElseThrow(() -> new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                                    "No route contribution sale line found for rotation with id: " + purchaseLine.getRouteId()));
+                            .findAny().orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_LINE_SALE_LINE_NOT_FOUND,
+                                    String.valueOf(purchaseLine.getRouteId())));
                     // Update values
                     saleLine.setPrice(purchaseLine.getPrice());
                     return saleLine;
@@ -383,17 +379,17 @@ public class ContributionServiceImpl implements IContributionService {
         checkIfFileExists(fileId);
         checkIfRouteExists(routeId);
         if (!contributionRepository.existsById(contributionId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(contributionId));
         }
         LineContributionRoute lineContributionRoute = lineContributionRouteRepository.findById(lineId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution Line not found with id: " + lineId));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_LINE_NOT_FOUND, String.valueOf(lineId)));
 
         return ILineContributionRouteMapper.INSTANCE.toDto(lineContributionRoute);
     }
 
     private Set<LineContributionRoute> createRouteContributionLines(final Long contributionId, final Route contributionRoute) {
         if (CollectionUtils.isEmpty(contributionRoute.getRotations())) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "NO rotations found for route with id: " + contributionRoute.getId());
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_WITH_NO_ROTATIONS, String.valueOf(contributionRoute.getId()));
         }
         Set<LineContributionRoute> lines = contributionRoute.getRotations().stream().map(rotation -> {
             List<LineContributionRoute> res = new ArrayList<>();
@@ -425,13 +421,13 @@ public class ContributionServiceImpl implements IContributionService {
 
     private void checkIfRouteExists(Long routeId) {
         if (!routeRepository.existsById(routeId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId));
         }
     }
 
     private void checkIfFileExists(Long fileId) {
         if (!fileRepository.existsById(fileId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId));
         }
     }
 }

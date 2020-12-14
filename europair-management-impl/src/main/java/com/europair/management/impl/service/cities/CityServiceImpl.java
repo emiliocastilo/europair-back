@@ -1,17 +1,17 @@
 package com.europair.management.impl.service.cities;
 
 import com.europair.management.api.dto.cities.CityDTO;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.cities.CityMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.cities.repository.CityRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -28,7 +28,7 @@ public class CityServiceImpl implements ICityService {
     @Override
     public CityDTO findById(Long id) {
         return CityMapper.INSTANCE.toDto(cityRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "City not found on id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CITY_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CityServiceImpl implements ICityService {
     @Override
     public CityDTO updateCity(final Long id, final CityDTO cityDTO) {
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "City not found on id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CITY_NOT_FOUND, String.valueOf(id)));
 
         CityMapper.INSTANCE.updateFromDto(cityDTO, city);
         city = cityRepository.save(city);
@@ -52,7 +52,7 @@ public class CityServiceImpl implements ICityService {
     @Override
     public void deleteCity(Long id) {
         City city = cityRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "City not found on id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CITY_NOT_FOUND, String.valueOf(id)));
         cityRepository.delete(city);
     }
 

@@ -1,17 +1,17 @@
 package com.europair.management.impl.service.files;
 
 import com.europair.management.api.dto.files.ClientDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.files.IClientMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.files.entity.Client;
 import com.europair.management.rest.model.files.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -23,7 +23,7 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public ClientDto findById(Long id) {
         return IClientMapper.INSTANCE.toDto(clientRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CLIENT_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ClientServiceImpl implements IClientService {
     public ClientDto saveClient(final ClientDto clientDto) {
 
         if (clientDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New client expected. Identifier %s got", clientDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CLIENT_NEW_WITH_ID, String.valueOf(clientDto.getId()));
         }
         Client client = IClientMapper.INSTANCE.toEntity(clientDto);
         client = clientRepository.save(client);
@@ -47,7 +47,7 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public ClientDto updateClient(Long id, ClientDto clientDto) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CLIENT_NOT_FOUND, String.valueOf(id)));
 
         IClientMapper.INSTANCE.updateFromDto(clientDto, client);
         client = clientRepository.save(client);
@@ -58,7 +58,7 @@ public class ClientServiceImpl implements IClientService {
     @Override
     public void deleteClient(Long id) {
         if (!clientRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found with id: " + id);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CLIENT_NOT_FOUND, String.valueOf(id));
         }
         clientRepository.deleteById(id);
     }
