@@ -1,7 +1,9 @@
 package com.europair.management.impl.service.operators;
 
 import com.europair.management.api.dto.operators.OperatorDTO;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.operators.IOperatorMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.operators.repository.OperatorRepository;
@@ -11,10 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +36,7 @@ public class OperatorServiceImpl implements IOperatorService {
   @Override
   public OperatorDTO findById(final Long id) {
     return IOperatorMapper.INSTANCE.toDto(operatorRepository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + id)));
+        .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(id))));
   }
 
   @Transactional(readOnly = false)
@@ -44,7 +44,7 @@ public class OperatorServiceImpl implements IOperatorService {
   public OperatorDTO saveOperator(final OperatorDTO operatorDTO) {
 
     if (operatorDTO.getId() != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New operator expected. Identifier %s got", operatorDTO.getId()));
+      throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NEW_WITH_ID, String.valueOf(operatorDTO.getId()));
     }
 
     Operator operator = IOperatorMapper.INSTANCE.toEntity(operatorDTO);
@@ -57,7 +57,7 @@ public class OperatorServiceImpl implements IOperatorService {
   public OperatorDTO updateOperator(Long id, final OperatorDTO operatorDTO) {
 
     Operator operator = operatorRepository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + id));
+        .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(id)));
 
     IOperatorMapper.INSTANCE.updateFromDto(operatorDTO, operator);
     operator = operatorRepository.save(operator);
@@ -69,7 +69,7 @@ public class OperatorServiceImpl implements IOperatorService {
   public void deleteOperator(Long id) {
 
     Operator operator = operatorRepository.findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + id));
+        .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(id)));
 
     operator.setRemovedAt(LocalDateTime.now());
     operatorRepository.save(operator);

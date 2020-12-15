@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.flights;
 
 import com.europair.management.api.dto.flights.FlightServiceDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.flights.IFlightServiceMapper;
 import com.europair.management.impl.service.calculation.ICalculationService;
 import com.europair.management.impl.util.Utils;
@@ -22,10 +23,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -72,7 +71,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     public FlightServiceDto findById(Long fileId, Long routeId, Long flightId, Long id) {
         validatePathIds(fileId, routeId, flightId);
         return IFlightServiceMapper.INSTANCE.toDto(flightServiceRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_SERVICE_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
@@ -80,10 +79,10 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         validatePathIds(fileId);
         Route route = getRoute(routeId);
         if (flightServiceDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New FlightService expected. Identifier %s got", flightServiceDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_SERVICE_NEW_WITH_ID, String.valueOf(flightServiceDto.getId()));
         }
         if (CollectionUtils.isEmpty(flightServiceDto.getFlightIdList())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No flight ids found in request body");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_SERVICE_NO_FLIGHT_IDS);
         }
 
         Service serviceType = getService(flightServiceDto.getServiceId());
@@ -115,7 +114,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
         Flight flight = getFlight(flightId);
         Service serviceType = getService(flightServiceDto.getServiceId());
         FlightService flightService = flightServiceRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_SERVICE_NOT_FOUND, String.valueOf(id)));
 
         IFlightServiceMapper.INSTANCE.updateFromDto(flightServiceDto, flightService);
         // Recalculate vat
@@ -129,7 +128,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     public void deleteFlightService(Long fileId, Long routeId, Long flightId, Long id) {
         validatePathIds(fileId, routeId, flightId);
         if (!flightServiceRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "FlightService not found with id: " + id);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_SERVICE_NOT_FOUND, String.valueOf(id));
         }
         flightServiceRepository.deleteById(id);
     }
@@ -138,32 +137,32 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     private void validatePathIds(final Long fileId, final Long routeId, final Long flightId) {
         validatePathIds(fileId);
         if (!routeRepository.existsById(routeId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId));
         }
         if (!flightRepository.existsById(flightId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Flight not found with id: " + flightId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_NOT_FOUND, String.valueOf(flightId));
         }
     }
 
     private void validatePathIds(final Long fileId) {
         if (!fileRepository.existsById(fileId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId));
         }
     }
 
     private Route getRoute(@NotNull Long routeId) {
         return routeRepository.findById(routeId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No route found with id: " + routeId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId)));
     }
 
     private Flight getFlight(@NotNull Long flightId) {
         return flightRepository.findById(flightId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No flight found with id: " + flightId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_NOT_FOUND, String.valueOf(flightId)));
     }
 
     private Service getService(@NotNull Long serviceTypeId) {
         return serviceTypeRepository.findById(serviceTypeId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No service type found with id: " + serviceTypeId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_SERVICE_NEW_WITH_ID, String.valueOf(serviceTypeId)));
     }
 
     private void calculateVat(final Long fileId, final Service serviceType, final Flight flight, final FlightService flightService) {

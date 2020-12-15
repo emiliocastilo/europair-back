@@ -10,6 +10,7 @@ public enum ErrorCodesEnum {
     // Airport
     AIRPORT_NOT_FOUND("100", HttpStatus.NOT_FOUND, "Airport not found with id"),
     AIRPORT_NEW_WITH_ID("101", HttpStatus.BAD_REQUEST, "New Airport expected. Found identifier"),
+    AIRPORT_IATA_NOT_FOUND("102", HttpStatus.NOT_FOUND, "Airport not found with IATA"),
 
     // Airport Observation
     AIRPORT_OBSERVATION_NOT_FOUND("110", HttpStatus.NOT_FOUND, "AirportObservation not found with id"),
@@ -21,6 +22,7 @@ public enum ErrorCodesEnum {
 
     // Region
     REGION_NOT_FOUND("130", HttpStatus.NOT_FOUND, "Region not found with id"),
+    REGION_NEW_WITH_ID("131", HttpStatus.BAD_REQUEST, "New Region expected. Found identifier"),
     REGION_AIRPORT_NOT_FOUND("132", HttpStatus.NOT_FOUND, "Region-Airport not found with id"),
 
     // Runway
@@ -37,6 +39,7 @@ public enum ErrorCodesEnum {
 
     // Taxes
     TAX_NOT_FOUND("170", HttpStatus.NOT_FOUND, "No Tax found for code"),
+    TAX_ROUTE_BALEARIC_NOT_FOUND("171", HttpStatus.NOT_FOUND, "Route balearics VAT not found with airports"),
 
     // City
     CITY_NOT_FOUND("180", HttpStatus.NOT_FOUND, "City not found with id"),
@@ -77,6 +80,7 @@ public enum ErrorCodesEnum {
     CONTRIBUTION_LINE_CONTRIBUTION_MISMATCH("254", HttpStatus.BAD_REQUEST, "The given contribution id do not match with the related contribution id in the Contribution Line provided."),
     CONTRIBUTION_LINE_ROUTE_MISMATCH("255", HttpStatus.UNPROCESSABLE_ENTITY, "Contribution lines doesn't match with route with id"),
     CONTRIBUTION_LINE_SALE_LINE_NOT_FOUND("256", HttpStatus.PRECONDITION_FAILED, "No route contribution sale line found for rotation with id"),
+    CONTRIBUTION_WITH_NO_FLIGHTS("257", HttpStatus.PRECONDITION_FAILED, "There are no flights in the contribution for the tax calculation."),
 
     // Route
     ROUTE_NOT_FOUND("260", HttpStatus.NOT_FOUND, "Route not found with id"),
@@ -84,6 +88,11 @@ public enum ErrorCodesEnum {
     ROUTE_WITH_NO_ROTATIONS("262", HttpStatus.PRECONDITION_FAILED, "No rotations found for route with id"),
     ROUTE_FIRST_FLIGHT_NOT_FOUND("263", HttpStatus.NOT_FOUND, "No first flight found for route with id"),
     ROUTE_LAST_FLIGHT_NOT_FOUND("264", HttpStatus.NOT_FOUND, "No last flight found for route with id"),
+    ROUTE_WITH_NO_FLIGHTS("265", HttpStatus.PRECONDITION_FAILED, "No flights found for route with id"),
+    ROUTE_WITH_CONTRIBUTIONS("266", HttpStatus.PRECONDITION_FAILED, "Cannot delete Route with contributions."),
+    ROUTE_WITH_NO_FREQ_DAYS("267", HttpStatus.BAD_REQUEST, "No Route frequency days found."),
+    ROUTE_ROTATION_NOT_FOUND("268", HttpStatus.NOT_FOUND, "Rotation not found with id"),
+    ROUTE_DATES_ERROR("269", HttpStatus.BAD_REQUEST, "Route start date is after end date."),
 
     // Country
     COUNTRY_NOT_FOUND("270", HttpStatus.NOT_FOUND, "Country not found with id"),
@@ -142,6 +151,38 @@ public enum ErrorCodesEnum {
     // Aircraft Type Average Speed
     AIRCRAFT_TYPE_AVG_SPEED_NOT_FOUND("390", HttpStatus.NOT_FOUND, "AircraftTypeAverageSpeed not found with id"),
     AIRCRAFT_TYPE_AVG_SPEED_NEW_WITH_ID("391", HttpStatus.BAD_REQUEST, "New AircraftTypeAverageSpeed expected. Found identifier"),
+
+    // Flight Service
+    FLIGHT_SERVICE_NOT_FOUND("400", HttpStatus.NOT_FOUND, "FlightService not found with id"),
+    FLIGHT_SERVICE_NEW_WITH_ID("401", HttpStatus.BAD_REQUEST, "New FlightService expected. Found identifier"),
+    FLIGHT_SERVICE_NO_FLIGHT_IDS("402", HttpStatus.BAD_REQUEST, "No flight ids found in request body."),
+
+    // Service
+    SERVICE_NOT_FOUND("410", HttpStatus.NOT_FOUND, "Service not found with id"),
+    SERVICE_NEW_WITH_ID("411", HttpStatus.BAD_REQUEST, "New Service expected. Found identifier"),
+
+    // Operator
+    OPERATOR_NOT_FOUND("420", HttpStatus.NOT_FOUND, "Operator not found with id"),
+    OPERATOR_NEW_WITH_ID("421", HttpStatus.BAD_REQUEST, "New Operator expected. Found identifier"),
+
+    // Operator Comment
+    OPERATOR_COMMENT_NOT_FOUND("430", HttpStatus.NOT_FOUND, "OperatorComment not found with id"),
+
+    // Role
+    ROLE_NOT_FOUND("440", HttpStatus.NOT_FOUND, "Role not found with id"),
+    ROLE_NEW_WITH_ID("441", HttpStatus.BAD_REQUEST, "New Role expected. Found identifier"),
+
+    // Task
+    TASK_NOT_FOUND("450", HttpStatus.NOT_FOUND, "Task not found with id"),
+    TASK_NEW_WITH_ID("451", HttpStatus.BAD_REQUEST, "New Task expected. Found identifier"),
+
+    // Screen
+    SCREEN_NOT_FOUND("460", HttpStatus.NOT_FOUND, "Screen not found with id"),
+    SCREEN_NEW_WITH_ID("461", HttpStatus.BAD_REQUEST, "New Screen expected. Found identifier"),
+
+    // User
+    USER_NOT_FOUND("470", HttpStatus.NOT_FOUND, "User not found with id"),
+
 
     ;
 

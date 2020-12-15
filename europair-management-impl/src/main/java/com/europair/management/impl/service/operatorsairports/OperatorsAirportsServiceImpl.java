@@ -1,7 +1,9 @@
 package com.europair.management.impl.service.operatorsairports;
 
 import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.operators.entity.Operator;
 import com.europair.management.rest.model.operators.repository.OperatorRepository;
 import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
@@ -10,10 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,7 +28,7 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
   public Page<OperatorsAirportsDTO> findOperatorsAirportsByOperatorPaginated(Long operatorId, Pageable pageable) {
 
     Operator operator = operatorRepository.findById(operatorId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + operatorId));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(operatorId)));
 
     Page<OperatorsAirports> airportsList = operatorsAirportsRepository.findByOperatorId(operatorId, pageable);
 
@@ -39,10 +39,10 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
   public OperatorsAirportsDTO findOperatorsAirportsById(Long operatorId, Long id) {
 
     Operator operator = operatorRepository.findById(operatorId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + operatorId));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(operatorId)));
 
     return IOperatorsAirportsMapper.INSTANCE.toDto(operatorsAirportsRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "OperatorsAirports not found on id: " + id)));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OPERATOR_NOT_FOUND, String.valueOf(id))));
   }
 
   @Transactional(readOnly = false)
@@ -50,7 +50,7 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
   public OperatorsAirportsDTO saveOperatorsAirports(Long operatorId, OperatorsAirportsDTO operatorsAirportsDTO) {
 
     Operator operator = operatorRepository.findById(operatorId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + operatorId));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(operatorId)));
 
     OperatorsAirports operatorsAirports = IOperatorsAirportsMapper.INSTANCE.toEntity(operatorsAirportsDTO);
     operatorsAirports.setOperator(operator);
@@ -64,10 +64,10 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
   public OperatorsAirportsDTO updateOperatorsAirports(Long operatorId, Long id, OperatorsAirportsDTO operatorsAirportsDTO) {
 
     Operator operator = operatorRepository.findById(operatorId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + operatorId));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(operatorId)));
 
     OperatorsAirports operatorsAirports = operatorsAirportsRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "OperatorsAirports not found on id: " + id));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OPERATOR_NOT_FOUND, String.valueOf(id)));
 
       IOperatorsAirportsMapper.INSTANCE.updateFromDto(operatorsAirportsDTO, operatorsAirports);
       operatorsAirports.setOperator(operator);
@@ -80,10 +80,10 @@ public class OperatorsAirportsServiceImpl implements IOperatorsAirportsService {
   @Override
   public void deleteOperatorsAirports(Long operatorId, Long id) {
     Operator operatorBD = operatorRepository.findById(operatorId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Operator not found on id: " + operatorId));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.OPERATOR_NOT_FOUND, String.valueOf(operatorId)));
 
     if (!operatorsAirportsRepository.existsById(id)) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "OperatorsAirports not found with id: " + id);
+      throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OPERATOR_NOT_FOUND, String.valueOf(id));
     }
     operatorsAirportsRepository.deleteById(id);
   }
