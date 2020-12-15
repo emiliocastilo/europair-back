@@ -4,6 +4,8 @@ import com.europair.management.api.enums.ContractStatesEnum;
 import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.contracts.entity.Contract;
 import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
@@ -15,11 +17,9 @@ import com.europair.management.rest.model.files.repository.FileStatusRepository;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -151,8 +151,8 @@ public class StateChangeServiceImpl implements IStateChangeService {
             }
             return route;
         } else {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "Route cannot change from state: " + route.getRouteState() + " to: " + state);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.STATE_CHANGE_ROUTE,
+                    String.format("from %s to %s", route.getRouteState(), state));
         }
     }
 
@@ -168,7 +168,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
         FileStatesEnum currentState = FileStatesEnum.valueOf(file.getStatus().getCode());
         if (canChangeState(file, state)) {
             FileStatus updatedStatus = fileStatusRepository.findFirstByCode(state.toString())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + state));
+                    .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.STATE_FILE_STATATUS_NOT_FOUND, state.toString()));
             file.setStatusId(updatedStatus.getId());
             file.setStatus(updatedStatus);
             // Change states from other entities
@@ -178,8 +178,8 @@ public class StateChangeServiceImpl implements IStateChangeService {
             }
             return file;
         } else {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "File cannot change from state: " + currentState + " to: " + state);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.STATE_CHANGE_FILE,
+                    String.format("from %s to %s", currentState, state));
         }
     }
 
@@ -200,8 +200,8 @@ public class StateChangeServiceImpl implements IStateChangeService {
             }
             return contribution;
         } else {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "Contribution cannot change from state: " + contribution.getContributionState() + " to: " + state);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.STATE_CHANGE_CONTRIBUTION,
+                    String.format("from %s to %s", contribution.getContributionState(), state));
         }
     }
 
@@ -219,8 +219,8 @@ public class StateChangeServiceImpl implements IStateChangeService {
             // Change states from other entities
             return contract;
         } else {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "Contract cannot change from state: " + contract.getContractState() + " to: " + state);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.STATE_CHANGE_CONTRACT,
+                    String.format("from %s to %s", contract.getContractState(), state));
         }
     }
 

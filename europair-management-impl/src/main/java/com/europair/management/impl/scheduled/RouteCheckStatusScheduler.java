@@ -1,6 +1,8 @@
 package com.europair.management.impl.scheduled;
 
 import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
@@ -8,13 +10,11 @@ import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import net.javacrumbs.shedlock.core.SchedulerLock;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -61,12 +61,8 @@ public class RouteCheckStatusScheduler {
     private void transitRotationToLostExpiredIfFlightIsAreGone(List<Flight> flightList) {
         for ( Flight flight : flightList){
             if(flight.getDepartureTime().isBefore(LocalDateTime.now())){
-                Route route = this.routeRepository.findById(flight.getRouteId())
-                        .orElseThrow(
-                                () -> new ResponseStatusException(
-                                        HttpStatus.INTERNAL_SERVER_ERROR,
-                                        String.format("Something when wrong with the flight : %s can not retrieve the route information", flight.getId()))
-                        );
+                Route route = this.routeRepository.findById(flight.getRouteId()).orElseThrow(() ->
+                        Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FLIGHT_GET_ROUTE_ERROR, String.valueOf(flight.getId())));
                 route.setRouteState(RouteStatesEnum.LOST_EXPIRED);
                 this.routeRepository.saveAndFlush(route);
             }
@@ -98,12 +94,8 @@ public class RouteCheckStatusScheduler {
      * This method populates the SecurityContextHolder to keep the auditory based on spring working
      */
     private void populateSecurityContextForAuditorWithSystemUser() {
-        User user = this.userRepository.findByUsername("system")
-                .orElseThrow(
-                    () -> new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR,
-                    String.format("Something when wrong retrieveing the System user. Check if exist on database"))
-                );
+        User user = this.userRepository.findByUsername("system").orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.USER_SYSTEM_NOT_FOUND));
 
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getUsername(), null, new ArrayList<>()));
     }

@@ -140,6 +140,7 @@ public enum ErrorCodesEnum {
     // Flight
     FLIGHT_NOT_FOUND("360", HttpStatus.NOT_FOUND, "Flight not found with id"),
     FLIGHT_NEW_WITH_ID("361", HttpStatus.BAD_REQUEST, "New Flight expected. Found identifier"),
+    FLIGHT_GET_ROUTE_ERROR("362", HttpStatus.INTERNAL_SERVER_ERROR, "Something when wrong, cannot retrieve the route information from flight with id"),
 
     // Aircraft Type
     AIRCRAFT_TYPE_NOT_FOUND("370", HttpStatus.NOT_FOUND, "AircraftType not found with id"),
@@ -185,6 +186,9 @@ public enum ErrorCodesEnum {
     // User
     USER_NOT_FOUND("470", HttpStatus.NOT_FOUND, "User not found with id"),
     USER_TOKEN_NOT_FOUND("471", HttpStatus.NOT_FOUND, "User of the token authentication not found searched by email"),
+    USER_SYSTEM_NOT_FOUND("472", HttpStatus.INTERNAL_SERVER_ERROR, "Something when wrong retrieving the System user. Check if exist on database."),
+    USER_USERNAME_NOT_FOUND("473", HttpStatus.NOT_FOUND, "User not found with username"),
+    USER_FOR_MENU_NOT_FOUND("474", HttpStatus.NOT_FOUND, "User not found, something when wrong with database please review logs. userId"),
 
     // Conversion
     CONVERSION_FLIGHT_RANGE_ERROR("480", HttpStatus.INTERNAL_SERVER_ERROR, "Conversion service error while converting flight ranges."),
@@ -192,6 +196,13 @@ public enum ErrorCodesEnum {
     // Filter
     FILTER_PARAMS_INVALID_OPERATOR("490", HttpStatus.BAD_REQUEST, "Invalid filter params, operator not valid"),
     FILTER_PARAMS_INVALID_PARAMS("491", HttpStatus.BAD_REQUEST, "Invalid filter params."),
+
+    // State
+    STATE_FILE_STATATUS_NOT_FOUND("500", HttpStatus.NOT_FOUND, "File status not found with code"),
+    STATE_CHANGE_FILE("501", HttpStatus.PRECONDITION_FAILED, "File cannot change state"),
+    STATE_CHANGE_CONTRIBUTION("502", HttpStatus.PRECONDITION_FAILED, "Contribution cannot change state"),
+    STATE_CHANGE_CONTRACT("503", HttpStatus.PRECONDITION_FAILED, "Contract cannot change state"),
+    STATE_CHANGE_ROUTE("504", HttpStatus.PRECONDITION_FAILED, "Route cannot change state"),
 
     ;
 

@@ -21,6 +21,7 @@ import com.europair.management.api.integrations.office365.dto.RouteSharingDTO;
 import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
 import com.europair.management.api.integrations.office365.enums.Office365PlanningFlightActionType;
 import com.europair.management.api.integrations.office365.enums.Office365PlanningOperationTypeEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.integrations.office365.mappers.IOffice365Mapper;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
@@ -45,11 +46,9 @@ import com.europair.management.rest.model.routes.entity.RouteFrequencyDay;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -96,10 +95,10 @@ public class Office365ServiceImpl implements IOffice365Service {
     @Override
     public ConfirmedOperationDto getConfirmedOperationData(Long routeId, Long contributionId) {
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId)));
 
         Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(contributionId)));
 
         return mapConfirmedOperation(route, contribution);
     }
@@ -110,14 +109,14 @@ public class Office365ServiceImpl implements IOffice365Service {
         ResponseContributionFlights responseContributionFlights = new ResponseContributionFlights();
 
         // preconditions
-        Contribution contribution = this.contributionRepository.findById(contributionId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+        Contribution contribution = this.contributionRepository.findById(contributionId).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(contributionId)));
 
-        Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + contribution.getAircraftId()));
+        Aircraft aircraft = this.aircraftRepository.findById(contribution.getAircraftId()).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NOT_FOUND, String.valueOf(contribution.getAircraftId())));
 
-        Route route = this.routeRepository.findById(contribution.getRouteId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + contribution.getRouteId()));
+        Route route = this.routeRepository.findById(contribution.getRouteId()).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(contribution.getRouteId())));
 
 
         List<DistanceSpeedUtils> dsDataList = new ArrayList<>();
@@ -186,10 +185,10 @@ public class Office365ServiceImpl implements IOffice365Service {
     public List<PlanningFlightsDTO> getPlanningFlightsInfo(Long routeId, Long contributionId) {
 
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId)));
 
         Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Contribution not found with id: " + contributionId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_NOT_FOUND, String.valueOf(contributionId)));
 
         return mapPlanningFlightsInfo(route, contribution);
 
@@ -199,7 +198,7 @@ public class Office365ServiceImpl implements IOffice365Service {
     public SimplePlanningDTO getPlanningInfo(Long routeId, Long contributionId) {
 
         Route route = routeRepository.findById(routeId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId)));
         File file = route.getFile();
         // ToDo: to send the full data
 //        Contribution contribution = contributionRepository.findById(contributionId).orElseThrow(() ->

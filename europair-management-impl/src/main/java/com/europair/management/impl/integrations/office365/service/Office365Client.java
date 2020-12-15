@@ -5,18 +5,11 @@ import com.europair.management.api.integrations.office365.dto.PlanningFlightsDTO
 import com.europair.management.api.integrations.office365.dto.ResponseSendPlanningFlightsDTO;
 import com.europair.management.api.integrations.office365.dto.SimplePlaningFlightDTO;
 import com.europair.management.api.integrations.office365.dto.SimplePlanningDTO;
-import feign.FeignException;
-import feign.hystrix.FallbackFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
