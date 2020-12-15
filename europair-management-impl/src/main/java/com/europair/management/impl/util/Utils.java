@@ -16,7 +16,6 @@ import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.CollectionUtils;
@@ -27,7 +26,14 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Utils {
@@ -51,8 +57,7 @@ public class Utils {
                                     try {
                                         operator = OperatorEnum.valueOf(paramValues[1].toUpperCase());
                                     } catch (IllegalArgumentException e) {
-                                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                                "Invalid filter params, operator not valid: " + paramValues[1], e);
+                                        throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILTER_PARAMS_INVALID_OPERATOR, paramValues[1]);
                                     }
 
                                     return Restriction.builder()
@@ -67,7 +72,7 @@ public class Utils {
             return criteria;
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid filter params. ", e);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILTER_PARAMS_INVALID_PARAMS);
         }
     }
 
@@ -242,12 +247,10 @@ public class Utils {
     public static int calculateConnectingFlights(final Airport origin, final Airport destination, final AircraftType aircraftType,
                                                  final ConversionService conversionService) {
         if (origin.getLatitude() == null || origin.getLongitude() == null || destination.getLatitude() == null || destination.getLongitude() == null) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "One of the airports doesn't have all the coordinates data to calculate the distance.");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NO_COORDINATES);
         }
         if (aircraftType.getFlightRange() == null || aircraftType.getFlightRangeUnit() == null) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "No flight range data for aircraft type with id: " + aircraftType.getId());
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_TYPE_NO_FLIGHT_RANGE, String.valueOf(aircraftType.getId()));
         }
         Unit defaultUnit = Unit.NAUTIC_MILE;
         Double flightRangeInDefaultUnit = aircraftType.getFlightRange();
@@ -260,8 +263,7 @@ public class Utils {
             conversionData.setDataToConvert(Collections.singletonList(ct));
             List<Double> result = conversionService.convertData(conversionData);
             if (CollectionUtils.isEmpty(result)) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "Conversion service error while converting flight ranges.");
+                throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONVERSION_FLIGHT_RANGE_ERROR);
             }
             flightRangeInDefaultUnit = result.get(0);
         }
@@ -363,7 +365,8 @@ public class Utils {
                 // User name for Azure users
                 final String azureUserEmail = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("unique_name");
                 res = userRepository.findByEmail(azureUserEmail).orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User of the token authentication not found searched by email: " + azureUserEmail)).getId();
+                        Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.USER_TOKEN_NOT_FOUND, String.valueOf(azureUserEmail)))
+                        .getId();
             }
 
             return res;

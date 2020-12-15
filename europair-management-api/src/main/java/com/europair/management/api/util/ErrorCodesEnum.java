@@ -11,6 +11,7 @@ public enum ErrorCodesEnum {
     AIRPORT_NOT_FOUND("100", HttpStatus.NOT_FOUND, "Airport not found with id"),
     AIRPORT_NEW_WITH_ID("101", HttpStatus.BAD_REQUEST, "New Airport expected. Found identifier"),
     AIRPORT_IATA_NOT_FOUND("102", HttpStatus.NOT_FOUND, "Airport not found with IATA"),
+    AIRPORT_NO_COORDINATES("102", HttpStatus.PRECONDITION_FAILED, "One of the airports doesn't have all the coordinates data to calculate the distance."),
 
     // Airport Observation
     AIRPORT_OBSERVATION_NOT_FOUND("110", HttpStatus.NOT_FOUND, "AirportObservation not found with id"),
@@ -143,6 +144,7 @@ public enum ErrorCodesEnum {
     // Aircraft Type
     AIRCRAFT_TYPE_NOT_FOUND("370", HttpStatus.NOT_FOUND, "AircraftType not found with id"),
     AIRCRAFT_TYPE_NEW_WITH_ID("371", HttpStatus.BAD_REQUEST, "New AircraftType expected. Found identifier"),
+    AIRCRAFT_TYPE_NO_FLIGHT_RANGE("372", HttpStatus.PRECONDITION_FAILED, "No flight range data for aircraft type with id"),
 
     // Aircraft Type Observation
     AIRCRAFT_TYPE_OBSERVATION_NOT_FOUND("380", HttpStatus.NOT_FOUND, "AircraftTypeObservation not found with id"),
@@ -182,7 +184,14 @@ public enum ErrorCodesEnum {
 
     // User
     USER_NOT_FOUND("470", HttpStatus.NOT_FOUND, "User not found with id"),
+    USER_TOKEN_NOT_FOUND("471", HttpStatus.NOT_FOUND, "User of the token authentication not found searched by email"),
 
+    // Conversion
+    CONVERSION_FLIGHT_RANGE_ERROR("480", HttpStatus.INTERNAL_SERVER_ERROR, "Conversion service error while converting flight ranges."),
+
+    // Filter
+    FILTER_PARAMS_INVALID_OPERATOR("490", HttpStatus.BAD_REQUEST, "Invalid filter params, operator not valid"),
+    FILTER_PARAMS_INVALID_PARAMS("491", HttpStatus.BAD_REQUEST, "Invalid filter params."),
 
     ;
 
