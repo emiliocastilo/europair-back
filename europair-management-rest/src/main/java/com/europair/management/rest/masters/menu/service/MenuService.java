@@ -1,9 +1,9 @@
 package com.europair.management.rest.masters.menu.service;
 
 import com.europair.management.api.dto.menu.MenuOptionDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.masters.menu.MenuOptionMapper;
 import com.europair.management.impl.util.Utils;
-import com.europair.management.rest.audit.AuditorAwareImpl;
 import com.europair.management.rest.masters.menu.repository.MenuOptionRepository;
 import com.europair.management.rest.model.masters.menu.entity.MenuOption;
 import com.europair.management.rest.model.roles.entity.Role;
@@ -14,11 +14,15 @@ import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -43,9 +47,8 @@ public class MenuService {
 
         // we must retrieve the user who request the menu, takes all his task and just send all allowed views for him
         Long userId = Utils.GetUserFromSecurityContext.getLoggedUserId(userRepository);
-        User user = userRepository.findById(userId)
-                .orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found, something when wrong with database please review logs. userId: " + userId));
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.USER_FOR_MENU_NOT_FOUND, String.valueOf(userId)));
         List<Role> roleList = user.getRoles();
         List<Task> taskList = user.getTasks();
 

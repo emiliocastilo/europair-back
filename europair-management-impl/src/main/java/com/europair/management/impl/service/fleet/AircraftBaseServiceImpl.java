@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.fleet;
 
 import com.europair.management.api.dto.fleet.AircraftBaseDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.fleet.IAircraftBaseMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -14,10 +15,8 @@ import com.europair.management.rest.model.fleet.repository.AircraftRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -47,7 +46,7 @@ public class AircraftBaseServiceImpl implements IAircraftBaseService {
     public AircraftBaseDto findById(final Long aircraftId, Long id) {
         checkIfAircraftExists(aircraftId);
         return IAircraftBaseMapper.INSTANCE.toDto(aircraftBaseRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Base not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_BASE_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
@@ -55,7 +54,7 @@ public class AircraftBaseServiceImpl implements IAircraftBaseService {
         checkIfAircraftExists(aircraftId);
         checkIfAirportExists(aircraftBaseDto.getAirport().getId());
         if (aircraftBaseDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Base expected. Identifier %s got", aircraftBaseDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_BASE_NEW_WITH_ID, String.valueOf(aircraftBaseDto.getId()));
         }
 
         AircraftBase aircraftBase = IAircraftBaseMapper.INSTANCE.toEntity(aircraftBaseDto);
@@ -78,7 +77,7 @@ public class AircraftBaseServiceImpl implements IAircraftBaseService {
         checkIfAircraftExists(aircraftId);
         checkIfAirportExists(aircraftBaseDto.getAirport().getId());
         AircraftBase aircraftBase = aircraftBaseRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Base not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_BASE_NOT_FOUND, String.valueOf(id)));
         IAircraftBaseMapper.INSTANCE.updateFromDto(aircraftBaseDto, aircraftBase);
 
         // Change relationships
@@ -97,20 +96,20 @@ public class AircraftBaseServiceImpl implements IAircraftBaseService {
     public void deleteAircraftBase(final Long aircraftId, Long id) {
         checkIfAircraftExists(aircraftId);
         if (!aircraftBaseRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Base not found with id: " + id);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_BASE_NOT_FOUND, String.valueOf(id));
         }
         aircraftBaseRepository.deleteById(id);
     }
 
     private void checkIfAirportExists(final Long airportId) {
         if (!airportRepository.existsById(airportId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NOT_FOUND, String.valueOf(airportId));
         }
     }
 
     private void checkIfAircraftExists(final Long aircraftId) {
         if (!aircraftRepository.existsById(aircraftId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + aircraftId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_NOT_FOUND, String.valueOf(aircraftId));
         }
     }
 

@@ -2,7 +2,9 @@ package com.europair.management.impl.service.roles;
 
 import com.europair.management.api.dto.roles.RoleDTO;
 import com.europair.management.api.dto.tasks.TaskDTO;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.roles.RoleMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.roles.repository.IRoleRepository;
 import com.europair.management.rest.model.rolestasks.entity.RolesTasks;
@@ -15,10 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Set;
@@ -42,7 +42,7 @@ public class RoleServiceImpl implements IRoleService {
   @Override
   public RoleDTO findById(final Long id) {
     return RoleMapper.INSTANCE.toDto(roleRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id)));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROLE_NOT_FOUND, String.valueOf(id))));
   }
 
   @Transactional(readOnly = false)
@@ -50,7 +50,7 @@ public class RoleServiceImpl implements IRoleService {
   public RoleDTO saveRole(final RoleDTO roleDTO) {
 
     if(roleDTO.getId() != null){
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New role expected. Identifier %s got", roleDTO.getId()));
+      throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROLE_NEW_WITH_ID, String.valueOf(roleDTO.getId()));
     }
     Role role = RoleMapper.INSTANCE.toEntity(roleDTO);
     role = roleRepository.save(role);
@@ -62,7 +62,7 @@ public class RoleServiceImpl implements IRoleService {
   public RoleDTO updateRole(final Long id, final RoleDTO roleDTO) {
     roleDTO.setId(id);
     Role role = roleRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROLE_NOT_FOUND, String.valueOf(id)));
 
     RoleMapper.INSTANCE.updateFromDto(roleDTO, role);
     role = roleRepository.save(role);
@@ -75,7 +75,8 @@ public class RoleServiceImpl implements IRoleService {
         if (!existIdTaskDTOInJPAList(taskDTO, role.getRolesTasks())){
 
           // we have left hand side of the relationship role but we must have both
-          Task task = taskRepository.findById(taskDTO.getId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found on id: " + taskDTO.getId()) );
+          Task task = taskRepository.findById(taskDTO.getId()).orElseThrow(() ->
+                  Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.TASK_NOT_FOUND, String.valueOf(taskDTO.getId())));
 
           RolesTasksPK rolesTasksPK = new RolesTasksPK();
           rolesTasksPK.setRoleId(role.getId());
@@ -86,7 +87,7 @@ public class RoleServiceImpl implements IRoleService {
           rolesTasks.setTask(task);
 
           rolesTasksRepository.save(rolesTasks);
-        };
+        }
       }
       /*
       must iterate over the jpa list deleting all the task that are not in the DTO list
@@ -98,7 +99,7 @@ public class RoleServiceImpl implements IRoleService {
       }
 
     role = roleRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id));
+            .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROLE_NOT_FOUND, String.valueOf(id)));
 
     return RoleMapper.INSTANCE.toDto(role);
   }
@@ -131,7 +132,7 @@ public class RoleServiceImpl implements IRoleService {
   public void deleteRole(Long id) {
 
     Role roleBD = roleRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Role not found on id: " + id));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROLE_NOT_FOUND, String.valueOf(id)));
     roleRepository.deleteById(id);
   }
 

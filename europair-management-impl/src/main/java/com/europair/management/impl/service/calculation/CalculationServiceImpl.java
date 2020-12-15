@@ -2,6 +2,7 @@ package com.europair.management.impl.service.calculation;
 
 import com.europair.management.api.dto.taxes.RouteBalearicsPctVatDTO;
 import com.europair.management.api.enums.ServiceTypeEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.service.taxes.IRouteBalearicsPctVatService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -15,9 +16,7 @@ import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.taxes.repository.TaxRepository;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CalculationServiceImpl implements ICalculationService {
@@ -48,7 +47,7 @@ public class CalculationServiceImpl implements ICalculationService {
     @Override
     public Double calculateServiceTaxToApply(Long fileId, Airport origin, Airport destination, ServiceTypeEnum serviceType, boolean isSale) {
         File file = fileRepository.findById(fileId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId)));
 
         Double taxToApply;
         if (isSale) {
@@ -112,7 +111,7 @@ public class CalculationServiceImpl implements ICalculationService {
 
     private Airport getAirport(final Long airportId) {
         return airportRepository.findById(airportId).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "No airport found with id: " + airportId));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NOT_FOUND, String.valueOf(airportId)));
     }
 
     // Tax on sale (IVA devengado)
@@ -393,19 +392,19 @@ public class CalculationServiceImpl implements ICalculationService {
 
     private Double getSpainTax() {
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_CODE)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax found for code: " + Utils.Constants.TAX_ES_CODE))
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.TAX_NOT_FOUND, Utils.Constants.TAX_ES_CODE))
                 .getTaxPercentage();
     }
 
     private Double getSpainReducedTax() {
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_REDUCED_CODE)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax found for code: " + Utils.Constants.TAX_ES_REDUCED_CODE))
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.TAX_NOT_FOUND, Utils.Constants.TAX_ES_REDUCED_CODE))
                 .getTaxPercentage();
     }
 
     private Double getIGICTax() {
         return taxRepository.findFirstByCode(Utils.Constants.TAX_ES_IGIC_CODE)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No Tax found for code: " + Utils.Constants.TAX_ES_IGIC_CODE))
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.TAX_NOT_FOUND, Utils.Constants.TAX_ES_IGIC_CODE))
                 .getTaxPercentage();
     }
 

@@ -2,6 +2,7 @@ package com.europair.management.impl.service.files;
 
 import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.enums.FileStatesEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.files.IFileMapper;
 import com.europair.management.impl.util.Utils;
@@ -14,10 +15,8 @@ import com.europair.management.rest.model.files.repository.FileStatusRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,14 +48,14 @@ public class FileServiceImpl implements IFileService {
   @Override
   public FileDTO findById(Long id) {
     return IFileMapper.INSTANCE.toDto(fileRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id)));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(id))));
   }
 
   @Override
   public FileDTO saveFile(FileDTO fileDTO) {
 
     if (fileDTO.getId() != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New File expected. Identifier %s got", fileDTO.getId()));
+      throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NEW_WITH_ID, String.valueOf(fileDTO.getId()));
     }
     File file = IFileMapper.INSTANCE.toEntity(fileDTO);
 
@@ -66,7 +65,7 @@ public class FileServiceImpl implements IFileService {
     // Check status
     if (file.getStatusId() == null) {
       FileStatus status = fileStatusRepository.findFirstByCode(FileStatesEnum.SALES.toString())
-              .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File status not found with code: " + FileStatesEnum.SALES));
+              .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_STATUS_CODE_NOT_FOUND, FileStatesEnum.SALES.toString()));
       file.setStatusId(status.getId());
       file.setStatus(status);
     }
@@ -80,7 +79,7 @@ public class FileServiceImpl implements IFileService {
   public Boolean updateFile(Long id, FileDTO fileDTO) {
 
     File file = fileRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(id)));
 
     IFileMapper.INSTANCE.updateFromDto(fileDTO, file);
     file = fileRepository.save(file);
@@ -92,7 +91,7 @@ public class FileServiceImpl implements IFileService {
   public void deleteFile(Long id) {
 
     File file = fileRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found on id: " + id));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(id)));
 
     file.setRemovedAt(LocalDateTime.now());
     fileRepository.save(file);
@@ -141,7 +140,7 @@ public class FileServiceImpl implements IFileService {
   @Override
   public List<String> getValidFileStatesToChange(Long id) {
     File file = fileRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + id));
+            .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(id)));
     return Stream.of(FileStatesEnum.values())
             .filter(state -> stateChangeService.canChangeState(file, state))
             .map(FileStatesEnum::name)

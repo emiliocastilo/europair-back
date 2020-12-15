@@ -2,6 +2,7 @@ package com.europair.management.impl.service.flights;
 
 import com.europair.management.api.enums.OperationTypeEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.service.calculation.ICalculationService;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.exception.EuropairForeignTaxException;
@@ -12,11 +13,9 @@ import com.europair.management.rest.model.flights.repository.FlightTaxRepository
 import com.europair.management.rest.model.routes.entity.Route;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,7 +49,7 @@ public class FlightTaxServiceImpl implements IFlightTaxService {
         }
 
         if (CollectionUtils.isEmpty(routeFlights)) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Something went wrong. There are no flights in the contribution for the tax calculation.");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRIBUTION_WITH_NO_FLIGHTS);
         }
 
         ServiceTypeEnum serviceType = ServiceTypeEnum.FLIGHT;

@@ -1,16 +1,16 @@
 package com.europair.management.impl.service.services;
 
 import com.europair.management.api.dto.services.ServiceDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.servicetypes.IServiceTypeMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.services.entity.Service;
 import com.europair.management.rest.model.services.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @org.springframework.stereotype.Service
 @Transactional(readOnly = true)
@@ -28,14 +28,14 @@ public class ServiceServiceImpl implements IServiceService {
   @Override
   public ServiceDto findById(Long id) {
     return IServiceTypeMapper.INSTANCE.toDto(serviceTypeRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ServiceType not found with id: " + id)));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.SERVICE_NOT_FOUND, String.valueOf(id))));
   }
 
   @Override
   @Transactional(readOnly = false)
   public ServiceDto saveService(ServiceDto serviceDto) {
     if (serviceDto.getId() != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Service Type expected. Identifier %s got", serviceDto.getId()));
+      throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.SERVICE_NEW_WITH_ID, String.valueOf(serviceDto.getId()));
     }
     Service service = IServiceTypeMapper.INSTANCE.toEntity(serviceDto);
     service = serviceTypeRepository.save(service);
@@ -48,7 +48,7 @@ public class ServiceServiceImpl implements IServiceService {
   @Transactional(readOnly = false)
   public void updateService(Long id, ServiceDto serviceDto) {
     Service service = serviceTypeRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ServiceType not found with id: " + id));
+      .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.SERVICE_NOT_FOUND, String.valueOf(id)));
 
     serviceDto.setId(id);
     serviceDto.setId(id);serviceDto.setId(id);IServiceTypeMapper.INSTANCE.updateFromDto(serviceDto, service);
@@ -60,7 +60,7 @@ public class ServiceServiceImpl implements IServiceService {
   @Transactional(readOnly = false)
   public void deleteService(Long id) {
     if (!serviceTypeRepository.existsById(id)) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ServiceType not found with id: " + id);
+      throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.SERVICE_NOT_FOUND, String.valueOf(id));
     }
     serviceTypeRepository.deleteById(id);
   }

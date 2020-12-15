@@ -3,6 +3,7 @@ package com.europair.management.impl.util;
 import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.enums.UTCEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -15,13 +16,13 @@ import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.criteria.Predicate;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -56,8 +57,7 @@ public class Utils {
                                     try {
                                         operator = OperatorEnum.valueOf(paramValues[1].toUpperCase());
                                     } catch (IllegalArgumentException e) {
-                                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                                                "Invalid filter params, operator not valid: " + paramValues[1], e);
+                                        throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILTER_PARAMS_INVALID_OPERATOR, paramValues[1]);
                                     }
 
                                     return Restriction.builder()
@@ -72,7 +72,7 @@ public class Utils {
             return criteria;
 
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid filter params. ", e);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILTER_PARAMS_INVALID_PARAMS);
         }
     }
 
@@ -247,12 +247,10 @@ public class Utils {
     public static int calculateConnectingFlights(final Airport origin, final Airport destination, final AircraftType aircraftType,
                                                  final ConversionService conversionService) {
         if (origin.getLatitude() == null || origin.getLongitude() == null || destination.getLatitude() == null || destination.getLongitude() == null) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "One of the airports doesn't have all the coordinates data to calculate the distance.");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NO_COORDINATES);
         }
         if (aircraftType.getFlightRange() == null || aircraftType.getFlightRangeUnit() == null) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
-                    "No flight range data for aircraft type with id: " + aircraftType.getId());
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_TYPE_NO_FLIGHT_RANGE, String.valueOf(aircraftType.getId()));
         }
         Unit defaultUnit = Unit.NAUTIC_MILE;
         Double flightRangeInDefaultUnit = aircraftType.getFlightRange();
@@ -265,8 +263,7 @@ public class Utils {
             conversionData.setDataToConvert(Collections.singletonList(ct));
             List<Double> result = conversionService.convertData(conversionData);
             if (CollectionUtils.isEmpty(result)) {
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "Conversion service error while converting flight ranges.");
+                throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONVERSION_FLIGHT_RANGE_ERROR);
             }
             flightRangeInDefaultUnit = result.get(0);
         }
@@ -368,7 +365,8 @@ public class Utils {
                 // User name for Azure users
                 final String azureUserEmail = (String) ((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getClaims().get("unique_name");
                 res = userRepository.findByEmail(azureUserEmail).orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "User of the token authentication not found searched by email: " + azureUserEmail)).getId();
+                        Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.USER_TOKEN_NOT_FOUND, String.valueOf(azureUserEmail)))
+                        .getId();
             }
 
             return res;
@@ -384,5 +382,35 @@ public class Utils {
         }
 
         return airportFLightList;
+    }
+
+    /**
+     * Utils class for error handling
+     */
+    public static class ErrorHandlingUtils {
+
+        /**
+         * Creates a new ResponseStatusException with the error code and description as a cause with extended details as a param
+         *
+         * @param error Error data, httpStatus, code and description
+         * @param cause Extended data of the error to append after de enum description (pe. identifier of not found entity)
+         * @return new ResponseStatusException created
+         */
+        public static ResponseStatusException getException(@NotNull ErrorCodesEnum error, @NotEmpty String cause) {
+            String exceptionMsg = "[" + error.getCode() + "]:" + error.getDescription() + " " + cause;
+            return new ResponseStatusException(error.getHttpStatus(), exceptionMsg);
+        }
+
+        /**
+         * Creates a new ResponseStatusException with the error code and description as a cause
+         *
+         * @param error Error data, httpStatus, code and description
+         * @return new ResponseStatusException created
+         */
+        public static ResponseStatusException getException(@NotNull ErrorCodesEnum error) {
+            String exceptionMsg = "[" + error.getCode() + "]:" + error.getDescription();
+            return new ResponseStatusException(error.getHttpStatus(), exceptionMsg);
+        }
+
     }
 }

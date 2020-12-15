@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.airport;
 
 import com.europair.management.api.dto.airport.AirportObservationDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.airport.IAirportObservationMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.airport.entity.Airport;
@@ -12,10 +13,8 @@ import com.europair.management.rest.model.common.OperatorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -41,15 +40,16 @@ public class AirportObservationServiceImpl implements IAirportObservationService
     @Override
     public AirportObservationDto findById(final Long airportId, Long id) {
         checkIfAirportExists(airportId);
-        return IAirportObservationMapper.INSTANCE.toDto(airportObservationRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AirportObservation not found with id: " + id)));
+        return IAirportObservationMapper.INSTANCE.toDto(airportObservationRepository.findById(id).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OBSERVATION_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
     public AirportObservationDto saveAirportObservation(final Long airportId, AirportObservationDto airportObservationDto) {
         checkIfAirportExists(airportId);
         if (airportObservationDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New AirportObservation expected. Identifier %s got", airportObservationDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OBSERVATION_NEW_WITH_ID,
+                    String.valueOf(airportObservationDto.getId()));
         }
 
         AirportObservation airportObservation = IAirportObservationMapper.INSTANCE.toEntity(airportObservationDto);
@@ -68,7 +68,7 @@ public class AirportObservationServiceImpl implements IAirportObservationService
     public AirportObservationDto updateAirportObservation(final Long airportId, Long id, AirportObservationDto airportObservationDto) {
         checkIfAirportExists(airportId);
         AirportObservation airportObservation = airportObservationRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AirportObservation not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OBSERVATION_NOT_FOUND, String.valueOf(id)));
         IAirportObservationMapper.INSTANCE.updateFromDto(airportObservationDto, airportObservation);
         airportObservation = airportObservationRepository.save(airportObservation);
 
@@ -79,14 +79,14 @@ public class AirportObservationServiceImpl implements IAirportObservationService
     public void deleteAirportObservation(final Long airportId, Long id) {
         checkIfAirportExists(airportId);
         if (!airportObservationRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AirportObservation not found with id: " + id);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_OBSERVATION_NOT_FOUND, String.valueOf(id));
         }
         airportObservationRepository.deleteById(id);
     }
 
     private void checkIfAirportExists(final Long airportId) {
         if (!airportRepository.existsById(airportId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Airport not found with id: " + airportId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_NOT_FOUND, String.valueOf(airportId));
         }
     }
 

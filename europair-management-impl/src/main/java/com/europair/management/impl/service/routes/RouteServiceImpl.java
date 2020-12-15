@@ -6,6 +6,7 @@ import com.europair.management.api.dto.routes.RouteExtendedDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.impl.mappers.routes.IRouteFrequencyDayMapper;
@@ -28,11 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.NotNull;
 import java.time.DateTimeException;
@@ -107,14 +106,14 @@ public class RouteServiceImpl implements IRouteService {
     public RouteDto findById(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         return IRouteMapper.INSTANCE.toDto(routeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
     public RouteDto saveRoute(final Long fileId, RouteExtendedDto routeDto) {
         checkIfFileExists(fileId);
         if (routeDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New Route expected. Identifier %s got", routeDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NEW_WITH_ID, String.valueOf(routeDto.getId()));
         }
 
         // Route validations
@@ -125,7 +124,7 @@ public class RouteServiceImpl implements IRouteService {
         Map<String, Airport> routeAirports = iataCodes.stream()
                 .distinct()
                 .map(iata -> airportRepository.findFirstByIataCode(iata)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No airport found with IATA: " + iata)))
+                        .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_IATA_NOT_FOUND, iata)))
                 .collect(Collectors.toMap(Airport::getIataCode, airport -> airport));
 
         Route route = IRouteMapper.INSTANCE.toEntity(routeDto);
@@ -177,7 +176,7 @@ public class RouteServiceImpl implements IRouteService {
     public RouteDto updateRoute(final Long fileId, Long id, RouteDto routeDto) {
         checkIfFileExists(fileId);
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(id)));
         IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
 
         // Delete route frequency days
@@ -207,16 +206,16 @@ public class RouteServiceImpl implements IRouteService {
     public void deleteRoute(final Long fileId, Long id) {
         checkIfFileExists(fileId);
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(id)));
         if (!CollectionUtils.isEmpty(route.getContributions())) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, "Cannot delete Route with contributions.");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_WITH_CONTRIBUTIONS);
         }
         routeRepository.deleteById(id);
     }
 
     private void checkIfFileExists(final Long fileId) {
         if (!fileRepository.existsById(fileId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found with id: " + fileId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId));
         }
     }
 
@@ -283,7 +282,7 @@ public class RouteServiceImpl implements IRouteService {
             case BIWEEKLY:
                 DayOfWeek min = dayOfWeekList.stream().min(Comparator.comparingInt(DayOfWeek::getValue)).orElse(null);
                 DayOfWeek max = dayOfWeekList.stream().max(Comparator.comparingInt(DayOfWeek::getValue))
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Route frequency days found!"));
+                        .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_WITH_NO_FREQ_DAYS));
 
                 LocalDate startCounter;
                 if (firstRotation) {
@@ -308,7 +307,7 @@ public class RouteServiceImpl implements IRouteService {
                 break;
             case DAY_OF_MONTH:
                 Integer minDayOfMonth = dayOfMonthList.stream().min(Integer::compareTo)
-                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No Route frequency days found!"));
+                        .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_WITH_NO_FREQ_DAYS));
 
                 if (firstRotation && dayOfMonthList.contains(rotationDate.getDayOfMonth())) {
                     return rotationDate;
@@ -348,10 +347,10 @@ public class RouteServiceImpl implements IRouteService {
     @Override
     public RouteDto updateRouteRotation(Long routeId, Long id, RouteDto routeDto) {
         if (!routeRepository.existsById(routeId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + routeId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(routeId));
         }
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Rotation not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_ROTATION_NOT_FOUND, String.valueOf(id)));
         IRouteMapper.INSTANCE.updateFromDto(routeDto, route);
         route = routeRepository.save(route);
 
@@ -368,7 +367,7 @@ public class RouteServiceImpl implements IRouteService {
     @Override
     public List<String> getValidRouteStatesToChange(Long id) {
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(id)));
         return Stream.of(RouteStatesEnum.values())
                 .filter(state -> stateChangeService.canChangeState(route, state))
                 .map(RouteStatesEnum::name)
@@ -386,8 +385,8 @@ public class RouteServiceImpl implements IRouteService {
                     flight.setOriginId(origin.getId());
                     flight.setDestinationId(routeAirportMap.get(iataPair.getSecond()).getId());
                     flight.setTimeZone(origin.getTimeZone());
-                    flight.setDepartureTime((null != rotation.getStartDate() ? rotation.getStartDate().atStartOfDay(): null));
-                    flight.setArrivalTime((null != rotation.getStartDate() ? rotation.getStartDate().atStartOfDay(): null));
+                    flight.setDepartureTime((null != rotation.getStartDate() ? rotation.getStartDate().atStartOfDay() : null));
+                    flight.setArrivalTime((null != rotation.getStartDate() ? rotation.getStartDate().atStartOfDay() : null));
                     flight.setRealDepartureTime(flight.getDepartureTime());
                     flight.setRealArrivalTime(flight.getArrivalTime());
                     flight.setRouteId(rotation.getId());
@@ -404,7 +403,7 @@ public class RouteServiceImpl implements IRouteService {
     // Validations
     private void routeValidations(final RouteDto routeDto) {
         if (routeDto.getStartDate().isAfter(routeDto.getEndDate())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Route start date is after end date.");
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_DATES_ERROR);
         }
     }
 
@@ -417,7 +416,8 @@ public class RouteServiceImpl implements IRouteService {
     public List<ContributionDTO> getContributionUsingRouteId(Long idRoute) {
         List<ContributionDTO> res = null;
 
-        Route route = this.routeRepository.findById(idRoute).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + idRoute));
+        Route route = this.routeRepository.findById(idRoute).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(idRoute)));
         Set<Contribution> contributions = route.getContributions();
 
         res = IContributionMapper.INSTANCE.toListDtos(contributions.stream()

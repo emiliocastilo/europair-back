@@ -1,6 +1,7 @@
 package com.europair.management.impl.service.fleet;
 
 import com.europair.management.api.dto.fleet.AircraftTypeAverageSpeedDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.fleet.IAircraftTypeAverageSpeedMapper;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -12,10 +13,8 @@ import com.europair.management.rest.model.fleet.repository.AircraftTypeRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -42,14 +41,14 @@ public class AircraftTypeAverageSpeedServiceImpl implements IAircraftTypeAverage
     public AircraftTypeAverageSpeedDto findById(final Long aircraftTypeId, Long id) {
         checkIfAircraftTypeExists(aircraftTypeId);
         return IAircraftTypeAverageSpeedMapper.INSTANCE.toDto(aircraftTypeAverageSpeedRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AverageSpeed not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_TYPE_AVG_SPEED_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
     public AircraftTypeAverageSpeedDto saveAircraftTypeAverageSpeed(final Long aircraftTypeId, AircraftTypeAverageSpeedDto aircraftTypeAverageSpeedDto) {
         checkIfAircraftTypeExists(aircraftTypeId);
         if (aircraftTypeAverageSpeedDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New AverageSpeed expected. Identifier %s got", aircraftTypeAverageSpeedDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_TYPE_AVG_SPEED_NEW_WITH_ID, String.valueOf(aircraftTypeAverageSpeedDto.getId()));
         }
 
         AircraftTypeAverageSpeed aircraftTypeAverageSpeed = IAircraftTypeAverageSpeedMapper.INSTANCE.toEntity(aircraftTypeAverageSpeedDto);
@@ -68,7 +67,7 @@ public class AircraftTypeAverageSpeedServiceImpl implements IAircraftTypeAverage
     public AircraftTypeAverageSpeedDto updateAircraftTypeAverageSpeed(final Long aircraftTypeId, Long id, AircraftTypeAverageSpeedDto aircraftTypeAverageSpeedDto) {
         checkIfAircraftTypeExists(aircraftTypeId);
         AircraftTypeAverageSpeed aircraftTypeAverageSpeed = aircraftTypeAverageSpeedRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "AverageSpeed not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_TYPE_AVG_SPEED_NOT_FOUND, String.valueOf(id)));
         IAircraftTypeAverageSpeedMapper.INSTANCE.updateFromDto(aircraftTypeAverageSpeedDto, aircraftTypeAverageSpeed);
         aircraftTypeAverageSpeed = aircraftTypeAverageSpeedRepository.save(aircraftTypeAverageSpeed);
 
@@ -79,14 +78,14 @@ public class AircraftTypeAverageSpeedServiceImpl implements IAircraftTypeAverage
     public void deleteAircraftTypeAverageSpeed(final Long aircraftTypeId, Long id) {
         checkIfAircraftTypeExists(aircraftTypeId);
         if (!aircraftTypeAverageSpeedRepository.existsById(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "AverageSpeed not found with id: " + id);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_TYPE_AVG_SPEED_NOT_FOUND, String.valueOf(id));
         }
         aircraftTypeAverageSpeedRepository.deleteById(id);
     }
 
     private void checkIfAircraftTypeExists(final Long aircraftTypeId) {
         if (!aircraftTypeRepository.existsById(aircraftTypeId)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft Type not found with id: " + aircraftTypeId);
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_TYPE_NOT_FOUND, String.valueOf(aircraftTypeId));
         }
     }
 

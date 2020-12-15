@@ -1,18 +1,18 @@
 package com.europair.management.impl.service.users;
 
 import com.europair.management.api.dto.users.UserDTO;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.users.UserMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
@@ -33,7 +33,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public UserDTO findById(Long id) {
         return UserMapper.INSTANCE.toDto(userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found on id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.USER_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
@@ -50,7 +50,7 @@ public class UserServiceImpl implements IUserService {
     public UserDTO updateUser(Long id, UserDTO userDTO) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found on id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.USER_NOT_FOUND, String.valueOf(id)));
         if (!user.getPassword().equals(userDTO.getPassword())) {
             userDTO.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         }
@@ -64,7 +64,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void deleteUser(Long id) {
         User userBD = userRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found on id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.USER_NOT_FOUND, String.valueOf(id)));
         userRepository.deleteById(id);
     }
 

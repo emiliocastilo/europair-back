@@ -1,7 +1,9 @@
 package com.europair.management.impl.service.fleet;
 
 import com.europair.management.api.dto.fleet.AircraftDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.fleet.IAircraftMapper;
+import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.fleet.entity.Aircraft;
 import com.europair.management.rest.model.fleet.entity.AircraftType;
@@ -11,10 +13,8 @@ import com.europair.management.rest.model.operators.entity.Operator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +31,7 @@ public class AircraftServiceImpl implements IAircraftService {
     @Override
     public AircraftDto findById(Long id) {
         return IAircraftMapper.INSTANCE.toDto(aircraftRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + id)));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_NOT_FOUND, String.valueOf(id))));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AircraftServiceImpl implements IAircraftService {
     public AircraftDto saveAircraft(final AircraftDto aircraftDto) {
 
         if (aircraftDto.getId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format("New aircraft expected. Identifier %s got", aircraftDto.getId()));
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_NEW_WITH_ID, String.valueOf(aircraftDto.getId()));
         }
         Aircraft aircraft = IAircraftMapper.INSTANCE.toEntity(aircraftDto);
 
@@ -64,7 +64,7 @@ public class AircraftServiceImpl implements IAircraftService {
     @Override
     public AircraftDto updateAircraft(Long id, AircraftDto aircraftDto) {
         Aircraft aircraft = aircraftRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_NOT_FOUND, String.valueOf(id)));
 
         IAircraftMapper.INSTANCE.updateFromDto(aircraftDto, aircraft);
 
@@ -88,7 +88,7 @@ public class AircraftServiceImpl implements IAircraftService {
     @Override
     public void deleteAircraft(Long id) {
         Aircraft aircraft = aircraftRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aircraft not found with id: " + id));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_NOT_FOUND, String.valueOf(id)));
         aircraft.setRemovedAt(LocalDateTime.now());
         aircraftRepository.save(aircraft);
     }

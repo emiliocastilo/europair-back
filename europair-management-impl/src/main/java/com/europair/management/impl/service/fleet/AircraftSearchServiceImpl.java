@@ -5,6 +5,7 @@ import com.europair.management.api.dto.conversions.ConversionDataDTO;
 import com.europair.management.api.dto.conversions.common.Unit;
 import com.europair.management.api.dto.fleet.AircraftFilterDto;
 import com.europair.management.api.dto.fleet.AircraftSearchResultDataDto;
+import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.fleet.IAircraftSearchMapper;
 import com.europair.management.impl.service.conversions.ConversionService;
 import com.europair.management.impl.util.DistanceSpeedUtils;
@@ -25,7 +26,6 @@ import com.europair.management.rest.model.routes.repository.RouteRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -85,13 +85,13 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
     public List<AircraftSearchResultDataDto> searchAircraft(final AircraftFilterDto filterDto) {
 
         Route route = routeRepository.findById(filterDto.getRouteId()).orElseThrow(() ->
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "Route not found with id: " + filterDto.getRouteId()));
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NOT_FOUND, String.valueOf(filterDto.getRouteId())));
 
         Route rotationSample = route.getParentRoute() == null ? route.getRotations().get(0) : route;
 
         Flight firstFlight = rotationSample.getFlights().stream().min(Comparator.comparing(Flight::getOrder))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No first flight found for route with id: " + rotationSample.getId()));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_FIRST_FLIGHT_NOT_FOUND,
+                        String.valueOf(rotationSample.getId())));
         Airport origin = firstFlight.getOrigin();
         Airport destination = firstFlight.getDestination();
 
@@ -128,7 +128,8 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         Integer minSubcategory = null;
         if (filterDto.getSubcategoryId() != null) {
             AircraftCategory subCategory = aircraftCategoryRepository.findById(filterDto.getSubcategoryId())
-                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Subcategory not found with id; " + filterDto.getSubcategoryId()));
+                    .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRCRAFT_SUBCATEGORY_NOT_FOUND,
+                            String.valueOf(filterDto.getSubcategoryId())));
             if (!Boolean.TRUE.equals(filterDto.getExactSubcategory())) {
                 minSubcategory = subCategory.getOrder();
                 filterDto.setCategoryId(subCategory.getParentCategory().getId());
@@ -140,7 +141,7 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
         Set<Long> regionCountryIds = null;
         if (filterDto.getRegionId() != null) {
             Region region = regionRepository.findById(filterDto.getRegionId()).orElseThrow(() ->
-                    new ResponseStatusException(HttpStatus.NOT_FOUND, "Region not found with id: " + filterDto.getRegionId()));
+                    Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.REGION_NOT_FOUND, String.valueOf(filterDto.getRegionId())));
             regionAirportIds = region.getAirports().stream().map(Airport::getId).collect(Collectors.toSet());
             regionCountryIds = region.getCountries().stream().map(Country::getId).collect(Collectors.toSet());
         }
@@ -196,8 +197,8 @@ public class AircraftSearchServiceImpl implements IAircraftSearchService {
 
     private List<Long> findNearbyAirports(final AircraftFilterDto filterDto, final Route route) {
         Flight lastFlight = route.getFlights().stream().max(Comparator.comparing(Flight::getOrder))
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "No last flight found for route with id: " + route.getId()));
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_LAST_FLIGHT_NOT_FOUND,
+                        String.valueOf(route.getId())));
         Airport destination = lastFlight.getDestination();
         // Find all active airports that have latitude and longitude values
         List<Airport> allAirports = airportRepository.findByRemovedAtNullAndLatitudeNotNullAndLongitudeNotNull();
