@@ -1,7 +1,7 @@
 package com.europair.management.rest.model.contracts.entity;
 
+import com.europair.management.api.enums.ContractConfigTimezoneEnum;
 import com.europair.management.api.enums.CurrencyEnum;
-import com.europair.management.api.enums.UTCEnum;
 import com.europair.management.rest.model.audit.entity.AuditModificationBaseEntityHardAudited;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -51,7 +51,7 @@ public class ContractConfiguration extends AuditModificationBaseEntityHardAudite
 
     @Column(name = "timezone")
     @Enumerated(EnumType.STRING)
-    private UTCEnum timezone;
+    private ContractConfigTimezoneEnum timezone;
 
     @Column(name = "contract_payment_conditions_id")
     private Long paymentConditionsId;
