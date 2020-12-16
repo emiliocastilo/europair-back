@@ -10,6 +10,7 @@ import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
+import com.europair.management.impl.mappers.contract.IContractCancelFeeMapper;
 import com.europair.management.impl.mappers.contract.IContractLineMapper;
 import com.europair.management.impl.mappers.contract.IContractMapper;
 import com.europair.management.impl.service.flights.IFlightServiceService;
@@ -17,7 +18,9 @@ import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.contracts.entity.Contract;
+import com.europair.management.rest.model.contracts.entity.ContractCancelFee;
 import com.europair.management.rest.model.contracts.entity.ContractLine;
+import com.europair.management.rest.model.contracts.repository.ContractCancelFeeRepository;
 import com.europair.management.rest.model.contracts.repository.ContractLineRepository;
 import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
@@ -68,6 +71,9 @@ public class ContractServiceImpl implements IContractService {
 
     @Autowired
     private LineContributionRouteRepository contributionLineRepository;
+
+    @Autowired
+    private ContractCancelFeeRepository contractCancelFeeRepository;
 
     @Autowired
     private IStateChangeService stateChangeService;
@@ -132,6 +138,8 @@ public class ContractServiceImpl implements IContractService {
         File file = fileRepository.findById(fileId).orElseThrow(() ->
                 Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId)));
         List<Route> routes = routeRepository.findAllByIdIn(routeIds);
+        final List<ContractCancelFee> defaultContractCancelFees = getDefaultContractCancelFees();
+        final List<ContractCancelFee> cancelFeeCopies = new ArrayList<>();
 
         // Validate routes
         if (!routes.stream().allMatch(route -> fileId.equals(route.getFileId()) && RouteStatesEnum.WON.equals(route.getRouteState()))) {
@@ -165,6 +173,9 @@ public class ContractServiceImpl implements IContractService {
 
             // Create sale contract lines
             saleContractLines.addAll(generateSaleContractLines(list));
+
+            // Copy default cancel fees
+            cancelFeeCopies.addAll(copyDefaultCancelFees(defaultContractCancelFees, purchaseContract));
         }
 
         // Sale contract
@@ -183,10 +194,17 @@ public class ContractServiceImpl implements IContractService {
                     line.setContractId(saleContractId);
                     return line;
                 }).collect(Collectors.toList());
+        // Copy default cancel fees for sale contract
+        cancelFeeCopies.addAll(copyDefaultCancelFees(defaultContractCancelFees, saleContract));
 
         // Persist all contract lines
         saleContractLines.addAll(purchaseContractLines);
         List<ContractLine> contractLinesSaved = contractLineRepository.saveAll(saleContractLines);
+
+        // Persist all copied cancel fees
+        if (!CollectionUtils.isEmpty(cancelFeeCopies)) {
+            List<ContractCancelFee> contractCancelFeeSaved = contractCancelFeeRepository.saveAll(cancelFeeCopies);
+        }
 
         // ToDo: generar servicios adicionales
 
@@ -312,6 +330,26 @@ public class ContractServiceImpl implements IContractService {
         }
 
         return contractLines;
+    }
+
+    private List<ContractCancelFee> getDefaultContractCancelFees() {
+        return contractCancelFeeRepository.findByContractIdNull();
+    }
+
+    private List<ContractCancelFee> copyDefaultCancelFees(final List<ContractCancelFee> defaultContractCancelFees, final Contract contract) {
+        List<ContractCancelFee> cancelFeeCopies = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(defaultContractCancelFees)) {
+            cancelFeeCopies = defaultContractCancelFees.stream()
+                    .map(contractCancelFee -> {
+                        ContractCancelFee ccfCopy = IContractCancelFeeMapper.INSTANCE.copyEntity(contractCancelFee);
+                        ccfCopy.setContractId(contract.getId());
+
+                        return ccfCopy;
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        return cancelFeeCopies;
     }
 
     private void generateFlightServices(Contribution contribution) {
