@@ -138,6 +138,21 @@ public interface IContractController {
 
     /**
      * <p>
+     * Copies all the contract data into a new contract
+     * </p>
+     *
+     * @param fileId     File identifier
+     * @param contractId Identifier of the contract to copy
+     * @return No data
+     */
+    @PostMapping("/{contractId}/copy")
+    @Operation(description = "Copies the selected contract into a new one", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> copyContract(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId);
+
+    /**
+     * <p>
      * Updates a contract line if the contract is not signed
      * </p>
      *

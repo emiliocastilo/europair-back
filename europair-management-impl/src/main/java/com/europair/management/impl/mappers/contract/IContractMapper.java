@@ -47,6 +47,23 @@ public interface IContractMapper {
     @Mapping(target = "contractConfiguration", ignore = true)
     void updateFromDto(final ContractDto dto, @MappingTarget Contract entity);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "modifiedBy", ignore = true)
+    @Mapping(target = "removedAt", ignore = true)
+    @Mapping(target = "code", ignore = true)
+    @Mapping(target = "contractState", ignore = true)
+    @Mapping(target = "contractDate", ignore = true)
+    @Mapping(target = "signatureDate", ignore = true)
+    @Mapping(target = "file", ignore = true)
+    @Mapping(target = "client", ignore = true)
+    @Mapping(target = "provider", ignore = true)
+    @Mapping(target = "contractConfiguration", ignore = true)
+    @Mapping(target = "contractLines", ignore = true)
+    Contract copyEntity(final Contract entity);
+
     @Named("mapTotalAmount")
     default BigDecimal mapTotalAmount(final Contract contract) {
         BigDecimal totalAmount = null;

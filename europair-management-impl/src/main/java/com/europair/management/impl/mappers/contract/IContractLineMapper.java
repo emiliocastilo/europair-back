@@ -40,4 +40,15 @@ public interface IContractLineMapper {
     @Mapping(target = "contractLineType", source = "lineContributionRouteType")
     ContractLine toContractLineFromContributionLine(final LineContributionRoute contributionLine);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "modifiedBy", ignore = true)
+    @Mapping(target = "removedAt", ignore = true)
+    @Mapping(target = "contractId", ignore = true)
+    @Mapping(target = "contract", ignore = true)
+    @Mapping(target = "route", ignore = true)
+    @Mapping(target = "contributionLine", ignore = true)
+    ContractLine copyEntity(final ContractLine entity);
 }

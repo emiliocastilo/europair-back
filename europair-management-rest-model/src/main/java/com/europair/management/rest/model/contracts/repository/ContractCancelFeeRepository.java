@@ -11,4 +11,5 @@ public interface ContractCancelFeeRepository extends JpaRepository<ContractCance
 
     List<ContractCancelFee> findByContractIdNull();
 
+    List<ContractCancelFee> findByContractId(Long contractId);
 }

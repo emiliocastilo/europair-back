@@ -31,4 +31,12 @@ public interface IContractConditionMapper {
     @Mapping(target = "contract", ignore = true)
     void copyFromEntity(final ContractCondition entityToCopy, @MappingTarget ContractCondition entity);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "modifiedBy", ignore = true)
+    @Mapping(target = "contractId", ignore = true)
+    @Mapping(target = "contract", ignore = true)
+    ContractCondition copyEntity(final ContractCondition entity);
 }
