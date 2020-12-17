@@ -1,7 +1,6 @@
 package com.europair.management.impl.service.contract;
 
 import com.europair.management.api.dto.contract.ContractCompleteDataDto;
-import com.europair.management.api.dto.contract.ContractConditionDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
@@ -55,7 +54,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
