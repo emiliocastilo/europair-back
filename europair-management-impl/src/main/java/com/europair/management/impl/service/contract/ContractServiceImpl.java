@@ -1,5 +1,7 @@
 package com.europair.management.impl.service.contract;
 
+import com.europair.management.api.dto.contract.ContractCompleteDataDto;
+import com.europair.management.api.dto.contract.ContractConditionDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
@@ -53,6 +55,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -279,6 +282,25 @@ public class ContractServiceImpl implements IContractService {
                 })
                 .collect(Collectors.toList());
         contractCancelFeesCopies = contractCancelFeeRepository.saveAll(contractCancelFeesCopies);
+    }
+
+    @Override
+    public ContractCompleteDataDto getContractCompleteData(@NotNull Long fileId, @NotNull Long contractId) {
+        checkIfFileExists(fileId);
+        Contract contract = contractRepository.findById(contractId).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NOT_FOUND, String.valueOf(contractId)));
+
+        ContractCompleteDataDto contractDto = IContractMapper.INSTANCE.toDtoComplete(contract);
+
+        contractDto.setConditions(contractConditionRepository.findByContractId(contractId).stream()
+                .map(IContractConditionMapper.INSTANCE::toDto)
+                .collect(Collectors.toSet()));
+
+        contractDto.setCancelFees(contractCancelFeeRepository.findByContractId(contractId).stream()
+                .map(IContractCancelFeeMapper.INSTANCE::toDto)
+                .collect(Collectors.toSet()));
+
+        return contractDto;
     }
 
     @Override

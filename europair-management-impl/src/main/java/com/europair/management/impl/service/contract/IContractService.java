@@ -1,5 +1,6 @@
 package com.europair.management.impl.service.contract;
 
+import com.europair.management.api.dto.contract.ContractCompleteDataDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
@@ -28,6 +29,8 @@ public interface IContractService {
     void updateStates(@NotNull Long fileId, @NotEmpty List<Long> contractIds, ContractStatesEnum state);
 
     void copyContract(@NotNull Long fileId, @NotNull Long contractId);
+
+    ContractCompleteDataDto getContractCompleteData(@NotNull Long fileId, @NotNull Long contractId);
 
     void updateContractLine(@NotNull Long fileId, @NotNull Long contractId, @NotNull Long contractLineId, @NotNull ContractLineDto contractLineDto);
 

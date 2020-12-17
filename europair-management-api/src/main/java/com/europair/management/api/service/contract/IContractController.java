@@ -1,6 +1,7 @@
 package com.europair.management.api.service.contract;
 
 import com.europair.management.api.dto.common.StateChangeDto;
+import com.europair.management.api.dto.contract.ContractCompleteDataDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
@@ -150,6 +151,22 @@ public interface IContractController {
     ResponseEntity<?> copyContract(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId);
+
+    /**
+     * <p>
+     * Retrieves contract complete data identified by id.
+     * </p>
+     *
+     * @param fileId     File identifier
+     * @param contractId Contract identifier
+     * @return Contract complete data
+     */
+    @GetMapping("/{contractId}/info")
+    @Operation(description = "Retrieve contract complete data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<ContractCompleteDataDto> getContractCompleteData(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId);
+
 
     /**
      * <p>

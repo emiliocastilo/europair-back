@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
@@ -20,6 +21,12 @@ public interface IContractLineMapper {
     @Mapping(target = "route.contributions", ignore = true)
     @Mapping(target = "contributionLine", ignore = true)
     ContractLineDto toDto(final ContractLine entity);
+
+    @Mapping(target = "contract", ignore = true)
+    @Mapping(target = "route", ignore = true)
+    @Mapping(target = "contributionLine", ignore = true)
+    @Named("toDtoLineOnly")
+    ContractLineDto toDtoLineOnly(final ContractLine entity);
 
     @Mapping(target = "contract", ignore = true)
     @Mapping(target = "route", ignore = true)

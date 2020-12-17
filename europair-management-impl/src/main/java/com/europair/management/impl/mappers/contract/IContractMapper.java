@@ -1,5 +1,6 @@
 package com.europair.management.impl.mappers.contract;
 
+import com.europair.management.api.dto.contract.ContractCompleteDataDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.contracts.entity.Contract;
@@ -35,6 +36,14 @@ public interface IContractMapper {
     @Mapping(target = "totalAmount", source = "entity", qualifiedByName = "mapTotalAmount")
     @Mapping(target = "contractConfiguration.contract", ignore = true)
     ContractDto toDtoNoLines(final Contract entity);
+
+    @Mapping(target = "file", ignore = true)
+    @Mapping(target = "provider.country", ignore = true)
+    @Mapping(target = "client.country", ignore = true)
+    @Mapping(target = "totalAmount", source = "entity", qualifiedByName = "mapTotalAmount")
+    @Mapping(target = "contractConfiguration.contract", ignore = true)
+    @Mapping(target = "contractLines", qualifiedByName = "toDtoLineOnly")
+    ContractCompleteDataDto toDtoComplete(final Contract entity);
 
     @Mapping(target = "file", ignore = true)
     @Mapping(target = "client", ignore = true)
