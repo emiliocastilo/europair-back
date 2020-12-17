@@ -4,8 +4,10 @@ import com.europair.management.rest.model.airport.entity.Airport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface AirportRepository extends JpaRepository<Airport, Long>, IAirportRepositoryCustom {
@@ -13,4 +15,6 @@ public interface AirportRepository extends JpaRepository<Airport, Long>, IAirpor
     List<Airport> findByRemovedAtNullAndLatitudeNotNullAndLongitudeNotNull();
 
     Optional<Airport> findFirstByIataCode(String code);
+
+    Set<Airport> findByIdIn(@NotEmpty Set<Long> ids);
 }

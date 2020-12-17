@@ -16,7 +16,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -82,4 +86,14 @@ public class OperatorServiceImpl implements IOperatorService {
     return operatorsWithFilter.map(operator -> IOperatorMapper.INSTANCE.toDto(operator));
   }
 
+  @Override
+  public void reactivateOperators(@NotEmpty Set<Long> operatorIds) {
+    Set<Operator> operators = operatorRepository.findByIdIn(operatorIds).stream()
+            .map(operator -> {
+              operator.setRemovedAt(null);
+              return operator;
+            })
+            .collect(Collectors.toSet());
+    operators = new HashSet<>(operatorRepository.saveAll(operators));
+  }
 }

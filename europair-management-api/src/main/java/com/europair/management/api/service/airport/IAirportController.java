@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
+import java.util.Set;
 
 @RequestMapping(value = {"/airports", "/external/airports"})
 public interface IAirportController {
@@ -89,4 +91,16 @@ public interface IAirportController {
     @Operation(description = "Soft Delete existing master airport by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteAirport(@Parameter(description = "Airport identifier") @PathVariable @NotNull final Long id);
 
+    /**
+     * <p>
+     * Reactivates the soft removed selected entities
+     * </p>
+     *
+     * @param airportIds Airport id list
+     * @return No content
+     */
+    @PutMapping("/reactivate")
+    @Operation(description = "Reactivates soft deleted airports", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> reactivateAirports(
+            @Parameter(description = "List of Airport identifiers") @NotEmpty @RequestBody final Set<Long> airportIds);
 }

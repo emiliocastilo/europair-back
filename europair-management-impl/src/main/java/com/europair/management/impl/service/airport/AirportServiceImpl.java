@@ -13,7 +13,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -62,5 +66,16 @@ public class AirportServiceImpl implements IAirportService {
 
         airport.setRemovedAt(LocalDateTime.now());
         airportRepository.save(airport);
+    }
+
+    @Override
+    public void reactivateAirports(@NotEmpty Set<Long> airportIds) {
+        Set<Airport> airports = airportRepository.findByIdIn(airportIds).stream()
+                .map(airport -> {
+                    airport.setRemovedAt(null);
+                    return airport;
+                })
+                .collect(Collectors.toSet());
+        airports = new HashSet<>(airportRepository.saveAll(airports));
     }
 }

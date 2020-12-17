@@ -53,7 +53,12 @@ public interface IContractMapper {
     Contract toEntity(final ContractDto dto);
 
     @Mapping(target = "contractState", ignore = true)
+    @Mapping(target = "fileId", ignore = true)
+    @Mapping(target = "file", ignore = true)
+    @Mapping(target = "client", ignore = true)
+    @Mapping(target = "provider", ignore = true)
     @Mapping(target = "contractConfiguration", ignore = true)
+    @Mapping(target = "contractLines", ignore = true)
     void updateFromDto(final ContractDto dto, @MappingTarget Contract entity);
 
     @Mapping(target = "id", ignore = true)

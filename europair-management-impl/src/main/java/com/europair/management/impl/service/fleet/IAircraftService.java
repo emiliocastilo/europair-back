@@ -5,6 +5,9 @@ import com.europair.management.rest.model.common.CoreCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import javax.validation.constraints.NotEmpty;
+import java.util.Set;
+
 public interface IAircraftService {
 
     Page<AircraftDto> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria);
@@ -17,4 +20,5 @@ public interface IAircraftService {
 
     void deleteAircraft(Long id);
 
+    void reactivateAircraft(@NotEmpty Set<Long> aircraftIds);
 }

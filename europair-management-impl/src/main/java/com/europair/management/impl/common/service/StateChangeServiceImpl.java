@@ -23,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -216,6 +217,9 @@ public class StateChangeServiceImpl implements IStateChangeService {
     private Contract changeContractState(final Contract contract, final ContractStatesEnum state) {
         if (canChangeState(contract, state)) {
             contract.setContractState(state);
+            if (ContractStatesEnum.SIGNED.equals(state) && contract.getSignatureDate() == null) {
+                contract.setSignatureDate(LocalDateTime.now());
+            }
             // Change states from other entities
             return contract;
         } else {

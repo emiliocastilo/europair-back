@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -83,4 +85,11 @@ public class OperatorController implements IOperatorController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
+    public ResponseEntity<?> reactivateOperators(@NotEmpty Set<Long> operatorIds) {
+        LOGGER.debug("[OperatorController] - Starting method [reactivateOperators] with input: operatorIds={}", operatorIds);
+        operatorService.reactivateOperators(operatorIds);
+        LOGGER.debug("[OperatorController] - Ending method [reactivateOperators] with no return.");
+        return ResponseEntity.noContent().build();
+    }
 }
