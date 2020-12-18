@@ -101,12 +101,12 @@ public class ContractController implements IContractController {
     }
 
     @Override
-    public ResponseEntity<?> copyContract(@NotNull Long fileId, @NotNull Long contractId) {
+    public ResponseEntity<Long> copyContract(@NotNull Long fileId, @NotNull Long contractId) {
         LOGGER.debug("[ContractController] - Starting method [copyContract] with input: fileId={}, contractId={}",
                 fileId, contractId);
-        contractService.copyContract(fileId, contractId);
-        LOGGER.debug("[ContractController] - Ending method [copyContract] with no return.");
-        return ResponseEntity.noContent().build();
+        Long contractCopyId = contractService.copyContract(fileId, contractId);
+        LOGGER.debug("[ContractController] - Ending method [copyContract] with return: {}", contractCopyId);
+        return ResponseEntity.ok(contractCopyId);
     }
 
     @Override

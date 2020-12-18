@@ -232,14 +232,14 @@ public class ContractServiceImpl implements IContractService {
     }
 
     @Override
-    public void copyContract(@NotNull Long fileId, @NotNull Long contractId) {
+    public Long copyContract(@NotNull Long fileId, @NotNull Long contractId) {
         checkIfFileExists(fileId);
         Contract originalContract = contractRepository.findById(contractId).orElseThrow(() ->
                 Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NOT_FOUND, String.valueOf(contractId)));
 
         // Copy contract data
         Contract contractCopy = IContractMapper.INSTANCE.copyEntity(originalContract);
-        contractCopy.setCode(generateContractCode());
+        contractCopy.setCode(generateContractCopyCode(originalContract.getCode()));
         contractCopy.setContractDate(LocalDateTime.now());
         contractCopy.setContractState(ContractStatesEnum.PENDING);
 
@@ -280,6 +280,8 @@ public class ContractServiceImpl implements IContractService {
                 })
                 .collect(Collectors.toList());
         contractCancelFeesCopies = contractCancelFeeRepository.saveAll(contractCancelFeesCopies);
+
+        return contractCopyId;
     }
 
     @Override
@@ -368,6 +370,29 @@ public class ContractServiceImpl implements IContractService {
         // Code for new Contract
         sb.append(StringUtils.leftPad(String.valueOf(lastCodeOfCurrentYear == null ? CODE_INIT_VALUE : lastCodeOfCurrentYear + 1),
                 6, "0"));
+
+        return sb.toString();
+    }
+
+    private String generateContractCopyCode(@NotEmpty String originalContractCode) {
+        final String originalCode = originalContractCode.contains("-") ? originalContractCode.substring(0, 10) : originalContractCode;
+
+        StringBuilder sb = new StringBuilder();
+
+        // Code to filter
+        sb.append(originalCode);
+
+        // Find last code copy if exists
+        final String codeFilterValue = sb.toString();
+        final Integer lastCodeCopyNum = contractRepository.findByCodeStartsWith(codeFilterValue).stream()
+                .filter(contract -> contract.getCode().contains("-"))
+                .map(contract -> Integer.valueOf(contract.getCode().substring(10).replace("-", "")))
+                .max(Integer::compareTo)
+                .orElse(0);
+
+        // Code for contract copy
+        sb.append("-");
+        sb.append(StringUtils.leftPad(String.valueOf(lastCodeCopyNum + 1), 2, "0"));
 
         return sb.toString();
     }

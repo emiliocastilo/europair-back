@@ -28,7 +28,7 @@ public interface IContractService {
 
     void updateStates(@NotNull Long fileId, @NotEmpty List<Long> contractIds, ContractStatesEnum state);
 
-    void copyContract(@NotNull Long fileId, @NotNull Long contractId);
+    Long copyContract(@NotNull Long fileId, @NotNull Long contractId);
 
     ContractCompleteDataDto getContractCompleteData(@NotNull Long fileId, @NotNull Long contractId);
 
