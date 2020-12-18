@@ -144,9 +144,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Observation",
@@ -289,7 +287,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "5379bded-70bc-4060-b48e-43144fced90b",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -299,16 +296,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "91341a93-462b-4f95-802d-f806e2fc92c4",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "aircraft - filter",
@@ -465,8 +459,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Aircraft Category",
@@ -657,9 +650,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "aircraft category - get by id",
@@ -832,8 +823,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Aircraft Type",
@@ -977,7 +967,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "69017eea-494c-41b1-82c9-436896f16e2d",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -987,16 +976,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1b736b23-49bb-4419-a5cc-001a0321c7d5",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Observation",
@@ -1139,7 +1125,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "4fc91708-5a6d-4d3a-908a-b8d7d858fa09",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1149,16 +1134,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "8ac4837e-0814-4597-a462-01bf09eb68eb",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "aircraft type- get by id",
@@ -1304,7 +1286,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "a2dd56d0-3086-46ea-b9b9-489bec1afa2d",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -1314,15 +1295,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "96e65e36-79f4-45be-9515-9c38cc63ab25",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Airport",
@@ -1463,9 +1442,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Runway",
@@ -1601,9 +1578,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Airport Operators",
@@ -1746,7 +1721,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "172e4664-a9b4-4cff-94c3-1b9027f50f61",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -1756,16 +1730,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "d016c45c-3365-4268-b0ec-961ecdbbb366",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Terminal",
@@ -1903,9 +1874,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Airport Region",
@@ -2012,9 +1981,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "airport - find by Id",
@@ -2022,12 +1989,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/airports/1",
-							"protocol": "http",
+							"raw": "{{url}}/airports/1",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
-							"port": "8080",
 							"path": [
 								"airports",
 								"1"
@@ -2075,7 +2040,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"iataCode\": \"AAA\",\r\n    \"icaoCode\": \"AAAA\",\r\n    \"name\": \"Airport A\",\r\n    \"country\": {\r\n        \"id\": 1\r\n    },\r\n    \"city\": {\r\n        \"id\": 1\r\n    },\r\n    \"timeZone\": \"GTM+1\",\r\n    \"elevation\": {\r\n        \"value\": 5000,\r\n        \"type\": \"KILOMETER\"\r\n    },\r\n    \"latitude\": 123,\r\n    \"longitude\": 123,\r\n    \"customs\": \"NO\",\r\n    \"specialConditions\": false,\r\n    \"flightRules\": \"IFR\"\r\n}",
+							"raw": "{\r\n    \"iataCode\": \"AAA\",\r\n    \"icaoCode\": \"AAAA\",\r\n    \"name\": \"Airport A\",\r\n    \"country\": {\r\n        \"id\": 1\r\n    },\r\n    \"city\": {\r\n        \"id\": 1\r\n    },\r\n    \"timeZone\": \"ONE\",\r\n    \"elevation\": {\r\n        \"value\": 5000,\r\n        \"type\": \"KILOMETER\"\r\n    },\r\n    \"latitude\": 123,\r\n    \"longitude\": 123,\r\n    \"customs\": \"NO\",\r\n    \"specialConditions\": false,\r\n    \"flightRules\": \"IFR\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2129,22 +2094,46 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/airports/1",
-							"protocol": "http",
+							"raw": "{{url}}/airports/7278",
 							"host": [
-								"localhost"
+								"{{url}}"
 							],
-							"port": "8080",
 							"path": [
 								"airports",
-								"1"
+								"7278"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "airport - reactivate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[7277, 7278]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports/reactivate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports",
+								"reactivate"
 							]
 						}
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "City",
@@ -2240,8 +2229,150 @@
 					},
 					"response": []
 				}
+			]
+		},
+		{
+			"name": "Calculations",
+			"item": [
+				{
+					"name": "Calculate VAT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/calculations/vat?fileId=10&originAirportId=9488&destinationAirportId=9540&serviceType=CATERING_ON_BOARD&isSale=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"calculations",
+								"vat"
+							],
+							"query": [
+								{
+									"key": "fileId",
+									"value": "10"
+								},
+								{
+									"key": "originAirportId",
+									"value": "9488"
+								},
+								{
+									"key": "destinationAirportId",
+									"value": "9540"
+								},
+								{
+									"key": "serviceType",
+									"value": "CATERING_ON_BOARD"
+								},
+								{
+									"key": "isSale",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Calculate VAT - Percentage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/calculations/vat/percentage?fileId=10&originAirportId=9488&destinationAirportId=9540&serviceType=CATERING_ON_BOARD&isSale=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"calculations",
+								"vat",
+								"percentage"
+							],
+							"query": [
+								{
+									"key": "fileId",
+									"value": "10"
+								},
+								{
+									"key": "originAirportId",
+									"value": "9488"
+								},
+								{
+									"key": "destinationAirportId",
+									"value": "9540"
+								},
+								{
+									"key": "serviceType",
+									"value": "CATERING_ON_BOARD"
+								},
+								{
+									"key": "isSale",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Calculate VAT - Route percentage",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/calculations/vat/route-percentage?originAirportId=9488&destinationAirportId=9540&serviceType=CATERING_ON_BOARD&isSale=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"calculations",
+								"vat",
+								"route-percentage"
+							],
+							"query": [
+								{
+									"key": "originAirportId",
+									"value": "9488"
+								},
+								{
+									"key": "destinationAirportId",
+									"value": "9540"
+								},
+								{
+									"key": "serviceType",
+									"value": "CATERING_ON_BOARD"
+								},
+								{
+									"key": "isSale",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				}
 			],
-			"protocolProfileBehavior": {}
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		},
 		{
 			"name": "Commons",
@@ -2300,8 +2431,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Contacts",
@@ -2419,8 +2549,837 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
+		},
+		{
+			"name": "Contract",
+			"item": [
+				{
+					"name": "ContractCancelFee",
+					"item": [
+						{
+							"name": "contract cancel fee - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-cancel-fee",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-cancel-fee"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract cancel fee - find by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-cancel-fee/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-cancel-fee",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract cancel fee - create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"contractId\": null,\r\n    \"fromValue\": 1,\r\n    \"fromUnit\": \"Dia\",\r\n    \"feePercentage\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/contract-cancel-fee",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-cancel-fee"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "ContractPaymentCondition",
+					"item": [
+						{
+							"name": "contract payment condition - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-payment-conditions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-payment-conditions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract payment condition - find by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-payment-conditions/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-payment-conditions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract payment condition - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"P1\",\r\n    \"name\": \"-8 DIAS\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/contract-payment-conditions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-payment-conditions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract payment condition - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"code\": \"P1\",\r\n    \"name\": \"-7 DIAS\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/contract-payment-conditions/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-payment-conditions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract payment condition - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-payment-conditions/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-payment-conditions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "ContractConfiguration",
+					"item": [
+						{
+							"name": "contract configuration - find",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/59/contracts/1/configuration",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"59",
+										"contracts",
+										"1",
+										"configuration"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract configuration - create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"language\":\"ES\",\r\n   \"timezone\":\"UTC\",\r\n   \"paymentConditionsObservations\":\"Obs\",\r\n   \"deposit\":\"101\",\r\n   \"depositExpirationDate\":\"2021-01-05\",\r\n   \"paymentConditionsId\":2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/60/contracts/3/configuration",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"60",
+										"contracts",
+										"3",
+										"configuration"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract configuration - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"id\": 2,\r\n   \"language\":\"ES\",\r\n   \"timezone\":\"UTC\",\r\n   \"paymentConditionsObservation\":\"Obs update\",\r\n   \"deposit\":\"101\",\r\n   \"depositExpirationDate\":\"2021-01-05\",\r\n   \"paymentConditionsId\":2,\r\n   \"currency\": \"EUR\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/60/contracts/3/configuration",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"60",
+										"contracts",
+										"3",
+										"configuration"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "ContractCondition",
+					"item": [
+						{
+							"name": "contract condition - filter",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-conditions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-conditions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract condition - find by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-conditions/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-conditions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract condition - add",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": null,\r\n    \"contractId\": null,\r\n    \"conditionOrder\": 1,\r\n    \"code\": \"DEFAULT-1\",\r\n    \"title\": \"Default Condition 1\",\r\n    \"description\": \"<p>Description 1</p>\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/contract-conditions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-conditions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract condition - update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 1,\r\n    \"contractId\": null,\r\n    \"conditionOrder\": 1,\r\n    \"code\": \"DEFAULT-1\",\r\n    \"title\": \"Default Condition 1\",\r\n    \"description\": \"<p>Description 1 update</p>\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/contract-conditions/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-conditions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract condition - delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/contract-conditions/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-conditions",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "contract condition - copy",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"contractId\": 3,\r\n    \"conditions\": [2,3]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/contract-conditions/copy",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"contract-conditions",
+										"copy"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Pruebas",
+					"item": [
+						{
+							"name": "1 - add file",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": null,\r\n    \"code\": \"T1216\",\r\n    \"description\": \"Prueba 16-12\",\r\n    \"statusId\": null,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": 1,\r\n    \"saleAgentId\": 1,\r\n    \"operationType\": \"COMMERCIAL\",\r\n    \"observation\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2 - add route (adhoc)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2021-10-01\",\r\n    \"endDate\": \"2021-10-10\",\r\n    \"seatsF\": 30,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 60 \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/60/routes",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"60",
+										"routes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "3 - add contribution",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"fileId\": 60,\r\n    \"routeId\": 335,\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": 366,\r\n    \"aircraftId\": 37,\r\n    \"requestTime\": null,\r\n    \"quotedTime\": null,\r\n    \"cargoAirborne\": null,\r\n    \"currency\": \"EUR\",\r\n    \"currencyOnSale\": \"EUR\",\r\n    \"comments\": null,\r\n    \"exchangeBuyType\": null,\r\n    \"purchasePrice\": 8000,\r\n    \"purchaseCommissionPercent\": 0,\r\n    \"inlcudedIva\": false,\r\n    \"salesPrice\": 10000,\r\n    \"salesCommissionPercent\": 0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/60/routes/335/contributions",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"60",
+										"routes",
+										"335",
+										"contributions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "4 - update contribution line (purchase)",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":1,\r\n    \"contributionId\": 59,\r\n    \"routeId\": 333,\r\n    \"comments\": \"Comentario compra\",\r\n    \"price\": 9000,\r\n    \"lineContributionRouteType\":\"PURCHASE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/59/routes/333/contributions/293/linecontributionroute/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"59",
+										"routes",
+										"333",
+										"contributions",
+										"293",
+										"linecontributionroute",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "5 - update contribution line (sale)",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 2,\r\n    \"contributionId\": 1,\r\n    \"routeId\": 2,\r\n    \"comments\": \"Comentario venta\",\r\n    \"price\": 11000,\r\n    \"lineContributionRouteType\":\"SALE\",\r\n    \"type\":\"FLIGHT\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"contributions",
+										"1",
+										"linecontributionroute",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "6 - change contribution state",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"idList\": [294],\r\n   \"state\": \"SENDED\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/60/routes/335/contributions/state",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"60",
+										"routes",
+										"335",
+										"contributions",
+										"state"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "contract - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/60/contracts",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"60",
+								"contracts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contract - find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/60/contracts/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"60",
+								"contracts",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contract - add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fileId\": 1,\r\n    \"routeId\": 1,\r\n    \"contributionState\": \"PENDING\",\r\n    \"operatorId\": 1,\r\n    \"aircraftId\": 1,\r\n    \"requestTime\": null,\r\n    \"quotedTime\": null,\r\n    \"cargoAirborne\": null,\r\n    \"currency\": \"EUR\",\r\n    \"currencyOnSale\": \"EUR\",\r\n    \"comments\": null,\r\n    \"exchangeBuyType\": null,\r\n    \"purchasePrice\": 8000,\r\n    \"purchaseCommissionPercent\": 0,\r\n    \"inlcudedIva\": false,\r\n    \"salesPrice\": 10000,\r\n    \"salesCommissionPercent\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/contract",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"contract"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contract - generate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[335]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/60/contracts/generate",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"60",
+								"contracts",
+								"generate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contract - copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/60/contracts/8/copy",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"60",
+								"contracts",
+								"8",
+								"copy"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contract - info (complete data)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/60/contracts/5/info",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"60",
+								"contracts",
+								"5",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "contract - delete (soft)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/contract/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"contract",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Contribution",
@@ -2465,7 +3424,6 @@
 										{
 											"listen": "prerequest",
 											"script": {
-												"id": "11f3f40c-50a0-40a2-847c-3c93427152bc",
 												"exec": [
 													""
 												],
@@ -2501,9 +3459,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "save lineContributionRoute PURCHASE - FLIGHT",
@@ -2669,10 +3625,32 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "lineContributionRoute - find by id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/contributions/1/linecontributionroute/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"contributions",
+										"1",
+										"linecontributionroute",
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "getContributionByFilter",
@@ -2749,7 +3727,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "92bf676e-becc-47ec-a3e4-16ad4e421ba6",
 								"exec": [
 									""
 								],
@@ -2791,7 +3768,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "bfe44573-973b-46c6-a318-80013c8a5bce",
 								"exec": [
 									""
 								],
@@ -2833,7 +3809,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d6de6de2-b98f-40b4-8402-b55ae4c1c139",
 								"exec": [
 									""
 								],
@@ -2875,7 +3850,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "51a4fef0-236f-460d-89e3-96516030cd14",
 								"exec": [
 									""
 								],
@@ -3067,9 +4041,30 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "contribution - delete (soft)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/files/1/routes/2/contributions/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"routes",
+								"2",
+								"contributions",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Conversions",
@@ -3119,8 +4114,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Country",
@@ -3163,8 +4157,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "File",
@@ -3218,7 +4211,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"id\": null,\r\n    \"fileId\": null,\r\n    \"flightMotive\": \"flightMotive\",\r\n    \"connections\": \"connections\",\r\n    \"limitations\": \"limitations\",\r\n    \"fixedVariableFuel\": \"fixedVariableFuel\",\r\n    \"luggage\": \"luggage\",\r\n    \"specialLuggage\": \"specialLuggage\",\r\n    \"onBoardService\": \"onBoardService\",\r\n    \"specialRequests\": \"specialRequests\",\r\n    \"otherCharges\": \"otherCharges\",\r\n    \"operationalInfo\": \"operationalInfo\"\r\n}",
+									"raw": "{\r\n    \"id\": null,\r\n    \"fileId\": null,\r\n    \"flightMotive\": \"flightMotive\",\r\n    \"connections\": \"connections\",\r\n    \"limitations\": \"limitations\",\r\n    \"fixedVariableFuel\": \"fixedVariableFuel\",\r\n    \"luggage\": \"luggage\",\r\n    \"specialLuggage\": \"specialLuggage\",\r\n    \"onBoardService\": \"onBoardService\",\r\n    \"specialRequests\": \"specialRequests\",\r\n    \"otherCharges\": \"otherCharges\",\r\n    \"operationalInfo\": \"operationalInfo\",\r\n    \"observation\": \"observation\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3288,9 +4281,7 @@
 							},
 							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "Route",
@@ -3329,9 +4320,7 @@
 									},
 									"response": []
 								}
-							],
-							"protocolProfileBehavior": {},
-							"_postman_isSubFolder": true
+							]
 						},
 						{
 							"name": "route - filter",
@@ -3379,7 +4368,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-10\",\r\n    \"seatsF\": 30,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 60 \r\n}",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"startDate\": \"2021-10-01\",\r\n    \"endDate\": \"2021-10-10\",\r\n    \"seatsF\": 30,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 60 \r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3407,7 +4396,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"DAILY\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-30\",\r\n    \"rotationsNumber\": null,\r\n    \"frequencyDays\": [\r\n        {\"weekday\": \"MONDAY\"},\r\n        {\"weekday\": \"WEDNESDAY\"}\r\n    ]\r\n}",
+									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"DAILY\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-10-30\",\r\n    \"rotationsNumber\": null,\r\n    \"frequencyDays\": [\r\n        {\"weekday\": \"MONDAY\"},\r\n        {\"weekday\": \"WEDNESDAY\"}\r\n    ],\r\n    \"seatsF\": 30,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 60\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3491,7 +4480,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"label\": \"MAD-PMI-MAD\",\r\n    \"frequency\": \"DAY_OF_MONTH\",\r\n    \"startDate\": \"2020-10-01\",\r\n    \"endDate\": \"2020-12-31\",\r\n    \"rotationsNumber\": null,\r\n    \"frequencyDays\": [\r\n        {\"monthDay\": 5},\r\n        {\"monthDay\": 25}\r\n    ]\r\n}",
+									"raw": "{\r\n    \"endDate\": \"2021-03-31\",\r\n    \"frequency\": \"DAY_OF_MONTH\",\r\n    \"frequencyDays\": [{\"monthDay\": 30}],\r\n    \"label\": \"PMI-MAD-PMI\",\r\n    \"seatsC\": 0,\r\n    \"seatsF\": 0,\r\n    \"seatsY\": 0,\r\n    \"startDate\": \"2020-12-01\"\r\n}\r\n",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3589,10 +4578,41 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "route - get valid states to change",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \"idList\": [1],\r\n   \"state\": \"OPTIONED\"\r\n}\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/files/1/routes/1/state",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"files",
+										"1",
+										"routes",
+										"1",
+										"state"
+									]
+								}
+							},
+							"response": []
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "file - add",
@@ -3601,7 +4621,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": null,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1\",\r\n    \"statusId\": null,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": null,\r\n    \"saleAgentId\": null,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null\r\n}",
+							"raw": "{\r\n    \"id\": null,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1\",\r\n    \"statusId\": null,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": 1,\r\n    \"saleAgentId\": 1,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3662,7 +4682,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"id\": 1,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1 upd8\",\r\n    \"statusId\": 1,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": 1,\r\n    \"saleAgentId\": 1,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null,\r\n    \"specialLuggage\": \"Tiger Cage\"\r\n}",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"code\": \"F1\",\r\n    \"description\": \"File desc 1 upd8\",\r\n    \"statusId\": 1,\r\n    \"clientId\": 1,\r\n    \"contactId\": 1,\r\n    \"providerId\": 1,\r\n    \"salePersonId\": 1,\r\n    \"saleAgentId\": 1,\r\n    \"operationType\": \"ACMI\",\r\n    \"observation\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3726,9 +4746,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "file - get valid states to change",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"idList\": [1],\r\n   \"state\": \"SALES\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/files/1/state",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"files",
+								"1",
+								"state"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Flight",
@@ -3876,7 +4926,6 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "a49f640f-d0ab-44f5-aa3f-1eefe0c34a15",
 								"type": "text/javascript",
 								"exec": [
 									""
@@ -3886,16 +4935,13 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "54e61b40-0da5-446f-8f91-52d54f61d1a9",
 								"type": "text/javascript",
 								"exec": [
 									""
 								]
 							}
 						}
-					],
-					"protocolProfileBehavior": {},
-					"_postman_isSubFolder": true
+					]
 				},
 				{
 					"name": "flight - filter",
@@ -3947,7 +4993,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"originId\": 2,\r\n    \"destinationId\": 4,\r\n    \"order\": null,\r\n    \"id\": null,\r\n    \"departureTime\": \"2020-10-06 00:00\",\r\n    \"arrivalTime\": null,\r\n    \"timeZone\": \"ONE\",\r\n    \"seatsF\": 10,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 30,\r\n    \"beds\": null,\r\n    \"stretchers\": null\r\n}",
+							"raw": "{\r\n    \"originId\": 2,\r\n    \"destinationId\": 4,\r\n    \"order\": null,\r\n    \"id\": null,\r\n    \"departureTime\": \"2021-09-30 00:00\",\r\n    \"arrivalTime\": null,\r\n    \"timeZone\": \"ONE\",\r\n    \"seatsF\": 10,\r\n    \"seatsC\": 50,\r\n    \"seatsY\": 30,\r\n    \"beds\": null,\r\n    \"stretchers\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -4054,8 +5100,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Integration",
@@ -4076,6 +5121,31 @@
 								"confirmation",
 								"1",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "office365 - send planning",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/integration/office/planning?fileId=41",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"integration",
+								"office",
+								"planning"
+							],
+							"query": [
+								{
+									"key": "fileId",
+									"value": "41"
+								}
 							]
 						}
 					},
@@ -4124,9 +5194,64 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "office365 - get contribution flights",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/integration/office/get/flight/contribution/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"integration",
+								"office",
+								"get",
+								"flight",
+								"contribution",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
+		},
+		{
+			"name": "Region",
+			"item": [
+				{
+					"name": "region - filter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/regions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"regions"
+							],
+							"query": [
+								{
+									"key": "filter_code",
+									"value": "TEST,EQUALS",
+									"disabled": true
+								},
+								{
+									"key": "filter_airports.name",
+									"value": "ANA,CONTAINS",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Role",
@@ -4195,8 +5320,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Screen",
@@ -4239,8 +5363,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Services",
@@ -4356,7 +5479,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "76ba3863-c42d-407f-9cc9-a0ed53964cd9",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -4366,15 +5488,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "01fd63d4-bf3b-459c-8104-78f1b8ec5eb9",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Task",
@@ -4460,8 +5580,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "User",
@@ -4492,8 +5611,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "VAT_Balearics",
@@ -4548,8 +5666,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "login_generate_token",
@@ -4557,7 +5674,6 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "14419e2d-6698-4b7b-bf46-8bde1b3e0436",
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
 							"pm.collectionVariables.set(\"token\", jsonData.jwtToken);"
@@ -4765,7 +5881,6 @@
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "477761d9-1911-4d76-a5c9-281cc36a3089",
 				"type": "text/javascript",
 				"exec": [
 					"var current_timestamp = new Date();",
@@ -4776,7 +5891,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "17c6e574-d72d-4da2-8727-f736eff80e8e",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -4786,20 +5900,16 @@
 	],
 	"variable": [
 		{
-			"id": "0f322b30-a85f-4b4f-b052-94aff8bcd706",
 			"key": "token",
 			"value": ""
 		},
 		{
-			"id": "e8bd9283-997e-41a8-97d0-eab2f3b10d1a",
 			"key": "url",
 			"value": "http://localhost:8080"
 		},
 		{
-			"id": "122e3a3e-dbbf-4e7e-9dfe-2552780a1660",
 			"key": "dev",
-			"value": "http://212.51.59.56/services"
+			"value": "https://dev-erp-europair.plexus.services/services"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
