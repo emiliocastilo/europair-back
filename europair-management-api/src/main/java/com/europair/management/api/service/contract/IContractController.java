@@ -144,11 +144,11 @@ public interface IContractController {
      *
      * @param fileId     File identifier
      * @param contractId Identifier of the contract to copy
-     * @return No data
+     * @return Contract copy identifier
      */
     @PostMapping("/{contractId}/copy")
     @Operation(description = "Copies the selected contract into a new one", security = {@SecurityRequirement(name = "bearerAuth")})
-    ResponseEntity<?> copyContract(
+    ResponseEntity<Long> copyContract(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId);
 
