@@ -254,12 +254,16 @@ public class ContractServiceImpl implements IContractService {
                     return lineCopy;
                 })
                 .collect(Collectors.toList());
-        contractLineCopies = contractLineRepository.saveAll(contractLineCopies);
+        if (!CollectionUtils.isEmpty(contractLineCopies)) {
+            contractLineCopies = contractLineRepository.saveAll(contractLineCopies);
+        }
 
         // Copy configuration
         ContractConfiguration configurationCopy = IContractConfigurationMapper.INSTANCE.copyEntity(originalContract.getContractConfiguration());
-        configurationCopy.setContractId(contractCopyId);
-        configurationCopy = contractConfigurationRepository.save(configurationCopy);
+        if (configurationCopy != null) {
+            configurationCopy.setContractId(contractCopyId);
+            configurationCopy = contractConfigurationRepository.save(configurationCopy);
+        }
 
         // Copy conditions
         List<ContractCondition> contractConditionsCopies = contractConditionRepository.findByContractId(contractId).stream()
@@ -269,7 +273,9 @@ public class ContractServiceImpl implements IContractService {
                     return conditionCopy;
                 })
                 .collect(Collectors.toList());
-        contractConditionsCopies = contractConditionRepository.saveAll(contractConditionsCopies);
+        if (!CollectionUtils.isEmpty(contractConditionsCopies)) {
+            contractConditionsCopies = contractConditionRepository.saveAll(contractConditionsCopies);
+        }
 
         // Copy cancel fees
         List<ContractCancelFee> contractCancelFeesCopies = contractCancelFeeRepository.findByContractId(contractId).stream()
@@ -279,7 +285,9 @@ public class ContractServiceImpl implements IContractService {
                     return cancelFeeCopy;
                 })
                 .collect(Collectors.toList());
-        contractCancelFeesCopies = contractCancelFeeRepository.saveAll(contractCancelFeesCopies);
+        if (!CollectionUtils.isEmpty(contractCancelFeesCopies)) {
+            contractCancelFeesCopies = contractCancelFeeRepository.saveAll(contractCancelFeesCopies);
+        }
 
         return contractCopyId;
     }
