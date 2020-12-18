@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Map;
+import java.util.Set;
 
 @RequestMapping(value = {"/aircrafts", "/external/aircrafts"})
 public interface IAircraftController {
@@ -89,4 +91,16 @@ public interface IAircraftController {
     @Operation(description = "Deletes existing master aircraft by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
     ResponseEntity<?> deleteAircraft(@Parameter(description = "Aircraft identifier") @PathVariable @NotNull final Long id);
 
+    /**
+     * <p>
+     * Reactivates the soft removed selected entities
+     * </p>
+     *
+     * @param aircraftIds Aircraft id list
+     * @return No content
+     */
+    @PutMapping("/reactivate")
+    @Operation(description = "Reactivates soft deleted aircraft", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> reactivateAircraft(
+            @Parameter(description = "List of Aircraft identifiers") @NotEmpty @RequestBody final Set<Long> aircraftIds);
 }

@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
@@ -20,6 +21,12 @@ public interface IContractLineMapper {
     @Mapping(target = "route.contributions", ignore = true)
     @Mapping(target = "contributionLine", ignore = true)
     ContractLineDto toDto(final ContractLine entity);
+
+    @Mapping(target = "contract", ignore = true)
+    @Mapping(target = "route", ignore = true)
+    @Mapping(target = "contributionLine", ignore = true)
+    @Named("toDtoLineOnly")
+    ContractLineDto toDtoLineOnly(final ContractLine entity);
 
     @Mapping(target = "contract", ignore = true)
     @Mapping(target = "route", ignore = true)
@@ -40,4 +47,15 @@ public interface IContractLineMapper {
     @Mapping(target = "contractLineType", source = "lineContributionRouteType")
     ContractLine toContractLineFromContributionLine(final LineContributionRoute contributionLine);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "modifiedBy", ignore = true)
+    @Mapping(target = "removedAt", ignore = true)
+    @Mapping(target = "contractId", ignore = true)
+    @Mapping(target = "contract", ignore = true)
+    @Mapping(target = "route", ignore = true)
+    @Mapping(target = "contributionLine", ignore = true)
+    ContractLine copyEntity(final ContractLine entity);
 }

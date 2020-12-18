@@ -1,5 +1,6 @@
 package com.europair.management.impl.service.contract;
 
+import com.europair.management.api.dto.contract.ContractCompleteDataDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
@@ -10,6 +11,9 @@ import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.enums.ServiceTypeEnum;
 import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.common.service.IStateChangeService;
+import com.europair.management.impl.mappers.contract.IContractCancelFeeMapper;
+import com.europair.management.impl.mappers.contract.IContractConditionMapper;
+import com.europair.management.impl.mappers.contract.IContractConfigurationMapper;
 import com.europair.management.impl.mappers.contract.IContractLineMapper;
 import com.europair.management.impl.mappers.contract.IContractMapper;
 import com.europair.management.impl.service.flights.IFlightServiceService;
@@ -17,7 +21,13 @@ import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
 import com.europair.management.rest.model.contracts.entity.Contract;
+import com.europair.management.rest.model.contracts.entity.ContractCancelFee;
+import com.europair.management.rest.model.contracts.entity.ContractCondition;
+import com.europair.management.rest.model.contracts.entity.ContractConfiguration;
 import com.europair.management.rest.model.contracts.entity.ContractLine;
+import com.europair.management.rest.model.contracts.repository.ContractCancelFeeRepository;
+import com.europair.management.rest.model.contracts.repository.ContractConditionRepository;
+import com.europair.management.rest.model.contracts.repository.ContractConfigurationRepository;
 import com.europair.management.rest.model.contracts.repository.ContractLineRepository;
 import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
@@ -68,6 +78,15 @@ public class ContractServiceImpl implements IContractService {
 
     @Autowired
     private LineContributionRouteRepository contributionLineRepository;
+
+    @Autowired
+    private ContractCancelFeeRepository contractCancelFeeRepository;
+
+    @Autowired
+    private ContractConfigurationRepository contractConfigurationRepository;
+
+    @Autowired
+    private ContractConditionRepository contractConditionRepository;
 
     @Autowired
     private IStateChangeService stateChangeService;
@@ -132,6 +151,8 @@ public class ContractServiceImpl implements IContractService {
         File file = fileRepository.findById(fileId).orElseThrow(() ->
                 Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId)));
         List<Route> routes = routeRepository.findAllByIdIn(routeIds);
+        final List<ContractCancelFee> defaultContractCancelFees = getDefaultContractCancelFees();
+        final List<ContractCancelFee> cancelFeeCopies = new ArrayList<>();
 
         // Validate routes
         if (!routes.stream().allMatch(route -> fileId.equals(route.getFileId()) && RouteStatesEnum.WON.equals(route.getRouteState()))) {
@@ -165,6 +186,9 @@ public class ContractServiceImpl implements IContractService {
 
             // Create sale contract lines
             saleContractLines.addAll(generateSaleContractLines(list));
+
+            // Copy default cancel fees
+            cancelFeeCopies.addAll(copyDefaultCancelFees(defaultContractCancelFees, purchaseContract));
         }
 
         // Sale contract
@@ -183,10 +207,17 @@ public class ContractServiceImpl implements IContractService {
                     line.setContractId(saleContractId);
                     return line;
                 }).collect(Collectors.toList());
+        // Copy default cancel fees for sale contract
+        cancelFeeCopies.addAll(copyDefaultCancelFees(defaultContractCancelFees, saleContract));
 
         // Persist all contract lines
         saleContractLines.addAll(purchaseContractLines);
         List<ContractLine> contractLinesSaved = contractLineRepository.saveAll(saleContractLines);
+
+        // Persist all copied cancel fees
+        if (!CollectionUtils.isEmpty(cancelFeeCopies)) {
+            List<ContractCancelFee> contractCancelFeeSaved = contractCancelFeeRepository.saveAll(cancelFeeCopies);
+        }
 
         // ToDo: generar servicios adicionales
 
@@ -198,6 +229,76 @@ public class ContractServiceImpl implements IContractService {
     public void updateStates(@NotNull Long fileId, @NotEmpty List<Long> contractIds, ContractStatesEnum state) {
         checkIfFileExists(fileId);
         stateChangeService.changeState(contractIds, state);
+    }
+
+    @Override
+    public void copyContract(@NotNull Long fileId, @NotNull Long contractId) {
+        checkIfFileExists(fileId);
+        Contract originalContract = contractRepository.findById(contractId).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NOT_FOUND, String.valueOf(contractId)));
+
+        // Copy contract data
+        Contract contractCopy = IContractMapper.INSTANCE.copyEntity(originalContract);
+        contractCopy.setCode(generateContractCode());
+        contractCopy.setContractDate(LocalDateTime.now());
+        contractCopy.setContractState(ContractStatesEnum.PENDING);
+
+        contractCopy = contractRepository.save(contractCopy);
+        final Long contractCopyId = contractCopy.getId();
+
+        // Copy lines
+        List<ContractLine> contractLineCopies = originalContract.getContractLines().stream()
+                .map(contractLine -> {
+                    ContractLine lineCopy = IContractLineMapper.INSTANCE.copyEntity(contractLine);
+                    lineCopy.setContractId(contractCopyId);
+                    return lineCopy;
+                })
+                .collect(Collectors.toList());
+        contractLineCopies = contractLineRepository.saveAll(contractLineCopies);
+
+        // Copy configuration
+        ContractConfiguration configurationCopy = IContractConfigurationMapper.INSTANCE.copyEntity(originalContract.getContractConfiguration());
+        configurationCopy.setContractId(contractCopyId);
+        configurationCopy = contractConfigurationRepository.save(configurationCopy);
+
+        // Copy conditions
+        List<ContractCondition> contractConditionsCopies = contractConditionRepository.findByContractId(contractId).stream()
+                .map(contractCondition -> {
+                    ContractCondition conditionCopy = IContractConditionMapper.INSTANCE.copyEntity(contractCondition);
+                    conditionCopy.setContractId(contractCopyId);
+                    return conditionCopy;
+                })
+                .collect(Collectors.toList());
+        contractConditionsCopies = contractConditionRepository.saveAll(contractConditionsCopies);
+
+        // Copy cancel fees
+        List<ContractCancelFee> contractCancelFeesCopies = contractCancelFeeRepository.findByContractId(contractId).stream()
+                .map(cancelFee -> {
+                    ContractCancelFee cancelFeeCopy = IContractCancelFeeMapper.INSTANCE.copyEntity(cancelFee);
+                    cancelFeeCopy.setContractId(contractCopyId);
+                    return cancelFeeCopy;
+                })
+                .collect(Collectors.toList());
+        contractCancelFeesCopies = contractCancelFeeRepository.saveAll(contractCancelFeesCopies);
+    }
+
+    @Override
+    public ContractCompleteDataDto getContractCompleteData(@NotNull Long fileId, @NotNull Long contractId) {
+        checkIfFileExists(fileId);
+        Contract contract = contractRepository.findById(contractId).orElseThrow(() ->
+                Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.CONTRACT_NOT_FOUND, String.valueOf(contractId)));
+
+        ContractCompleteDataDto contractDto = IContractMapper.INSTANCE.toDtoComplete(contract);
+
+        contractDto.setConditions(contractConditionRepository.findByContractId(contractId).stream()
+                .map(IContractConditionMapper.INSTANCE::toDto)
+                .collect(Collectors.toSet()));
+
+        contractDto.setCancelFees(contractCancelFeeRepository.findByContractId(contractId).stream()
+                .map(IContractCancelFeeMapper.INSTANCE::toDto)
+                .collect(Collectors.toSet()));
+
+        return contractDto;
     }
 
     @Override
@@ -312,6 +413,26 @@ public class ContractServiceImpl implements IContractService {
         }
 
         return contractLines;
+    }
+
+    private List<ContractCancelFee> getDefaultContractCancelFees() {
+        return contractCancelFeeRepository.findByContractIdNull();
+    }
+
+    private List<ContractCancelFee> copyDefaultCancelFees(final List<ContractCancelFee> defaultContractCancelFees, final Contract contract) {
+        List<ContractCancelFee> cancelFeeCopies = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(defaultContractCancelFees)) {
+            cancelFeeCopies = defaultContractCancelFees.stream()
+                    .map(contractCancelFee -> {
+                        ContractCancelFee ccfCopy = IContractCancelFeeMapper.INSTANCE.copyEntity(contractCancelFee);
+                        ccfCopy.setContractId(contract.getId());
+
+                        return ccfCopy;
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        return cancelFeeCopies;
     }
 
     private void generateFlightServices(Contribution contribution) {

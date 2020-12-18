@@ -2,10 +2,10 @@ package com.europair.management.impl.service.contract;
 
 
 import com.europair.management.api.dto.common.StateChangeDto;
+import com.europair.management.api.dto.contract.ContractCompleteDataDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
-import com.europair.management.api.enums.ContributionStatesEnum;
 import com.europair.management.api.service.contract.IContractController;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -98,6 +98,24 @@ public class ContractController implements IContractController {
         contractService.updateStates(fileId, stateChangeDto.getIdList(), stateChangeDto.getState());
         LOGGER.debug("[ContractController] - Ending method [changeState] with no return.");
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> copyContract(@NotNull Long fileId, @NotNull Long contractId) {
+        LOGGER.debug("[ContractController] - Starting method [copyContract] with input: fileId={}, contractId={}",
+                fileId, contractId);
+        contractService.copyContract(fileId, contractId);
+        LOGGER.debug("[ContractController] - Ending method [copyContract] with no return.");
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<ContractCompleteDataDto> getContractCompleteData(@NotNull Long fileId, @NotNull Long contractId) {
+        LOGGER.debug("[ContractController] - Starting method [getContractCompleteData] with input: fileId={}, contractId={}",
+                fileId, contractId);
+        ContractCompleteDataDto dto = contractService.getContractCompleteData(fileId, contractId);
+        LOGGER.debug("[ContractController] - Ending method [getContractCompleteData] with return: {}", dto);
+        return ResponseEntity.ok(dto);
     }
 
     @Override

@@ -3,7 +3,10 @@ package com.europair.management.rest.common.configuration;
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.users.entity.User;
 import com.europair.management.rest.model.users.repository.IUserRepository;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +26,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(JWTAuthorizationFilter.class);
 
   private static final String TOKEN_BEARER_PREFIX = "Bearer";
   private static final String HEADER_AUTHORIZACION_KEY = "Authorization";
@@ -46,6 +51,13 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
       return;
     }
     UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
+
+    // Check for expired token to throw 401 error
+    final String expired = (String) req.getAttribute("expired");
+    if (expired != null) {
+      res.sendError(HttpServletResponse.SC_UNAUTHORIZED, expired);
+    }
+
     SecurityContextHolder.getContext().setAuthentication(authentication);
     chain.doFilter(req, res);
   }
@@ -54,11 +66,17 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     String token = request.getHeader(HEADER_AUTHORIZACION_KEY);
     if (token != null) {
       // Process token and get user.
-      String user = Jwts.parser()
-        .setSigningKey(secretKey)
-        .parseClaimsJws(token.replace(TOKEN_BEARER_PREFIX, ""))
-        .getBody()
-        .getSubject();
+      String user = null;
+      try {
+        user = Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token.replace(TOKEN_BEARER_PREFIX, ""))
+                .getBody()
+                .getSubject();
+      } catch (ExpiredJwtException e) {
+        LOGGER.debug("Expired JWT token: " + e.getMessage());
+        request.setAttribute("expired", e.getMessage());
+      }
 
       if (user != null) {
         // retrieve all the roles from the external user using the username and put into authorities

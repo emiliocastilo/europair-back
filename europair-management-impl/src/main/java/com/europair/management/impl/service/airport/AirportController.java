@@ -14,9 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -78,6 +80,14 @@ public class AirportController implements IAirportController {
         LOGGER.debug("[AirportController] - Starting method [deleteAirport] with input: id={}", id);
         airportService.deleteAirport(id);
         LOGGER.debug("[AirportController] - Ending method [deleteAirport] with no return");
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<?> reactivateAirports(@NotEmpty Set<Long> airportIds) {
+        LOGGER.debug("[AirportController] - Starting method [reactivateAirports] with input: airportIds={}", airportIds);
+        airportService.reactivateAirports(airportIds);
+        LOGGER.debug("[AirportController] - Ending method [reactivateAirports] with no return");
         return ResponseEntity.noContent().build();
     }
 }

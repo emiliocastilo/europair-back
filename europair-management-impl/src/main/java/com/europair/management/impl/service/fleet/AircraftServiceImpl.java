@@ -16,7 +16,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -93,4 +97,14 @@ public class AircraftServiceImpl implements IAircraftService {
         aircraftRepository.save(aircraft);
     }
 
+    @Override
+    public void reactivateAircraft(@NotEmpty Set<Long> aircraftIds) {
+        Set<Aircraft> aircraftSet = aircraftRepository.findByIdIn(aircraftIds).stream()
+                .map(aircraft -> {
+                    aircraft.setRemovedAt(null);
+                    return aircraft;
+                })
+                .collect(Collectors.toSet());
+        aircraftSet = new HashSet<>(aircraftRepository.saveAll(aircraftSet));
+    }
 }

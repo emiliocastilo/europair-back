@@ -1,8 +1,8 @@
 package com.europair.management.api.dto.contract;
 
 import com.europair.management.api.dto.audit.AuditModificationBaseDTO;
+import com.europair.management.api.enums.ContractConfigTimezoneEnum;
 import com.europair.management.api.enums.CurrencyEnum;
-import com.europair.management.api.enums.UTCEnum;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +33,7 @@ public class ContractConfigurationDto extends AuditModificationBaseDTO {
     private String language;
 
     @JsonProperty("timezone")
-    private UTCEnum timezone;
+    private ContractConfigTimezoneEnum timezone;
 
     @JsonProperty("paymentConditionsId")
     private Long paymentConditionsId;

@@ -1,6 +1,7 @@
 package com.europair.management.api.service.contract;
 
 import com.europair.management.api.dto.common.StateChangeDto;
+import com.europair.management.api.dto.contract.ContractCompleteDataDto;
 import com.europair.management.api.dto.contract.ContractDto;
 import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.api.enums.ContractStatesEnum;
@@ -135,6 +136,37 @@ public interface IContractController {
     ResponseEntity<?> changeState(
             @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
             @Parameter(description = "State change data") @NotNull @RequestBody final StateChangeDto<ContractStatesEnum> stateChangeDto);
+
+    /**
+     * <p>
+     * Copies all the contract data into a new contract
+     * </p>
+     *
+     * @param fileId     File identifier
+     * @param contractId Identifier of the contract to copy
+     * @return No data
+     */
+    @PostMapping("/{contractId}/copy")
+    @Operation(description = "Copies the selected contract into a new one", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<?> copyContract(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId);
+
+    /**
+     * <p>
+     * Retrieves contract complete data identified by id.
+     * </p>
+     *
+     * @param fileId     File identifier
+     * @param contractId Contract identifier
+     * @return Contract complete data
+     */
+    @GetMapping("/{contractId}/info")
+    @Operation(description = "Retrieve contract complete data by identifier", security = {@SecurityRequirement(name = "bearerAuth")})
+    ResponseEntity<ContractCompleteDataDto> getContractCompleteData(
+            @Parameter(description = "File identifier") @NotNull @PathVariable final Long fileId,
+            @Parameter(description = "Contract identifier") @NotNull @PathVariable final Long contractId);
+
 
     /**
      * <p>

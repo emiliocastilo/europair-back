@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Set;
 
@@ -60,4 +61,5 @@ public interface AircraftRepository extends JpaRepository<Aircraft, Long>, IAirc
             @Param(value = "regionCountryIds") Set<Long> regionCountryIds
     );
 
+    Set<Aircraft> findByIdIn(@NotEmpty Set<Long> ids);
 }

@@ -28,4 +28,13 @@ public interface IContractConfigurationMapper {
     @Mapping(target = "paymentConditions", ignore = true)
     void updateFromDto(final ContractConfigurationDto dto, @MappingTarget ContractConfiguration entity);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "modifiedBy", ignore = true)
+    @Mapping(target = "contractId", ignore = true)
+    @Mapping(target = "contract", ignore = true)
+    @Mapping(target = "paymentConditions", ignore = true)
+    ContractConfiguration copyEntity(final ContractConfiguration entity);
 }

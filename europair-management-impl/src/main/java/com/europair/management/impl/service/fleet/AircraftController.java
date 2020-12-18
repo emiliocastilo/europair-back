@@ -14,9 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -69,4 +71,11 @@ public class AircraftController implements IAircraftController {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
+    public ResponseEntity<?> reactivateAircraft(@NotEmpty Set<Long> aircraftIds) {
+        LOGGER.debug("[AircraftController] - Starting method [reactivateAircraft] with input: aircraftIds={}", aircraftIds);
+        aircraftService.reactivateAircraft(aircraftIds);
+        LOGGER.debug("[AircraftController] - Ending method [reactivateAircraft] with no return.");
+        return ResponseEntity.noContent().build();
+    }
 }
