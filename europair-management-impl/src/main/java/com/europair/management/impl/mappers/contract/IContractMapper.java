@@ -2,8 +2,11 @@ package com.europair.management.impl.mappers.contract;
 
 import com.europair.management.api.dto.contract.ContractCompleteDataDto;
 import com.europair.management.api.dto.contract.ContractDto;
+import com.europair.management.api.dto.contract.ContractLineDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.rest.model.contracts.entity.Contract;
+import com.europair.management.rest.model.contracts.entity.ContractLine;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
@@ -13,6 +16,8 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
@@ -42,7 +47,7 @@ public interface IContractMapper {
     @Mapping(target = "client.country", ignore = true)
     @Mapping(target = "totalAmount", source = "entity", qualifiedByName = "mapTotalAmount")
     @Mapping(target = "contractConfiguration.contract", ignore = true)
-    @Mapping(target = "contractLines", qualifiedByName = "toDtoLineOnly")
+    @Mapping(target = "contractLines", qualifiedByName = "toDtoLineOnlyList")
     ContractCompleteDataDto toDtoComplete(final Contract entity);
 
     @Mapping(target = "file", ignore = true)
@@ -94,4 +99,7 @@ public interface IContractMapper {
         return totalAmount;
     }
 
+    @Named("toDtoLineOnlyList")
+    @IterableMapping(qualifiedByName = "toDtoLineOnly")
+    Set<ContractLineDto> toDtoLineOnlyList(final Set<ContractLine> entityList);
 }

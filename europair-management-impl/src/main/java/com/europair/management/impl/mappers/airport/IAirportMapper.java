@@ -1,19 +1,26 @@
 package com.europair.management.impl.mappers.airport;
 
 import com.europair.management.api.dto.airport.AirportDto;
+import com.europair.management.api.dto.airport.RunwayDto;
+import com.europair.management.api.dto.operatorsairports.OperatorsAirportsDTO;
 import com.europair.management.api.dto.regions.RegionDTO;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.impl.mappers.operatorsAirports.IOperatorsAirportsMapper;
 import com.europair.management.rest.model.airport.entity.Airport;
+import com.europair.management.rest.model.airport.entity.Runway;
 import com.europair.management.rest.model.cities.entity.City;
 import com.europair.management.rest.model.countries.entity.Country;
+import com.europair.management.rest.model.operatorsairports.entity.OperatorsAirports;
 import com.europair.management.rest.model.regions.entity.Region;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(config = AuditModificationBaseMapperConfig.class,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG,
@@ -25,9 +32,9 @@ public interface IAirportMapper {
     @Mapping(target = "city.country", ignore = true)
     @Mapping(target = "elevation.value", source = "elevation")
     @Mapping(target = "elevation.type", source = "elevationUnit")
-    @Mapping(target = "runways", qualifiedByName = "toRunwayDto")
-    @Mapping(target = "operators", qualifiedByName = "operatorsAirportToDtoFromAirport")
-    @Mapping(target = "regions", qualifiedByName = "regionToSimpleDto")
+    @Mapping(target = "runways", qualifiedByName = "toRunwayDtoList")
+    @Mapping(target = "operators", qualifiedByName = "operatorsAirportToDtoFromAirportList")
+    @Mapping(target = "regions", qualifiedByName = "regionToSimpleDtoList")
     AirportDto toDto(final Airport entity);
 
     @Mapping(source = "elevation.value", target = "elevation")
@@ -81,4 +88,15 @@ public interface IAirportMapper {
     @Named("airportToSimpleDto")
     AirportDto toSimpleDto(final Airport entity);
 
+    @Named("toRunwayDtoList")
+    @IterableMapping(qualifiedByName = "toRunwayDto")
+    List<RunwayDto> toRunwayDtoList(final List<Runway> entityList);
+
+    @Named("operatorsAirportToDtoFromAirportList")
+    @IterableMapping(qualifiedByName = "operatorsAirportToDtoFromAirport")
+    List<OperatorsAirportsDTO> toDtoFromAirportList(final List<OperatorsAirports> entity);
+
+    @Named("regionToSimpleDtoList")
+    @IterableMapping(qualifiedByName = "regionToSimpleDto")
+    List<RegionDTO> regionToSimpleDtoList(final List<Region> entity);
 }

@@ -5,12 +5,15 @@ import com.europair.management.api.dto.routes.RouteExtendedDto;
 import com.europair.management.impl.mappers.audit.AuditModificationBaseMapperConfig;
 import com.europair.management.impl.mappers.contributions.IContributionMapper;
 import com.europair.management.rest.model.routes.entity.Route;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingInheritanceStrategy;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(uses = IContributionMapper.class, config = AuditModificationBaseMapperConfig.class,
         mappingInheritanceStrategy = MappingInheritanceStrategy.AUTO_INHERIT_ALL_FROM_CONFIG)
@@ -22,8 +25,8 @@ public interface IRouteMapper {
     RouteDto toDto(final Route entity);
 
 
-    @Mapping(target = "rotationsExtended", source = "rotations", qualifiedByName = "toExtendedDto")
     @Named("toExtendedDto")
+    @Mapping(target = "rotationsExtended", source = "rotations", qualifiedByName = "toExtendedDtoList")
     RouteExtendedDto toExtendedDto(final Route entity);
 
     @Mapping(target = "file", ignore = true)
@@ -59,4 +62,7 @@ public interface IRouteMapper {
     @Mapping(target = "contributions", ignore = true)
     Route mapRotation(final Route parentRoute);
 
+    @Named("toExtendedDtoList")
+    @IterableMapping(qualifiedByName = "toExtendedDto")
+    List<RouteExtendedDto> toExtendedDtoList(final List<Route> entity);
 }
