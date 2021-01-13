@@ -70,4 +70,7 @@ public class FileDTO extends AuditModificationBaseDTO {
   //This entity has his own endpoint to ask for a list of routes of a file, no needed
   //private List<Route> routes;
 
+  @JsonProperty("updatedAfterContractSigned")
+  private Boolean updatedAfterContractSigned;
+
 }

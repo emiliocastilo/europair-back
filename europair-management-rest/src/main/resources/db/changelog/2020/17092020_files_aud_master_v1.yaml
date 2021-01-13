@@ -174,3 +174,15 @@ databaseChangeLog:
         - dropForeignKeyConstraint:
             baseTableName: files_aud
             constraintName: file_aud_sale_agent_fk
+
+  - changeSet:
+      id: 17092020_files_aud_master_v1_20210112_add_column
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      changes:
+        - addColumn:
+            tableName: files_aud
+            columns:
+              - column:
+                  name: file_updated_after_contract_signed
+                  type: boolean

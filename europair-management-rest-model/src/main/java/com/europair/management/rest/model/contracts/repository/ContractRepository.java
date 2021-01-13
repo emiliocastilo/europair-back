@@ -13,4 +13,5 @@ public interface ContractRepository extends JpaRepository<Contract, Long>, ICont
 
     List<Contract> findAllByIdIn(List<Long> idList);
 
+    List<Contract> findByFileId(Long fileId);
 }

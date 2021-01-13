@@ -107,4 +107,7 @@ public class File extends SoftRemovableBaseEntityHardAudited implements Serializ
   @OneToMany(orphanRemoval = true, mappedBy = "file")
   private List<Route> routes;
 
+  @Column(name = "file_updated_after_contract_signed")
+  private Boolean updatedAfterContractSigned;
+
 }

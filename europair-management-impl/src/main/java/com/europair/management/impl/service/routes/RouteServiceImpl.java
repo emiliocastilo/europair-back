@@ -4,6 +4,7 @@ import com.europair.management.api.dto.contribution.ContributionDTO;
 import com.europair.management.api.dto.routes.RouteDto;
 import com.europair.management.api.dto.routes.RouteExtendedDto;
 import com.europair.management.api.dto.routes.RouteFrequencyDayDto;
+import com.europair.management.api.enums.ContractStatesEnum;
 import com.europair.management.api.enums.FrequencyEnum;
 import com.europair.management.api.enums.RouteStatesEnum;
 import com.europair.management.api.util.ErrorCodesEnum;
@@ -16,7 +17,10 @@ import com.europair.management.rest.model.airport.entity.Airport;
 import com.europair.management.rest.model.airport.repository.AirportRepository;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.OperatorEnum;
+import com.europair.management.rest.model.contracts.entity.Contract;
+import com.europair.management.rest.model.contracts.repository.ContractRepository;
 import com.europair.management.rest.model.contributions.entity.Contribution;
+import com.europair.management.rest.model.files.entity.File;
 import com.europair.management.rest.model.files.repository.FileRepository;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.flights.repository.FlightRepository;
@@ -69,6 +73,9 @@ public class RouteServiceImpl implements IRouteService {
     private FlightRepository flightRepository;
 
     @Autowired
+    private ContractRepository contractRepository;
+
+    @Autowired
     private IStateChangeService stateChangeService;
 
     @Override
@@ -111,7 +118,8 @@ public class RouteServiceImpl implements IRouteService {
 
     @Override
     public RouteDto saveRoute(final Long fileId, RouteExtendedDto routeDto) {
-        checkIfFileExists(fileId);
+        File file = fileRepository.findById(fileId)
+                .orElseThrow(() -> Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.FILE_NOT_FOUND, String.valueOf(fileId)));
         if (routeDto.getId() != null) {
             throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.ROUTE_NEW_WITH_ID, String.valueOf(routeDto.getId()));
         }
@@ -168,6 +176,14 @@ public class RouteServiceImpl implements IRouteService {
         // Create rotations
         List<Route> rotations = createRotations(route, routeAirports, rotationDates, routeDto);
         route.setRotations(rotations);
+
+        // Check if file has signed contracts and update file property if true
+        List<Contract> fileContracts = contractRepository.findByFileId(fileId);
+        if (!CollectionUtils.isEmpty(fileContracts) && fileContracts.stream()
+                .anyMatch(contract -> ContractStatesEnum.SIGNED.equals(contract.getContractState()))) {
+            file.setUpdatedAfterContractSigned(true);
+            file = fileRepository.save(file);
+        }
 
         return IRouteMapper.INSTANCE.toDto(route);
     }

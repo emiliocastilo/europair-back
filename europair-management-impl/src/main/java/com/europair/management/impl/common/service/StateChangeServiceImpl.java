@@ -83,8 +83,10 @@ public class StateChangeServiceImpl implements IStateChangeService {
             case NEW_REQUEST -> FileStatesEnum.SALES.equals(stateTo);
             case SALES -> FileStatesEnum.OPTIONED.equals(stateTo) || FileStatesEnum.BLUE_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
             case OPTIONED -> FileStatesEnum.BLUE_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
-            case BLUE_BOOKED -> FileStatesEnum.GREEN_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
-            case GREEN_BOOKED -> FileStatesEnum.PREFLIGHT.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo);
+            case BLUE_BOOKED -> FileStatesEnum.GREEN_BOOKED.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo)
+                    || (FileStatesEnum.BLUE_BOOKED.equals(stateTo) && Boolean.TRUE.equals(file.getUpdatedAfterContractSigned()));
+            case GREEN_BOOKED -> FileStatesEnum.PREFLIGHT.equals(stateTo) || FileStatesEnum.CNX.equals(stateTo)
+                    || (FileStatesEnum.GREEN_BOOKED.equals(stateTo) && Boolean.TRUE.equals(file.getUpdatedAfterContractSigned()));
             default -> false;
         };
         // Additional validations
@@ -175,7 +177,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
             // Change states from other entities
             if (FileStatesEnum.CNX.equals(state)) {
                 List<Long> routeIds = file.getRoutes().stream().map(Route::getId).collect(Collectors.toList());
-                changeState(routeIds, FileStatesEnum.OPTIONED);
+                changeState(routeIds, RouteStatesEnum.LOST_CANX_REQUEST);
             }
             return file;
         } else {
