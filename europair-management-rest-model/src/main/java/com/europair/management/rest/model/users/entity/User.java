@@ -6,7 +6,18 @@ import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.tasks.entity.Task;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -45,4 +56,6 @@ public class User extends AuditModificationBaseEntity {
     inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id"))
   private List<Task> tasks;
 
+  @Column(name = "internal_user")
+  private Boolean internalUser;
 }

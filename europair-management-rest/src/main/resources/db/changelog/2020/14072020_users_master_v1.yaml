@@ -63,3 +63,16 @@ databaseChangeLog:
             incrementBy: 1
             startWith: 1
             tableName: users
+
+  - changeSet:
+      id: 14072020_users_v1_20210114_add_column
+      context: dev or pre or pro
+      author: axel.sanchezsalom
+      changes:
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: internal_user
+                  type: boolean
+                  defaultValue: 1

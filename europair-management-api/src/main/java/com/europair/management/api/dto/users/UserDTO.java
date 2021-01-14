@@ -33,4 +33,5 @@ public class UserDTO extends AuditModificationBaseDTO {
 
   private List<TaskDTO> tasks;
 
+  private Boolean internalUser;
 }
