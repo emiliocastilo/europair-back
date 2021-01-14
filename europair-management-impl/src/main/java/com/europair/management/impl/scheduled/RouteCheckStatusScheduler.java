@@ -7,7 +7,7 @@ import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import net.javacrumbs.shedlock.core.SchedulerLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,7 +32,7 @@ public class RouteCheckStatusScheduler {
     private RouteRepository routeRepository;
 
     @Autowired
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
 
     /**
      * Cron executed every night at 00:00 in production environments

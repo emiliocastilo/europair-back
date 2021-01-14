@@ -2,8 +2,7 @@ package com.europair.management.rest.common.configuration;
 
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
-import io.jsonwebtoken.Jwts;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,9 +30,9 @@ public class JWTAuthorizationFilterInternal extends BasicAuthenticationFilter {
   @Value("${europair.security.token.secret.key}")
   private String secretKey = "3ur0p41r";
 
-  private IUserRepository userRepository;
+  private UserRepository userRepository;
 
-  public JWTAuthorizationFilterInternal(AuthenticationManager authManager, IUserRepository userRepository) {
+  public JWTAuthorizationFilterInternal(AuthenticationManager authManager, UserRepository userRepository) {
     super(authManager);
     this.userRepository = userRepository;
   }

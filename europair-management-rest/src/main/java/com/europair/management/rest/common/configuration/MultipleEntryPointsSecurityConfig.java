@@ -1,6 +1,6 @@
 package com.europair.management.rest.common.configuration;
 
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -25,7 +25,7 @@ public class MultipleEntryPointsSecurityConfig {
 public class MultipleEntryPointsSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
 
     // common stuff related with security
     @Profile("h2")

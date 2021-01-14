@@ -14,7 +14,7 @@ import com.europair.management.rest.model.fleet.entity.AircraftTypeAverageSpeed;
 import com.europair.management.rest.model.flights.entity.Flight;
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import org.springframework.data.util.Pair;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -352,7 +352,7 @@ public class Utils {
      */
     public static class GetUserFromSecurityContext {
 
-        public static Long getLoggedUserId(IUserRepository userRepository) {
+        public static Long getLoggedUserId(UserRepository userRepository) {
             Long res = null;
 
             // User name for externals

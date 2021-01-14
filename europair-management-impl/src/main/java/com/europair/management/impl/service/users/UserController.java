@@ -2,6 +2,8 @@ package com.europair.management.impl.service.users;
 
 import com.europair.management.api.dto.users.UserDTO;
 import com.europair.management.api.service.users.IUserController;
+import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.common.CoreCriteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,10 +30,11 @@ public class UserController implements IUserController {
     @Autowired
     private IUserService userService;
 
-    public ResponseEntity<Page<UserDTO>> getAllUsersPaginated(final Pageable pageable) {
-        LOGGER.debug("[UserController] - Starting method [getAllUsersPaginated] with input: pageable={}", pageable);
-        final Page<UserDTO> userDTOPage = userService.findAllPaginated(pageable);
-        LOGGER.debug("[UserController] - Ending method [getAllUsersPaginated] with return: {}", userDTOPage);
+    public ResponseEntity<Page<UserDTO>> getAllUsersPaginatedByFilter(final Pageable pageable, Map<String, String> reqParam) {
+        LOGGER.debug("[UserController] - Starting method [getAllUsersPaginatedByFilter] with input: pageable={}, reqParam={}", pageable, reqParam);
+        CoreCriteria criteria = Utils.mapFilterRequestParams(reqParam);
+        final Page<UserDTO> userDTOPage = userService.findAllPaginatedByFilter(pageable, criteria);
+        LOGGER.debug("[UserController] - Ending method [getAllUsersPaginatedByFilter] with return: {}", userDTOPage);
         return ResponseEntity.ok().body(userDTOPage);
     }
 

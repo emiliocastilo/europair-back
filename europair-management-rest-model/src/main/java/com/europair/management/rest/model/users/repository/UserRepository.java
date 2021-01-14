@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface IUserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, IUserRepositoryCustom {
 
   @Transactional(propagation = Propagation.REQUIRES_NEW)
   Optional<User> findByUsername(final String username);

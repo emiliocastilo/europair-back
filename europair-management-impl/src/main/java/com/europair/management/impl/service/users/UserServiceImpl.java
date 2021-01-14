@@ -4,8 +4,9 @@ import com.europair.management.api.dto.users.UserDTO;
 import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.mappers.users.UserMapper;
 import com.europair.management.impl.util.Utils;
+import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,14 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements IUserService {
 
     @Autowired
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public Page<UserDTO> findAllPaginated(Pageable pageable) {
-        return userRepository.findAll(pageable).map(UserMapper.INSTANCE::toDto);
+    public Page<UserDTO> findAllPaginatedByFilter(Pageable pageable, CoreCriteria criteria) {
+        return userRepository.findUsersByCriteria(criteria, pageable).map(UserMapper.INSTANCE::toDto);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.europair.management.rest.auth.service;
 import com.europair.management.api.util.ErrorCodesEnum;
 import com.europair.management.impl.util.Utils;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   @Autowired
-  private IUserRepository userRepository;
+  private UserRepository userRepository;
 
   @Override
   @Transactional(readOnly = true)

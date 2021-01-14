@@ -2,7 +2,7 @@ package com.europair.management.rest.common.configuration;
 
 import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
@@ -35,9 +35,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
   @Value("${europair.security.token.secret.key}")
   private String secretKey = "3ur0p41r";
 
-  private IUserRepository userRepository;
+  private UserRepository userRepository;
 
-  public JWTAuthorizationFilter(AuthenticationManager authManager, IUserRepository userRepository) {
+  public JWTAuthorizationFilter(AuthenticationManager authManager, UserRepository userRepository) {
     super(authManager);
     this.userRepository = userRepository;
   }

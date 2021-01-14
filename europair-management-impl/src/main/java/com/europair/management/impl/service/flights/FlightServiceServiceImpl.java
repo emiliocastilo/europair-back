@@ -18,7 +18,7 @@ import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.routes.repository.RouteRepository;
 import com.europair.management.rest.model.services.entity.Service;
 import com.europair.management.rest.model.services.repository.ServiceRepository;
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,7 +46,7 @@ public class FlightServiceServiceImpl implements IFlightServiceService {
     private FlightRepository flightRepository;
 
     @Autowired
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private FlightServiceRepository flightServiceRepository;

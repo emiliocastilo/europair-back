@@ -10,7 +10,7 @@ import com.europair.management.rest.model.roles.entity.Role;
 import com.europair.management.rest.model.screens.entity.Screen;
 import com.europair.management.rest.model.tasks.entity.Task;
 import com.europair.management.rest.model.users.entity.User;
-import com.europair.management.rest.model.users.repository.IUserRepository;
+import com.europair.management.rest.model.users.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +30,11 @@ public class MenuService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MenuService.class);
 
     private final MenuOptionRepository menuOptionRepository;
-    private final IUserRepository userRepository;
+    private final UserRepository userRepository;
 
 
     @Autowired
-    public MenuService(MenuOptionRepository menuOptionRepository, IUserRepository userRepository) {
+    public MenuService(MenuOptionRepository menuOptionRepository, UserRepository userRepository) {
         this.menuOptionRepository = menuOptionRepository;
         this.userRepository = userRepository;
     }
