@@ -5,6 +5,10 @@ import com.europair.management.rest.model.audit.entity.SoftRemovableBaseEntityHa
 import com.europair.management.rest.model.routes.entity.Route;
 import com.europair.management.rest.model.users.entity.User;
 import lombok.Data;
+import org.apache.commons.lang3.builder.DiffBuilder;
+import org.apache.commons.lang3.builder.DiffResult;
+import org.apache.commons.lang3.builder.Diffable;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -33,7 +37,7 @@ import java.util.List;
 @Table(name = "files")
 @Data
 @Audited
-public class File extends SoftRemovableBaseEntityHardAudited implements Serializable {
+public class File extends SoftRemovableBaseEntityHardAudited implements Serializable, Diffable<File> {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,4 +114,21 @@ public class File extends SoftRemovableBaseEntityHardAudited implements Serializ
   @Column(name = "file_updated_after_contract_signed")
   private Boolean updatedAfterContractSigned;
 
+  @Override
+  public DiffResult<File> diff(File file) {
+    return new DiffBuilder<>(this, file, ToStringStyle.DEFAULT_STYLE)
+            .append("id", this.id, file.id)
+            .append("code", this.code, file.code)
+            .append("description", this.description, file.description)
+            .append("statusId", this.statusId, file.statusId)
+            .append("clientId", this.clientId, file.clientId)
+            .append("contactId", this.contactId, file.contactId)
+            .append("providerId", this.providerId, file.providerId)
+            .append("salePersonId", this.salePersonId, file.salePersonId)
+            .append("saleAgentId", this.saleAgentId, file.saleAgentId)
+            .append("operationType", this.operationType, file.operationType)
+            .append("updatedAfterContractSigned", this.updatedAfterContractSigned, file.updatedAfterContractSigned)
+            .append("removesAt", this.getRemovedAt(), file.getRemovedAt())
+            .build();
+  }
 }

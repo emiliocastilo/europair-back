@@ -172,7 +172,7 @@ public abstract class BaseRepositoryImpl<T> {
 	 * @param id
 	 * @return
 	 */
-	public List<AuditRevision<T>> listRevisions(String id) {
+	public List<AuditRevision<T>> listRevisions(Long id) {
 
 	    List<AuditRevision<T>> revisions = new ArrayList<>();
         AuditReader auditReader = getAuditBuilder();

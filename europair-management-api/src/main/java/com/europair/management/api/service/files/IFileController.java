@@ -1,5 +1,6 @@
 package com.europair.management.api.service.files;
 
+import com.europair.management.api.dto.common.BaseAuditDto;
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.enums.FileStatesEnum;
@@ -115,10 +116,20 @@ public interface IFileController {
    * <p>Gets a list of the states that the file can change</p>
    *
    * @param id File identifier
-   * @return No content
+   * @return List of file states
    */
   @GetMapping("/{id}/state")
   @Operation(description = "Get valid state changes of a file")
   ResponseEntity<List<String>> getValidFileStatesToChange(
           @Parameter(description = "File identifier") @PathVariable @NotNull final Long id);
+
+  /**
+   * <p>Gets a list of the file audit changes</p>
+   *
+   * @param id File identifier
+   * @return List of File audit changes
+   */
+  @GetMapping("/{id}/audit")
+  @Operation(description = "Get valid state changes of a file")
+  ResponseEntity<List<BaseAuditDto>> getAuditChanges(@Parameter(description = "File identifier") @PathVariable @NotNull final Long id);
 }

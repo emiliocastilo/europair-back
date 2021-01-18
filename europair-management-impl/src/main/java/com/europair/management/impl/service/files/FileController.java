@@ -1,5 +1,7 @@
 package com.europair.management.impl.service.files;
 
+import com.europair.management.api.dto.common.AuditChangesDto;
+import com.europair.management.api.dto.common.BaseAuditDto;
 import com.europair.management.api.dto.common.StateChangeDto;
 import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.enums.FileStatesEnum;
@@ -19,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -90,6 +93,14 @@ public class FileController implements IFileController {
         LOGGER.debug("[FileController] - Starting method [deleteFile] with input: id={}", id);
         List<String> res = fileService.getValidFileStatesToChange(id);
         LOGGER.debug("[FileController] - Ending method [deleteFile] with return: {}", res);
+        return ResponseEntity.ok(res);
+    }
+
+    @Override
+    public ResponseEntity<List<BaseAuditDto>> getAuditChanges(@NotNull Long id) {
+        LOGGER.debug("[FileController] - Starting method [getAuditChanges] with input: id={}", id);
+        List<BaseAuditDto> res = fileService.getAuditChanges(id);
+        LOGGER.debug("[FileController] - Ending method [getAuditChanges] with return: {}", res);
         return ResponseEntity.ok(res);
     }
 }

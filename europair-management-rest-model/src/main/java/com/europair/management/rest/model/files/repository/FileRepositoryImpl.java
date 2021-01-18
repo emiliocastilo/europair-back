@@ -1,5 +1,6 @@
 package com.europair.management.rest.model.files.repository;
 
+import com.europair.management.rest.model.audit.entity.AuditRevision;
 import com.europair.management.rest.model.common.CoreCriteria;
 import com.europair.management.rest.model.common.repository.BaseRepositoryImpl;
 import com.europair.management.rest.model.files.entity.File;
@@ -28,4 +29,8 @@ public class FileRepositoryImpl extends BaseRepositoryImpl<File> implements IFil
     return result;
   }
 
+  @Override
+  public List<AuditRevision<File>> getAuditRevisions(Long id) {
+    return listRevisions(id);
+  }
 }

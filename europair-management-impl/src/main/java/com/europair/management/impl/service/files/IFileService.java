@@ -1,5 +1,7 @@
 package com.europair.management.impl.service.files;
 
+import com.europair.management.api.dto.common.AuditChangesDto;
+import com.europair.management.api.dto.common.BaseAuditDto;
 import com.europair.management.api.dto.files.FileDTO;
 import com.europair.management.api.enums.FileStatesEnum;
 import com.europair.management.rest.model.common.CoreCriteria;
@@ -23,4 +25,6 @@ public interface IFileService {
   void updateStates(List<Long> fileIds, FileStatesEnum state);
 
   List<String> getValidFileStatesToChange(Long id);
+
+  List<BaseAuditDto> getAuditChanges(Long id);
 }
