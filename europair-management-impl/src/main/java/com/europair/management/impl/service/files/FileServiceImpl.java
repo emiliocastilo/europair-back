@@ -182,8 +182,8 @@ public class FileServiceImpl implements IFileService {
               baseAuditDto.setChanges(diffResult.getDiffs().stream().map(diff -> {
                 AuditChangesDto auditChangesDto = new AuditChangesDto();
                 auditChangesDto.setPropertyName(diff.getFieldName());
-                auditChangesDto.setOldValue(diff.getLeft().toString());
-                auditChangesDto.setNewValue(diff.getRight().toString());
+                auditChangesDto.setOldValue(String.valueOf(diff.getLeft()));
+                auditChangesDto.setNewValue(String.valueOf(diff.getRight()));
 
                 return auditChangesDto;
               }).collect(Collectors.toList()));
