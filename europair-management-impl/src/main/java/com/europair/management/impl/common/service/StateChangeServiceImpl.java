@@ -115,8 +115,7 @@ public class StateChangeServiceImpl implements IStateChangeService {
         ContributionStatesEnum currentState = contribution.getContributionState();
         // Validate state to change
         return switch (currentState) {
-            case PENDING -> ContributionStatesEnum.SENDED.equals(stateTo);
-            case SENDED -> ContributionStatesEnum.QUOTED.equals(stateTo);
+            case PENDING, SENT -> !ContributionStatesEnum.PENDING.equals(stateTo);
             case QUOTED -> ContributionStatesEnum.WON.equals(stateTo);
             default -> false;
         };
