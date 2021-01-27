@@ -44,6 +44,15 @@ public class AirportServiceImpl implements IAirportService {
         }
 
         Airport airport = IAirportMapper.INSTANCE.toEntity(airportDto);
+
+        // Check for IATA / ICAO duplicates
+        if (airportRepository.existsByIataCode(airport.getIataCode())) {
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_IATA_DUPLICATE, airport.getIataCode());
+        }
+        if (airportRepository.existsByIcaoCode(airport.getIcaoCode())) {
+            throw Utils.ErrorHandlingUtils.getException(ErrorCodesEnum.AIRPORT_ICAO_DUPLICATE, airport.getIcaoCode());
+        }
+
         airport = airportRepository.save(airport);
 
         return IAirportMapper.INSTANCE.toDto(airport);
