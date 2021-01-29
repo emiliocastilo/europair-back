@@ -11,7 +11,9 @@ public enum ErrorCodesEnum {
     AIRPORT_NOT_FOUND("100", HttpStatus.NOT_FOUND, "Airport not found with id"),
     AIRPORT_NEW_WITH_ID("101", HttpStatus.BAD_REQUEST, "New Airport expected. Found identifier"),
     AIRPORT_IATA_NOT_FOUND("102", HttpStatus.NOT_FOUND, "Airport not found with IATA"),
-    AIRPORT_NO_COORDINATES("102", HttpStatus.PRECONDITION_FAILED, "One of the airports doesn't have all the coordinates data to calculate the distance."),
+    AIRPORT_NO_COORDINATES("103", HttpStatus.PRECONDITION_FAILED, "One of the airports doesn't have all the coordinates data to calculate the distance."),
+    AIRPORT_IATA_DUPLICATE("104", HttpStatus.BAD_REQUEST, "Airport already exists with IATA code"),
+    AIRPORT_ICAO_DUPLICATE("105", HttpStatus.BAD_REQUEST, "Airport already exists with ICAO code"),
 
     // Airport Observation
     AIRPORT_OBSERVATION_NOT_FOUND("110", HttpStatus.NOT_FOUND, "AirportObservation not found with id"),

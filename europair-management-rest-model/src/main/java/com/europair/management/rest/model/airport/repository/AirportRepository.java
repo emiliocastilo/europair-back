@@ -17,4 +17,8 @@ public interface AirportRepository extends JpaRepository<Airport, Long>, IAirpor
     Optional<Airport> findFirstByIataCode(String code);
 
     Set<Airport> findByIdIn(@NotEmpty Set<Long> ids);
+
+    boolean existsByIataCode(String code);
+
+    boolean existsByIcaoCode(String code);
 }
