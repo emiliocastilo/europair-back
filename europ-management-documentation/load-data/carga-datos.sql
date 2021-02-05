@@ -140,7 +140,36 @@ iif(len([Auxiliar Code]) < 5, concat('"', [Auxiliar Code], '"'), 'null'), ', ',
 '(select id from countries where code="', [Country ID], '"), ',
 '(select id from cities where code="', [City ID], '" and country_id=(select id from countries where code="', [Country ID], '")), ',
 iif(len(eba.[Time Zone ID]) < 1, 'null', 
-	concat('"UTC ', iif(ebtz.[Initial Gap Type] = 0, '+', '-'), format(ebtz.[Initial Gap], 'hh:mm'), '"')), ', ',
+  concat('"',
+    iif([Initial Gap Type] = 0, '', 'MINUS_'),
+    case
+      when format(ebtz.[Initial Gap], 'hh')=0 and format(ebtz.[Initial Gap], 'mm')=0 then 'ZERO'
+        when format(ebtz.[Initial Gap], 'hh')=1 and format(ebtz.[Initial Gap], 'mm')=0 then 'ONE'
+        when format(ebtz.[Initial Gap], 'hh')=2 and format(ebtz.[Initial Gap], 'mm')=0 then 'TWO'
+        when format(ebtz.[Initial Gap], 'hh')=2 and format(ebtz.[Initial Gap], 'mm')=30 then 'HALF_PAST_TWO'
+        when format(ebtz.[Initial Gap], 'hh')=3 and format(ebtz.[Initial Gap], 'mm')=0 then 'THREE'
+        when format(ebtz.[Initial Gap], 'hh')=4 and format(ebtz.[Initial Gap], 'mm')=0 then 'FOUR'
+        when format(ebtz.[Initial Gap], 'hh')=4 and format(ebtz.[Initial Gap], 'mm')=30 then 'HALF_PAST_FOUR'
+        when format(ebtz.[Initial Gap], 'hh')=5 and format(ebtz.[Initial Gap], 'mm')=0 then 'FIVE'
+        when format(ebtz.[Initial Gap], 'hh')=5 and format(ebtz.[Initial Gap], 'mm')=30 then 'HALF_PAST_FIVE'
+        when format(ebtz.[Initial Gap], 'hh')=5 and format(ebtz.[Initial Gap], 'mm')=45 then 'QUARTER_TO_SIX'
+        when format(ebtz.[Initial Gap], 'hh')=6 and format(ebtz.[Initial Gap], 'mm')=0 then 'SIX'
+        when format(ebtz.[Initial Gap], 'hh')=6 and format(ebtz.[Initial Gap], 'mm')=30 then 'HALF_PAST_SIX'
+        when format(ebtz.[Initial Gap], 'hh')=7 and format(ebtz.[Initial Gap], 'mm')=0 then 'SEVEN'
+        when format(ebtz.[Initial Gap], 'hh')=8 and format(ebtz.[Initial Gap], 'mm')=0 then 'EIGHT'
+        when format(ebtz.[Initial Gap], 'hh')=8 and format(ebtz.[Initial Gap], 'mm')=45 then 'QUARTER_TO_NINE'
+        when format(ebtz.[Initial Gap], 'hh')=9 and format(ebtz.[Initial Gap], 'mm')=0 then 'NINE'
+        when format(ebtz.[Initial Gap], 'hh')=9 and format(ebtz.[Initial Gap], 'mm')=30 then 'HALF_PAST_NINE'
+        when format(ebtz.[Initial Gap], 'hh')=10 and format(ebtz.[Initial Gap], 'mm')=0 then 'TEN'
+        when format(ebtz.[Initial Gap], 'hh')=10 and format(ebtz.[Initial Gap], 'mm')=30 then 'HALF_PAST_TEN'
+        when format(ebtz.[Initial Gap], 'hh')=11 and format(ebtz.[Initial Gap], 'mm')=0 then 'ELEVEN'
+        when format(ebtz.[Initial Gap], 'hh')=12 and format(ebtz.[Initial Gap], 'mm')=0 then 'TWELVE'
+        when format(ebtz.[Initial Gap], 'hh')=12 and format(ebtz.[Initial Gap], 'mm')=45 then 'QUARTER_TO_THIRTEEN'
+        when format(ebtz.[Initial Gap], 'hh')=13 and format(ebtz.[Initial Gap], 'mm')=0 then 'THIRTEEN'
+        when format(ebtz.[Initial Gap], 'hh')=14 and format(ebtz.[Initial Gap], 'mm')=0 then 'FOURTEEN'
+    end, '"'
+  )
+), ', ',
 Elevation, ', "FOOT", ',
 (([Latitude Degrees]+([Latitude Minutes]/60.0)+([Latitude Seconds]/3600.0))* iif([Latitude Type]=1,-1,1)), ', ',
 (([Longitude Degrees]+([Longitude Minutes]/60.0)+([Longitude Seconds]/3600.0))* iif([Longitude Type]=1,-1,1)), ', ',
