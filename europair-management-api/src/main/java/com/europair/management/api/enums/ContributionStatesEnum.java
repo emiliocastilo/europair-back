@@ -4,7 +4,7 @@ public enum ContributionStatesEnum {
 
     PENDING,
 
-    SENDED,
+    SENT,
 
     QUOTED,
 
